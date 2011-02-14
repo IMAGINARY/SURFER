@@ -204,7 +204,7 @@ var p:PolynomialOperation;
              p=t7;
            }
 */
-           var p:PolynomialOperation = AlgebraicExpressionParser.parse( "x^2+y^2-1" );
+           var p:PolynomialOperation = AlgebraicExpressionParser.parse( expression );
 
            // current version does not support surface parameters
            /*if( p.accept( new DoubleVariableChecker(), ( Void ) null ) )

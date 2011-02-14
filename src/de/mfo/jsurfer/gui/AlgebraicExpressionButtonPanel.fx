@@ -18,6 +18,7 @@ import javafx.ext.swing.*;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javafx.scene.input.MouseButton;
+import javax.swing.event.*;
 
 /**
  * @author Panda
@@ -146,7 +147,6 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             height: T.height*getScale(height,width)
             maxHeight: T.height*getScale(height,width)
          };
-
         SurfaceExpression.content=
         [
             sw
@@ -253,6 +253,21 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             setZoom();
             setButtons();
             setTextField();
+            test.getDocument().addDocumentListener( DocumentListener
+            {
+                override function changedUpdate( e )
+                {
+                    surferPanel.surfaceExpressionChanged(test.getText());
+                }
+                override function insertUpdate( e )
+                {
+                    surferPanel.surfaceExpressionChanged(test.getText());
+                }
+                override function removeUpdate( e )
+                {
+                    surferPanel.surfaceExpressionChanged(test.getText());
+                }
+            } );
             setColoChooser();
             setRenderPanel();
  
