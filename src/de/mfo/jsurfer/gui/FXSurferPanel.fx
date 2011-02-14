@@ -12,7 +12,7 @@ import javax.vecmath.*;
 import javafx.scene.Group;
 import javafx.ext.swing.*;
 import javafx.scene.Node;
-//import de.mfo.jsurfer.parser.*;
+import de.mfo.jsurfer.parser.*;
 import de.mfo.jsurfer.algebra.*;
 //import java.io.IOException;
 import java.lang.System;
@@ -187,10 +187,11 @@ public class FXSurferPanel extends CustomNode {
 
     public function surfaceExpressionChanged(expression:String):Boolean
     {
-        //var P:AlgebraicExpressionParser2= new AlgebraicExpressionParser2();
+//        var P:AlgebraicExpressionParser= new AlgebraicExpressionParser;
         try
         {
-         var p:PolynomialOperation;
+/*
+var p:PolynomialOperation;
            {
              var t1:PolynomialOperation=new PolynomialPower(new PolynomialVariable( PolynomialVariable.Var.valueOf( "x" ) ), 2 );
              var t2:PolynomialOperation=new PolynomialPower(new PolynomialVariable( PolynomialVariable.Var.valueOf( "y" ) ), 2 );
@@ -202,15 +203,15 @@ public class FXSurferPanel extends CustomNode {
             //p.getAlgebraicSurfaceRenderer().setSurfaceExpression( t7 );
              p=t7;
            }
-
-           //var p:PolynomialOperation = P.parse( expression );
+*/
+           var p:PolynomialOperation = AlgebraicExpressionParser.parse( "x^2+y^2-1" );
 
            // current version does not support surface parameters
            /*if( p.accept( new DoubleVariableChecker(), ( Void ) null ) )
                throw new Exception();*/
 
-           renderer.getAlgebraicSurfaceRenderer().setSurfaceExpression( p );
-           renderer.repaintImage();
+               renderer.getAlgebraicSurfaceRenderer().setSurfaceExpression( p );
+renderer.repaintImage();
            //surfaceExpression.setBackground( Color.WHITE );
         }
         catch( Exception )

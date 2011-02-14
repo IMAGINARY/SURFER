@@ -14,7 +14,7 @@ import javax.vecmath.*;
 
 import de.mfo.jsurfer.rendering.*;
 import de.mfo.jsurfer.rendering.cpu.*;
-//import de.mfo.jsurfer.parser.*;
+import de.mfo.jsurfer.parser.*;
 import de.mfo.jsurfer.util.*;
 import de.mfo.jsurfer.algebra.*;
 //import java.lang.System;
@@ -44,6 +44,24 @@ public class JSurferRenderPanel extends JComponent
     RotateSphericalDragger rsd;
     Matrix4f scale;
     public float publicScaleFactor;//0.0 bis 1.0
+
+    public class Concrete extends Concrete1
+    {
+        public Concrete()
+        {
+            _fsp = 1;
+        }
+    }
+
+    public class Concrete1 extends Abstract
+    {
+
+    }
+
+    public abstract class Abstract
+    {
+        protected int _fsp;
+    }
 
     public JSurferRenderPanel()
     {
@@ -342,6 +360,8 @@ public class JSurferRenderPanel extends JComponent
 
         try
         {
+            p.getAlgebraicSurfaceRenderer().setSurfaceExpression( AlgebraicExpressionParser.parse( "x^2+y^2-1" ) );
+            /*
             PolynomialOperation t1=new PolynomialPower(new PolynomialVariable( PolynomialVariable.Var.valueOf( "x" ) ), 2 );
     PolynomialOperation t2=new PolynomialPower(new PolynomialVariable( PolynomialVariable.Var.valueOf( "y" ) ), 2 );
     PolynomialOperation t3=new PolynomialPower(new PolynomialVariable( PolynomialVariable.Var.valueOf( "z" ) ), 2 );
@@ -351,6 +371,8 @@ public class JSurferRenderPanel extends JComponent
     PolynomialOperation t6=new PolynomialSubtraction(t5,new DoubleValue( 1.0 ));
     PolynomialOperation t7=new PolynomialAddition(t4,t6);
             p.getAlgebraicSurfaceRenderer().setSurfaceExpression( t7 );
+
+             */
         }
         catch( Exception e )
         {
