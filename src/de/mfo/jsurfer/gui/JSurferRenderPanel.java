@@ -45,24 +45,6 @@ public class JSurferRenderPanel extends JComponent
     Matrix4f scale;
     public float publicScaleFactor;//0.0 bis 1.0
 
-    public class Concrete extends Concrete1
-    {
-        public Concrete()
-        {
-            _fsp = 1;
-        }
-    }
-
-    public class Concrete1 extends Abstract
-    {
-
-    }
-
-    public abstract class Abstract
-    {
-        protected int _fsp;
-    }
-
     public JSurferRenderPanel()
     {
         renderSize = new Dimension( 240, 240 );

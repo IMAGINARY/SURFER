@@ -122,7 +122,7 @@ public class UnivariatePolynomialExpansion extends AbstractVisitor< UnivariatePo
 
     public UnivariatePolynomial visit( DoubleVariable dv, Void param )
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException( "no value has been assigned to parameter '" + dv.name + "'" );
     }
     
     public UnivariatePolynomial visit( DoubleValue dv, Void param )

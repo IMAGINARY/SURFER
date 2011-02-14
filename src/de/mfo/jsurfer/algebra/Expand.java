@@ -88,7 +88,7 @@ public class Expand extends AbstractVisitor< XYZPolynomial, Void >
 
     public XYZPolynomial visit( DoubleVariable dv, Void param )
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException( "no value has been assigned to parameter '" + dv.name + "'" );
     }
     
     public XYZPolynomial visit( DoubleValue dv, Void param )

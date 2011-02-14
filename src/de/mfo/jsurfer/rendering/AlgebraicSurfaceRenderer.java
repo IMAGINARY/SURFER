@@ -18,11 +18,14 @@ public abstract class AlgebraicSurfaceRenderer
     
     public static final int MAX_LIGHTS = 8;
 
+    private PolynomialOperation surfaceExpressionFamily;
+
     private PolynomialOperation surfaceExpression;
     private PolynomialOperation gradientXExpression;
     private PolynomialOperation gradientYExpression;
     private PolynomialOperation gradientZExpression;
-    private Map< String, Float > parameters;
+
+    private Simplificator parameterSubstitutor;
     
     private Camera camera;
     private Material frontMaterial;
@@ -34,9 +37,7 @@ public abstract class AlgebraicSurfaceRenderer
     
     public AlgebraicSurfaceRenderer()
     {
-        this.surfaceExpression = new PolynomialVariable( PolynomialVariable.Var.z );
-        calculateGradientExpression();
-        this.parameters = new HashMap< String, Float >();
+        this.parameterSubstitutor = new Simplificator();
         this.camera = new Camera();
         this.frontMaterial = new Material();
         this.backMaterial = new Material();
@@ -47,76 +48,91 @@ public abstract class AlgebraicSurfaceRenderer
         this.surfaceTransform = new Matrix4f();
         this.surfaceTransform.setIdentity();
         this.backgroundColor = new Color3f( 1.0f, 1.0f, 1.0f );
+
+        this.setSurfaceFamily( new PolynomialVariable( PolynomialVariable.Var.z ) );
     }
     
     public abstract void draw( int[] colorBuffer, int width, int height );
     
+    @Deprecated
     public void setSurfaceExpression( PolynomialOperation expression )
     {
-        Simplificator simplificator = new Simplificator();
-
-        // assign simplified expression
-        this.surfaceExpression = expression.accept( simplificator, ( Void ) null );
-        
-        // calculate expressions of gradient 
-        calculateGradientExpression();
+        this.setSurfaceFamily( expression );
     }
-    
-    private void calculateGradientExpression()
+
+    public void setSurfaceFamily( PolynomialOperation expression )
     {
-        Simplificator simplificator = new Simplificator();
-        
-        // calculate grad_x and simplify
-        this.gradientXExpression = this.surfaceExpression.accept( new Differentiator( PolynomialVariable.Var.x ), ( Void ) null );
-        this.gradientXExpression = this.gradientXExpression.accept( simplificator, ( Void ) null );
-
-        // calculate grad_y and simplify
-        this.gradientYExpression = this.surfaceExpression.accept( new Differentiator( PolynomialVariable.Var.y ), ( Void ) null );
-        this.gradientYExpression = this.gradientYExpression.accept( simplificator, ( Void ) null );
-
-        // calculate grad_z and simplify
-        this.gradientZExpression = this.surfaceExpression.accept( new Differentiator( PolynomialVariable.Var.z ), ( Void ) null );
-        this.gradientZExpression = this.gradientZExpression.accept( simplificator, ( Void ) null );
+        this.surfaceExpressionFamily = expression;
+        this.clearExpressionCache();
+        this.parameterSubstitutor = new Simplificator(); // forget about old values of parameters
     }
     
+    private void clearExpressionCache()
+    {
+        this.surfaceExpression = null; // clear cache version of concrete surface expression, where all parameters have been set
+        this.gradientXExpression = null;
+        this.gradientYExpression = null;
+        this.gradientZExpression = null;        
+    }
+
+    public PolynomialOperation getSurfaceFamily()
+    {
+        return this.surfaceExpressionFamily;
+    }
+
     public PolynomialOperation getSurfaceExpression()
     {
+        if( this.surfaceExpression == null )
+            this.surfaceExpression = this.surfaceExpressionFamily.accept( parameterSubstitutor, ( Void ) null );
         return this.surfaceExpression;
     }
     
     public PolynomialOperation getGradientXExpression()
     {
+        if( this.gradientXExpression == null )
+            this.gradientXExpression = getSurfaceExpression().accept( new Differentiator( PolynomialVariable.Var.x ), ( Void ) null );
         return this.gradientXExpression;
     }
     
     public PolynomialOperation getGradientYExpression()
     {
+        if( this.gradientYExpression == null )
+            this.gradientYExpression = getSurfaceExpression().accept( new Differentiator( PolynomialVariable.Var.y ), ( Void ) null );
         return this.gradientYExpression;
     }
     
     public PolynomialOperation getGradientZExpression()
     {
+        if( this.gradientZExpression == null )
+            this.gradientZExpression = getSurfaceExpression().accept( new Differentiator( PolynomialVariable.Var.z ), ( Void ) null );
         return this.gradientZExpression;
     }
     
-    public void setParameter( String name, float value )
+    public void setParameterValue( String name, double value )
     {
-        this.parameters.put( name, value );
+        this.parameterSubstitutor.setParameterValue( name, value );
+        clearExpressionCache();
     }
     
     public void unsetParameter( String name )
     {
-        this.parameters.remove( name );
+        this.parameterSubstitutor.unsetParameterValue(name);
+        clearExpressionCache();
     }
     
-    public void getParameter( String name )
+    public double getParameterValue( String name )
     {
-        this.parameters.get( name );
+        return this.parameterSubstitutor.getParameterValue( name );
     }
     
-    public Set< Map.Entry< String, Float > > getParameters()
+    public Set< Map.Entry< String, Double > > getAssignedParameters()
     {
-        return this.parameters.entrySet();
+        return this.parameterSubstitutor.getKnownParameters();
+    }
+
+    public Set< String > getAllParameterNames()
+    {
+        return this.surfaceExpressionFamily.accept( new DoubleVariableExtractor(), ( Void ) null );
     }
     
     public void setCamera( Camera camera )

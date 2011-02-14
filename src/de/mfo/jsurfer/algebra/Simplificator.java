@@ -22,24 +22,27 @@ public class Simplificator extends AbstractVisitor< PolynomialOperation, Void >
 
     public double getParameterValue( String name )
     {
-        try
-        {
-            return this.dict.get( name );
-        }
-        catch( NullPointerException npe )
-        {
-            return Double.NaN;
-        }
+        return this.dict.get( name );
     }
 
-    public Set< String > getParameters()
+    public Set< String > getKnownParameterNames()
     {
         return this.dict.keySet();
+    }
+
+    public Set< Map.Entry< String, Double > > getKnownParameters()
+    {
+        return this.dict.entrySet();
     }
 
     public void setParameterValue( String name, double value )
     {
         this.dict.put( name, value );
+    }
+
+    public void unsetParameterValue( String name )
+    {
+        this.dict.remove(name);
     }
 
     public PolynomialOperation visit( PolynomialAddition pa, Void param )

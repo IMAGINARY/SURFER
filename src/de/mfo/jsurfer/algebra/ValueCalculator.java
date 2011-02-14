@@ -202,7 +202,10 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
 
     public Double visit( DoubleVariable dv, Void param )
     {
-        return this.dict.get( dv.name );
+        Double d = this.dict.get( dv.name );
+        if( d == null )
+            throw new UnsupportedOperationException( "no value has been assigned to parameter '" + dv.name + "'" );
+        return d;
     }
     
     public Double visit( DoubleValue dv, Void param )
