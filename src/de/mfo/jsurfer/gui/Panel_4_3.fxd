@@ -1886,8 +1886,8 @@ Group
 						strokeLineJoin: StrokeLineJoin.MITER
 						strokeWidth: 2.0
 						width: 500.0
-						x: 100.0
-						y: 0.0
+                                                x: 700.0
+                                                y: 1400.0
 					}
 				]
 			},
@@ -1898,12 +1898,14 @@ Group
 				[
 					Circle 
 					{ 
-						centerX:250 
+						centerX:40
 						centerY:0 
 						radius:40 
 						fill: Color.BLACK
 					}
 				]
+                                translateX: 700.0
+                                translateY: 1400.0
 			},
 			Group 
 			{
@@ -1927,8 +1929,9 @@ Group
 					}
 					
 				]
-				translateX: 50
-				translateY: 0
+
+                                translateX: 650.0
+                                translateY: 1400.0
 			},
 			Group 
 			{
@@ -1952,12 +1955,12 @@ Group
 					}
 					
 				]
-				translateX: 550
-				translateY: 0
+                                translateX: 1250.0
+                                translateY: 1400.0
 			}
 		]
-		translateX: 600
-		translateY: 1400
+		translateX: 0
+		translateY: 0
 	},
 	Group 
 	{
@@ -1979,8 +1982,8 @@ Group
 						strokeLineJoin: StrokeLineJoin.MITER
 						strokeWidth: 2.0
 						width: 500.0
-						x: 100.0
-						y: 0.0
+						x: 1300.0
+						y: 1400.0
 					}
 				]
 			},
@@ -1991,12 +1994,14 @@ Group
 				[
 					Circle 
 					{ 
-						centerX:250 
+						centerX:40
 						centerY:0 
 						radius:40 
 						fill: Color.BLACK
 					}
 				]
+                                translateX: 1400
+                                translateY: 1400
 			},
 			Group 
 			{
@@ -2020,8 +2025,8 @@ Group
 					}
 					
 				]
-				translateX: 50
-				translateY: 0
+                                translateX: 1250
+                                translateY: 1400
 			},
 			Group 
 			{
@@ -2045,12 +2050,11 @@ Group
 					}
 					
 				]
-				translateX: 550
-				translateY: 0
+				translateX: 1750
+				translateY: 1400
 			}
 		]
-		translateX: 1200
-		translateY: 1400
+		
 	},
 	Group 
 	{

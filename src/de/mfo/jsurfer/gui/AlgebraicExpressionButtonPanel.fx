@@ -32,15 +32,46 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     var test:JTextField=new JTextField();
     var frontColor: ColorChooser;
     var backColor: ColorChooser;
-    var zoomShaft:Node;
-    var zoomThumb:Node;
-    var zoomDragStartX:Number;
+    //var zoomShaft:Node;
+    //var zoomThumb:Node;
+    var DragStartX:Number;
+    var ParA:Number=0.5 on replace
+    {
+
+        if (ParA<0){ParA=0;}
+        else if (ParA>1){ParA=1;}
+        else
+        {
+        def min = fxdButtons.getNode("ParA_Shaft").layoutBounds.minX;
+	def max = fxdButtons.getNode("ParA_Shaft").layoutBounds.maxX-fxdButtons.getNode("ParA_Thumb").layoutBounds.width;
+        //def wert=
+        fxdButtons.getNode("ParA_Thumb").translateX = (ParA)*(max-min)+min;
+        System.out.println("PAraA:{ParA}  {fxdButtons.getNode("ParA_Thumb").translateX}  {(ParA)*(max-min)+min} {min} {max}");
+        }
+        surferPanel.a=ParA;
+    };
+    var ParB:Number=0.5 on replace
+    {
+
+        if (ParB<0){ParB=0;}
+        else if (ParB>1){ParB=1;}
+        else
+        {
+        def min = fxdButtons.getNode("ParB_Shaft").layoutBounds.minX;
+	def max = fxdButtons.getNode("ParB_Shaft").layoutBounds.maxX-fxdButtons.getNode("ParB_Thumb").layoutBounds.width;
+        //def wert=
+        fxdButtons.getNode("ParB_Thumb").translateX = (ParB)*(max-min)+min;
+        System.out.println("PAraB:{ParB}  {fxdButtons.getNode("ParB_Thumb").translateX}  {(ParB)*(max-min)+min} {min} {max}");
+        }
+        surferPanel.b=ParB;
+    };
     var zoomScale:Number=bind surferPanel.scale on replace
     {
-        def min = zoomShaft.layoutBounds.minX;
-	def max = zoomShaft.layoutBounds.maxX-zoomThumb.layoutBounds.width;
-        zoomThumb.translateX = ((zoomScale)*(max-min)+min);
-        //System.out.println("zoomScale:{(zoomScale)*(max-min)+min}");
+        def min = fxdButtons.getNode("Zoom_Shaft").layoutBounds.minX;
+	//def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Shaft").layoutBounds.width;
+        def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Thumb").layoutBounds.width;
+        fxdButtons.getNode("Zoom_Thumb").translateX = (zoomScale)*(max-min)+min;
+        System.out.println("zoomScale:{(zoomScale)*(max-min)+min} {zoomScale} {min} {max}");
     };
     
         public var scale:Number;
@@ -120,18 +151,56 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     }
     function setZoom()
     {
-        zoomShaft = fxdButtons.getNode("Zoom_Shaft");
-	zoomThumb = fxdButtons.getNode("Zoom_Thumb");
-	zoomThumb.onMousePressed = zoomMouseDown;
-	zoomThumb.onMouseDragged = zoomMouseDrag;
+        //zoomShaft = fxdButtons.getNode("Zoom_Shaft");
+	//zoomThumb = fxdButtons.getNode("Zoom_Thumb");
+	fxdButtons.getNode("Zoom_Thumb").onMousePressed = function (ev:MouseEvent){sliderMouseDown(ev, "Zoom")};
+	fxdButtons.getNode("Zoom_Thumb").onMouseDragged = function (ev:MouseEvent)
+        {
+            var x:Number=sliderMouseDrag(ev, "Zoom");
+            def min = fxdButtons.getNode("Zoom_Shaft").layoutBounds.minX;
+            def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Thumb").layoutBounds.width;
+            surferPanel.setScale((x-min)/(max-min));
+        };
         def m:MouseEvent=MouseEvent{};
-        zoomMouseDrag(m);
+        sliderMouseDrag(m,"Zoom");
         fxdButtons.getNode("Zoom_Minus").onMousePressed=function(e: MouseEvent): Void {surferPanel.setScale(surferPanel.scale-0.025); };
         fxdButtons.getNode("Zoom_Plus").onMousePressed=function(e: MouseEvent): Void {surferPanel.setScale(surferPanel.scale+0.025); };
         /*def min = zoomShaft.layoutBounds.minX;
 	def max = zoomShaft.layoutBounds.maxX-zoomThumb.layoutBounds.width;
         zoomThumb.translateX = ((zoomScale)*(max-min)+min);*/
     }
+    function setParameter()
+    {
+        
+        //var ParAX:Number;
+        //var ParBX:Number;
+        fxdButtons.getNode("ParA_Thumb").onMousePressed = function (ev:MouseEvent){sliderMouseDown(ev, "ParA")};
+	fxdButtons.getNode("ParA_Thumb").onMouseDragged = function (ev:MouseEvent)
+        {
+            var x:Number=sliderMouseDrag(ev, "ParA");
+            def min = fxdButtons.getNode("ParA_Shaft").layoutBounds.minX;
+            def max = fxdButtons.getNode("ParA_Shaft").layoutBounds.maxX-fxdButtons.getNode("ParA_Thumb").layoutBounds.width;
+            ParA=((x-min)/(max-min));
+        };
+        def m:MouseEvent=MouseEvent{};
+        sliderMouseDrag(m,"ParA");
+        fxdButtons.getNode("ParA_Minus").onMousePressed=function(e: MouseEvent): Void {ParA-=0.025;};
+        fxdButtons.getNode("ParA_Plus").onMousePressed=function(e: MouseEvent): Void {ParA+=0.025;};
+
+        fxdButtons.getNode("ParB_Thumb").onMousePressed = function (ev:MouseEvent){sliderMouseDown(ev, "ParB")};
+	fxdButtons.getNode("ParB_Thumb").onMouseDragged = function (ev:MouseEvent)
+        {
+            var x:Number=sliderMouseDrag(ev, "ParB");
+            def min = fxdButtons.getNode("ParB_Shaft").layoutBounds.minX;
+            def max = fxdButtons.getNode("ParB_Shaft").layoutBounds.maxX-fxdButtons.getNode("ParB_Thumb").layoutBounds.width;
+            ParB=((x-min)/(max-min));
+        };
+        //def m2:MouseEvent=MouseEvent{};
+        sliderMouseDrag(m,"ParB");
+        fxdButtons.getNode("ParB_Minus").onMousePressed=function(e: MouseEvent): Void {ParB-=0.025;};
+        fxdButtons.getNode("ParB_Plus").onMousePressed=function(e: MouseEvent): Void {ParB+=0.025;};
+    }
+    
     function setTextField()
     {
         var T:Bounds=fxdButtons.getNode("Text").boundsInParent;
@@ -270,6 +339,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             } );
             setColoChooser();
             setRenderPanel();
+            setParameter();
  
 		return Group
 		{
@@ -378,15 +448,39 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 		fxdButtons.getNode("Button_Pressed_{s}").visible=false;
                 if (pressedButton==s){pressedButton="";System.out.println("Standard {s}");}
 	}
-        function zoomMouseDown(ev:MouseEvent) : Void
+        function sliderMouseDown(ev:MouseEvent, s:String) : Void
 	{	//zoomDragStartX = zoomThumb.layoutX;
-                zoomDragStartX = zoomThumb.translateX;
+                DragStartX = fxdButtons.getNode("{s}_Thumb").translateX;
+	}
+	function sliderMouseDrag(ev:MouseEvent, s:String) : Number
+	{	var x:Number = DragStartX + /*getScale(height,width)*/ev.dragX/getScale(height,width);
+                if (getScale(height,width)==0.0)x=DragStartX;
+		def min = fxdButtons.getNode("{s}_Shaft").layoutBounds.minX;
+		def max = fxdButtons.getNode("{s}_Shaft").layoutBounds.maxX-fxdButtons.getNode("{s}_Thumb").layoutBounds.width;
+		//def min = fxdButtons.getNode("{s}_Shaft").localToScene(fxdButtons.getNode("{s}_Shaft").layoutBounds).minX;
+                //def max = fxdButtons.getNode("{s}_Shaft").localToScene(fxdButtons.getNode("{s}_Shaft").layoutBounds).maxX-fxdButtons.getNode("{s}_Shaft").localToScene(fxdButtons.getNode("{s}_Thumb").layoutBounds).width;
+                if(x < min)
+		{	x = min;
+		}
+		else if(x > max)
+		{	x = max;
+		}
+                //zoomScale = x/(max-min);
+                //surferPanel.setScale((x-min)/(max-min));
+                return x;
+                //surferPanel.scale=5.0;
+		//zoomThumb.translateX = x;
+                //System.out.println("Drag:{min},{max},{x},{zoomDragStartX},{(x-min)/(max-min)}");
+	}
+        /*function zoomMouseDown(ev:MouseEvent) : Void
+	{	//zoomDragStartX = zoomThumb.layoutX;
+                zoomDragStartX = fxdButtons.getNode("Zoom_Thumb").translateX;
 	}
 	function zoomMouseDrag(ev:MouseEvent) : Void
-	{	var x:Number = zoomDragStartX + /*getScale(height,width)*/ev.dragX/getScale(height,width);
+	{	var x:Number = zoomDragStartX + ev.dragX/getScale(height,width);
                 if (getScale(height,width)==0.0)x=zoomDragStartX;
-		def min = zoomShaft.layoutBounds.minX;
-		def max = zoomShaft.layoutBounds.maxX-zoomThumb.layoutBounds.width;
+		def min = fxdButtons.getNode("Zoom_Shaft").layoutBounds.minX;
+		def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Thumb").layoutBounds.width;
 		if(x < min)
 		{	x = min;
 		}
@@ -398,5 +492,5 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                 //surferPanel.scale=5.0;
 		//zoomThumb.translateX = x;
                 //System.out.println("Drag:{min},{max},{x},{zoomDragStartX},{(x-min)/(max-min)}");
-	}
+	}*/
 }

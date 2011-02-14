@@ -20,7 +20,7 @@ import de.mfo.jsurfer.algebra.*;
 import javafx.scene.layout.LayoutInfo;
 //import javax.swing.event.*;
 import java.awt.event.*;
-
+import java.util.*;
 /**
  * @author Panda
  */
@@ -49,7 +49,20 @@ public class FXSurferPanel extends CustomNode {
     public var x: Number;
 //setRenderSize
     public var y: Number;
-
+    public var a: Number on replace
+    {
+        renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
+        renderer.repaintImage();
+        System.out.println("lokal a: {a}");
+    };
+    public var b: Number on replace
+    {
+        renderer.getAlgebraicSurfaceRenderer().setParameterValue("b", b);
+        renderer.repaintImage();
+        System.out.println("lokal b: {b}");
+    };
+    public var usedA:Boolean;
+    public var usedB:Boolean;
     public var width: Number/* on replace oldValue
     {
         var d:Dimension=new Dimension(width, height);
@@ -204,14 +217,26 @@ var p:PolynomialOperation;
              p=t7;
            }
 */
-           var p:PolynomialOperation = AlgebraicExpressionParser.parse( expression );
 
+/*var p:PolynomialOperation = AlgebraicExpressionParser.parse( "x^2+y^2-1+a" );
+           var degree:Integer = p.accept( new DegreeCalculator(), ( null as java.lang.Void ) );
+           var params:java.util.Set = p.accept( new DoubleVariableExtractor(), ( null as java.lang.Void ) );
+           System.out.println( "degree={degree}" );
+           System.out.println( "parameters={params.toString()}" );*/
+           var p:PolynomialOperation = AlgebraicExpressionParser.parse( expression );
+            var degree:Integer = p.accept( new DegreeCalculator(), ( null as java.lang.Void ) );
            // current version does not support surface parameters
            /*if( p.accept( new DoubleVariableChecker(), ( Void ) null ) )
                throw new Exception();*/
 
-               renderer.getAlgebraicSurfaceRenderer().setSurfaceExpression( p );
-renderer.repaintImage();
+               renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(p);
+               renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
+               renderer.getAlgebraicSurfaceRenderer().setParameterValue("b", b);
+               var  PAR:Set=renderer.getAlgebraicSurfaceRenderer().getAllParameterNames();
+               usedA=PAR.contains("a");
+               usedB=PAR.contains("b");
+               //setSurfaceExpression( p );
+            renderer.repaintImage();
            //surfaceExpression.setBackground( Color.WHITE );
         }
         catch( Exception )
