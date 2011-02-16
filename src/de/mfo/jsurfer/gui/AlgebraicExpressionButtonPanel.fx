@@ -19,6 +19,9 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javafx.scene.input.MouseButton;
 import javax.swing.event.*;
+import java.util.*;
+import javax.swing.event.*;
+import javax.swing.*;
 
 /**
  * @author Panda
@@ -71,7 +74,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 	//def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Shaft").layoutBounds.width;
         def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Thumb").layoutBounds.width;
         fxdButtons.getNode("Zoom_Thumb").translateX = (zoomScale)*(max-min)+min;
-        System.out.println("zoomScale:{(zoomScale)*(max-min)+min} {zoomScale} {min} {max}");
+        //System.out.println("zoomScale:{(zoomScale)*(max-min)+min} {zoomScale} {min} {max}");
     };
     
         public var scale:Number;
@@ -163,8 +166,8 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         };
         def m:MouseEvent=MouseEvent{};
         sliderMouseDrag(m,"Zoom");
-        fxdButtons.getNode("Zoom_Minus").onMousePressed=function(e: MouseEvent): Void {surferPanel.setScale(surferPanel.scale-0.025); };
-        fxdButtons.getNode("Zoom_Plus").onMousePressed=function(e: MouseEvent): Void {surferPanel.setScale(surferPanel.scale+0.025); };
+        fxdButtons.getNode("Zoom_Minus").onMousePressed=function(e: MouseEvent): Void {surferPanel.setScale(surferPanel.scale-0.005); };
+        fxdButtons.getNode("Zoom_Plus").onMousePressed=function(e: MouseEvent): Void {surferPanel.setScale(surferPanel.scale+0.005); };
         /*def min = zoomShaft.layoutBounds.minX;
 	def max = zoomShaft.layoutBounds.maxX-zoomThumb.layoutBounds.width;
         zoomThumb.translateX = ((zoomScale)*(max-min)+min);*/
@@ -370,18 +373,69 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 	}
 	public function forward()
 	{
-                pos=test.getCaretPosition();
+                /*pos=test.getCaretPosition();
                 //expression=test.getText();
 		if (pos<expression.length())pos++;               
                 //test.setText(expression);
-                test.setCaretPosition(pos);
+                test.setCaretPosition(pos);*/
+                var fc:JFileChooser  = new JFileChooser();
+        fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        fc.setAcceptAllFileFilterUsed( false );
+        var jsurfFilter:JSurfFilter  = new JSurfFilter();
+        fc.addChoosableFileFilter( jsurfFilter );
+
+        var returnVal:Integer = fc.showSaveDialog( surferPanel.renderer );
+        if( returnVal == JFileChooser.APPROVE_OPTION )
+        {
+            var f:java.io.File  = fc.getSelectedFile();
+            f = jsurfFilter.ensureExtension( f );
+            try
+            {
+                //file.toURL()
+                surferPanel.renderer.saveToFile( f.toURL());
+                surferPanel.renderer.repaintImage();
+                //renderer.saveToPNG( f, 1024, 1024 );
+            }
+            catch(e: java.lang.Exception  )
+            {
+                var  message:String= "Could not save to file \" {f.getName()  } \".";
+                if( e.getMessage() != null )
+                    message = "{message}\n\nMessage: {e.getMessage()}";
+                JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
+            }
+        }
 	}
 
 	public function back()
 	{
-                pos=test.getCaretPosition();
-		if (pos>0)pos--;
-                test.setCaretPosition(pos);
+                         var fc:JFileChooser  = new JFileChooser();
+        fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        fc.setAcceptAllFileFilterUsed( false );
+        var jsurfFilter:JSurfFilter  = new JSurfFilter();
+        fc.addChoosableFileFilter( jsurfFilter );
+
+        var returnVal:Integer = fc.showOpenDialog( surferPanel.renderer );
+        if( returnVal == JFileChooser.APPROVE_OPTION )
+        {
+            var f:java.io.File  = fc.getSelectedFile();
+            f = jsurfFilter.ensureExtension( f );
+            try
+            {
+                //file.toURL()
+                surferPanel.renderer.loadFromFile( f.toURL());
+                surferPanel.renderer.repaintImage();
+                
+                test.setText(surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString());
+                //renderer.saveToPNG( f, 1024, 1024 );
+            }
+            catch(e: java.lang.Exception  )
+            {
+                var  message:String= "Could not save to file \" {f.getName()  } \".";
+                if( e.getMessage() != null )
+                    message = "{message}\n\nMessage: {e.getMessage()}";
+                JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
+            }
+        }
 	}
 
 	public function backspace()
@@ -494,3 +548,4 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                 //System.out.println("Drag:{min},{max},{x},{zoomDragStartX},{(x-min)/(max-min)}");
 	}*/
 }
+
