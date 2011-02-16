@@ -288,7 +288,7 @@ public abstract class AlgebraicSurfaceRenderer
             if( name.startsWith( parameter_prefix ) )
             {
                 String parameterName = name.substring( parameter_prefix.length() );
-                this.setParameterValue( parameterName, Float.parseFloat( ( String ) entry.getKey() ) );
+                this.setParameterValue( parameterName, Float.parseFloat( ( String ) entry.getValue() ) );
             }
         }
 
