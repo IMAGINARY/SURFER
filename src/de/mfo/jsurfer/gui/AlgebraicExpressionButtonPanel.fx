@@ -373,69 +373,18 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 	}
 	public function forward()
 	{
-                /*pos=test.getCaretPosition();
+                //pos=test.getCaretPosition();
                 //expression=test.getText();
-		if (pos<expression.length())pos++;               
+		if (pos<expression.length())pos++;
                 //test.setText(expression);
-                test.setCaretPosition(pos);*/
-                var fc:JFileChooser  = new JFileChooser();
-        fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
-        fc.setAcceptAllFileFilterUsed( false );
-        var jsurfFilter:JSurfFilter  = new JSurfFilter();
-        fc.addChoosableFileFilter( jsurfFilter );
-
-        var returnVal:Integer = fc.showSaveDialog( surferPanel.renderer );
-        if( returnVal == JFileChooser.APPROVE_OPTION )
-        {
-            var f:java.io.File  = fc.getSelectedFile();
-            f = jsurfFilter.ensureExtension( f );
-            try
-            {
-                //file.toURL()
-                surferPanel.renderer.saveToFile( f.toURL());
-                surferPanel.renderer.repaintImage();
-                //renderer.saveToPNG( f, 1024, 1024 );
-            }
-            catch(e: java.lang.Exception  )
-            {
-                var  message:String= "Could not save to file \" {f.getName()  } \".";
-                if( e.getMessage() != null )
-                    message = "{message}\n\nMessage: {e.getMessage()}";
-                JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
-            }
-        }
+                test.setCaretPosition(pos);
 	}
 
 	public function back()
 	{
-                         var fc:JFileChooser  = new JFileChooser();
-        fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
-        fc.setAcceptAllFileFilterUsed( false );
-        var jsurfFilter:JSurfFilter  = new JSurfFilter();
-        fc.addChoosableFileFilter( jsurfFilter );
-
-        var returnVal:Integer = fc.showOpenDialog( surferPanel.renderer );
-        if( returnVal == JFileChooser.APPROVE_OPTION )
-        {
-            var f:java.io.File  = fc.getSelectedFile();
-            f = jsurfFilter.ensureExtension( f );
-            try
-            {
-                //file.toURL()
-                surferPanel.renderer.loadFromFile( f.toURL());
-                surferPanel.renderer.repaintImage();
-                
-                test.setText(surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString());
-                //renderer.saveToPNG( f, 1024, 1024 );
-            }
-            catch(e: java.lang.Exception  )
-            {
-                var  message:String= "Could not save to file \" {f.getName()  } \".";
-                if( e.getMessage() != null )
-                    message = "{message}\n\nMessage: {e.getMessage()}";
-                JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
-            }
-        }
+                pos=test.getCaretPosition();
+		if (pos>0)pos--;
+                test.setCaretPosition(pos);
 	}
 
 	public function backspace()
@@ -547,5 +496,65 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 		//zoomThumb.translateX = x;
                 //System.out.println("Drag:{min},{max},{x},{zoomDragStartX},{(x-min)/(max-min)}");
 	}*/
+    function load():Void
+    {
+       var fc:JFileChooser  = new JFileChooser();
+       fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+       fc.setAcceptAllFileFilterUsed( false );
+       var jsurfFilter:JSurfFilter  = new JSurfFilter();
+       fc.addChoosableFileFilter( jsurfFilter );
+
+       var returnVal:Integer = fc.showOpenDialog( surferPanel.renderer );
+       if( returnVal == JFileChooser.APPROVE_OPTION )
+       {
+          var f:java.io.File  = fc.getSelectedFile();
+          f = jsurfFilter.ensureExtension( f );
+          try
+          {
+             surferPanel.renderer.loadFromFile( f.toURL());
+             surferPanel.renderer.repaintImage();
+             test.setText(surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString());
+           }
+           catch(e: java.lang.Exception  )
+           {
+             var  message:String= "Could not save to file \" {f.getName()  } \".";
+             if( e.getMessage() != null )
+             message = "{message}\n\nMessage: {e.getMessage()}";
+             JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
+           }
+        }
+      }
+
+      function save():Void
+      {
+        var fc:JFileChooser  = new JFileChooser();
+        fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        fc.setAcceptAllFileFilterUsed( false );
+        var jsurfFilter:JSurfFilter  = new JSurfFilter();
+        fc.addChoosableFileFilter( jsurfFilter );
+
+        var returnVal:Integer = fc.showSaveDialog( surferPanel.renderer );
+        if( returnVal == JFileChooser.APPROVE_OPTION )
+        {
+            var f:java.io.File  = fc.getSelectedFile();
+            f = jsurfFilter.ensureExtension( f );
+            try
+            {
+                //file.toURL()
+                surferPanel.renderer.saveToFile( f.toURL());
+                surferPanel.renderer.repaintImage();
+                //renderer.saveToPNG( f, 1024, 1024 );
+            }
+            catch(e: java.lang.Exception  )
+            {
+                var  message:String= "Could not save to file \" {f.getName()  } \".";
+                if( e.getMessage() != null )
+                    message = "{message}\n\nMessage: {e.getMessage()}";
+                JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
+            }
+        }
+      }
+
+
 }
 
