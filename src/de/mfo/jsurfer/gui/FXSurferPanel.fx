@@ -27,7 +27,7 @@ import java.util.*;
 
 public class FXSurferPanel extends CustomNode {
 
-    var renderer: JSurferRenderPanel=new JSurferRenderPanel() ;
+    public var renderer: JSurferRenderPanel=new JSurferRenderPanel() ;
     public var frontColor: Color3f on replace
     {
         var frontMaterial: Material=renderer.getAlgebraicSurfaceRenderer().getFrontMaterial();
@@ -80,15 +80,15 @@ public class FXSurferPanel extends CustomNode {
     }/**/;
     public function setScale(n:Number)
     {
-        renderer.setScale( n );
-        scale=renderer.publicScaleFactor;
+        renderer.setScale( n*4-2 );
+        scale=renderer.getScale()/4+0.5;
         //System.out.println("SetScale: {scale}, bindinghack.value{bindinghack.value}");
         //renderer.repaintImage();
     }
 
-    public var scale:Number=renderer.publicScaleFactor on replace
+    public var scale:Number=renderer.getScale()/4+0.5 on replace
     {
-        renderer.setScale( scale );
+        renderer.setScale( scale*4-2 );
         renderer.repaintImage();
         //System.out.println("Scale has changed: {scale}");
     };
@@ -157,7 +157,7 @@ public class FXSurferPanel extends CustomNode {
         MouseWheelListener{
             override function mouseWheelMoved(e)
             {
-                scale=renderer.publicScaleFactor;
+                scale=renderer.getScale()/4+0.5;
             }
         }
 
@@ -201,6 +201,7 @@ public class FXSurferPanel extends CustomNode {
     public function surfaceExpressionChanged(expression:String):Boolean
     {
 //        var P:AlgebraicExpressionParser= new AlgebraicExpressionParser;
+  
         try
         {
 /*
@@ -228,13 +229,23 @@ var p:PolynomialOperation;
            // current version does not support surface parameters
            /*if( p.accept( new DoubleVariableChecker(), ( Void ) null ) )
                throw new Exception();*/
+               var old:PolynomialOperation=renderer.getAlgebraicSurfaceRenderer().getSurfaceFamily();
+               //renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(p);
+               renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(expression);
+               var  PAR:Set=renderer.getAlgebraicSurfaceRenderer().getAllParameterNames();
+               System.out.println("PAR voll:{PAR}");
+               usedA=PAR.remove("a");
+               usedB=PAR.remove("b");
+               System.out.println("PAR leer:{PAR}");
+               if (not PAR.isEmpty())
+               {
+                   renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(old);
+                   System.out.println("falsch");
+                   return false;
+               }
 
-               renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(p);
                renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
                renderer.getAlgebraicSurfaceRenderer().setParameterValue("b", b);
-               var  PAR:Set=renderer.getAlgebraicSurfaceRenderer().getAllParameterNames();
-               usedA=PAR.contains("a");
-               usedB=PAR.contains("b");
                //setSurfaceExpression( p );
             renderer.repaintImage();
            //surfaceExpression.setBackground( Color.WHITE );
