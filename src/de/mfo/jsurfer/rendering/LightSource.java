@@ -5,6 +5,9 @@
 package de.mfo.jsurfer.rendering;
 
 import javax.vecmath.*;
+import java.util.Properties;
+import de.mfo.jsurfer.util.BasicIO;
+
 
 /**
  *
@@ -12,14 +15,29 @@ import javax.vecmath.*;
  */
 public class LightSource {
 
+    public enum Status { ON, OFF }
+
+    private Status status;
     private Point3f position;
     private Color3f color;
     private float intensity;
 
+
     public LightSource() {
+        this.status = Status.ON;
         this.position = new Point3f( 0.0f, 0.0f, 0.0f );
         this.color = new Color3f( 1.0f, 1.0f, 1.0f );
         this.intensity = 1.0f;
+    }
+
+    public void setStatus( Status status )
+    {
+        this.status = status;
+    }
+
+    public Status getStatus()
+    {
+        return this.status;
     }
 
     public void setPosition(Point3f position)
@@ -52,5 +70,33 @@ public class LightSource {
 
     public float getIntensity() {
         return intensity;
+    }
+
+    public Properties saveProperties( Properties props, String prefix, String suffix )
+    {
+        props.setProperty( prefix + "status" + suffix, status.name() );
+        props.setProperty( prefix + "position" + suffix, BasicIO.toString( position ) );
+        props.setProperty( prefix + "color" + suffix, "" + BasicIO.toString( color ) );
+        props.setProperty( prefix + "intensity" + suffix, "" + intensity );
+        return props;
+    }
+
+    public void loadProperties( Properties props, String prefix, String suffix )
+    {
+        String status_key = prefix + "status" + suffix;
+        if( props.containsKey( status_key ) )
+            status = Status.valueOf( props.getProperty( status_key ) );
+
+        String position_key = prefix + "position" + suffix;
+        if( props.containsKey( position_key ) )
+            position = BasicIO.fromPoint3fString( props.getProperty( position_key ) );
+
+        String color_key = prefix + "color" + suffix;
+        if( props.containsKey( color_key ) )
+            color = BasicIO.fromColor3fString( props.getProperty( color_key ) );
+
+        String intensity_key = prefix + "intensity" + suffix;
+        if( props.containsKey( intensity_key ) )
+            intensity = Float.parseFloat( props.getProperty( intensity_key ) );
     }
 }

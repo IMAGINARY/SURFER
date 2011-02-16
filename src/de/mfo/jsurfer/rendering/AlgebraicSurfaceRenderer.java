@@ -6,8 +6,17 @@
 package de.mfo.jsurfer.rendering;
 
 import de.mfo.jsurfer.algebra.*;
+import de.mfo.jsurfer.util.BasicIO;
+import de.mfo.jsurfer.parser.*;
 import javax.vecmath.*;
 import java.util.*;
+
+// input/output
+import java.net.URL;
+import java.util.Properties;
+import java.io.*;
+
+
 
 /**
  *
@@ -43,6 +52,11 @@ public abstract class AlgebraicSurfaceRenderer
         this.backMaterial = new Material();
         this.lightSources = new LightSource[ MAX_LIGHTS ];
         this.lightSources[ 0 ] = new LightSource();
+        for( int i = 1; i < this.lightSources.length; i++ )
+        {
+            this.lightSources[ i ] = new LightSource();
+            this.lightSources[ i ].setStatus(LightSource.Status.OFF);
+        }
         this.transform = new Matrix4f();
         this.transform.setIdentity();
         this.surfaceTransform = new Matrix4f();
@@ -238,5 +252,68 @@ public abstract class AlgebraicSurfaceRenderer
     public Color3f getBackgroundColor()
     {
         return this.backgroundColor;
+    }
+
+    public void loadFromFile( URL url )
+            throws IOException, Exception
+    {
+        Properties props = new Properties();
+        props.load( url.openStream() );
+
+        this.setSurfaceFamily( AlgebraicExpressionParser.parse( props.getProperty( "surface_equation" ) ) );
+
+        Set< Map.Entry< Object, Object > > entries = props.entrySet();
+        String parameter_prefix = "surface_parameter_";
+        for( Map.Entry< Object, Object > entry : entries )
+        {
+            String name = (String) entry.getKey();
+            if( name.startsWith( parameter_prefix ) )
+            {
+                String parameterName = name.substring( parameter_prefix.length() );
+                this.setParameterValue( parameterName, Float.parseFloat( ( String ) entry.getKey() ) );
+            }
+        }
+
+        this.getCamera().loadProperties( props, "camera_", "" );
+        this.getFrontMaterial().loadProperties(props, "front_material_", "");
+        this.getBackMaterial().loadProperties(props, "back_material_", "");
+        for( int i = 0; i < this.MAX_LIGHTS; i++ )
+        {
+            this.getLightSource( i ).setStatus(LightSource.Status.OFF);
+            this.getLightSource( i ).loadProperties( props, "light_", "_" + i );
+        }
+        this.setTransform( BasicIO.fromMatrix4fString( props.getProperty( "transform" ) ) );
+        this.setTransform( BasicIO.fromMatrix4fString( props.getProperty( "surface_transform" ) ) );
+        this.setBackgroundColor( BasicIO.fromColor3fString( props.getProperty( "background_color" ) ) );
+    }
+
+    public void saveToFile( URL url )
+            throws IOException
+    {
+        Properties props = new Properties();
+        String surfaceEquation = this.getSurfaceFamily().accept( new ToStringVisitor(), (Void) null);
+        props.setProperty( "surface_equation", surfaceEquation );
+        
+        Set< String > paramNames = getAllParameterNames();
+        for( String paramName : paramNames )
+        {
+            try
+            {
+                props.setProperty( "surface_parameter_" + paramName, "" + this.getParameterValue( paramName ) );
+            }
+            catch( Exception e ) {}
+        }
+        
+        this.getCamera().saveProperties( props, "camera_", "" );
+        this.getFrontMaterial().saveProperties(props, "front_material_", "");
+        this.getBackMaterial().saveProperties(props, "back_material_", "");
+        for( int i = 0; i < this.MAX_LIGHTS; i++ )
+            this.getLightSource( i ).saveProperties( props, "light_", "_" + i );
+        props.setProperty( "transform", BasicIO.toString( this.getTransform() ) );
+        props.setProperty( "surface_transform", BasicIO.toString( this.getSurfaceTransform() ) );
+        props.setProperty( "background_color", BasicIO.toString( this.getBackgroundColor() ) );
+
+        File property_file = new File( url.getFile() );
+        props.store( new FileOutputStream( property_file ), "jSurfer surface description" );
     }
 }

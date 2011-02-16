@@ -45,7 +45,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
 
         int numOfLightSources = 0;
         for( int i = 0; i < MAX_LIGHTS; i++ )
-            if( getLightSource( i ) != null )
+            if( getLightSource( i ).getStatus() == LightSource.Status.ON )
                 numOfLightSources++;
         dcsd.lightSources = new LightSource[ numOfLightSources ];
         dcsd.frontLightProducts = new LightProducts[ numOfLightSources ];
@@ -54,7 +54,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         for( int i = 0; i < MAX_LIGHTS; i++ )
         {
             LightSource lightSource = getLightSource( i );
-            if( lightSource != null )
+            if( lightSource.getStatus() == LightSource.Status.ON )
             {
                 dcsd.lightSources[lightSourceIndex] = lightSource;
                 dcsd.frontLightProducts[lightSourceIndex] = new LightProducts( lightSource, getFrontMaterial() );

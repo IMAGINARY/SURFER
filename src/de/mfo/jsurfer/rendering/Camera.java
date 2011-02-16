@@ -6,6 +6,8 @@
 package de.mfo.jsurfer.rendering;
 
 import javax.vecmath.*;
+import java.util.Properties;
+import de.mfo.jsurfer.util.BasicIO;
 
 /**
  *
@@ -87,5 +89,33 @@ public class Camera {
     public Matrix4f getTransform()
     {
         return this.transform;
+    }
+    
+    public Properties saveProperties( Properties props, String prefix, String suffix )
+    {
+        props.setProperty( prefix + "type" + suffix, cameraType.toString() );
+        props.setProperty( prefix + "fov_y" + suffix, "" + fovY );        
+        props.setProperty( prefix + "height" + suffix, "" + height );
+        props.setProperty( prefix + "transform" + suffix, BasicIO.toString( transform ) );
+        return props;
+    }
+
+    public void loadProperties( Properties props, String prefix, String suffix )
+    {
+        String camera_type_key = prefix + "type" + suffix;
+        if( props.containsKey( camera_type_key ) )
+            cameraType = CameraType.valueOf( props.getProperty( camera_type_key ) );
+
+        String fov_y_key = prefix + "fov_y" + suffix;
+        if( props.containsKey( fov_y_key ) )
+            fovY = Float.parseFloat( props.getProperty( fov_y_key ) );
+
+        String height_key = prefix + "height" + suffix;
+        if( props.containsKey( height_key ) )
+            height = Float.parseFloat( props.getProperty( height_key ) );
+
+        String transform_key = prefix + "transform" + suffix;
+        if( props.containsKey( transform_key ) )
+            transform = BasicIO.fromMatrix4fString( props.getProperty( transform_key ) );
     }
 }
