@@ -27,6 +27,7 @@ public abstract class AlgebraicSurfaceRenderer
     
     public static final int MAX_LIGHTS = 8;
 
+    private String surfaceExpressionFamilyString;
     private PolynomialOperation surfaceExpressionFamily;
 
     private PolynomialOperation surfaceExpression;
@@ -74,11 +75,23 @@ public abstract class AlgebraicSurfaceRenderer
         this.setSurfaceFamily( expression );
     }
 
-    public void setSurfaceFamily( PolynomialOperation expression )
+    private void setSurfaceFamily( PolynomialOperation expression, String expressionString )
     {
         this.surfaceExpressionFamily = expression;
+        this.surfaceExpressionFamilyString = expressionString;
         this.clearExpressionCache();
         this.parameterSubstitutor = new Simplificator(); // forget about old values of parameters
+    }
+
+    public void setSurfaceFamily( PolynomialOperation expression )
+    {
+        setSurfaceFamily( expression, expression.accept( new ToStringVisitor(), (Void) null) );
+    }
+
+    public void setSurfaceFamily( String expression )
+            throws Exception
+    {
+        setSurfaceFamily( AlgebraicExpressionParser.parse( expression ), expression );
     }
     
     private void clearExpressionCache()
@@ -92,6 +105,11 @@ public abstract class AlgebraicSurfaceRenderer
     public PolynomialOperation getSurfaceFamily()
     {
         return this.surfaceExpressionFamily;
+    }
+
+    public String getSurfaceFamilyString()
+    {
+        return this.surfaceExpressionFamilyString;
     }
 
     public PolynomialOperation getSurfaceExpression()
@@ -260,7 +278,7 @@ public abstract class AlgebraicSurfaceRenderer
         Properties props = new Properties();
         props.load( url.openStream() );
 
-        this.setSurfaceFamily( AlgebraicExpressionParser.parse( props.getProperty( "surface_equation" ) ) );
+        this.setSurfaceFamily( props.getProperty( "surface_equation" ) );
 
         Set< Map.Entry< Object, Object > > entries = props.entrySet();
         String parameter_prefix = "surface_parameter_";
@@ -291,8 +309,7 @@ public abstract class AlgebraicSurfaceRenderer
             throws IOException
     {
         Properties props = new Properties();
-        String surfaceEquation = this.getSurfaceFamily().accept( new ToStringVisitor(), (Void) null);
-        props.setProperty( "surface_equation", surfaceEquation );
+        props.setProperty( "surface_equation", getSurfaceFamilyString() );
         
         Set< String > paramNames = getAllParameterNames();
         for( String paramName : paramNames )
