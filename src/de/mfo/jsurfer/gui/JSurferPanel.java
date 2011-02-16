@@ -434,7 +434,7 @@ class PNGFilter extends javax.swing.filechooser.FileFilter
 
     public static java.io.File ensureExtension( java.io.File f )
     {
-        if( getExtension( f ) != "png" )
+        if( !getExtension( f ).equals( "png" ) )
             f = new java.io.File( f.getAbsolutePath() + ".png" );
         return f;
     }
