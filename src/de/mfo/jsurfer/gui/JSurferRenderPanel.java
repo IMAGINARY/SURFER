@@ -12,6 +12,11 @@ import javax.swing.*;
 import java.awt.image.*;
 import javax.vecmath.*;
 
+// input/output
+import java.net.URL;
+import java.util.*;
+import java.io.*;
+
 import de.mfo.jsurfer.rendering.*;
 import de.mfo.jsurfer.rendering.cpu.*;
 import de.mfo.jsurfer.parser.*;
@@ -43,33 +48,31 @@ public class JSurferRenderPanel extends JComponent
     Dimension renderSize;
     RotateSphericalDragger rsd;
     Matrix4f scale;
-    public float publicScaleFactor;//0.0 bis 1.0
 
     public JSurferRenderPanel()
     {
         renderSize = new Dimension( 240, 240 );
-        
+
         refreshImage = true;
         refreshImageAntiAliased = true;
         renderSizeChanged = true;
         resizeImageWithComponent = false;
-        
+
         asr = new CPUAlgebraicSurfaceRenderer();
-        
+
         rsd = new RotateSphericalDragger();
         scale = new Matrix4f();
         scale.setIdentity();
-        publicScaleFactor=0.5f;
         MouseAdapter ma = new MouseAdapter(){
             public void mousePressed( MouseEvent me ) { JSurferRenderPanel.this.mousePressed( me ); }
             public void mouseDragged( MouseEvent me ) { JSurferRenderPanel.this.mouseDragged( me ); }
             public void mouseWheelMoved( MouseWheelEvent mwe ) { JSurferRenderPanel.this.scaleSurface ( mwe.getWheelRotation() ); }
         };
-        
+
         addMouseListener( ma );
         addMouseMotionListener( (MouseMotionListener) ma);
         addMouseWheelListener( (MouseWheelListener) ma);
-        
+
         KeyAdapter ka = new KeyAdapter() {
             public void keyPressed( KeyEvent e )
             {
@@ -80,12 +83,12 @@ public class JSurferRenderPanel extends JComponent
             }
         };
         addKeyListener( ka );
-        
+
         ComponentAdapter ca = new ComponentAdapter() {
             public void componentResized( ComponentEvent ce ) { JSurferRenderPanel.this.componentResized( ce ); }
         };
         addComponentListener( ca );
-        
+
         setDoubleBuffered( true );
         setFocusable( true );
     }
@@ -94,7 +97,7 @@ public class JSurferRenderPanel extends JComponent
     {
         return this.asr;
     }
-    
+
     public void setResizeImageWithComponent( boolean resize )
     {
         resizeImageWithComponent = resize;
@@ -108,37 +111,37 @@ public class JSurferRenderPanel extends JComponent
             repaint();
         }
     }
-    
+
     public boolean getResizeWithComponent()
     {
         return resizeImageWithComponent;
     }
-    
+
     public void repaintImage()
     {
         refreshImage = true;
         repaint();
     }
-    
+
     void createBufferedImage()
     {
         colorBuffer = new int[ renderSize.width * renderSize.height ];
         memoryImageSource = new MemoryImageSource( renderSize.width, renderSize.height, colorBuffer, 0, renderSize.width );
         memoryImageSource.setAnimated( true );
         memoryImageSource.setFullBufferUpdates( true );
-    
+
         DirectColorModel colormodel = new DirectColorModel( 24, 0xff0000, 0xff00, 0xff );
         SampleModel sampleModel = colormodel.createCompatibleSampleModel( renderSize.width, renderSize.height );
         DataBufferInt data = new DataBufferInt( colorBuffer, renderSize.width * renderSize.height );
         WritableRaster raster = WritableRaster.createWritableRaster( sampleModel, data, new Point( 0, 0 ) );
         surfaceImage = new BufferedImage( colormodel, raster, false, null );
     }
-    
+
     public Dimension getPreferredSize()
     {
         return new Dimension( renderSize.width, renderSize.height );
     }
-    
+
     public void setRenderSize( Dimension d )
     {
         if( !resizeImageWithComponent )
@@ -152,26 +155,26 @@ public class JSurferRenderPanel extends JComponent
             }
         }
     }
-    
+
     public Dimension getRenderSize()
     {
         return renderSize;
     }
-    
+
     public void setScale( float scaleFactor )
     {
-        if (scaleFactor<0.0f)scaleFactor=0.0f;
-        if (scaleFactor>1.0f)scaleFactor=1.0f;
-        publicScaleFactor=scaleFactor;
-        
-        scaleFactor=( float ) Math.pow( 10, scaleFactor*2.0);
-        //System.out.println(publicScaleFactor+" "+scaleFactor);
+        if (scaleFactor<-2.0f)scaleFactor=-2.0f;
+        if (scaleFactor>2.0f)scaleFactor=2.0f;
+
+        scaleFactor=( float ) Math.pow( 10, scaleFactor);
+        //System.out.println(" scaleFactor: "+scaleFactor);
         scale.setScale( scaleFactor );
     }
 
     public float getScale()
     {
-        return publicScaleFactor;
+        //System.out.println("getScale "+this.scale.getScale()+" "+this.scale.m00+" "+(float)Math.log10(this.scale.getScale()));
+        return (float)Math.log10(this.scale.getScale());
     }
 
     public void saveToPNG( java.io.File f, int width, int height )
@@ -213,13 +216,13 @@ public class JSurferRenderPanel extends JComponent
                     refreshImage = refreshImageAntiAliased = false;
                 }
             }
-            
+
             Graphics2D g2 = ( Graphics2D ) g;
-            
+
             g2.setColor( this.asr.getBackgroundColor().get() );
-            
+
             // calculate necessary painting information
-            Point startPosition;            
+            Point startPosition;
             double scale;
             double aspectRatioComponent = this.getWidth() / ( double ) this.getHeight();
             double aspectRatioImage = renderSize.width / ( double ) renderSize.height;
@@ -246,7 +249,7 @@ public class JSurferRenderPanel extends JComponent
             // fill margins with background color
             g2.fillRect( r1.x, r1.y, r1.width, r1.height );
             g2.fillRect( r2.x, r2.y, r2.width, r2.height );
-            
+
             // draw the surface image to the component and apply appropriate scaling
             AffineTransform t = new AffineTransform();
             t.scale( scale, scale );
@@ -258,7 +261,7 @@ public class JSurferRenderPanel extends JComponent
             g.drawString( "this component needs a Graphics2D for painting", 2, this.getHeight() - 2 );
         }
     }
-    
+
     protected void refreshImage( boolean antiAliased )
     {
         Matrix4f rotation = new Matrix4f();
@@ -270,12 +273,12 @@ public class JSurferRenderPanel extends JComponent
             asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
         else
             asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_2x2 );
-        
+
         setOptimalCameraDistance( asr.getCamera() );
-        
+
         asr.draw( colorBuffer, renderSize.width, renderSize.height );
     }
-    
+
     protected static void setOptimalCameraDistance( Camera c )
     {
         float cameraDistance;
@@ -292,7 +295,7 @@ public class JSurferRenderPanel extends JComponent
         }
         c.lookAt( new Point3f( 0f, 0f, cameraDistance ), new Point3f( 0f, 0f, 0f ), new Vector3f( 0f, 1f, 0f ) );
     }
-    
+
     protected void componentResized( ComponentEvent ce )
     {
         rsd.setXSpeed( 180.0f / this.getWidth() );
@@ -306,7 +309,7 @@ public class JSurferRenderPanel extends JComponent
             repaint();
         }
     }
-    
+
     protected void mousePressed( MouseEvent me )
     {
         grabFocus();
@@ -323,18 +326,82 @@ public class JSurferRenderPanel extends JComponent
 
     protected void scaleSurface( int units )
     {
-        
+
         /*Matrix4f tmp = new Matrix4f();
         tmp.setIdentity();
         tmp.setScale( ( float ) Math.pow( 1.0625, units ) );
         scale.mul( tmp );*/
-        setScale(publicScaleFactor-((float)(units))/200.0f );
-        
+
+        this.setScale(this.getScale()-((float)(units))/50.0f );
+        //this.setScale(0);
         refreshImage = true;
         refreshImageAntiAliased = false;
-        repaint();        
+        repaint();
     }
-    
+
+    public void loadFromFile( URL url )
+            throws IOException, Exception
+    {
+        Properties props = new Properties();
+        props.load( url.openStream() );
+
+        asr.setSurfaceFamily( props.getProperty( "surface_equation" ) );
+
+        Set< Map.Entry< Object, Object > > entries = props.entrySet();
+        String parameter_prefix = "surface_parameter_";
+        for( Map.Entry< Object, Object > entry : entries )
+        {
+            String name = (String) entry.getKey();
+            if( name.startsWith( parameter_prefix ) )
+            {
+                String parameterName = name.substring( parameter_prefix.length() );
+                asr.setParameterValue( parameterName, Float.parseFloat( ( String ) entry.getKey() ) );
+            }
+        }
+
+        asr.getCamera().loadProperties( props, "camera_", "" );
+        asr.getFrontMaterial().loadProperties(props, "front_material_", "");
+        asr.getBackMaterial().loadProperties(props, "back_material_", "");
+        for( int i = 0; i < asr.MAX_LIGHTS; i++ )
+        {
+            asr.getLightSource( i ).setStatus(LightSource.Status.OFF);
+            asr.getLightSource( i ).loadProperties( props, "light_", "_" + i );
+        }
+        asr.setBackgroundColor( BasicIO.fromColor3fString( props.getProperty( "background_color" ) ) );
+        this.setScale( Float.parseFloat( props.getProperty( "scale_factor" ) ) );
+        rsd.setRotation( BasicIO.fromMatrix4fString( props.getProperty( "rotation_matrix" ) ) );
+    }
+
+    public void saveToFile( URL url )
+            throws IOException
+    {
+        Properties props = new Properties();
+        props.setProperty( "surface_equation", asr.getSurfaceFamilyString() );
+
+        Set< String > paramNames = asr.getAllParameterNames();
+        for( String paramName : paramNames )
+        {
+            try
+            {
+                props.setProperty( "surface_parameter_" + paramName, "" + asr.getParameterValue( paramName ) );
+            }
+            catch( Exception e ) {}
+        }
+
+        asr.getCamera().saveProperties( props, "camera_", "" );
+        asr.getFrontMaterial().saveProperties(props, "front_material_", "");
+        asr.getBackMaterial().saveProperties(props, "back_material_", "");
+        for( int i = 0; i < asr.MAX_LIGHTS; i++ )
+            asr.getLightSource( i ).saveProperties( props, "light_", "_" + i );
+        props.setProperty( "background_color", BasicIO.toString( asr.getBackgroundColor() ) );
+
+        props.setProperty( "scale_factor", ""+this.getScale() );
+        props.setProperty( "rotation_matrix", BasicIO.toString( rsd.getRotation() ));
+
+        File property_file = new File( url.getFile() );
+        props.store( new FileOutputStream( property_file ), "jSurfer surface description" );
+    }
+
     public static void main( String[]args )
     {
         JSurferRenderPanel p = new JSurferRenderPanel();
@@ -360,7 +427,7 @@ public class JSurferRenderPanel extends JComponent
         {
             e.printStackTrace();
         }
-        
+
         JFrame f = new JFrame();
         f.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         f.getContentPane().add( p );
