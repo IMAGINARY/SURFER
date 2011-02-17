@@ -355,7 +355,8 @@ public class JSurferRenderPanel extends JComponent
             if( name.startsWith( parameter_prefix ) )
             {
                 String parameterName = name.substring( parameter_prefix.length() );
-                asr.setParameterValue( parameterName, Float.parseFloat( ( String ) entry.getKey() ) );
+                asr.setParameterValue( parameterName, Float.parseFloat( ( String ) entry.getValue() ) );
+                System.out.println("LoadRenderPar: " + parameterName + "=" + entry.getValue() + " (" + Float.parseFloat( (String) entry.getValue()) + ") "+ asr.getParameterValue( parameterName));
             }
         }
 
