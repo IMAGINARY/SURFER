@@ -49,20 +49,34 @@ public class FXSurferPanel extends CustomNode {
     public var x: Number;
 //setRenderSize
     public var y: Number;
-    public var a: Number on replace
+    public var a: Number =0 on replace
     {
         renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
         renderer.repaintImage();
         System.out.println("lokal a: {a}");
     };
-    public var b: Number on replace
+    public var b: Number =0  on replace
     {
         renderer.getAlgebraicSurfaceRenderer().setParameterValue("b", b);
         renderer.repaintImage();
         System.out.println("lokal b: {b}");
     };
-    public var usedA:Boolean;
-    public var usedB:Boolean;
+    public var c: Number =0 on replace
+    {
+        renderer.getAlgebraicSurfaceRenderer().setParameterValue("c", c);
+        renderer.repaintImage();
+        System.out.println("lokal c: {c}");
+    };
+    public var d: Number =0  on replace
+    {
+        renderer.getAlgebraicSurfaceRenderer().setParameterValue("d", d);
+        renderer.repaintImage();
+        System.out.println("lokal d: {d}");
+    };
+    public var usedA:Boolean=false;
+    public var usedB:Boolean=false;
+    public var usedC:Boolean=false;
+    public var usedD:Boolean=false;
     public var width: Number/* on replace oldValue
     {
         var d:Dimension=new Dimension(width, height);
@@ -236,6 +250,8 @@ var p:PolynomialOperation;
                System.out.println("PAR voll:{PAR}");
                usedA=PAR.remove("a");
                usedB=PAR.remove("b");
+               usedA=PAR.remove("c");
+               usedB=PAR.remove("d");
                System.out.println("PAR leer:{PAR}");
                if (not PAR.isEmpty())
                {
