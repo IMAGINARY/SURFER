@@ -33,7 +33,7 @@ import javafx.fxd.Duplicator;
 public class AlgebraicExpressionButtonPanel extends CustomNode {
 
     var SurfaceExpression:HBox= new HBox();
-    var surferPanel:FXSurferPanel;
+    public var surferPanel:FXSurferPanel;
     //var surfaceExpressionField:SwingTextField=new SwingTextField();
     var test:JTextField=new JTextField();
     var frontColor: ColorChooser;
