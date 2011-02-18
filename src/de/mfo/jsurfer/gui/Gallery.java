@@ -56,7 +56,7 @@ public class Gallery {
         this.number = number;
         this.key = rb.getString( "gallery_" + number + "_key" );
         this.name = rb.getString( key );
-        this.icon = loadImage( getResource( "gallery/" + key + "_icon.png" ) );
+        this.icon = loadImage( getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" ) );
         this.description = renderPDF( getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" ), gallery_entry_description_width, gallery_entry_description_height );
         
         String[] content_keys = getContentKeys();
@@ -140,6 +140,7 @@ public class Gallery {
 
             // render PDF into image
             PDFFile pdfFile = new PDFFile( byte_buf );
+            System.err.println( pdfFile.getVersionString() );
             PDFPage pdfPage = pdfFile.getPage( 0 );
             java.awt.geom.Rectangle2D r2d = pdfPage.getBBox();
             Image img = pdfPage.getImage( width, height, r2d, null, true, true );
@@ -179,7 +180,7 @@ public class Gallery {
         {
             this.key = key;
             this.name = rb.getString( key );
-            this.icon = loadImage( getResource( "gallery/" + key + "_description.pdf" ) );
+            this.icon = loadImage( getResource( "gallery/" + key + "_icon.png" ) );
             this.description = renderPDF( getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" ), gallery_entry_description_width, gallery_entry_description_height );
             this.jsurf_file_url = getResource( "gallery/" + key + ".jsurf" );
         }
