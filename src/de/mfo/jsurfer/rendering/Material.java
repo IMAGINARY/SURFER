@@ -73,7 +73,7 @@ public class Material {
         props.setProperty( prefix + "color" + suffix, BasicIO.toString( color ) );
         props.setProperty( prefix + "ambient_intensity" + suffix, "" + ambientIntensity );
         props.setProperty( prefix + "diffuse_intensity" + suffix, "" + diffuseIntensity );
-        props.setProperty( prefix + "specular_iIntensity" + suffix, "" + specularIntensity );
+        props.setProperty( prefix + "specular_intensity" + suffix, "" + specularIntensity );
         props.setProperty( prefix + "shininess" + suffix, "" + shininess );
         return props;
     }
