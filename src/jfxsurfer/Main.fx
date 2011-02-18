@@ -48,8 +48,8 @@ def stage: Stage =Stage{
     title: "First JavaFX Application"
     fullScreen: false //true
     scene: scene = Scene {
-        width: 200
-        height: 200
+        width: 192*4
+        height: 108*4
         content: [
                     AP
         ]
