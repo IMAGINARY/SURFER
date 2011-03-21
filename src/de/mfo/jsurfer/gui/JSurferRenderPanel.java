@@ -11,6 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.image.*;
 import javax.vecmath.*;
+import org.jdesktop.swingworker.*;
 
 // input/output
 import java.net.URL;
@@ -48,11 +49,54 @@ public class JSurferRenderPanel extends JComponent
     Dimension renderSize;
     RotateSphericalDragger rsd;
     Matrix4f scale;
+    RenderWorker rw;
+    boolean firstRun;
+
+    class RenderWorker extends SwingWorker
+    {
+        private boolean _reschedule;
+
+        { _reschedule = false; }
+
+        void setReschedule( boolean reschedule ) { this._reschedule = reschedule; }
+        boolean willReschedule() { return this._reschedule; }
+
+        @Override
+        protected java.lang.Object doInBackground() {
+
+            // do rendering
+            Matrix4f rotation = new Matrix4f();
+            rotation.invert( rsd.getRotation() );
+            asr.setTransform( rotation );
+            asr.setSurfaceTransform( scale );
+            asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
+            if( refreshImageAntiAliased )
+                asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
+            else
+                asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_2x2 );
+
+            setOptimalCameraDistance( asr.getCamera() );
+
+            synchronized( colorBuffer )
+            {
+                asr.draw( colorBuffer, renderSize.width, renderSize.height );
+            }
+            return null;
+        }
+
+        @Override
+        public void done() {
+            repaint();
+            if( willReschedule() )
+                scheduleSurfaceRepaint();
+        }
+    };
 
     public JSurferRenderPanel()
     {
         renderSize = new Dimension( 240, 240 );
 
+        firstRun = true;
         refreshImage = true;
         refreshImageAntiAliased = true;
         renderSizeChanged = true;
@@ -91,6 +135,9 @@ public class JSurferRenderPanel extends JComponent
 
         setDoubleBuffered( true );
         setFocusable( true );
+
+        rw = new RenderWorker();
+        createBufferedImage();
     }
 
     public AlgebraicSurfaceRenderer getAlgebraicSurfaceRenderer()
@@ -108,7 +155,7 @@ public class JSurferRenderPanel extends JComponent
             renderSize.height = Math.max( 1, renderSize.height );
             renderSizeChanged = true;
             refreshImage = true;
-            repaint();
+            scheduleSurfaceRepaint();
         }
     }
 
@@ -120,7 +167,7 @@ public class JSurferRenderPanel extends JComponent
     public void repaintImage()
     {
         refreshImage = true;
-        repaint();
+        scheduleSurfaceRepaint();
     }
 
     void createBufferedImage()
@@ -152,6 +199,7 @@ public class JSurferRenderPanel extends JComponent
                 refreshImage = true;
                 refreshImageAntiAliased = false;
                 renderSize = new Dimension( d );
+                scheduleSurfaceRepaint();
             }
         }
     }
@@ -198,35 +246,16 @@ public class JSurferRenderPanel extends JComponent
     {
         if( g instanceof Graphics2D )
         {
-            if( renderSizeChanged )
-            {
-                createBufferedImage();
-                renderSizeChanged = false;
-            }
-            if( refreshImage )
-            {
-                refreshImage( refreshImageAntiAliased );
-                if( !refreshImageAntiAliased )
-                {
-                    refreshImage = refreshImageAntiAliased = true;
-                    repaint();
-                }
-                else
-                {
-                    refreshImage = refreshImageAntiAliased = false;
-                }
-            }
-
-            Graphics2D g2 = ( Graphics2D ) g;
+            final Graphics2D g2 = ( Graphics2D ) g;
 
             g2.setColor( this.asr.getBackgroundColor().get() );
 
             // calculate necessary painting information
-            Point startPosition;
-            double scale;
+            final Point startPosition;
+            final double scale;
             double aspectRatioComponent = this.getWidth() / ( double ) this.getHeight();
             double aspectRatioImage = renderSize.width / ( double ) renderSize.height;
-            Rectangle r1, r2;
+            final Rectangle r1, r2;
             if( aspectRatioImage > aspectRatioComponent )
             {
                 // scale image width to component width
@@ -245,20 +274,40 @@ public class JSurferRenderPanel extends JComponent
                 r1 = new Rectangle( 0, 0, startPosition.x, this.getHeight() );
                 r2 = new Rectangle( startPosition.x + newImageWidth, 0, this.getWidth() - newImageWidth, this.getHeight() );
             }
-
-            // fill margins with background color
-            g2.fillRect( r1.x, r1.y, r1.width, r1.height );
-            g2.fillRect( r2.x, r2.y, r2.width, r2.height );
-
-            // draw the surface image to the component and apply appropriate scaling
-            AffineTransform t = new AffineTransform();
+            final AffineTransform t = new AffineTransform();
             t.scale( scale, scale );
-            g2.drawImage( surfaceImage, new AffineTransformOp( t, AffineTransformOp.TYPE_BILINEAR ), startPosition.x, startPosition.y );
+
+            synchronized( colorBuffer )
+            {
+                // fill margins with background color
+                g2.fillRect( r1.x, r1.y, r1.width, r1.height );
+                g2.fillRect( r2.x, r2.y, r2.width, r2.height );
+
+                // draw the surface image to the component and apply appropriate scaling
+                g2.drawImage( surfaceImage, new AffineTransformOp( t, AffineTransformOp.TYPE_BILINEAR ), startPosition.x, startPosition.y );
+            }
         }
         else
         {
             super.paintComponents( g );
             g.drawString( "this component needs a Graphics2D for painting", 2, this.getHeight() - 2 );
+        }
+    }
+
+    protected void scheduleSurfaceRepaint()
+    {
+        switch( rw.getState() )
+        {
+            case PENDING:
+                rw.execute();
+                break;
+            case STARTED:
+                rw.setReschedule( true );
+                break;
+            case DONE:
+                rw = new RenderWorker();
+                rw.execute();
+                break;
         }
     }
 
@@ -306,6 +355,7 @@ public class JSurferRenderPanel extends JComponent
             renderSizeChanged = true;
             refreshImage = true;
             refreshImageAntiAliased = false;
+            scheduleSurfaceRepaint();
             repaint();
         }
     }
@@ -321,7 +371,7 @@ public class JSurferRenderPanel extends JComponent
         rsd.dragTo( me.getPoint() );
         refreshImage = true;
         refreshImageAntiAliased = false;
-        repaint();
+        scheduleSurfaceRepaint();
     }
 
     protected void scaleSurface( int units )
@@ -336,7 +386,7 @@ public class JSurferRenderPanel extends JComponent
         //this.setScale(0);
         refreshImage = true;
         refreshImageAntiAliased = false;
-        repaint();
+        scheduleSurfaceRepaint();
     }
 
     public void loadFromFile( URL url )

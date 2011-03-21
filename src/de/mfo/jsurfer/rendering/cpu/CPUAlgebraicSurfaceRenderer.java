@@ -78,7 +78,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     public CPUAlgebraicSurfaceRenderer()
     {
         super();
-        threadPoolExecutor = Executors.newFixedThreadPool( ( int ) ( Runtime.getRuntime().availableProcessors() * 1.0 ) );
+        threadPoolExecutor = Executors.newFixedThreadPool( ( int ) ( Runtime.getRuntime().availableProcessors() * 2.0 ) );
         //threadPoolExecutor = Executors.newFixedThreadPool( 1 );
         this.setAntiAliasingMode( AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
         this.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
@@ -137,8 +137,8 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         DrawcallStaticData dcsd = collectDrawCallStaticData( colorBuffer, width, height );
 
         Collection< Callable< Void > > renderingTasks = new LinkedList<Callable< Void >>();
-        int xStep = width / Math.min( width, Runtime.getRuntime().availableProcessors() );
-        int yStep = height / Math.min( height, Runtime.getRuntime().availableProcessors() );
+        int xStep = width / Math.min( width, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
+        int yStep = height / Math.min( height, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
         for( int x = 0; x < width; x += xStep )
             for( int y = 0; y < height; y += yStep )
             {
