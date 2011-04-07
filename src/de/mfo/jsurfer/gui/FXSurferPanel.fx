@@ -21,11 +21,24 @@ import javafx.scene.layout.LayoutInfo;
 //import javax.swing.event.*;
 import java.awt.event.*;
 import java.util.*;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
 /**
  * @author Panda
  */
 
 public class FXSurferPanel extends CustomNode {
+    var timeline = Timeline {
+    keyFrames: KeyFrame {
+        time: 100ms
+        action: function() {
+            /**
+             * Perform Complex Operation!!!!
+             */
+              renderer.repaintImage();
+        }
+    }
+}
 
     public var renderer: JSurferRenderPanel=new JSurferRenderPanel() ;
     public var frontColor: Color3f on replace
@@ -77,6 +90,7 @@ public class FXSurferPanel extends CustomNode {
     public var usedB:Boolean=false;
     public var usedC:Boolean=false;
     public var usedD:Boolean=false;
+    public var correctExpression:Boolean=true;
     public var width: Number/* on replace oldValue
     {
         var d:Dimension=new Dimension(width, height);
@@ -103,7 +117,7 @@ public class FXSurferPanel extends CustomNode {
     public var scale:Number=renderer.getScale()/4+0.5 on replace
     {
         renderer.setScale( scale*4-2 );
-        renderer.repaintImage();
+       timeline.playFromStart();
         //System.out.println("Scale has changed: {scale}");
     };
 
@@ -244,24 +258,27 @@ var p:PolynomialOperation;
            /*if( p.accept( new DoubleVariableChecker(), ( Void ) null ) )
                throw new Exception();*/
                var old:PolynomialOperation=renderer.getAlgebraicSurfaceRenderer().getSurfaceFamily();
-               //renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(p);
+               renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(p);
                renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(expression);
                var  PAR:Set=renderer.getAlgebraicSurfaceRenderer().getAllParameterNames();
                System.out.println("PAR voll:{PAR}");
                usedA=PAR.remove("a");
                usedB=PAR.remove("b");
-               usedA=PAR.remove("c");
-               usedB=PAR.remove("d");
-               System.out.println("PAR leer:{PAR}");
+               usedC=PAR.remove("c");
+               usedD=PAR.remove("d");
+               System.out.println("PAR leer({usedA},{usedB},{usedC},{usedD}):{PAR}");
                if (not PAR.isEmpty())
                {
                    renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(old);
                    System.out.println("falsch");
+                   correctExpression=false;
                    return false;
                }
 
                renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
                renderer.getAlgebraicSurfaceRenderer().setParameterValue("b", b);
+               renderer.getAlgebraicSurfaceRenderer().setParameterValue("c", c);
+               renderer.getAlgebraicSurfaceRenderer().setParameterValue("d", d);
                //setSurfaceExpression( p );
             renderer.repaintImage();
            //surfaceExpression.setBackground( Color.WHITE );
@@ -269,11 +286,13 @@ var p:PolynomialOperation;
         catch( Exception )
         {
             System.out.println("falsch");
+            correctExpression=false;
             return false;
             //surfaceExpression.setBackground( new Color( 255, 90, 90 ).brighter() );
         }
         //parserFeld.setText(P.a()+"\n 1 \n 2 \n 3");
         //errorFeld.setText("line "+ P.errorRow()+" : "+P.errorMessage());
+        correctExpression=true;
         return true;
     }
 

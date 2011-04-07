@@ -26,11 +26,27 @@ import javax.swing.BorderFactory;
 import java.io.File;
 import java.io.InputStream;
 import javafx.fxd.Duplicator;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
 /**
  * @author Panda
  */
 
 public class AlgebraicExpressionButtonPanel extends CustomNode {
+
+var timeline = Timeline {
+    keyFrames: KeyFrame {
+        time: 50ms
+        action: function() {
+            setPar();
+        }
+    }
+}
+    var correctExpression:Boolean= bind surferPanel.correctExpression on replace
+    {
+        fxdButtons.getNode("Button_Correct").visible=surferPanel.correctExpression;
+        fxdButtons.getNode("Button_Wrong").visible=not surferPanel.correctExpression;
+    }
 
     var SurfaceExpression:HBox= new HBox();
     public var surferPanel:FXSurferPanel;
@@ -108,27 +124,28 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     var ParAUse:Boolean = bind surferPanel.usedA on replace
     {
         //fxdButtons.getNode("ParA").visible=ParAUse;
-        setPar();
+        timeline.playFromStart();
     }
     var ParBUse:Boolean = bind surferPanel.usedB on replace
     {
-        setPar();
+        timeline.playFromStart();
         //fxdButtons.getNode("ParB").visible=ParBUse;
     }
 
     var ParCUse:Boolean = bind surferPanel.usedC on replace
     {
-        setPar();
+        timeline.playFromStart();
         //fxdButtons.getNode("ParB").visible=ParBUse;
     }
     var ParDUse:Boolean = bind surferPanel.usedD on replace
     {
-        setPar();
+        timeline.playFromStart();
         //fxdButtons.getNode("ParB").visible=ParBUse;
     }
     var sliderWidth:Number=0;
     var zoomScale:Number=bind surferPanel.scale on replace
     {
+        
         def min = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.minY;
 	//def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Shaft").layoutBounds.width;
         def max = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.height*0.6;
@@ -163,7 +180,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 
         function getScale(n:Number, w:Number):Number
         {
-            var tmp:Number = w/fxdButtons.layoutBounds.maxY;
+            var tmp:Number = w/fxdButtons.layoutBounds.maxX;
             if (tmp*(fxdButtons.layoutBounds.maxY)>n)
             {
                 tmp=n/fxdButtons.layoutBounds.maxY;
@@ -275,7 +292,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     function setTextField()
     {
         var T:Bounds=fxdButtons.getNode("Equation").boundsInParent;
-        //fxdButtons.getNode("Equation").visible=false;
+        fxdButtons.getNode("Equation").visible=false;
         System.out.println("TxtOrG:{T.minX},{T.minY},{T.maxX},{T.maxY},{T.width},{T.height}");
 
         def sw:SwingComponent=SwingComponent.wrap(test);
@@ -394,7 +411,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 
 	var inside : Boolean=false;
         var pressedButton : String="";
-        var copynode:Node=javafx.fxd.Duplicator.duplicate(fxdButtons.getNode("Button_a"));
+        //var copynode:Node=javafx.fxd.Duplicator.duplicate(fxdButtons.getNode("Button_a"));
         //copynode.translateX=50;
 
 	public override function create(): Node
@@ -403,9 +420,9 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             setButtons();
             setTextField();
 
-            copynode.translateY=100;
-            copynode.translateX=100;
-            copynode.scaleX=3;
+            //copynode.translateY=100;
+            //copynode.translateX=100;
+            //copynode.scaleX=3;
             test.getDocument().addDocumentListener( DocumentListener
             {
                 override function changedUpdate( e )
@@ -448,8 +465,8 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                             backColor,
                             surferPanel,
 
-                            SurfaceExpression,
-                            copynode
+                            SurfaceExpression//,
+                            //copynode
 
                             //javafx.fxd.Duplicator.duplicate(fxdButtons.getNode("Button_a"))
                             /*Group
@@ -469,7 +486,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 		if (pos<expression.length())pos++;
                 //test.setText(expression);
                 test.setCaretPosition(pos);
-                System.out.println("zoomScale:{copynode.localToScene(0,0)}");
+                //System.out.println("zoomScale:{copynode.localToScene(0,0)}");
 
 	}
 
@@ -634,17 +651,18 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 	}*/
         function setPar():Void
         {
-            System.out.println("setPar: ");
+            
             var listIn:String[]=[];
             var listOut:String[]=[];
             if (surferPanel.usedD){insert "D" into listIn;}else{insert "D" into listOut;}
             if (surferPanel.usedC){insert "C" into listIn;}else{insert "C" into listOut;}
             if (surferPanel.usedB){insert "B" into listIn;}else{insert "B" into listOut;}
             if (surferPanel.usedA){insert "A" into listIn;}else{insert "A" into listOut;}
+            System.out.println("setParList({surferPanel.usedA},{surferPanel.usedB},{surferPanel.usedC},{surferPanel.usedD}): {listIn}");
             for (e in listOut)
             {
                 fxdButtons.getNode("Slider_{e}").visible=false;
-
+                //System.out.println(" in : {e}");
             }
 
             def i=listIn.size();
@@ -669,7 +687,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                     fxdButtons.getNode("Slider_{e}").visible=true;
                     fxdButtons.getNode("Slider_{e}").translateX=-num*sliderWidth;
                     num+=1.0;
-                    System.out.println("setPar: Slider_{e} {fxdButtons.getNode("Slider_{e}").translateX} {-num*sliderWidth} ");
+                    System.out.println("doPar: Slider_{e} {fxdButtons.getNode("Slider_{e}").translateX} {-num*sliderWidth} ");
                 }
                 fxdButtons.getNode("Slider_Plus_Parameter_Middle_Background").visible=true;
                 fxdButtons.getNode("Slider_Plus_Parameter_End").visible=true;
