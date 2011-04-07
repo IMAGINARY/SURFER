@@ -36,6 +36,7 @@ function toggleFullscreenKey(e:KeyEvent):Void
 
 }
 
+javax.swing.UIManager.setLookAndFeel( javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
 
 def AP: AlgebraicExpressionButtonPanel = AlgebraicExpressionButtonPanel{
                 x: 0, y:0, width:bind scene.width, height:bind scene.height, expression: "Text"
