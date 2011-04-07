@@ -39,9 +39,7 @@ import de.mfo.jsurfer.algebra.*;
 public class JSurferRenderPanel extends JComponent
 {
     CPUAlgebraicSurfaceRenderer asr;
-    BufferedImage surfaceImage;
-    int[] colorBuffer;
-    MemoryImageSource memoryImageSource;
+    BufferedImage currentSurfaceImage;
     boolean refreshImage;
     boolean refreshImageAntiAliased;
     boolean renderSizeChanged;
@@ -50,7 +48,53 @@ public class JSurferRenderPanel extends JComponent
     RotateSphericalDragger rsd;
     Matrix4f scale;
     RenderWorker rw;
+    HiResRenderWorker hrrw;
     boolean firstRun;
+
+    class HiResRenderWorker extends SwingWorker
+    {
+        @Override
+        protected java.lang.Object doInBackground() {
+
+            // do rendering
+            Matrix4f rotation = new Matrix4f();
+            rotation.invert( rsd.getRotation() );
+            asr.setTransform( rotation );
+            asr.setSurfaceTransform( scale );
+            asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
+            asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
+
+            setOptimalCameraDistance( asr.getCamera() );
+
+            // create hi res color buffer
+            int w = getWidth();
+            int h = getHeight();
+            BufferPair bp = createBufferedImage( w, h );
+
+            try
+            {
+                asr.draw( bp.intBuffer, w, h );
+                return bp.bufferedImage;
+            }
+            catch( Throwable t )
+            {
+                return null;
+            }
+        }
+
+        @Override
+        public void done() {
+            try
+            {
+                BufferedImage bi = ( BufferedImage ) get();
+                currentSurfaceImage = bi != null ? bi : currentSurfaceImage;
+                repaint();
+            }
+            catch( java.util.concurrent.CancellationException ce ) {}
+            catch( java.util.concurrent.ExecutionException ce ) {}
+            catch( java.lang.InterruptedException ce ) {}
+        }
+    };
 
     class RenderWorker extends SwingWorker
     {
@@ -62,7 +106,13 @@ public class JSurferRenderPanel extends JComponent
         boolean willReschedule() { return this._reschedule; }
 
         @Override
-        protected java.lang.Object doInBackground() {
+        protected java.lang.Object doInBackground()
+        {
+            // cancel hi-res render worker
+            asr.stopDrawing();
+
+            // create color buffer
+            BufferPair bp = createBufferedImage( renderSize.width, renderSize.height );
 
             // do rendering
             Matrix4f rotation = new Matrix4f();
@@ -70,25 +120,42 @@ public class JSurferRenderPanel extends JComponent
             asr.setTransform( rotation );
             asr.setSurfaceTransform( scale );
             asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
-            if( refreshImageAntiAliased )
-                asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
-            else
-                asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_2x2 );
-
+            asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
             setOptimalCameraDistance( asr.getCamera() );
-
-            synchronized( colorBuffer )
+            try
             {
-                asr.draw( colorBuffer, renderSize.width, renderSize.height );
+                asr.draw( bp.intBuffer, renderSize.width, renderSize.height );
+                return bp.bufferedImage;
             }
-            return null;
+            catch( Throwable t )
+            {
+                return null;
+            }
         }
 
         @Override
         public void done() {
-            repaint();
+
+            try
+            {
+                BufferedImage bi = ( BufferedImage ) get();
+                currentSurfaceImage = bi != null ? bi : currentSurfaceImage;
+                repaint();
+            }
+            catch( java.util.concurrent.CancellationException ce ) {}
+            catch( java.util.concurrent.ExecutionException ce ) {}
+            catch( java.lang.InterruptedException ce ) {}
+
             if( willReschedule() )
+            {
                 scheduleSurfaceRepaint();
+            }
+            else
+            {
+                // initiate hi-res rendering
+                hrrw = new HiResRenderWorker();
+                hrrw.execute();
+            }
         }
     };
 
@@ -137,7 +204,7 @@ public class JSurferRenderPanel extends JComponent
         setFocusable( true );
 
         rw = new RenderWorker();
-        createBufferedImage();
+        currentSurfaceImage = null;
     }
 
     public AlgebraicSurfaceRenderer getAlgebraicSurfaceRenderer()
@@ -170,18 +237,26 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
     }
 
-    void createBufferedImage()
+    class BufferPair
     {
-        colorBuffer = new int[ renderSize.width * renderSize.height ];
-        memoryImageSource = new MemoryImageSource( renderSize.width, renderSize.height, colorBuffer, 0, renderSize.width );
+        public BufferedImage bufferedImage;
+        public int[] intBuffer;
+
+        public BufferPair( BufferedImage bi, int[] i ) { bufferedImage = bi; intBuffer = i; }
+    }
+
+    BufferPair createBufferedImage( int w, int h )
+    {
+        int[] colorBuffer = new int[ w * h ];
+        MemoryImageSource memoryImageSource = new MemoryImageSource( w, h, colorBuffer, 0, w );
         memoryImageSource.setAnimated( true );
         memoryImageSource.setFullBufferUpdates( true );
 
         DirectColorModel colormodel = new DirectColorModel( 24, 0xff0000, 0xff00, 0xff );
-        SampleModel sampleModel = colormodel.createCompatibleSampleModel( renderSize.width, renderSize.height );
-        DataBufferInt data = new DataBufferInt( colorBuffer, renderSize.width * renderSize.height );
+        SampleModel sampleModel = colormodel.createCompatibleSampleModel( w, h );
+        DataBufferInt data = new DataBufferInt( colorBuffer, w * h );
         WritableRaster raster = WritableRaster.createWritableRaster( sampleModel, data, new Point( 0, 0 ) );
-        surfaceImage = new BufferedImage( colormodel, raster, false, null );
+        return new BufferPair( new BufferedImage( colormodel, raster, false, null ), colorBuffer );
     }
 
     public Dimension getPreferredSize()
@@ -230,20 +305,23 @@ public class JSurferRenderPanel extends JComponent
     {
         Dimension oldDim = getRenderSize();
         setRenderSize( new Dimension( width, height ) );
-        createBufferedImage();
-        refreshImage( true );
-        saveToPNG( f );
+        scheduleSurfaceRepaint();
+        try
+        {
+            rw.get();
+            saveToPNG( f );
+        }
+        catch( java.util.concurrent.CancellationException ce ) {}
+        catch( java.util.concurrent.ExecutionException ce ) {}
+        catch( java.lang.InterruptedException ce ) {}
         setRenderSize( oldDim );
+        scheduleSurfaceRepaint();
     }
 
     public void saveToPNG( java.io.File f )
             throws java.io.IOException
     {
-        javax.imageio.ImageIO.write( surfaceImage, "png", f );
-    }
-
-    public void repaint() {
-        super.repaint();
+        javax.imageio.ImageIO.write( currentSurfaceImage, "png", f );
     }
 
     protected void paintComponent( Graphics g )
@@ -255,16 +333,23 @@ public class JSurferRenderPanel extends JComponent
             g2.setColor( this.asr.getBackgroundColor().get() );
 
             // calculate necessary painting information
+            BufferedImage bi = this.currentSurfaceImage;
+            if( bi == null )
+            {
+                g2.fillRect( 0, 0, this.getWidth(), this.getHeight() );
+                return;
+            }
+
             final Point startPosition;
             final double scale;
             double aspectRatioComponent = this.getWidth() / ( double ) this.getHeight();
-            double aspectRatioImage = renderSize.width / ( double ) renderSize.height;
+            double aspectRatioImage = bi.getWidth() / ( double ) bi.getHeight();
             final Rectangle r1, r2;
             if( aspectRatioImage > aspectRatioComponent )
             {
                 // scale image width to component width
-                scale = this.getWidth() / ( double ) renderSize.width;
-                int newImageHeight = ( int ) ( renderSize.height * scale );
+                scale = this.getWidth() / ( double ) bi.getWidth();
+                int newImageHeight = ( int ) ( bi.getHeight() * scale );
                 startPosition = new Point( 0, ( this.getHeight() - newImageHeight ) / 2 );
                 r1 = new Rectangle( 0, 0, this.getWidth(), startPosition.y );
                 r2 = new Rectangle( 0, startPosition.y + newImageHeight, this.getWidth(), this.getHeight() - newImageHeight );
@@ -272,8 +357,8 @@ public class JSurferRenderPanel extends JComponent
             else
             {
                 // scale image height to component height
-                scale = this.getHeight() / ( double ) renderSize.height;
-                int newImageWidth = ( int ) ( renderSize.width * scale );
+                scale = this.getHeight() / ( double ) bi.getHeight();
+                int newImageWidth = ( int ) ( bi.getWidth() * scale );
                 startPosition = new Point( ( this.getWidth() - newImageWidth ) / 2, 0 );
                 r1 = new Rectangle( 0, 0, startPosition.x, this.getHeight() );
                 r2 = new Rectangle( startPosition.x + newImageWidth, 0, this.getWidth() - newImageWidth, this.getHeight() );
@@ -281,15 +366,12 @@ public class JSurferRenderPanel extends JComponent
             final AffineTransform t = new AffineTransform();
             t.scale( scale, scale );
 
-            synchronized( colorBuffer )
-            {
-                // fill margins with background color
-                g2.fillRect( r1.x, r1.y, r1.width, r1.height );
-                g2.fillRect( r2.x, r2.y, r2.width, r2.height );
+            // fill margins with background color
+            g2.fillRect( r1.x, r1.y, r1.width, r1.height );
+            g2.fillRect( r2.x, r2.y, r2.width, r2.height );
 
-                // draw the surface image to the component and apply appropriate scaling
-                g2.drawImage( surfaceImage, new AffineTransformOp( t, AffineTransformOp.TYPE_BILINEAR ), startPosition.x, startPosition.y );
-            }
+            // draw the surface image to the component and apply appropriate scaling
+            g2.drawImage( bi, new AffineTransformOp( t, AffineTransformOp.TYPE_BILINEAR ), startPosition.x, startPosition.y );
         }
         else
         {
@@ -316,23 +398,6 @@ public class JSurferRenderPanel extends JComponent
                     break;
             }
         }
-    }
-
-    protected void refreshImage( boolean antiAliased )
-    {
-        Matrix4f rotation = new Matrix4f();
-        rotation.invert( rsd.getRotation() );
-        asr.setTransform( rotation );
-        asr.setSurfaceTransform( scale );
-        asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
-        if( antiAliased )
-            asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
-        else
-            asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_2x2 );
-
-        setOptimalCameraDistance( asr.getCamera() );
-
-        asr.draw( colorBuffer, renderSize.width, renderSize.height );
     }
 
     protected static void setOptimalCameraDistance( Camera c )
@@ -362,9 +427,9 @@ public class JSurferRenderPanel extends JComponent
             renderSizeChanged = true;
             refreshImage = true;
             refreshImageAntiAliased = false;
-            scheduleSurfaceRepaint();
-            repaint();
         }
+        scheduleSurfaceRepaint();
+        repaint();
     }
 
     protected void mousePressed( MouseEvent me )

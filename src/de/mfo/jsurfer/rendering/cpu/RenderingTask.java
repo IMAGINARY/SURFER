@@ -26,6 +26,7 @@ public class RenderingTask implements Callable<Void>
     private int xEnd;
     private int yEnd;
     private DrawcallStaticData dcsd;
+    private boolean interrupted;
 
     public RenderingTask( DrawcallStaticData dcsd, int xStart, int yStart, int xEnd, int yEnd )
     {
@@ -34,7 +35,11 @@ public class RenderingTask implements Callable<Void>
         this.yStart = yStart;
         this.xEnd = xEnd;
         this.yEnd = yEnd;
+        this.interrupted = false;
     }
+
+    public boolean isInterrupted() { return this.interrupted; }
+    public void interrupt() { this.interrupted = true; }
 
     public Void call()
     {
@@ -43,8 +48,11 @@ public class RenderingTask implements Callable<Void>
             render();
         } catch( Throwable t )
         {
-            System.err.println( "Uncaught exception in thread " + Thread.currentThread() + ": " + t );
-            t.printStackTrace();
+            if( !isInterrupted() )
+            {
+                System.err.println( "Uncaught exception in thread " + Thread.currentThread() + ": " + t );
+                t.printStackTrace();
+            }
         }
         return null;
     }
@@ -56,12 +64,12 @@ public class RenderingTask implements Callable<Void>
             case PATTERN_1x1:
             {
                 // no antialising -> sample pixel center
-                for( int y = yStart; y <= yEnd; y++ )
+                for( int y = yStart; y <= yEnd && !this.interrupted; y++ )
                 {
                     float v = -y / ( dcsd.height - 1.0f );
                     ColumnSubstitutor someB = dcsd.someA.setV( v );
                 
-                    for( int x = xStart; x <= xEnd; x++ )
+                    for( int x = xStart; x <= xEnd && !this.interrupted; x++ )
                     {
                         float u = -x / ( dcsd.width - 1.0f );
                         UnivariatePolynomial p = someB.setU( u );
@@ -77,13 +85,13 @@ public class RenderingTask implements Callable<Void>
                 // all other antialiasing modes
                 // first sample canvas at pixel corners and cast primary rays
                 Color3f[] internalColorBuffer = new Color3f[ ( xEnd - xStart + 2 ) * ( yEnd - yStart + 2 ) ];
-                for( int y = yStart; y <= yEnd + 1; y++ )
+                for( int y = yStart; y <= yEnd + 1 && !this.interrupted; y++ )
                 {
                     int internalColorBufferIndex = ( xEnd - xStart + 2 ) * ( y - yStart );
                     float v = -( y - 0.5f ) / ( dcsd.height - 1.0f );
                     ColumnSubstitutor someB = dcsd.someA.setV( v );
                     
-                    for( int x = xStart; x <= xEnd + 1; x++ )
+                    for( int x = xStart; x <= xEnd + 1 && !this.interrupted; x++ )
                     {
                         // current position on viewing plane
                         float u = -( x - 0.5f ) / ( dcsd.width - 1.0f );
