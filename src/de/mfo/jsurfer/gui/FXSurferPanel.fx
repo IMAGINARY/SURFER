@@ -28,18 +28,18 @@ import javafx.animation.KeyFrame;
  */
 
 public class FXSurferPanel extends CustomNode {
+    /*
     var timeline = Timeline {
     keyFrames: KeyFrame {
-        time: 100ms
+        time: 0ms
         action: function() {
-            /**
-             * Perform Complex Operation!!!!
-             */
-              renderer.repaintImage();
+
+            renderer.repaintImage();
         }
     }
-}
 
+}
+*/
     public var renderer: JSurferRenderPanel=new JSurferRenderPanel() ;
     public var frontColor: Color3f on replace
     {
@@ -117,7 +117,8 @@ public class FXSurferPanel extends CustomNode {
     public var scale:Number=renderer.getScale()/4+0.5 on replace
     {
         renderer.setScale( scale*4-2 );
-       timeline.playFromStart();
+        renderer.repaintImage();
+        //timeline.playFromStart();
         //System.out.println("Scale has changed: {scale}");
     };
 

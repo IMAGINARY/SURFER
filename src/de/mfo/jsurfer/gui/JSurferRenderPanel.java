@@ -242,6 +242,10 @@ public class JSurferRenderPanel extends JComponent
         javax.imageio.ImageIO.write( surfaceImage, "png", f );
     }
 
+    public void repaint() {
+        super.repaint();
+    }
+
     protected void paintComponent( Graphics g )
     {
         if( g instanceof Graphics2D )
@@ -296,18 +300,21 @@ public class JSurferRenderPanel extends JComponent
 
     protected void scheduleSurfaceRepaint()
     {
-        switch( rw.getState() )
+        //synchronized( rw )
         {
-            case PENDING:
-                rw.execute();
-                break;
-            case STARTED:
-                rw.setReschedule( true );
-                break;
-            case DONE:
-                rw = new RenderWorker();
-                rw.execute();
-                break;
+            switch( rw.getState() )
+            {
+                case PENDING:
+                    rw.execute();
+                    break;
+                case STARTED:
+                    rw.setReschedule( true );
+                    break;
+                case DONE:
+                    rw = new RenderWorker();
+                    rw.execute();
+                    break;
+            }
         }
     }
 

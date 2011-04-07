@@ -78,7 +78,15 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     public CPUAlgebraicSurfaceRenderer()
     {
         super();
-        threadPoolExecutor = Executors.newFixedThreadPool( ( int ) ( Runtime.getRuntime().availableProcessors() * 2.0 ) );
+        class PriorityThreadFactory implements ThreadFactory {
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setPriority( Thread.MIN_PRIORITY );
+                return t;
+            }
+        }
+
+        threadPoolExecutor = Executors.newFixedThreadPool( ( int ) ( Runtime.getRuntime().availableProcessors() * 2.0 ), new PriorityThreadFactory() );
         //threadPoolExecutor = Executors.newFixedThreadPool( 1 );
         this.setAntiAliasingMode( AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
         this.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
