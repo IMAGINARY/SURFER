@@ -47,8 +47,8 @@ public class Gallery {
             System.out.println( keys.nextElement() );
          
 
-        this.gallery_entry_description_width = 600;
-        this.gallery_entry_description_height = 430;
+        this.gallery_description_width = 600;
+        this.gallery_description_height = 430;
 
         this.gallery_entry_description_width = 380;
         this.gallery_entry_description_height = 2*380;
@@ -57,7 +57,7 @@ public class Gallery {
         this.key = rb.getString( "gallery_" + number + "_key" );
         this.name = rb.getString( key );
         this.icon = loadImage( getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" ) );
-        this.description = renderPDF( getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" ), gallery_entry_description_width, gallery_entry_description_height );
+        this.description = renderPDF( getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" ), gallery_description_width, gallery_description_height );
         
         String[] content_keys = getContentKeys();
         LinkedList< GalleryItem > l = new LinkedList< GalleryItem >();
