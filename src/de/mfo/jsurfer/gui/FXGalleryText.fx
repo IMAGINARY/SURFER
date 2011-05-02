@@ -17,21 +17,17 @@ public class FXGalleryText extends CustomNode
     public var y: Number;
     public var width: Number;
     public var height: Number;
-
+    public var gallerys:de.mfo.jsurfer.gui.Gallery[];
+    public var gallery:Integer;
     public override function create(): javafx.scene.Node
     {
-        /*def sw:SwingComponent=SwingComponent.wrap(getRenderer());
-        sw.layoutInfo=LayoutInfo{
-            minWidth: bind height,
-            width: bind width
-            maxWidth: bind width
-            minHeight: bind height
-            height: bind height
-            maxHeight: bind height
-         };*/
-
-        return javafx.scene.Group {
-                    translateX: bind x translateY: bind y;
+        return javafx.scene.Group
+        {
+            translateX: bind x translateY: bind y;
+            content:
+            [
+                javafx.scene.layout.Stack
+                {
                     content:
                     [
                         javafx.scene.shape.Rectangle
@@ -40,9 +36,19 @@ public class FXGalleryText extends CustomNode
                             width: bind width  height: bind height
                             fill: javafx.scene.paint.Color.rgb(0, 200, 100)
                         }
-                        //SwingComponent.wrap(getRenderer())
+                        javafx.scene.image.ImageView
+                        {
+                            image: bind javafx.ext.swing.SwingUtils.toFXImage( gallerys[gallery].getDescription() )
+                            fitHeight:bind height
+                            fitWidth: bind width
+                            preserveRatio: true
+                            layoutInfo:javafx.scene.layout.LayoutInfo{hpos:javafx.geometry.HPos.LEFT}
+
+                        }
                     ]
                 }
+            ]
+        }
     }
 
 }

@@ -45,6 +45,28 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         fxdButtons: fxdButtons;
         getScale:function():Number{return getScale(height,width)};
     }
+    def loadURL:function(url:java.net.URL):Void=function(url:java.net.URL)
+    {
+        
+        try
+        {
+            surferPanel.renderer.loadFromFile( url);
+            surferPanel.renderer.repaintImage();
+
+            //renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
+            //surferPanel.a=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a");
+            //System.out.println("loaded Par a:{surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a")}");
+            //surferPanel.b=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("b");
+            test.setText(surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString());
+        }
+        catch(e: java.lang.Exception  )
+        {
+            var  message:String= "Could not open file \" {url.getPath()  } \".";
+            if( e.getMessage() != null )
+            message = "{message}\n\nMessage: {e.getMessage()}";
+            JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
+        }
+    }
     var tabField:TabField = TabField
     {
         sliders: sliders,
@@ -63,6 +85,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         tabBoxNode:fxdButtons.getNode("Tab_Box")
         galleryTextNode:fxdButtons.getNode("Gallery_Text")
         galleryMiniNode:fxdButtons.getNode("Gallery_Select")
+        loadSurface:loadURL
     }
     
     var correctExpression:Boolean= bind surferPanel.correctExpression on replace
@@ -461,6 +484,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         
 
 
+
     function load():Void
     {
        var fc:JFileChooser  = new JFileChooser();
@@ -474,7 +498,8 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
        {
           var f:java.io.File  = fc.getSelectedFile();
           f = jsurfFilter.ensureExtension( f );
-          try
+          loadURL(f.toURL());
+          /*try
           {
              surferPanel.renderer.loadFromFile( f.toURL());
              surferPanel.renderer.repaintImage();
@@ -491,7 +516,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
              if( e.getMessage() != null )
              message = "{message}\n\nMessage: {e.getMessage()}";
              JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.OK_OPTION );
-           }
+           }*/
         }
       }
 

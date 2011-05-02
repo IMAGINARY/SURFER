@@ -17,32 +17,106 @@ public class FXGalleryChooser extends CustomNode
     public var y: Number;
     public var width: Number;
     public var height: Number;
-
+    public var gallerys:de.mfo.jsurfer.gui.Gallery[];
+    public var gallery:Integer=0;
     public override function create(): javafx.scene.Node
     {
-        /*def sw:SwingComponent=SwingComponent.wrap(getRenderer());
-        sw.layoutInfo=LayoutInfo{
-            minWidth: bind height,
-            width: bind width
-            maxWidth: bind width
-            minHeight: bind height
-            height: bind height
-            maxHeight: bind height
-         };*/
+        return javafx.scene.Group
+        {
+            translateX: bind x translateY: bind y;
+            content:
+            [
+                javafx.scene.layout.Stack
+                {
+                    content:
+                    [
+                        /*javafx.scene.shape.Rectangle
+                        {
+                            x: 0  y: 0
+                            width: bind width  height: bind height
+                            fill: javafx.scene.paint.Color.rgb(200, 0, 0)
+                        }*/
+                        javafx.scene.layout.VBox
+                        {
+                            padding: javafx.geometry.Insets { top: 4 right: 4 bottom: 4 left: 4}
+                            spacing: 4
+                            nodeHPos: javafx.geometry.HPos.CENTER
+                            content: for (i in [0..4])createButton(i)
 
-        return javafx.scene.Group {
-                    translateX: bind x translateY: bind y;
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+   /* private function getFontWeight(g:Integer):javafx.scene.text.FontWeight
+    {
+        if (g==gallery)return javafx.scene.text.FontWeight.REGULAR;
+
+    }*/
+
+    function createButton(g:Integer):javafx.scene.Group
+    {
+        return javafx.scene.Group
+        {
+            //translateX: bind x+g*(height/5) translateY: bind y*(height/5);
+            onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {gallery=g;}
+            content:
+            [
+                javafx.scene.layout.Stack
+                {
                     content:
                     [
                         javafx.scene.shape.Rectangle
                         {
                             x: 0  y: 0
-                            width: bind width  height: bind height
-                            fill: javafx.scene.paint.Color.rgb(0, 200, 0)
+                            width: bind width-10  height: bind (height-4*5)/5
+                            //visible:false
+                            opacity:0.0
+                            //fill: javafx.scene.paint.Color.rgb(0, 200, 0)
+                        }/**/
+
+                        javafx.scene.layout.HBox
+                        {
+                            content:
+                            [
+                                javafx.scene.image.ImageView
+                                {
+                                    image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getIcon() )
+                                    fitHeight:bind (height-4*5)/5
+                                    preserveRatio: true
+                                    layoutInfo:javafx.scene.layout.LayoutInfo{hpos:javafx.geometry.HPos.LEFT}
+
+                                }
+                                javafx.scene.text.Text
+                                {
+                                    id: "FXGalleryChooser{g}"
+                                    font: bind javafx.scene.text.Font.font
+                                    (  
+                                        "BirchStd",
+                                         if (g==gallery){javafx.scene.text.FontWeight.BOLD}else{ javafx.scene.text.FontWeight.REGULAR},
+                                         ((height-4*5)/5)*0.4*0.6
+                                    )
+                                    content: "{gallerys[g].getName()}"
+                                    //textAlignment:javafx.scene.text.TextAlignment.CENTER
+                                    translateX: bind width*0.05
+                                    translateY: bind (height-4*5)/5*0.2
+                                    /*layoutInfo:javafx.scene.layout.LayoutInfo
+                                    {
+                                        //hpos:javafx.geometry.HPos.RIGHT
+                                        //vpos:javafx.geometry.VPos.TOP
+                                    }*/
+                                   
+                                }
+                            ]
                         }
-                        //SwingComponent.wrap(getRenderer())
+
                     ]
                 }
+            ]
+        };
     }
+
+
 
 }

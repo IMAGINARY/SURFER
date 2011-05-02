@@ -32,6 +32,16 @@ public class TabField {
     public var galleryTextNode:javafx.scene.Node;
     public var galleryMiniNode:javafx.scene.Node;
     public var surferPanel:FXSurferPanel;
+    public var loadSurface:function(url:java.net.URL):Void;
+
+    public var gallerys:de.mfo.jsurfer.gui.Gallery[]=
+    [
+        new de.mfo.jsurfer.gui.Gallery(0 ),
+        new de.mfo.jsurfer.gui.Gallery(1 ),
+        new de.mfo.jsurfer.gui.Gallery(2 ),
+        new de.mfo.jsurfer.gui.Gallery(3 ),
+        new de.mfo.jsurfer.gui.Gallery(4 )
+    ];
 
     
 
@@ -59,25 +69,20 @@ public class TabField {
         frontColorNode.visible=false;
 
     }
-    function setSurfaceInfoAndGalleryChooser()
+    function setGalleryChooser()
     {
         //fxdButtons.getNode("Surfer").visible=true;
        var R:javafx.geometry.Bounds=tabBoxNode.layoutBounds;
         //System.out.println("RenderPanelOrG:{R.minX},{R.minY},{R.maxX},{R.maxY},{R.width},{R.height}");
-       surfaceInfo=FXSurfaceInfo
-       {
-            width:bind R.width*getScale(sceneHeight,sceneWidth),
-            height:bind R.height*getScale(sceneHeight,sceneWidth),
-            x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
-        };
-        galleryChooser=FXGalleryChooser
+       galleryChooser=FXGalleryChooser
         {
             width:bind R.width*getScale(sceneHeight,sceneWidth),
             height:bind R.height*getScale(sceneHeight,sceneWidth),
             x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
+            y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
+            gallerys:gallerys
         };
+
         tabBoxNode.visible=false;
     }
     function setGalleryText()
@@ -90,7 +95,9 @@ public class TabField {
             width:bind G.width*getScale(sceneHeight,sceneWidth),
             height:bind G.height*getScale(sceneHeight,sceneWidth),
             x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
+            y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
+            gallerys:gallerys,
+            gallery:bind galleryChooser.gallery
         };
         galleryTextNode.visible=false;
     }
@@ -104,9 +111,36 @@ public class TabField {
             width:bind G.width*getScale(sceneHeight,sceneWidth),
             height:bind G.height*getScale(sceneHeight,sceneWidth),
             x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
+            y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
+            gallerys:gallerys,
+            gallery:bind galleryChooser.gallery
+            surface:0
+            press:function():Void
+            {
+                setInfoState();
+                loadSurface(gallerys[galleryMini.gallery].getEntries()[ galleryMini.surface ].getJSurfURL());
+
+            }
         };
         galleryMiniNode.visible=false;
+    }
+    function setSurfaceInfo()
+    {
+        //fxdButtons.getNode("Surfer").visible=true;
+       var R:javafx.geometry.Bounds=tabBoxNode.layoutBounds;
+        //System.out.println("RenderPanelOrG:{R.minX},{R.minY},{R.maxX},{R.maxY},{R.width},{R.height}");
+       surfaceInfo=FXSurfaceInfo
+       {
+            width:bind R.width*getScale(sceneHeight,sceneWidth),
+            height:bind R.height*getScale(sceneHeight,sceneWidth),
+            x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
+            y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
+            gallerys:gallerys,
+            gallery:bind galleryChooser.gallery,
+            surface: bind galleryMini.surface
+        };
+
+        tabBoxNode.visible=false;
     }
     function setButtons()
     {
@@ -169,10 +203,11 @@ public class TabField {
     public function set()
     {
         setColoChooser();
-        setSurfaceInfoAndGalleryChooser();
+        setGalleryChooser();
         setButtons();
         setGalleryText();
         setGalleryMini();
+        setSurfaceInfo();
         setColorState();
     }
     

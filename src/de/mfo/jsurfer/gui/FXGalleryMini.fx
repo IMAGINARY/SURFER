@@ -18,32 +18,94 @@ public class FXGalleryMini extends CustomNode
     public var y: Number;
     public var width: Number;
     public var height: Number;
+    public var gallerys:de.mfo.jsurfer.gui.Gallery[];
+    public var gallery:Integer;
+    public var surface:Integer;
+    public var press:function():Void;
 
+    var galleryNodes:javafx.scene.layout.Tile[];
     public override function create(): javafx.scene.Node
     {
-        /*def sw:SwingComponent=SwingComponent.wrap(getRenderer());
-        sw.layoutInfo=LayoutInfo{
-            minWidth: bind height,
-            width: bind width
-            maxWidth: bind width
-            minHeight: bind height
-            height: bind height
-            maxHeight: bind height
-         };*/
+        galleryNodes=[javafx.scene.layout.Tile{},javafx.scene.layout.Tile{},javafx.scene.layout.Tile{},javafx.scene.layout.Tile{},javafx.scene.layout.Tile{}];
+        
+        for (g in [0..4])
+        {
+            galleryNodes[g]=javafx.scene.layout.Tile
+            {
+                columns: 3
+                hgap: 5
+                vgap: 5
+                padding: bind javafx.geometry.Insets{top: 5 left: (width-((width-3*5-2*20)/3*0.9*3+15))/2}
+                nodeVPos: javafx.geometry.VPos.BOTTOM
+                nodeHPos: javafx.geometry.HPos.LEFT
+                layoutInfo:javafx.scene.layout.LayoutInfo
+                {
+                    width: bind width  
+                    height: bind height
+                }
 
-        return javafx.scene.Group {
-                    translateX: bind x translateY: bind y;
-                    content:
+                content: bind
+                [
+                    for (i in [0..(gallerys[g].getEntries().length-1)])
+                    javafx.scene.Group
+                    {
+                        content:
+                        [
+                            javafx.scene.layout.VBox
+                            {
+                                onMousePressed :bind function(e: javafx.scene.input.MouseEvent): Void {surface=i;press();}
+                                content:
+                                [
+                                    javafx.scene.image.ImageView
+                                    {
+                                        image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
+                                        fitWidth:bind (width-3*5-2*20)/3*0.9
+                                        preserveRatio: true
+                                    }
+                                    javafx.scene.text.Text
+                                    {
+                                        id: "FXGalleryChooser{gallery} {i}"
+                                        font: bind javafx.scene.text.Font.font
+                                        (
+                                            "BirchStd",
+                                             javafx.scene.text.FontWeight.REGULAR,
+                                             ((width-3*5-2*20)/3*0.9)*0.4*0.15
+                                        )
+                                        content: "{gallerys[g].getEntries()[ i ].getName()} {gallerys[g].getEntries().length}"
+                                        textAlignment:javafx.scene.text.TextAlignment.CENTER
+                                        translateX: bind ((width-3*5-2*20)/3*0.9-scene.lookup("FXGalleryChooser{gallery} {i}").boundsInLocal.width)/2
+                                        //translateY: bind (height-4*5)/5*0.2
+                                        //textOrigin: javafx.scene.text.TextOrigin.BASELINE
+
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+        
+        return javafx.scene.Group
+        {
+            translateX: bind x translateY: bind y;
+            content:
+            [
+                javafx.scene.layout.Stack
+                {
+                    content:bind
                     [
-                        javafx.scene.shape.Rectangle
+                        /*javafx.scene.shape.Rectangle
                         {
                             x: 0  y: 0
                             width: bind width  height: bind height
-                            fill: javafx.scene.paint.Color.rgb(100, 200, 0)
-                        }
-                        //SwingComponent.wrap(getRenderer())
+                            fill: javafx.scene.paint.Color.rgb(0, 100, 200)
+                        }*/
+                        galleryNodes [gallery]
                     ]
                 }
+            ]
+        }
     }
 
 }
