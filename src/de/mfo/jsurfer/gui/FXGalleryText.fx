@@ -30,15 +30,15 @@ public class FXGalleryText extends CustomNode
                 {
                     content:
                     [
-                        javafx.scene.shape.Rectangle
+                        /*javafx.scene.shape.Rectangle
                         {
                             x: 0  y: 0
                             width: bind width  height: bind height
                             fill: javafx.scene.paint.Color.rgb(0, 200, 100)
-                        }
+                        }*/
                         javafx.scene.image.ImageView
                         {
-                            image: bind javafx.ext.swing.SwingUtils.toFXImage( gallerys[gallery].getDescription() )
+                            image: bind javafx.ext.swing.SwingUtils.toFXImage( gallerys[gallery].getDescription(width,height) )
                             fitHeight:bind height
                             fitWidth: bind width
                             preserveRatio: true
