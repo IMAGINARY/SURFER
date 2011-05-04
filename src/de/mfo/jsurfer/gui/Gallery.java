@@ -66,7 +66,11 @@ public class Gallery {
     }
     public BufferedImage getDescription( int width, int height )
     {
-        if( description == null || description.getWidth() != width || description.getHeight() == height )
+        if( width == 0 )
+            width = 1;
+        if( height == 0 )
+            height = 1;
+        if( description == null || description.getWidth() != width || description.getHeight() != height )
             description = renderPDF( descriptionURL, width, height );
         return description;
     }
@@ -196,9 +200,13 @@ public class Gallery {
         }
         public BufferedImage getDescription( int width, int height )
         {
-            if( description == null || description.getWidth() != width || description.getHeight() == height )
-                description = renderPDF( descriptionURL, width, height );
-            return description;
+            if( width == 0 )
+                width = 1;
+            if( height == 0 )
+                height = 1;
+            if( description == null || description.getWidth() != width || description.getHeight() != height )
+                    description = renderPDF( descriptionURL, width, height );
+                return description;
         }
         public URL getJSurfURL() { return jsurf_file_url; }
     }
