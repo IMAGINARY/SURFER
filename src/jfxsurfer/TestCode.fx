@@ -82,10 +82,10 @@ public function testGallery() : Group
                         Text { content: "gallery_key={g.getKey()}" },
                         Text { content: "gallery_name={g.getName()}" },
                         ImageView { image: SwingUtils.toFXImage( g.getIcon() ) },
-                        ImageView { image: SwingUtils.toFXImage( g.getDescription() ) },
+                        ImageView { image: SwingUtils.toFXImage( g.getDescription( 100, 100 ) ) },
                         Text { content: "{g.getEntries()[ 0 ].getName()}" }
                         ImageView { image: SwingUtils.toFXImage( g.getEntries()[ 0 ].getIcon() ) }
-                        ImageView { image: SwingUtils.toFXImage( g.getEntries()[ 0 ].getDescription() ) }
+                        ImageView { image: SwingUtils.toFXImage( g.getEntries()[ 0 ].getDescription( 100, 100 ) ) }
                     ]
                 }
             }

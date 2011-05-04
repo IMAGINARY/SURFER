@@ -26,15 +26,11 @@ public class Gallery {
     int number;
     String key;
     String name;
+    URL iconURL;
     BufferedImage icon;
+    URL descriptionURL;
     BufferedImage description;
     GalleryItem[] gallery_items;
-
-    int gallery_description_width;
-    int gallery_description_height;
-
-    int gallery_entry_description_width;
-    int gallery_entry_description_height;
     
     public Gallery( int number )
             throws IOException
@@ -45,19 +41,12 @@ public class Gallery {
         Enumeration< String > keys = rb.getKeys();
         for(; keys.hasMoreElements(); ) 
             System.out.println( keys.nextElement() );
-         
-
-        this.gallery_description_width = 600;
-        this.gallery_description_height = 430;
-
-        this.gallery_entry_description_width = 380;
-        this.gallery_entry_description_height = 2*380;
         
         this.number = number;
         this.key = rb.getString( "gallery_" + number + "_key" );
         this.name = rb.getString( key );
-        this.icon = loadImage( getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" ) );
-        this.description = renderPDF( getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" ), gallery_description_width, gallery_description_height );
+        this.iconURL = getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" );
+        this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
         
         String[] content_keys = getContentKeys();
         LinkedList< GalleryItem > l = new LinkedList< GalleryItem >();
@@ -69,8 +58,18 @@ public class Gallery {
     public int getNumber() { return number; }
     public String getKey() { return key; }
     public String getName() { return name; }
-    public BufferedImage getIcon() { return icon; }
-    public BufferedImage getDescription() { return description; }           
+    public BufferedImage getIcon()
+    {
+        if( icon == null )
+            icon = loadImage( iconURL );
+        return icon;
+    }
+    public BufferedImage getDescription( int width, int height )
+    {
+        if( description == null || description.getWidth() != width || description.getHeight() == height )
+            description = renderPDF( descriptionURL, width, height );
+        return description;
+    }
     
     public GalleryItem[] getEntries()
     {
@@ -171,7 +170,9 @@ public class Gallery {
     {
         private String key;
         private String name;
+        private URL iconURL;
         private BufferedImage icon;
+        private URL descriptionURL;
         private BufferedImage description;
         private URL jsurf_file_url;
 
@@ -180,15 +181,25 @@ public class Gallery {
         {
             this.key = key;
             this.name = rb.getString( key );
-            this.icon = loadImage( getResource( "gallery/" + key + "_icon.png" ) );
-            this.description = renderPDF( getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" ), gallery_entry_description_width, gallery_entry_description_height );
+            this.iconURL = getResource( "gallery/" + key + "_icon.png" );
+            this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
             this.jsurf_file_url = getResource( "gallery/" + key + ".jsurf" );
         }
 
         public String getKey() { return key; }
         public String getName() { return name; }
-        public BufferedImage getIcon() { return icon; }
-        public BufferedImage getDescription() { return description; }
+        public BufferedImage getIcon()
+        {
+            if( icon == null )
+                icon = loadImage( iconURL );
+            return icon;
+        }
+        public BufferedImage getDescription( int width, int height )
+        {
+            if( description == null || description.getWidth() != width || description.getHeight() == height )
+                description = renderPDF( descriptionURL, width, height );
+            return description;
+        }
         public URL getJSurfURL() { return jsurf_file_url; }
     }
 }
