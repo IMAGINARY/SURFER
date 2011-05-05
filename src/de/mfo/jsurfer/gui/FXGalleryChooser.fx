@@ -19,6 +19,7 @@ public class FXGalleryChooser extends CustomNode
     public var height: Number;
     public var gallerys:de.mfo.jsurfer.gui.Gallery[];
     public var gallery:Integer=0;
+    public var setSurfaceNull:function():Void;
     public override function create(): javafx.scene.Node
     {
         return javafx.scene.Group
@@ -60,7 +61,7 @@ public class FXGalleryChooser extends CustomNode
         return javafx.scene.Group
         {
             //translateX: bind x+g*(height/5) translateY: bind y*(height/5);
-            onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {gallery=g;}
+            onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {setSurfaceNull();gallery=g;}
             content:
             [
                 javafx.scene.layout.Stack

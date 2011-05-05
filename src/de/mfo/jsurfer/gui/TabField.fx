@@ -81,6 +81,7 @@ public class TabField {
             x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:gallerys
+            setSurfaceNull:function():Void{galleryMini.surface=0;}
         };
 
         tabBoxNode.visible=false;
