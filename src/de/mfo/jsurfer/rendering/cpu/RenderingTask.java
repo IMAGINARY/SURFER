@@ -104,10 +104,10 @@ public class RenderingTask implements Callable<Void>
 
                 // antialias pixels
                 int ulIndex = 0; // index of color of upper left corner of the current pixel
-                for( int y = yStart; y <= yEnd; y++ )
+                for( int y = yStart; y <= yEnd && !this.interrupted; y++ )
                 {
                     int colorBufferIndex = dcsd.width * y + xStart;
-                    for( int x = xStart; x <= xEnd; x++ )
+                    for( int x = xStart; x <= xEnd && !this.interrupted; x++ )
                     {
                         Color3f ulColor = internalColorBuffer[ulIndex];
                         Color3f urColor = internalColorBuffer[ulIndex + 1];

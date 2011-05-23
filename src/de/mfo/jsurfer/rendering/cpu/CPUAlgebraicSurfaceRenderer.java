@@ -34,9 +34,9 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         dcsd.coefficientCalculator = new PolynomialExpansionCoefficientCalculator( getSurfaceExpression() );
 //        dcsd.realRootFinder = new DChainRootFinder();
 //        dcsd.realRootFinder = new SturmChainRootFinder(); 
-        dcsd.realRootFinder = new DescartesRootFinder( false ); 
+//        dcsd.realRootFinder = new DescartesRootFinder( false );
 //        dcsd.realRootFinder = new GPUSuitableDescartesRootFinder2( false );
-//        dcsd.realRootFinder = new BernsteinDescartesRootFinder( false );
+        dcsd.realRootFinder = new BernsteinDescartesRootFinder( false );
         dcsd.gradientCalculator = new FastGradientCalculator( getGradientXExpression(), getGradientYExpression(), getGradientZExpression() );
 
         dcsd.frontAmbientColor = new Color3f( getFrontMaterial().getColor() );

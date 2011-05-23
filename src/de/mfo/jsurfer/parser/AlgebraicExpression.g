@@ -105,7 +105,7 @@ unary_expr
 primary_expr
 	: DECIMAL_LITERAL
 	| FLOATING_POINT_LITERAL
-	| IDENTIFIER
+	| IDENTIFIER (primary_expr)*
 	| LPAR! add_expr RPAR!
 	;
 
@@ -124,7 +124,7 @@ FLOATING_POINT_LITERAL
 fragment
 EXPONENT : ( 'e' | 'E' ) ( PLUS | MINUS )? DIGIT+ ;
 
-IDENTIFIER : LETTER ( LETTER | DIGIT )*;
+IDENTIFIER : LETTER; // ( LETTER | DIGIT )*;
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n' | '\u000C' )+ 	{ $channel = HIDDEN; } ;
 

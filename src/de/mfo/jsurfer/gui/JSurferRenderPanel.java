@@ -22,9 +22,17 @@ import de.mfo.jsurfer.rendering.*;
 import de.mfo.jsurfer.rendering.cpu.*;
 import de.mfo.jsurfer.parser.*;
 import de.mfo.jsurfer.util.*;
-import de.mfo.jsurfer.algebra.*;
-//import java.lang.System;
-//import javax.swing.event.*;
+
+import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+import javax.media.opengl.glu.*;
+import javax.media.opengl.awt.GLJPanel;
+
+import java.awt.BorderLayout;
 
 /**
  * This panel displays an algebraic surface in its center. All settings of the used
@@ -38,8 +46,18 @@ import de.mfo.jsurfer.algebra.*;
  */
 public class JSurferRenderPanel extends JComponent
 {
+    class ImgBuffer
+    {
+        public int[] rgbBuffer;
+        public int width;
+        public int height;
+
+        public ImgBuffer( int w, int h ) { rgbBuffer = new int[ 3 * w * h ]; width = w; height = h; }
+    }
+
+
     CPUAlgebraicSurfaceRenderer asr;
-    BufferedImage currentSurfaceImage;
+    ImgBuffer currentSurfaceImage;
     boolean refreshImage;
     boolean refreshImageAntiAliased;
     boolean renderSizeChanged;
@@ -50,6 +68,8 @@ public class JSurferRenderPanel extends JComponent
     RenderWorker rw;
     HiResRenderWorker hrrw;
     boolean firstRun;
+    GLJPanel glcanvas;
+
 
     class HiResRenderWorker extends SwingWorker
     {
@@ -69,12 +89,12 @@ public class JSurferRenderPanel extends JComponent
             // create hi res color buffer
             int w = getWidth();
             int h = getHeight();
-            BufferPair bp = createBufferedImage( w, h );
+            ImgBuffer ib = new ImgBuffer( w, h );
 
             try
             {
-                asr.draw( bp.intBuffer, w, h );
-                return bp.bufferedImage;
+                asr.draw( ib.rgbBuffer, w, h );
+                return ib;
             }
             catch( Throwable t )
             {
@@ -86,8 +106,8 @@ public class JSurferRenderPanel extends JComponent
         public void done() {
             try
             {
-                BufferedImage bi = ( BufferedImage ) get();
-                currentSurfaceImage = bi != null ? bi : currentSurfaceImage;
+                ImgBuffer ib = ( ImgBuffer ) get();
+                currentSurfaceImage = ib != null ? ib : currentSurfaceImage;
                 repaint();
             }
             catch( java.util.concurrent.CancellationException ce ) {}
@@ -112,7 +132,7 @@ public class JSurferRenderPanel extends JComponent
             asr.stopDrawing();
 
             // create color buffer
-            BufferPair bp = createBufferedImage( renderSize.width, renderSize.height );
+            ImgBuffer ib = new ImgBuffer( renderSize.width, renderSize.height );
 
             // do rendering
             Matrix4f rotation = new Matrix4f();
@@ -124,8 +144,8 @@ public class JSurferRenderPanel extends JComponent
             setOptimalCameraDistance( asr.getCamera() );
             try
             {
-                asr.draw( bp.intBuffer, renderSize.width, renderSize.height );
-                return bp.bufferedImage;
+                asr.draw( ib.rgbBuffer, renderSize.width, renderSize.height );
+                return ib;
             }
             catch( Throwable t )
             {
@@ -138,8 +158,8 @@ public class JSurferRenderPanel extends JComponent
 
             try
             {
-                BufferedImage bi = ( BufferedImage ) get();
-                currentSurfaceImage = bi != null ? bi : currentSurfaceImage;
+                ImgBuffer ib = ( ImgBuffer ) get();
+                currentSurfaceImage = ib != null ? ib : currentSurfaceImage;
                 repaint();
             }
             catch( java.util.concurrent.CancellationException ce ) {}
@@ -203,8 +223,242 @@ public class JSurferRenderPanel extends JComponent
         setDoubleBuffered( true );
         setFocusable( true );
 
+        glcanvas = createGLCanvas();
+        setLayout( new BorderLayout() );
+        add( glcanvas, BorderLayout.CENTER );
+/*
+        final JFrame jframe = new JFrame( "One Triangle Swing GLCanvas" );
+        jframe.getContentPane().add( glcanvas, BorderLayout.CENTER );
+        jframe.setSize( 640, 480 );
+        jframe.setVisible( true );
+*/
         rw = new RenderWorker();
         currentSurfaceImage = null;
+    }
+
+    protected GLJPanel createGLCanvas()
+    {
+        GLCapabilities caps = new GLCapabilities( GLProfile.get( GLProfile.GL2 ) );
+        caps.setSampleBuffers( true );
+        caps.setNumSamples( 4 );
+        glcanvas = new GLJPanel( caps );
+        glcanvas.addGLEventListener( new GLEventListener() {
+
+            int textureId;
+
+            @Override
+            public void reshape( GLAutoDrawable glautodrawable, int x, int y, int width, int height ) {
+                GL2 gl = glautodrawable.getGL().getGL2();
+                gl.glViewport(x, y, width, height);
+                gl.glMatrixMode( GL2.GL_PROJECTION );
+                gl.glLoadIdentity();
+                if( width > height )
+                    gl.glOrtho( 0, width / ( double ) height, 0, 1, -2, 2 );
+                else
+                    gl.glOrtho( 0, 1, 0, height / ( double ) width, -2, 2 );
+            }
+
+            @Override
+            public void init( GLAutoDrawable glautodrawable )
+            {
+                GL2 gl = glautodrawable.getGL().getGL2();
+                
+                // create texture
+                int[] tmpId = new int[ 1 ];
+                gl.glGenTextures( 1, tmpId, 0 );
+                textureId = tmpId[ 0 ];
+
+                // more initialization
+                gl.glClearColor( 1.0f, 0.0f, 0.0f, 1.0f );
+                gl.glClearDepth( 1 );
+                gl.glEnable( GL2.GL_DEPTH_TEST );
+
+                // antialias lines
+                gl.glLineWidth( 2 );
+                gl.glEnable( GL2.GL_LINE_SMOOTH );
+                gl.glHint( GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST );
+                gl.glEnable( GL2.GL_BLEND );
+                gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+
+                gl.glEnable( GL2.GL_TEXTURE_2D );
+
+                gl.glEnable( GL2.GL_CULL_FACE );
+                gl.glCullFace( GL2.GL_BACK );
+
+                gl.glShadeModel( GL2.GL_SMOOTH );
+
+                gl.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST );
+
+                gl.glEnable( GL2.GL_NORMALIZE );
+                gl.glEnable( GL2.GL_MULTISAMPLE );
+
+                gl.glEnable( GL2.GL_LIGHT0 );
+                gl.glDisable( GL2.GL_LIGHT1 );
+                gl.glDisable( GL2.GL_LIGHT2 );
+                gl.glDisable( GL2.GL_LIGHT3 );
+                gl.glDisable( GL2.GL_LIGHT4 );
+                gl.glDisable( GL2.GL_LIGHT5 );
+                gl.glDisable( GL2.GL_LIGHT6 );
+                gl.glDisable( GL2.GL_LIGHT7 );
+
+                float ambientLight0[] = { 0.4f, 0.4f, 0.4f, 1.0f };
+                float diffuseLight0[] = { 1f, 1f, 1f, 1.0f };
+                float specularLight0[] = { 1f, 1f, 1f, 1.0f };
+
+                gl.glLightfv( GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambientLight0, 0 );
+                gl.glLightfv( GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuseLight0, 0 );
+                gl.glLightfv( GL2.GL_LIGHT0, GL2.GL_SPECULAR, specularLight0, 0 );
+            }
+
+            @Override
+            public void dispose( GLAutoDrawable glautodrawable ) {
+            }
+
+            private void drawCylinder( GL2 gl, double bottomRadius, double topRadius, double height )
+            {
+                GLU glu = new GLU();
+                GLUquadric gluQuadric = glu.gluNewQuadric();
+                glu.gluQuadricNormals( gluQuadric, GLU.GLU_SMOOTH );
+                glu.gluCylinder( gluQuadric, bottomRadius, topRadius, height, 32, 32 );
+
+                glu.gluQuadricOrientation( gluQuadric, GLU.GLU_INSIDE );
+                glu.gluDisk( gluQuadric, 0.0, bottomRadius, 32, 5 );
+                glu.gluQuadricOrientation( gluQuadric, GLU.GLU_OUTSIDE );
+
+                gl.glPushAttrib( GL2.GL_MATRIX_MODE );
+                gl.glMatrixMode( GL2.GL_MODELVIEW );
+                gl.glPushMatrix();
+                gl.glTranslated( 0, 0, height );
+                glu.gluDisk( gluQuadric, 0.0, topRadius, 32, 5 );
+                gl.glPopMatrix();
+                gl.glPopAttrib();
+            }
+
+            @Override
+            public void display( GLAutoDrawable glautodrawable ) {
+                System.out.println("display GL called");
+
+                GL2 gl = glautodrawable.getGL().getGL2();
+
+                gl.glEnable( GL2.GL_TEXTURE_2D );
+                gl.glBindTexture( GL2.GL_TEXTURE_2D, textureId );
+
+                gl.glPixelStorei( GL2.GL_UNPACK_ALIGNMENT, 1 );
+
+                ImgBuffer tmpImg = currentSurfaceImage;
+                if( tmpImg != null )
+                {
+                    gl.glTexImage2D( GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, tmpImg.width, tmpImg.height, 0, GL2.GL_BGRA, GL2.GL_UNSIGNED_BYTE, java.nio.IntBuffer.wrap( tmpImg.rgbBuffer ) );
+                }
+
+                gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP );
+                gl.glTexParameteri ( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP );
+                gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR );
+		gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR );
+                gl.glTexEnvf( GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_DECAL );
+
+                gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
+
+
+                gl.glMatrixMode( GL2.GL_MODELVIEW );
+                gl.glLoadIdentity();
+                
+                float position0[] = { 0f, 0f, 10f, 1.0f };
+                gl.glLightfv( GL2.GL_LIGHT0, GL2.GL_POSITION, position0, 0 );
+
+                gl.glDisable( GL2.GL_LIGHTING );
+                gl.glEnable( GL2.GL_TEXTURE_2D );
+
+                gl.glBegin( GL2.GL_QUADS );
+                    gl.glColor3d( 1, 1, 1 );
+                    gl.glTexCoord2d( 1.0, 1.0 );
+                    gl.glVertex3d( 1, 0, -1.5 );
+                    gl.glTexCoord2d( 1.0, 0.0 );
+                    gl.glVertex3d( 1, 1, -1.5 );
+                    gl.glTexCoord2d( 0.0, 0.0 );
+                    gl.glVertex3d( 0, 1, -1.5 );
+                    gl.glTexCoord2d( 0.0, 1.0 );
+                    gl.glVertex3d( 0, 0, -1.5 );
+                gl.glEnd();
+
+                gl.glTranslated( 0.08, 0.08, 0 );
+                gl.glScaled( 0.08, 0.08, 0.08 );
+
+                Matrix4f r = rsd.getRotation();
+                r.transpose();
+
+                float[] rf = { r.m00, r.m10, r.m20, r.m30,
+                               r.m01, r.m11, r.m21, r.m31,
+                               r.m02, r.m12, r.m22, r.m32,
+                               r.m03, r.m13, r.m23, r.m33 };
+                
+                gl.glScaled( 1, -1, -1 );
+                gl.glMultMatrixf( rf, 0 );
+                gl.glScaled( 1, -1, -1 );
+                
+                double radiusCyl = 0.04;
+                double tipLength = 0.33;
+                double radiusTip = 0.125;
+
+
+                float ambientMatX[] = { 0.1745f, 0.01175f, 0.01175f, 1f };
+                float diffuseMatX[] = { 0.61424f, 0.04136f, 0.04136f, 1f };
+                float specularMatX[] = { 0.727811f, 0.626959f, 0.626959f, 1f };
+                float shininessX[] = { 76.8f };
+
+                float ambientMatY[] = { 0.01175f, 0.1745f, 0.01175f, 1f };
+                float diffuseMatY[] = { 0.04136f, 0.61424f, 0.04136f, 1f };
+                float specularMatY[] = { 0.626959f, 0.727811f, 0.626959f, 1f };
+                float shininessY[] = { 76.8f };
+
+                float ambientMatZ[] = { 0.01175f, 0.01175f, 0.1745f, 1f };
+                float diffuseMatZ[] = { 0.04136f, 0.04136f, 0.61424f, 1f };
+                float specularMatZ[] = { 0.626959f, 0.626959f, 0.727811f, 1f };
+                float shininessZ[] = { 76.8f };
+
+                gl.glEnable( GL2.GL_LIGHTING );
+                gl.glDisable( GL2.GL_TEXTURE_2D );
+
+                gl.glPushMatrix();
+                gl.glBegin( GL2.GL_QUADS );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, ambientMatZ, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, diffuseMatZ, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, specularMatZ, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininessZ, 0 );
+                gl.glEnd();
+                drawCylinder( gl, radiusCyl, radiusCyl, 1.0 - tipLength ); // z-axis
+                gl.glTranslated( 0, 0, 1 - tipLength );
+                drawCylinder( gl, radiusTip, 0, tipLength ); // tip of y-axis
+                gl.glPopMatrix();
+
+                gl.glPushMatrix();
+                gl.glRotated( 90.0, 0, 1, 0 );
+                gl.glBegin( GL2.GL_QUADS );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, ambientMatX, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, diffuseMatX, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, specularMatX, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininessX, 0 );
+                gl.glEnd();
+                drawCylinder( gl, radiusCyl, radiusCyl, 1.0 - tipLength ); // x-axis
+                gl.glTranslated( 0, 0, 1 - tipLength );
+                drawCylinder( gl, radiusTip, 0, tipLength ); // tip of x-axis
+                gl.glPopMatrix();
+
+                gl.glPushMatrix();
+                gl.glRotated( 90.0, -1, 0, 0 );
+                gl.glBegin( GL2.GL_QUADS );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_AMBIENT, ambientMatY, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_DIFFUSE, diffuseMatY, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, specularMatY, 0 );
+                    gl.glMaterialfv( GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, shininessY, 0 );
+                gl.glEnd();
+                drawCylinder( gl, radiusCyl, radiusCyl, 1.0 - tipLength ); // Y-axis
+                gl.glTranslated( 0, 0, 1 - tipLength );
+                drawCylinder( gl, radiusTip, 0, tipLength ); // tip of z-axis
+                gl.glPopMatrix();
+            }
+        });
+        return glcanvas;
     }
 
     public AlgebraicSurfaceRenderer getAlgebraicSurfaceRenderer()
@@ -235,28 +489,6 @@ public class JSurferRenderPanel extends JComponent
     {
         refreshImage = true;
         scheduleSurfaceRepaint();
-    }
-
-    class BufferPair
-    {
-        public BufferedImage bufferedImage;
-        public int[] intBuffer;
-
-        public BufferPair( BufferedImage bi, int[] i ) { bufferedImage = bi; intBuffer = i; }
-    }
-
-    BufferPair createBufferedImage( int w, int h )
-    {
-        int[] colorBuffer = new int[ w * h ];
-        MemoryImageSource memoryImageSource = new MemoryImageSource( w, h, colorBuffer, 0, w );
-        memoryImageSource.setAnimated( true );
-        memoryImageSource.setFullBufferUpdates( true );
-
-        DirectColorModel colormodel = new DirectColorModel( 24, 0xff0000, 0xff00, 0xff );
-        SampleModel sampleModel = colormodel.createCompatibleSampleModel( w, h );
-        DataBufferInt data = new DataBufferInt( colorBuffer, w * h );
-        WritableRaster raster = WritableRaster.createWritableRaster( sampleModel, data, new Point( 0, 0 ) );
-        return new BufferPair( new BufferedImage( colormodel, raster, false, null ), colorBuffer );
     }
 
     public Dimension getPreferredSize()
@@ -318,14 +550,35 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
     }
 
+    BufferedImage createBufferedImageFromRGB( ImgBuffer ib )
+    {
+        int w = ib.width;
+        int h = ib.height;
+        int[] colorBuffer = new int[ w * h ];
+        MemoryImageSource memoryImageSource = new MemoryImageSource( w, h, colorBuffer, 0, w );
+        memoryImageSource.setAnimated( true );
+        memoryImageSource.setFullBufferUpdates( true );
+
+        DirectColorModel colormodel = new DirectColorModel( 24, 0xff0000, 0xff00, 0xff );
+        SampleModel sampleModel = colormodel.createCompatibleSampleModel( w, h );
+        DataBufferInt data = new DataBufferInt( colorBuffer, w * h );
+        WritableRaster raster = WritableRaster.createWritableRaster( sampleModel, data, new Point( 0, 0 ) );
+        return new BufferedImage( colormodel, raster, false, null );
+    }
+
     public void saveToPNG( java.io.File f )
             throws java.io.IOException
     {
-        javax.imageio.ImageIO.write( currentSurfaceImage, "png", f );
+        javax.imageio.ImageIO.write( createBufferedImageFromRGB( currentSurfaceImage ), "png", f );
     }
 
     protected void paintComponent( Graphics g )
     {
+        super.paintComponent( g );
+//        glcanvas.repaint();
+        if( true )
+            return;
+/*
         if( g instanceof Graphics2D )
         {
             final Graphics2D g2 = ( Graphics2D ) g;
@@ -378,6 +631,7 @@ public class JSurferRenderPanel extends JComponent
             super.paintComponents( g );
             g.drawString( "this component needs a Graphics2D for painting", 2, this.getHeight() - 2 );
         }
+ * */
     }
 
     protected void scheduleSurfaceRepaint()

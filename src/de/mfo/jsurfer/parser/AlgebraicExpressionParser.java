@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-02-14 14:44:58
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-03-21 16:26:58
 
 package de.mfo.jsurfer.parser;
 
@@ -580,7 +580,7 @@ public class AlgebraicExpressionParser extends Parser {
                 if ( (LA5_2==LPAR) ) {
                     alt5=2;
                 }
-                else if ( (LA5_2==EOF||(LA5_2>=PLUS && LA5_2<=POW)||LA5_2==RPAR) ) {
+                else if ( (LA5_2==EOF||(LA5_2>=PLUS && LA5_2<=POW)||(LA5_2>=RPAR && LA5_2<=IDENTIFIER)) ) {
                     alt5=1;
                 }
                 else {
@@ -656,7 +656,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "primary_expr"
-    // AlgebraicExpression.g:105:1: primary_expr : ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | LPAR add_expr RPAR );
+    // AlgebraicExpression.g:105:1: primary_expr : ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER ( IDENTIFIER )* | LPAR add_expr RPAR );
     public final AlgebraicExpressionParser.primary_expr_return primary_expr() throws RecognitionException {
         AlgebraicExpressionParser.primary_expr_return retval = new AlgebraicExpressionParser.primary_expr_return();
         retval.start = input.LT(1);
@@ -666,49 +666,51 @@ public class AlgebraicExpressionParser extends Parser {
         Token DECIMAL_LITERAL24=null;
         Token FLOATING_POINT_LITERAL25=null;
         Token IDENTIFIER26=null;
-        Token LPAR27=null;
-        Token RPAR29=null;
-        AlgebraicExpressionParser.add_expr_return add_expr28 = null;
+        Token IDENTIFIER27=null;
+        Token LPAR28=null;
+        Token RPAR30=null;
+        AlgebraicExpressionParser.add_expr_return add_expr29 = null;
 
 
         Object DECIMAL_LITERAL24_tree=null;
         Object FLOATING_POINT_LITERAL25_tree=null;
         Object IDENTIFIER26_tree=null;
-        Object LPAR27_tree=null;
-        Object RPAR29_tree=null;
+        Object IDENTIFIER27_tree=null;
+        Object LPAR28_tree=null;
+        Object RPAR30_tree=null;
 
         try {
-            // AlgebraicExpression.g:106:2: ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | LPAR add_expr RPAR )
-            int alt6=4;
+            // AlgebraicExpression.g:106:2: ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER ( IDENTIFIER )* | LPAR add_expr RPAR )
+            int alt7=4;
             switch ( input.LA(1) ) {
             case DECIMAL_LITERAL:
                 {
-                alt6=1;
+                alt7=1;
                 }
                 break;
             case FLOATING_POINT_LITERAL:
                 {
-                alt6=2;
+                alt7=2;
                 }
                 break;
             case IDENTIFIER:
                 {
-                alt6=3;
+                alt7=3;
                 }
                 break;
             case LPAR:
                 {
-                alt6=4;
+                alt7=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 6, 0, input);
+                    new NoViableAltException("", 7, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt6) {
+            switch (alt7) {
                 case 1 :
                     // AlgebraicExpression.g:106:4: DECIMAL_LITERAL
                     {
@@ -734,13 +736,41 @@ public class AlgebraicExpressionParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // AlgebraicExpression.g:108:4: IDENTIFIER
+                    // AlgebraicExpression.g:108:4: IDENTIFIER ( IDENTIFIER )*
                     {
                     root_0 = (Object)adaptor.nil();
 
                     IDENTIFIER26=(Token)match(input,IDENTIFIER,FOLLOW_IDENTIFIER_in_primary_expr302); 
                     IDENTIFIER26_tree = (Object)adaptor.create(IDENTIFIER26);
                     adaptor.addChild(root_0, IDENTIFIER26_tree);
+
+                    // AlgebraicExpression.g:108:15: ( IDENTIFIER )*
+                    loop6:
+                    do {
+                        int alt6=2;
+                        int LA6_0 = input.LA(1);
+
+                        if ( (LA6_0==IDENTIFIER) ) {
+                            alt6=1;
+                        }
+
+
+                        switch (alt6) {
+                    	case 1 :
+                    	    // AlgebraicExpression.g:108:17: IDENTIFIER
+                    	    {
+                    	    IDENTIFIER27=(Token)match(input,IDENTIFIER,FOLLOW_IDENTIFIER_in_primary_expr306); 
+                    	    IDENTIFIER27_tree = (Object)adaptor.create(IDENTIFIER27);
+                    	    adaptor.addChild(root_0, IDENTIFIER27_tree);
+
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    break loop6;
+                        }
+                    } while (true);
 
 
                     }
@@ -750,14 +780,14 @@ public class AlgebraicExpressionParser extends Parser {
                     {
                     root_0 = (Object)adaptor.nil();
 
-                    LPAR27=(Token)match(input,LPAR,FOLLOW_LPAR_in_primary_expr307); 
-                    pushFollow(FOLLOW_add_expr_in_primary_expr310);
-                    add_expr28=add_expr();
+                    LPAR28=(Token)match(input,LPAR,FOLLOW_LPAR_in_primary_expr314); 
+                    pushFollow(FOLLOW_add_expr_in_primary_expr317);
+                    add_expr29=add_expr();
 
                     state._fsp--;
 
-                    adaptor.addChild(root_0, add_expr28.getTree());
-                    RPAR29=(Token)match(input,RPAR,FOLLOW_RPAR_in_primary_expr312); 
+                    adaptor.addChild(root_0, add_expr29.getTree());
+                    RPAR30=(Token)match(input,RPAR,FOLLOW_RPAR_in_primary_expr319); 
 
                     }
                     break;
@@ -810,9 +840,10 @@ public class AlgebraicExpressionParser extends Parser {
     public static final BitSet FOLLOW_RPAR_in_unary_expr280 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_DECIMAL_LITERAL_in_primary_expr292 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_FLOATING_POINT_LITERAL_in_primary_expr297 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENTIFIER_in_primary_expr302 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_LPAR_in_primary_expr307 = new BitSet(new long[]{0x0000000000003A20L});
-    public static final BitSet FOLLOW_add_expr_in_primary_expr310 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_RPAR_in_primary_expr312 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENTIFIER_in_primary_expr302 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_IDENTIFIER_in_primary_expr306 = new BitSet(new long[]{0x0000000000000802L});
+    public static final BitSet FOLLOW_LPAR_in_primary_expr314 = new BitSet(new long[]{0x0000000000003A20L});
+    public static final BitSet FOLLOW_add_expr_in_primary_expr317 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_RPAR_in_primary_expr319 = new BitSet(new long[]{0x0000000000000002L});
 
 }
