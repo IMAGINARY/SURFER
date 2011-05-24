@@ -233,6 +233,7 @@ public class JSurferRenderPanel extends JComponent
         jframe.setVisible( true );
 */
         rw = new RenderWorker();
+        hrrw = new HiResRenderWorker();
         currentSurfaceImage = null;
     }
 
@@ -540,8 +541,7 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
         try
         {
-            rw.get();
-            saveToPNG( f );
+            javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.get() ), "png", f );
         }
         catch( java.util.concurrent.CancellationException ce ) {}
         catch( java.util.concurrent.ExecutionException ce ) {}
@@ -550,18 +550,14 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
     }
 
-    BufferedImage createBufferedImageFromRGB( ImgBuffer ib )
+    static BufferedImage createBufferedImageFromRGB( ImgBuffer ib )
     {
         int w = ib.width;
         int h = ib.height;
-        int[] colorBuffer = new int[ w * h ];
-        MemoryImageSource memoryImageSource = new MemoryImageSource( w, h, colorBuffer, 0, w );
-        memoryImageSource.setAnimated( true );
-        memoryImageSource.setFullBufferUpdates( true );
 
         DirectColorModel colormodel = new DirectColorModel( 24, 0xff0000, 0xff00, 0xff );
         SampleModel sampleModel = colormodel.createCompatibleSampleModel( w, h );
-        DataBufferInt data = new DataBufferInt( colorBuffer, w * h );
+        DataBufferInt data = new DataBufferInt( ib.rgbBuffer, w * h );
         WritableRaster raster = WritableRaster.createWritableRaster( sampleModel, data, new Point( 0, 0 ) );
         return new BufferedImage( colormodel, raster, false, null );
     }
@@ -779,8 +775,67 @@ public class JSurferRenderPanel extends JComponent
         props.store( new FileOutputStream( property_file ), "jSurfer surface description" );
     }
 
+    public static void generateGalleryThumbnails( String folder )
+    {
+        JSurferRenderPanel p = new JSurferRenderPanel();
+        synchronized( p.asr )
+        {
+            try
+            {
+                new File( folder ).mkdir();
+                JSurferRenderPanel.ImgBuffer ib = p.new ImgBuffer( 120, 120 );
+                for( int i = 0; i < Gallery.getNumberOfGalleries(); i++ )
+                {
+                    try
+                    {
+                        Gallery g = new Gallery( i );
+                        Gallery.GalleryItem[] gi_array = g.getEntries();
+                        try
+                        {
+                            for( Gallery.GalleryItem gi : gi_array )
+                            {
+                                File f = new File( folder + File.separator + gi.getKey() + "_icon.png" );
+                                System.out.print( "generating thumbnail for " + f.getName() + " at " + f );
+                                p.loadFromFile( gi.getJSurfURL() );
+
+                                // do rendering
+                                Matrix4f rotation = new Matrix4f();
+                                rotation.invert( p.rsd.getRotation() );
+                                p.asr.setTransform( rotation );
+                                p.asr.setSurfaceTransform( p.scale );
+                                p.asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
+                                p.asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
+
+                                p.asr.draw( ib.rgbBuffer, ib.width, ib.height );
+
+                                javax.imageio.ImageIO.write( createBufferedImageFromRGB( ib ), "png", f );
+                                System.out.println( " ... done" );
+                            }
+                        }
+                        catch( Throwable t )
+                        {
+                            System.err.println( t );
+                        }
+                    }
+                    catch( Throwable t )
+                    {
+                            System.err.println( t );
+                    }
+                }
+            }
+            catch( Throwable t )
+            {
+                System.err.println( t );
+            }
+        }
+        System.exit( 0 );
+    }
+
     public static void main( String[]args )
     {
+        generateGalleryThumbnails( "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
+        if( true )
+            return;
         JSurferRenderPanel p = new JSurferRenderPanel();
         //p.setResizeImageWithComponent( true );
 

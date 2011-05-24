@@ -31,7 +31,15 @@ public class Gallery {
     URL descriptionURL;
     BufferedImage description;
     GalleryItem[] gallery_items;
-    
+
+    public static int getNumberOfGalleries()
+            throws IOException
+    {
+        Locale locale = Locale.getDefault();
+        ResourceBundle rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gui/gallery/Gallery", locale );
+        return Integer.parseInt( rb.getString( "number_of_galleries" ) );
+    }
+
     public Gallery( int number )
             throws IOException
     {
@@ -64,6 +72,7 @@ public class Gallery {
             icon = loadImage( iconURL );
         return icon;
     }
+    public URL getIconURL() { return iconURL; }
     public BufferedImage getDescription( int width, int height )
     {
         if( width == 0 )
@@ -74,6 +83,7 @@ public class Gallery {
             description = renderPDF( descriptionURL, width, height );
         return description;
     }
+    public URL getDescriptionURL() { return descriptionURL; }
     
     public GalleryItem[] getEntries()
     {
@@ -198,6 +208,8 @@ public class Gallery {
                 icon = loadImage( iconURL );
             return icon;
         }
+        public URL getIconURL() { return iconURL; }
+
         public BufferedImage getDescription( int width, int height )
         {
             if( width == 0 )
@@ -208,6 +220,7 @@ public class Gallery {
                     description = renderPDF( descriptionURL, width, height );
                 return description;
         }
+        public URL getDescriptionURL() { return descriptionURL; }
         public URL getJSurfURL() { return jsurf_file_url; }
     }
 }
