@@ -270,7 +270,8 @@ public class JSurferRenderPanel extends JComponent
                 textureId = tmpId[ 0 ];
 
                 // more initialization
-                gl.glClearColor( 1.0f, 0.0f, 0.0f, 1.0f );
+                //gl.glClearColor( 1.0f, 0.0f, 0.0f, 1.0f );
+                gl.glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
                 gl.glClearDepth( 1 );
                 gl.glEnable( GL2.GL_DEPTH_TEST );
 
@@ -360,7 +361,6 @@ public class JSurferRenderPanel extends JComponent
 
                 gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
 
-
                 gl.glMatrixMode( GL2.GL_MODELVIEW );
                 gl.glLoadIdentity();
                 
@@ -370,17 +370,28 @@ public class JSurferRenderPanel extends JComponent
                 gl.glDisable( GL2.GL_LIGHTING );
                 gl.glEnable( GL2.GL_TEXTURE_2D );
 
+                int w = glautodrawable.getWidth();
+                int h = glautodrawable.getHeight();
+
+                gl.glMatrixMode( GL2.GL_PROJECTION );
+                gl.glPushMatrix();
+                gl.glLoadIdentity();
+                gl.glOrtho(0, w, 0, h, -2, 2 );
+
                 gl.glBegin( GL2.GL_QUADS );
                     gl.glColor3d( 1, 1, 1 );
                     gl.glTexCoord2d( 1.0, 1.0 );
-                    gl.glVertex3d( 1, 0, -1.5 );
+                    gl.glVertex3d( w, 0, -1.5 );
                     gl.glTexCoord2d( 1.0, 0.0 );
-                    gl.glVertex3d( 1, 1, -1.5 );
+                    gl.glVertex3d( w, h, -1.5 );
                     gl.glTexCoord2d( 0.0, 0.0 );
-                    gl.glVertex3d( 0, 1, -1.5 );
+                    gl.glVertex3d( 0, h, -1.5 );
                     gl.glTexCoord2d( 0.0, 1.0 );
                     gl.glVertex3d( 0, 0, -1.5 );
                 gl.glEnd();
+                gl.glPopMatrix();
+
+                gl.glMatrixMode( GL2.GL_MODELVIEW );
 
                 gl.glTranslated( 0.08, 0.08, 0 );
                 gl.glScaled( 0.08, 0.08, 0.08 );
