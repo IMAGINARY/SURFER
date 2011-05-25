@@ -94,9 +94,9 @@ public class FXGalleryChooser extends CustomNode
                                     id: "FXGalleryChooser{g}"
                                     font: bind javafx.scene.text.Font.font
                                     (  
-                                        "BirchStd",
+                                        "Helvetica",
                                          if (g==gallery){javafx.scene.text.FontWeight.BOLD}else{ javafx.scene.text.FontWeight.REGULAR},
-                                         ((height-4*5)/5)*0.4*0.6
+                                         ((height-4*5)/5)*0.4*0.4
                                     )
                                     content: "{gallerys[g].getName()}"
                                     //textAlignment:javafx.scene.text.TextAlignment.CENTER

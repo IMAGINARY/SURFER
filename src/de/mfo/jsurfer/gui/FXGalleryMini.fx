@@ -33,8 +33,8 @@ public class FXGalleryMini extends CustomNode
             galleryNodes[g]=javafx.scene.layout.Tile
             {
                 columns: 3
-                hgap: 5
-                vgap: 5
+                hgap: 20
+                vgap: 30
                 padding: bind javafx.geometry.Insets{top: 5 left: (width-((width-3*5-2*20)/3*0.9*3+15))/2}
                 nodeVPos: javafx.geometry.VPos.BOTTOM
                 nodeHPos: javafx.geometry.HPos.LEFT
@@ -59,7 +59,7 @@ public class FXGalleryMini extends CustomNode
                                     javafx.scene.image.ImageView
                                     {
                                         image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
-                                        fitWidth:bind (width-3*5-2*20)/3*0.9
+                                        fitWidth:bind (width-3*5-2*20)/3*0.7
                                         preserveRatio: true
                                     }
                                     javafx.scene.text.Text
@@ -67,13 +67,13 @@ public class FXGalleryMini extends CustomNode
                                         id: "FXGalleryChooser{gallery} {i}"
                                         font: bind javafx.scene.text.Font.font
                                         (
-                                            "BirchStd",
+                                            "Helvetica",
                                              javafx.scene.text.FontWeight.REGULAR,
-                                             ((width-3*5-2*20)/3*0.9)*0.4*0.15
+                                             ((width-3*5-2*20)/3*0.9)*0.4*0.25
                                         )
-                                        content: "{gallerys[g].getEntries()[ i ].getName()} {gallerys[g].getEntries().length}"
+                                        content: "{gallerys[g].getEntries()[ i ].getName()}"
                                         textAlignment:javafx.scene.text.TextAlignment.CENTER
-                                        translateX: bind ((width-3*5-2*20)/3*0.9-scene.lookup("FXGalleryChooser{gallery} {i}").boundsInLocal.width)/2
+                                        translateX: bind ((width-3*5-2*20)/3*0.7-scene.lookup("FXGalleryChooser{gallery} {i}").boundsInLocal.width)/2
                                         //translateY: bind (height-4*5)/5*0.2
                                         //textOrigin: javafx.scene.text.TextOrigin.BASELINE
 
