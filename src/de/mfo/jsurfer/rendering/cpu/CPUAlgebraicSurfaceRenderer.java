@@ -133,35 +133,16 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     {
         synchronized( drawMutex )
         {
-            /*DrawcallStaticData dcsd = collectDrawCallStaticData( colorBuffer, width, height );
-
-            LinkedList<RenderingTask> renderingTasks = new LinkedList<RenderingTask>();
-            int xStep = width / Math.min( width, Runtime.getRuntime().availableProcessors() );
-            int yStep = height / Math.min( height, Runtime.getRuntime().availableProcessors() );
-            for( int x = 0; x < width; x += xStep )
-                for( int y = 0; y < height; y += yStep )
-                    renderingTasks.add( new RenderingTask( dcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) );
-            try
-            {
-                threadPoolExecutor.invokeAll( renderingTasks );
-            } catch( InterruptedException ie )
-            {
-                System.out.println( ie );
-            }*/
             DrawcallStaticData dcsd = collectDrawCallStaticData( colorBuffer, width, height );
 
             stopDrawing();
-            currentRenderingTasks = new LinkedList< Callable< Void > >();
-            synchronized( currentRenderingTasks ) // avoids stopDrawing() during task creation
-            {
-                int xStep = width / Math.min( width, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
-                int yStep = height / Math.min( height, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
-                for( int x = 0; x < width; x += xStep )
-                    for( int y = 0; y < height; y += yStep )
-                    {
-                       currentRenderingTasks.add( new RenderingTask( dcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) );
-                    }
-            }
+            LinkedList< Callable< Void > > tmpCurrentRenderingTasks = new LinkedList< Callable< Void > >();
+            int xStep = width / Math.min( width, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
+            int yStep = height / Math.min( height, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
+            for( int x = 0; x < width; x += xStep )
+                for( int y = 0; y < height; y += yStep )
+                   tmpCurrentRenderingTasks.add( new RenderingTask( dcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) );
+            currentRenderingTasks = tmpCurrentRenderingTasks;
             try
             {
                 threadPoolExecutor.invokeAll( currentRenderingTasks );
@@ -172,16 +153,13 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
             {
                 throw new RuntimeException( ie );
             }
-            currentRenderingTasks.clear();
+            currentRenderingTasks = new LinkedList< Callable< Void > >();
         }
     }
 
     public void stopDrawing()
     {
-        synchronized( currentRenderingTasks )
-        {
-            for( Callable< Void > rt : currentRenderingTasks )
-                ( ( RenderingTask ) rt ).interrupt();
-        }
+        for( Callable< Void > rt : currentRenderingTasks )
+            ( ( RenderingTask ) rt ).interrupt();
     }
 }
