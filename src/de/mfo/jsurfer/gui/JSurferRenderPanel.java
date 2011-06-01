@@ -181,7 +181,7 @@ public class JSurferRenderPanel extends JComponent
 
     public JSurferRenderPanel()
     {
-        renderSize = new Dimension( 240, 240 );
+        renderSize = new Dimension( 150, 150 );
 
         firstRun = true;
         refreshImage = true;
@@ -357,6 +357,10 @@ public class JSurferRenderPanel extends JComponent
                 gl.glTexParameteri ( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP );
                 gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR );
 		gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR );
+                Color3f bg_color = JSurferRenderPanel.this.asr.getBackgroundColor();
+                float[] borderColor={ bg_color.x, bg_color.y, bg_color.z, 1.0f };
+                gl.glTexParameterfv( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_BORDER_COLOR, borderColor, 0 ); // set texture border to background color to guarantee correct texture interpolation at the boundary
+
                 gl.glTexEnvf( GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_DECAL );
 
                 gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
