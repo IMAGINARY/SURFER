@@ -69,6 +69,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     }
     var tabField:TabField = TabField
     {
+        language:java.util.Locale.GERMAN,
         sliders: sliders,
         getScale: getScale,
         sceneWidth: bind width;
@@ -336,10 +337,10 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                             },
                             tabField.frontColor,
                             tabField.backColor,
-                            tabField.surfaceInfo,
-                            tabField.galleryChooser,
-                            tabField.galleryText,
-                            tabField.galleryMini,
+                            tabField.multiSurfaceInfo,
+                            tabField.multiGalleryChooser,
+                            tabField.multiGalleryText,
+                            tabField.multiGalleryMini,
                             surferPanel,
 
                             SurfaceExpression//,
@@ -430,7 +431,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
            else if (c=="Comma"){insertStringInTextfield(".");}
            else if (c=="Correct"){/*Nothing Happens*/}
            else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
-           else if (c=="Help"){/*ToDo Help*/}
+           else if (c=="Help"){/*ToDo Help*/if (tabField.language==java.util.Locale.GERMAN){tabField.language=java.util.Locale.ENGLISH;}else {tabField.language=java.util.Locale.GERMAN;}}
 
             /*if (c!="Back" and c!="Forward" and c!="Backspace")
             {

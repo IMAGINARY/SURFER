@@ -14,6 +14,7 @@ import javafx.scene.CustomNode;
 
 public class FXGalleryMini extends CustomNode
 {
+    public-init var language: java.util.Locale;
     public var x: Number;
     public var y: Number;
     public var width: Number;
@@ -23,12 +24,12 @@ public class FXGalleryMini extends CustomNode
     public var surface:Integer;
     public var press:function():Void;
 
-    var galleryNodes:javafx.scene.layout.Tile[];
+    var galleryNodes:javafx.scene.layout.Tile[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])javafx.scene.layout.Tile{};;
     public override function create(): javafx.scene.Node
     {
-        galleryNodes=[javafx.scene.layout.Tile{},javafx.scene.layout.Tile{},javafx.scene.layout.Tile{},javafx.scene.layout.Tile{},javafx.scene.layout.Tile{}];
+        //galleryNodes=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])javafx.scene.layout.Tile{};
         
-        for (g in [0..4])
+        for (g in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])
         {
             galleryNodes[g]=javafx.scene.layout.Tile
             {

@@ -31,38 +31,43 @@ public class Gallery {
     URL descriptionURL;
     BufferedImage description;
     GalleryItem[] gallery_items;
-
-    public static int getNumberOfGalleries()
+    public static int getNumberOfGalleries() throws IOException
+    {
+        return getNumberOfGalleries(Locale.getDefault());
+    }
+    public static int getNumberOfGalleries(Locale locale)
             throws IOException
     {
-        Locale locale = Locale.getDefault();
         ResourceBundle rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gui/gallery/Gallery", locale );
         return Integer.parseInt( rb.getString( "number_of_galleries" ) );
     }
-
-    public Gallery( int number )
+    public Gallery(int number) throws IOException
+    {
+        this( number, Locale.getDefault() );
+    }
+    public Gallery( int number, Locale locale  )
             throws IOException
     {
-        locale = Locale.getDefault();
+        this.locale = locale;
         rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gui/gallery/Gallery", locale );
-        
+
         Enumeration< String > keys = rb.getKeys();
-        for(; keys.hasMoreElements(); ) 
-            System.out.println( keys.nextElement() );
-        
+        for(; keys.hasMoreElements(); ) keys.nextElement();
+            //System.out.println( keys.nextElement() );
+
         this.number = number;
         this.key = rb.getString( "gallery_" + number + "_key" );
         this.name = rb.getString( key );
         this.iconURL = getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" );
         this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
-        
+
         String[] content_keys = getContentKeys();
         LinkedList< GalleryItem > l = new LinkedList< GalleryItem >();
         for( int i = 0; i < content_keys.length; i++ )
             l.add( new GalleryItem( content_keys[ i ] ) );
         this.gallery_items = l.toArray( new GalleryItem[ 0 ] );
     }
-    
+
     public int getNumber() { return number; }
     public String getKey() { return key; }
     public String getName() { return name; }
@@ -84,7 +89,7 @@ public class Gallery {
         return description;
     }
     public URL getDescriptionURL() { return descriptionURL; }
-    
+
     public GalleryItem[] getEntries()
     {
         return this.gallery_items;
@@ -143,7 +148,7 @@ public class Gallery {
             int len;
             while( ( len = is.read(buf) ) != -1 )
                 tmpOut.write(buf, 0, len);
-        
+
             // close buffers
             is.close();
             tmpOut.close();
