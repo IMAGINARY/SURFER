@@ -64,27 +64,27 @@ public class FXSurferPanel extends CustomNode {
     public var y: Number;
     public var a: Number =0 on replace
     {
+        if (a<0)a=0;if (a>1)a=1;        
         renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
         renderer.repaintImage();
-        System.out.println("lokal a: {a}");
     };
     public var b: Number =0  on replace
     {
+        if (b<0)b=0;if (b>1)b=1;
         renderer.getAlgebraicSurfaceRenderer().setParameterValue("b", b);
         renderer.repaintImage();
-        System.out.println("lokal b: {b}");
     };
     public var c: Number =0 on replace
     {
+        if (c<0)c=0;if (c>1)c=1;
         renderer.getAlgebraicSurfaceRenderer().setParameterValue("c", c);
         renderer.repaintImage();
-        System.out.println("lokal c: {c}");
     };
     public var d: Number =0  on replace
     {
+        if (d<0)d=0;if (d>1)d=1;
         renderer.getAlgebraicSurfaceRenderer().setParameterValue("d", d);
         renderer.repaintImage();
-        System.out.println("lokal d: {d}");
     };
     public var usedA:Boolean=false;
     public var usedB:Boolean=false;
@@ -116,7 +116,7 @@ public class FXSurferPanel extends CustomNode {
 
     public var scale:Number=renderer.getScale()/4+0.5 on replace
     {
-        renderer.setScale( scale*4-2 );
+        //renderer.setScale( scale*4-2 );
         renderer.repaintImage();
         //timeline.playFromStart();
         //System.out.println("Scale has changed: {scale}");

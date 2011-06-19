@@ -15,107 +15,65 @@ public class FXSliders {
     public var getScale:function():Number;
     var sliderWidth:Number=0;
     var DragStartY:Number;
-    var timeline = javafx.animation.Timeline {
+    /*var timeline = javafx.animation.Timeline {
     keyFrames: javafx.animation.KeyFrame {
         time: 20ms
         action: function() {
             setVisibility(true);
         }
     }
-}
-    var ParA:Number=0.5 on replace
+}*/
+    var ParA:Number= bind surferPanel.a on replace
     {
-
-        if (ParA<0){ParA=0;}
-        else if (ParA>1){ParA=1;}
-        else
-        {
-        def min = fxdButtons.getNode("ParA_Shaft").layoutBounds.minY;
-	def max = fxdButtons.getNode("ParA_Shaft").layoutBounds.maxY-fxdButtons.getNode("ParA_Thumb").layoutBounds.height;
-        //def wert=
-        fxdButtons.getNode("ParA_Thumb").translateY = (ParA)*(max-min)+min;
-        //System.out.println("PAraA:{ParA}  {fxdButtons.getNode("ParA_Thumb").translateX}  {(ParA)*(max-min)+min} {min} {max}");
-        }
-        surferPanel.a=ParA;
-        //setPar();
+        def min = fxdButtons.getNode("Slider_A_Shaft").layoutBounds.minY;
+	def max = fxdButtons.getNode("Slider_A_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_A_Knob").layoutBounds.height*0.0;
+        var value:Number=ParA;if (value<0)value=0;if (value>1)value=1;
+        fxdButtons.getNode("Slider_A_Knob").translateY = (value)*(max-min);
     };
     var ParB:Number=0.5 on replace
     {
-
-        if (ParB<0){ParB=0;}
-        else if (ParB>1){ParB=1;}
-        else
-        {
-        def min = fxdButtons.getNode("ParB_Shaft").layoutBounds.minY;
-	def max = fxdButtons.getNode("ParB_Shaft").layoutBounds.maxY-fxdButtons.getNode("ParB_Thumb").layoutBounds.height;
-        //def wert=
-        fxdButtons.getNode("ParB_Thumb").translateY = (ParB+0.5)*(max-min);
-       // System.out.println("PAraB:{ParB}  {fxdButtons.getNode("ParB_Thumb").translateX}  {(ParB)*(max-min)+min} {min} {max}");
-        }
-        surferPanel.b=ParB;
-       // setPar();
+        def min = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.minY;
+	def max = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_B_Knob").layoutBounds.height*0.0;
+        var value:Number=ParB;if (value<0)value=0;if (value>1)value=1;
+        fxdButtons.getNode("Slider_B_Knob").translateY = (value)*(max-min);
     };
     var ParC:Number=0.5 on replace
     {
-
-        if (ParC<0){ParC=0;}
-        else if (ParC>1){ParC=1;}
-        else
-        {
-        def min = fxdButtons.getNode("ParC_Shaft").layoutBounds.minY;
-	def max = fxdButtons.getNode("ParC_Shaft").layoutBounds.maxY-fxdButtons.getNode("ParC_Thumb").layoutBounds.height;
-        //def wert=
-        fxdButtons.getNode("ParC_Thumb").translateY = (ParB+0.5)*(max-min)+min;
-       // System.out.println("PAraB:{ParB}  {fxdButtons.getNode("ParB_Thumb").translateX}  {(ParB)*(max-min)+min} {min} {max}");
-        }
-        surferPanel.c=ParC;
+        def min = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.minY;
+	def max = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_C_Knob").layoutBounds.height*0.0;
+        var value:Number=ParC;if (value<0)value=0;if (value>1)value=1;
+        fxdButtons.getNode("Slider_C_Knob").translateY = (value)*(max-min);
 
     };
     var ParD:Number=0.5 on replace
     {
-
-        if (ParD<0){ParD=0;}
-        else if (ParD>1){ParD=1;}
-        else
-        {
-        def min = fxdButtons.getNode("ParD_Shaft").layoutBounds.minY;
-	def max = fxdButtons.getNode("ParD_Shaft").layoutBounds.maxY-fxdButtons.getNode("ParD_Thumb").layoutBounds.height;
-        //def wert=
-        fxdButtons.getNode("ParD_Thumb").translateY = (ParD)*(max-min)+min;
-        //System.out.println("PAraB:{ParB}  {fxdButtons.getNode("ParB_Thumb").translateX}  {(ParB)*(max-min)+min} {min} {max}");
-        }
-        surferPanel.d=ParD;
-        //setPar();
+        def min = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.minY;
+	def max = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_D_Knob").layoutBounds.height*0.0;
+        var value:Number=ParD;if (value<0)value=0;if (value>1)value=1;
+        fxdButtons.getNode("Slider_D_Knob").translateY = (value)*(max-min);
     };
     var ParAUse:Boolean = bind surferPanel.usedA on replace
     {
-        //fxdButtons.getNode("ParA").visible=ParAUse;
-        timeline.playFromStart();
+        setVisibility(true);
     }
     var ParBUse:Boolean = bind surferPanel.usedB on replace
     {
-        timeline.playFromStart();
-        //fxdButtons.getNode("ParB").visible=ParBUse;
+        setVisibility(true);
     }
 
     var ParCUse:Boolean = bind surferPanel.usedC on replace
     {
-        timeline.playFromStart();
-        //fxdButtons.getNode("ParB").visible=ParBUse;
+        setVisibility(true);
     }
     var ParDUse:Boolean = bind surferPanel.usedD on replace
     {
-        timeline.playFromStart();
-        //fxdButtons.getNode("ParB").visible=ParBUse;
+        setVisibility(true);
     }
     var zoomScale:Number=bind surferPanel.scale on replace
     {
-
         def min = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.minY;
-	//def max = fxdButtons.getNode("Zoom_Shaft").layoutBounds.maxX-fxdButtons.getNode("Zoom_Shaft").layoutBounds.width;
         def max = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.height*0.0;
         fxdButtons.getNode("Slider_Zoom_Knob").translateY = (zoomScale)*(max-min);
-        //System.out.println("zoomScale:{(zoomScale)*(max-min)} {zoomScale} {min} {max}");
     };
     function setZoom()
     {
@@ -137,39 +95,53 @@ public class FXSliders {
     }
     function setParameter()
     {
-
-        //var ParAX:Number;
-        //var ParBX:Number;
-        fxdButtons.getNode("ParA_Thumb").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "ParA")};
-	fxdButtons.getNode("ParA_Thumb").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
+        fxdButtons.getNode("Slider_A_Knob").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "Slider_A")};
+	fxdButtons.getNode("Slider_A_Knob").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
         {
-            var x:Number=sliderMouseDrag(ev, "ParA");
-            def min = fxdButtons.getNode("ParA_Shaft").layoutBounds.minX;
-            def max = fxdButtons.getNode("ParA_Shaft").layoutBounds.maxX-fxdButtons.getNode("ParA_Thumb").layoutBounds.width;
-            ParA=((x-min)/(max-min));
+            var x:Number=sliderMouseDrag(ev, "Slider_A");
+            def min = fxdButtons.getNode("Slider_A_Shaft").layoutBounds.minY;
+            def max = fxdButtons.getNode("Slider_A_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_A_Knob").layoutBounds.height*0.8;
+            surferPanel.a=((x-min)/(max-min));
         };
+        def mA:javafx.scene.input.MouseEvent=javafx.scene.input.MouseEvent{}; sliderMouseDrag(mA,"Slider_A");
+        fxdButtons.getNode("Slider_A_Button_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.a-=0.025;};
+        fxdButtons.getNode("Slider_A_Button_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.a+=0.025;};
 
-        def m:javafx.scene.input.MouseEvent=javafx.scene.input.MouseEvent{};
-        sliderMouseDrag(m,"ParA");
-        fxdButtons.getNode("ParA_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {ParA-=0.025;};
-        fxdButtons.getNode("ParA_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {ParA+=0.025;};
-        fxdButtons.getNode("ParA").visible=surferPanel.usedA;
-
-        fxdButtons.getNode("ParB_Thumb").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "ParB")};
-	fxdButtons.getNode("ParB_Thumb").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
+        fxdButtons.getNode("Slider_B_Knob").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "Slider_B")};
+	fxdButtons.getNode("Slider_B_Knob").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
         {
-            var x:Number=sliderMouseDrag(ev, "ParB");
-            def min = fxdButtons.getNode("ParB_Shaft").layoutBounds.minX;
-            def max = fxdButtons.getNode("ParB_Shaft").layoutBounds.maxX-fxdButtons.getNode("ParB_Thumb").layoutBounds.width;
-            ParB=((x-min)/(max-min));
+            var x:Number=sliderMouseDrag(ev, "Slider_B");
+            def min = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.minY;
+            def max = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_B_Knob").layoutBounds.height*0.8;
+            surferPanel.b=((x-min)/(max-min));
         };
-        def m2:javafx.scene.input.MouseEvent=javafx.scene.input.MouseEvent{};
-        sliderMouseDrag(m2,"ParB");
-        fxdButtons.getNode("ParB_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {ParB-=0.025;};
-        fxdButtons.getNode("ParB_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {ParB+=0.025;};
-        fxdButtons.getNode("ParB").visible=surferPanel.usedB;
-        ParA=surferPanel.a;
-        ParB=surferPanel.b;
+        def mB:javafx.scene.input.MouseEvent=javafx.scene.input.MouseEvent{}; sliderMouseDrag(mB,"Slider_B");
+        fxdButtons.getNode("Slider_B_Button_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.b-=0.025;};
+        fxdButtons.getNode("Slider_B_Button_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.b+=0.025;};
+
+        fxdButtons.getNode("Slider_C_Knob").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "Slider_C")};
+	fxdButtons.getNode("Slider_C_Knob").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
+        {
+            var x:Number=sliderMouseDrag(ev, "Slider_C");
+            def min = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.minY;
+            def max = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_C_Knob").layoutBounds.height*0.8;
+            surferPanel.c=((x-min)/(max-min));
+        };
+        def mC:javafx.scene.input.MouseEvent=javafx.scene.input.MouseEvent{}; sliderMouseDrag(mC,"Slider_C");
+        fxdButtons.getNode("Slider_C_Button_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.c-=0.025;};
+        fxdButtons.getNode("Slider_C_Button_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.c+=0.025;};
+
+        fxdButtons.getNode("Slider_D_Knob").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "Slider_D")};
+	fxdButtons.getNode("Slider_D_Knob").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
+        {
+            var x:Number=sliderMouseDrag(ev, "Slider_D");
+            def min = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.minY;
+            def max = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_D_Knob").layoutBounds.height*0.8;
+            surferPanel.d=((x-min)/(max-min));
+        };
+        def mD:javafx.scene.input.MouseEvent=javafx.scene.input.MouseEvent{}; sliderMouseDrag(mD,"Slider_D");
+        fxdButtons.getNode("Slider_D_Button_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.d-=0.025;};
+        fxdButtons.getNode("Slider_D_Button_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.d+=0.025;};
     }
 
     public function setVisibility(visible:Boolean):Void
