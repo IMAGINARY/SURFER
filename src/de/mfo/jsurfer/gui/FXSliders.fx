@@ -13,7 +13,7 @@ public class FXSliders {
     public var surferPanel:FXSurferPanel;
     public var fxdButtons:javafx.fxd.FXDNode;
     public var getScale:function():Number;
-    var sliderWidth:Number=0;
+    var sliderWidth:Number;//=bind fxdButtons.getNode("Slider_Plus_Parameter_Middle_Background").layoutBounds.width;
     var DragStartY:Number;
     /*var timeline = javafx.animation.Timeline {
     keyFrames: javafx.animation.KeyFrame {
@@ -30,14 +30,14 @@ public class FXSliders {
         var value:Number=ParA;if (value<0)value=0;if (value>1)value=1;
         fxdButtons.getNode("Slider_A_Knob").translateY = (value)*(max-min);
     };
-    var ParB:Number=0.5 on replace
+    var ParB:Number=bind surferPanel.b  on replace
     {
         def min = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.minY;
 	def max = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_B_Knob").layoutBounds.height*0.0;
         var value:Number=ParB;if (value<0)value=0;if (value>1)value=1;
         fxdButtons.getNode("Slider_B_Knob").translateY = (value)*(max-min);
     };
-    var ParC:Number=0.5 on replace
+    var ParC:Number=bind surferPanel.c  on replace
     {
         def min = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.minY;
 	def max = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_C_Knob").layoutBounds.height*0.0;
@@ -45,7 +45,7 @@ public class FXSliders {
         fxdButtons.getNode("Slider_C_Knob").translateY = (value)*(max-min);
 
     };
-    var ParD:Number=0.5 on replace
+    var ParD:Number=bind surferPanel.d  on replace
     {
         def min = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.minY;
 	def max = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_D_Knob").layoutBounds.height*0.0;
@@ -77,7 +77,8 @@ public class FXSliders {
     };
     function setZoom()
     {
-        sliderWidth= fxdButtons.getNode("Slider_Plus_Parameter_Middle_Background").layoutBounds.width;
+        //sliderWidth= fxdButtons.getNode("Slider_Plus_Parameter_Middle_Background").layoutBounds.width;
+        sliderWidth=fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.minX-fxdButtons.getNode("Slider_A_Knob").layoutBounds.minX;
         fxdButtons.getNode("Slider_Zoom_Knob").onMousePressed = function (ev:javafx.scene.input.MouseEvent){sliderMouseDown(ev, "Slider_Zoom")};
 	fxdButtons.getNode("Slider_Zoom_Knob").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
         {
