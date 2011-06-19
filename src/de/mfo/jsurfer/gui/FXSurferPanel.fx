@@ -255,10 +255,12 @@ var p:PolynomialOperation;
            System.out.println( "parameters={params.toString()}" );*/
            var p:PolynomialOperation = AlgebraicExpressionParser.parse( expression );
             var degree:Integer = p.accept( new DegreeCalculator(), ( null as java.lang.Void ) );
+            
            // current version does not support surface parameters
            /*if( p.accept( new DoubleVariableChecker(), ( Void ) null ) )
                throw new Exception();*/
                var old:PolynomialOperation=renderer.getAlgebraicSurfaceRenderer().getSurfaceFamily();
+               var oldString:String=renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString();
                renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(p);
                renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(expression);
                var  PAR:Set=renderer.getAlgebraicSurfaceRenderer().getAllParameterNames();
@@ -268,10 +270,10 @@ var p:PolynomialOperation;
                usedC=PAR.remove("c");
                usedD=PAR.remove("d");
                System.out.println("PAR leer({usedA},{usedB},{usedC},{usedD}):{PAR}");
-               if (not PAR.isEmpty())
+               if (not PAR.isEmpty() or degree>15)
                {
                    renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(old);
-                   System.out.println("falsch");
+                   System.out.println("falsch {oldString}");
                    correctExpression=false;
                    return false;
                }
