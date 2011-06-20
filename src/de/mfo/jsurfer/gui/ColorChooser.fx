@@ -40,6 +40,10 @@ public class ColorChooser extends CustomNode
     var colorPicker: ColorChooserBasic=new ColorChooserBasic(width,height); 
 
 
+    public function setColor(color:javax.vecmath.Color3f ):Void
+    {
+        colorPicker.setRGB(color.x*255, color.y*255, color.z*255);
+    }
     
 
     public var x: Number;

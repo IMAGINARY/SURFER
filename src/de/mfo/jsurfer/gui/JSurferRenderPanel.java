@@ -62,6 +62,7 @@ public class JSurferRenderPanel extends JComponent
     boolean refreshImageAntiAliased;
     boolean renderSizeChanged;
     boolean resizeImageWithComponent;
+    boolean renderCoordinatenSystem;
     Dimension renderSize;
     RotateSphericalDragger rsd;
     Matrix4f scale;
@@ -181,6 +182,7 @@ public class JSurferRenderPanel extends JComponent
 
     public JSurferRenderPanel()
     {
+        renderCoordinatenSystem=true;
         renderSize = new Dimension( 150, 150 );
 
         firstRun = true;
@@ -318,6 +320,8 @@ public class JSurferRenderPanel extends JComponent
 
             private void drawCylinder( GL2 gl, double bottomRadius, double topRadius, double height )
             {
+                //renderCoordinatenSystem=true;
+                if (renderCoordinatenSystem==false)return;
                 GLU glu = new GLU();
                 GLUquadric gluQuadric = glu.gluNewQuadric();
                 glu.gluQuadricNormals( gluQuadric, GLU.GLU_SMOOTH );
@@ -789,7 +793,10 @@ public class JSurferRenderPanel extends JComponent
         File property_file = new File( url.getFile() );
         props.store( new FileOutputStream( property_file ), "jSurfer surface description" );
     }
-
+    public void drawCoordinatenSystem(boolean b)
+    {
+        renderCoordinatenSystem=b;
+    }
     public static void generateGalleryThumbnails( String folder )
     {
         JSurferRenderPanel p = new JSurferRenderPanel();

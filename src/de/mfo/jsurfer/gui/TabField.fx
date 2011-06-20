@@ -298,6 +298,15 @@ public class TabField {
         multiGalleryMini.visible=false;
         sliders.setVisibility(true);
     }
+    public function setHelpState()
+    {
+        germanGalleryChooser.gallery=0;
+        germanGalleryMini.surface=0;
+        englishGalleryChooser.gallery=0;
+        englishGalleryMini.surface=0;
+        setGalleryState();
+    }
+
     public function set()
     {
         setColoChooser();

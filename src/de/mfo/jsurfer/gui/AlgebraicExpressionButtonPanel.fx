@@ -35,6 +35,8 @@ import javafx.animation.KeyFrame;
 public class AlgebraicExpressionButtonPanel extends CustomNode {
 
 
+
+    var language:java.util.Locale=java.util.Locale.GERMAN;
     def fxdButtons:FXDNode = FXDNode
 	{
                 url:    "{__DIR__}surfer_touchscreen_1920_x_1080.fxz"
@@ -53,6 +55,20 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             surferPanel.renderer.loadFromFile( url);
             surferPanel.renderer.repaintImage();
 
+            try{surferPanel.a=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a");}catch(e: java.lang.Exception  ){}
+            try{surferPanel.b=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("b");}catch(e: java.lang.Exception  ){}
+            try{surferPanel.c=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("c");}catch(e: java.lang.Exception  ){}
+            try{surferPanel.d=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("d");}catch(e: java.lang.Exception  ){}
+
+            //surferPanel.b=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("b");
+            //surferPanel.c=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("c");
+            //surferPanel.d=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("d");
+            def FrontColor:javax.vecmath.Color3f=surferPanel.renderer.getAlgebraicSurfaceRenderer().getFrontMaterial().getColor();
+            def BackColor :javax.vecmath.Color3f=surferPanel.renderer.getAlgebraicSurfaceRenderer().getBackMaterial() .getColor();
+            //System.out.println("FrontColor{FrontColor.x},{FrontColor.y},{FrontColor.z}");
+            //System.out.println("BackColor{BackColor.x},{BackColor.y},{BackColor.z}");
+            tabField.frontColor.setColor(FrontColor);
+            tabField.backColor.setColor(BackColor);
             //renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
             //surferPanel.a=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a");
             //System.out.println("loaded Par a:{surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a")}");
@@ -69,7 +85,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     }
     var tabField:TabField = TabField
     {
-        language:java.util.Locale.GERMAN,
+        language:bind language//java.util.Locale.GERMAN,
         sliders: sliders,
         getScale: getScale,
         sceneWidth: bind width;
@@ -96,6 +112,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     }
 
     var SurfaceExpression:HBox= new HBox();
+    var EqualNull:HBox= new HBox();
     public var surferPanel:FXSurferPanel;
     //var surfaceExpressionField:SwingTextField=new SwingTextField();
     var test:JTextField=new JTextField("x^2+y^2+z^2+2*x*y*z-1");
@@ -163,9 +180,25 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     function setTextField()
     {
         var T:Bounds=fxdButtons.getNode("Equation").boundsInParent;
+        var T2:Bounds=fxdButtons.getNode("Equals_Zero").boundsInParent;
+        //var test:JTextField=new JTextField("x^2+y^2+z^2+2*x*y*z-1");
         fxdButtons.getNode("Equation").visible=false;
+        fxdButtons.getNode("Equals_Zero").visible=false;
         //System.out.println("TxtOrG:{T.minX},{T.minY},{T.maxX},{T.maxY},{T.width},{T.height}");
         //System.out.println("TabField:{tabField.backColor.width},{tabField.backColor.height}");
+        def textField0:JLabel=new JLabel("=0");
+        //textField0.setEditable(false);
+
+        def sw2:SwingComponent=SwingComponent.wrap(textField0);
+        sw2.layoutInfo=LayoutInfo
+        {
+            minWidth: T2.width*getScale(height,width)
+            //width: T2.width*getScale(height,width)
+            //maxWidth: T2.width*getScale(height,width)
+            minHeight: T2.height*getScale(height,width)
+            height: T2.height*getScale(height,width)
+            maxHeight: T2.height*getScale(height,width)
+         };
         def sw:SwingComponent=SwingComponent.wrap(test);
         sw.layoutInfo=LayoutInfo
         {
@@ -181,6 +214,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             sw
 
         ];
+        EqualNull.content=[sw2];
         //surfaceExpressionField.font=Font{size:T.minY*getScale(height,width)*0.08};
         //var f:Font=test.getFont();
         //Nimbus Sans L Regular Surfer.ttf
@@ -191,8 +225,12 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         f=f.deriveFont(T.minY*getScale(height,width)*0.08);
         test.setFont(f);
         test.setBorder( BorderFactory.createEmptyBorder() );
+        textField0.setFont(f);
+        textField0.setBorder(BorderFactory.createEmptyBorder());
         SurfaceExpression.layoutX=T.minX*getScale(height,width);
         SurfaceExpression.layoutY=T.minY*getScale(height,width);
+        EqualNull.layoutX=T2.minX*getScale(height,width);
+        EqualNull.layoutY=T2.minY*getScale(height,width);
     }
     function setButtons()
     {
@@ -274,6 +312,54 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                }
            };
 	}
+        //surferPanel.drawCoordinatenSystem
+        //Button_Axis
+        //surferPanel.drawCoordinatenSystem=true;
+        //System.out.println("Button Axis inni");
+        fxdButtons.getNode("Button_Pressed_Axis").visible=true;
+        fxdButtons.getNode("Button_Over_Axis").visible=false;
+        fxdButtons.getNode("Button_Axis").visible=false;
+        fxdButtons.getNode("Button_Pressed_Axis").onMousePressed=function(e:MouseEvent):Void
+        {
+            fxdButtons.getNode("Button_Pressed_Axis").visible=false;
+            fxdButtons.getNode("Button_Axis").visible=true;
+            surferPanel.drawCoordinatenSystem=false;
+            //System.out.println("Button_Presse_Axis pressed");
+
+        }
+        fxdButtons.getNode("Button_Axis").onMousePressed=function(e:MouseEvent):Void
+        {
+            fxdButtons.getNode("Button_Pressed_Axis").visible=true;
+            fxdButtons.getNode("Button_Axis").visible=false;
+            surferPanel.drawCoordinatenSystem=true;
+            //System.out.println("Button_Axis pressed");
+        }/**/
+        
+        //language
+        //"Button_Cursor_German"
+        fxdButtons.getNode("Button_Pressed_German").visible=true;
+        fxdButtons.getNode("Button_Over_German").visible=false;
+        fxdButtons.getNode("Button_Cursor_German").visible=false;
+        fxdButtons.getNode("Button_Pressed_English").visible=false;
+        fxdButtons.getNode("Button_Over_English").visible=false;
+        fxdButtons.getNode("Button_Cursor_English").visible=true;
+        fxdButtons.getNode("Button_Cursor_German").onMousePressed=function(e:MouseEvent):Void
+        {
+            fxdButtons.getNode("Button_Pressed_German").visible=true;
+            fxdButtons.getNode("Button_Cursor_German").visible=false;
+            fxdButtons.getNode("Button_Pressed_English").visible=false;
+            fxdButtons.getNode("Button_Cursor_English").visible=true;
+            language=java.util.Locale.GERMAN;
+        }
+        fxdButtons.getNode("Button_Cursor_English").onMousePressed=function(e:MouseEvent):Void
+        {
+            fxdButtons.getNode("Button_Pressed_German").visible=false;
+            fxdButtons.getNode("Button_Cursor_German").visible=true;
+            fxdButtons.getNode("Button_Pressed_English").visible=true;
+            fxdButtons.getNode("Button_Cursor_English").visible=false;
+            language=java.util.Locale.ENGLISH;
+        }
+        
 
     }
 
@@ -315,6 +401,17 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
             
             setRenderPanel();
             sliders.set();
+            def fxlabe=FXLabel
+                            {
+                                //def jLable:JLabel=new JLabel();
+                                string:"=0"
+                                Bound:fxdButtons.getNode("Equals_Zero"),
+                                getScale: getScale,
+                                sceneWidth: bind width;
+                                sceneHeight:bind height;
+                                faktor:0.08
+                            }
+                           // fxlabe.set();
             //fxdButtons.opacity=0.5;
 		return Group
 		{
@@ -343,7 +440,14 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                             tabField.multiGalleryMini,
                             surferPanel,
 
-                            SurfaceExpression//,
+                            SurfaceExpression,
+                            //fxlabe,
+                            javafx.scene.Group{
+                                content:[EqualNull]
+                            }
+                            
+                            
+                            
                             //copynode
 
                             //javafx.fxd.Duplicator.duplicate(fxdButtons.getNode("Button_a"))
@@ -431,7 +535,7 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
            else if (c=="Comma"){insertStringInTextfield(".");}
            else if (c=="Correct"){/*Nothing Happens*/}
            else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
-           else if (c=="Help"){/*ToDo Help*/if (tabField.language==java.util.Locale.GERMAN){tabField.language=java.util.Locale.ENGLISH;}else {tabField.language=java.util.Locale.GERMAN;}}
+           else if (c=="Help"){/*ToDo Help*/tabField.setHelpState();}
 
             /*if (c!="Back" and c!="Forward" and c!="Backspace")
             {
