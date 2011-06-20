@@ -401,7 +401,7 @@ public class JSurferRenderPanel extends JComponent
 
                 gl.glMatrixMode( GL2.GL_MODELVIEW );
 
-                gl.glTranslated( 0.08, 0.08, 0 );
+                gl.glTranslated(1- 0.08, 0.08, 0 );
                 gl.glScaled( 0.08, 0.08, 0.08 );
 
                 Matrix4f r = rsd.getRotation();
