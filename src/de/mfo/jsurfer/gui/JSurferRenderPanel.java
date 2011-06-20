@@ -797,57 +797,48 @@ public class JSurferRenderPanel extends JComponent
     {
         renderCoordinatenSystem=b;
     }
-    public static void generateGalleryThumbnails( String folder )
+    public static void generateGalleryThumbnails( String jsurf_folder, String png_folder )
     {
         JSurferRenderPanel p = new JSurferRenderPanel();
         synchronized( p.asr )
         {
             try
             {
-                new File( folder ).mkdir();
+                new File( png_folder ).mkdir();
                 JSurferRenderPanel.ImgBuffer ib = p.new ImgBuffer( 120, 120 );
-                for( int i = 0; i < Gallery.getNumberOfGalleries(); i++ )
+
+                String[] jsurf_dir_content = new File( jsurf_folder ).list();
+                if( jsurf_dir_content == null )
+                        System.err.println( new File( jsurf_folder ) + " does not exist or is not a directory" );
+                for( String filename : jsurf_dir_content )
                 {
-                    try
+                    if( filename.endsWith( ".jsurf" ) )
                     {
-                        Gallery g = new Gallery( i );
-                        Gallery.GalleryItem[] gi_array = g.getEntries();
-                        try
-                        {
-                            for( Gallery.GalleryItem gi : gi_array )
-                            {
-                                File f = new File( folder + File.separator + gi.getKey() + "_icon.png" );
-                                System.out.print( "generating thumbnail for " + f.getName() + " at " + f );
-                                p.loadFromFile( gi.getJSurfURL() );
+                        String key = filename.substring( 0, filename.length() - 6 );
+                        File jsurf_file = new File( jsurf_folder + File.separator + filename );
+                        File png_file = new File( png_folder + File.separator + key + "_icon.png" );
+                        System.out.print( "generating thumbnail for " + jsurf_file + " at " + png_file );
+                        p.loadFromFile( jsurf_file.getAbsoluteFile().toURL() );
 
-                                // do rendering
-                                Matrix4f rotation = new Matrix4f();
-                                rotation.invert( p.rsd.getRotation() );
-                                p.asr.setTransform( rotation );
-                                p.asr.setSurfaceTransform( p.scale );
-                                p.asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
-                                p.asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
+                        // do rendering
+                        Matrix4f rotation = new Matrix4f();
+                        rotation.invert( p.rsd.getRotation() );
+                        p.asr.setTransform( rotation );
+                        p.asr.setSurfaceTransform( p.scale );
+                        p.asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
+                        p.asr.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
 
-                                p.asr.draw( ib.rgbBuffer, ib.width, ib.height );
+                        p.asr.draw( ib.rgbBuffer, ib.width, ib.height );
 
-                                javax.imageio.ImageIO.write( createBufferedImageFromRGB( ib ), "png", f );
-                                System.out.println( " ... done" );
-                            }
-                        }
-                        catch( Throwable t )
-                        {
-                            System.err.println( t );
-                        }
-                    }
-                    catch( Throwable t )
-                    {
-                            System.err.println( t );
+                        javax.imageio.ImageIO.write( createBufferedImageFromRGB( ib ), "png", png_file );
+                        System.out.println( " ... done" );
                     }
                 }
             }
             catch( Throwable t )
             {
                 System.err.println( t );
+                t.printStackTrace( System.err );
             }
         }
         System.exit( 0 );
@@ -855,7 +846,7 @@ public class JSurferRenderPanel extends JComponent
 
     public static void main( String[]args )
     {
-        generateGalleryThumbnails( "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
+        generateGalleryThumbnails( "./src/de/mfo/jsurfer/gui/gallery", "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
         if( true )
             return;
         JSurferRenderPanel p = new JSurferRenderPanel();

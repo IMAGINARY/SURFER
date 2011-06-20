@@ -125,7 +125,10 @@ public class Gallery {
             url = getClass().getResource( url_language );
 
         if( url == null )
-            System.err.println( "resource \"" + url_language_country + "\" and fallback \"" + url_language + "\" not found" );
+            if( !locale.getCountry().equals( "" ) )
+                System.err.println( "resource \"" + url_language_country + "\" and fallback \"" + url_language + "\" not found" );
+            else
+                System.err.println( "resource \"" + url_language + "\" not found" );
         return url;
     }
 
