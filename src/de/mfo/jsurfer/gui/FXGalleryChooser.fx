@@ -73,7 +73,7 @@ public class FXGalleryChooser extends CustomNode
                         javafx.scene.shape.Rectangle
                         {
                             x: 0  y: 0
-                            width: bind width-10  height: bind (height-4*n)/n
+                            width: bind width-10  height: bind (height-4*5)/5
                             //visible:false
                             opacity:0.0
                             //fill: javafx.scene.paint.Color.rgb(0, 200, 0)
@@ -86,7 +86,7 @@ public class FXGalleryChooser extends CustomNode
                                 javafx.scene.image.ImageView
                                 {
                                     image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getIcon() )
-                                    fitHeight:bind (height-4*n)/n
+                                    fitHeight:bind (height-4*5)/5
                                     preserveRatio: true
                                     layoutInfo:javafx.scene.layout.LayoutInfo{hpos:javafx.geometry.HPos.LEFT}
 
@@ -98,12 +98,12 @@ public class FXGalleryChooser extends CustomNode
                                     (  
                                         "Helvetica",
                                          if (g==gallery){javafx.scene.text.FontWeight.BOLD}else{ javafx.scene.text.FontWeight.REGULAR},
-                                         ((height-4*n)/n)*0.4*0.4
+                                         ((height-4*5)/5)*0.4*0.4
                                     )
                                     content: "{gallerys[g].getName()}"
                                     //textAlignment:javafx.scene.text.TextAlignment.CENTER
                                     translateX: bind width*0.05
-                                    translateY: bind (height-4*n)/n*0.2
+                                    translateY: bind (height-4*5)/5*0.2
                                     /*layoutInfo:javafx.scene.layout.LayoutInfo
                                     {
                                         //hpos:javafx.geometry.HPos.RIGHT
