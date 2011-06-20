@@ -481,16 +481,14 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
 
 	public function backspace()
 	{
-                pos=test.getCaretPosition();
-                expression=test.getText();
-		if (pos>0)
-		{
-			expression="{expression.substring(0,pos-1)}{expression.substring(pos)}";
-			pos--;
-		}
-                test.setText(expression);
-                test.setCaretPosition(pos);
+            pos = test.getSelectionStart();
+            expression = test.getText();
+            if( pos == test.getSelectionEnd() )
+                pos--;// no text is selected; just remove one character
+            test.setText( "{expression.substring(0,pos)}{expression.substring(test.getSelectionEnd())}" );
+            test.setCaretPosition( pos );
 	}
+        
         public function CompleteDelete()
         {
             pos=0;
