@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpressionWalker.g 2011-03-21 16:09:56
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpressionWalker.g 2011-06-20 15:15:19
 
 package de.mfo.jsurfer.parser;
 
@@ -286,7 +286,7 @@ public class AlgebraicExpressionWalker extends TreeParser {
                                         {
                                             retval.op = new PolynomialNegation( (e1!=null?e1.op:null) );
                                         }
-                                    }                
+                                    }
                                 
 
                     }
@@ -354,7 +354,7 @@ public class AlgebraicExpressionWalker extends TreeParser {
                                         catch( ClassCastException cce2 )
                                         {
                                             throw new RecognitionException();
-                                        }                    
+                                        }
                                     }
                                 
 
@@ -464,7 +464,7 @@ public class AlgebraicExpressionWalker extends TreeParser {
                                             throw new RecognitionException();
                                         }
                                     }
-                                    
+
                                 
 
                     }

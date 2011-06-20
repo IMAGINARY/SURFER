@@ -44,12 +44,12 @@ package de.mfo.jsurfer.parser;
 
         // Create a stream of nodes fed by the parser
         CommonTreeNodeStream nodes = new CommonTreeNodeStream( ( CommonTree ) r.getTree() );
-        
+
         // Create a tree parser that feeds off the node stream
         AlgebraicExpressionWalker walker = new AlgebraicExpressionWalker( nodes );
-        
+
         // Begin tree parsing at start rule
-        return walker.start();        
+        return walker.start();
     }
 
     protected void mismatch( IntStream input, int ttype, BitSet follow )
@@ -75,7 +75,7 @@ package de.mfo.jsurfer.parser;
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
- 
+
 start
 	: add_expr EOF!
 	;
@@ -105,7 +105,7 @@ unary_expr
 primary_expr
 	: DECIMAL_LITERAL
 	| FLOATING_POINT_LITERAL
-	| IDENTIFIER (primary_expr)*
+	| IDENTIFIER
 	| LPAR! add_expr RPAR!
 	;
 
@@ -124,7 +124,7 @@ FLOATING_POINT_LITERAL
 fragment
 EXPONENT : ( 'e' | 'E' ) ( PLUS | MINUS )? DIGIT+ ;
 
-IDENTIFIER : LETTER; // ( LETTER | DIGIT )*;
+IDENTIFIER : LETTER ( LETTER | DIGIT )*;
 
 WHITESPACE : ( '\t' | ' ' | '\r' | '\n' | '\u000C' )+ 	{ $channel = HIDDEN; } ;
 

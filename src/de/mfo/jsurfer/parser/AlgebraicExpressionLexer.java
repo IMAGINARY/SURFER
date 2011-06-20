@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-03-21 16:26:58
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-06-20 15:15:14
 
 package de.mfo.jsurfer.parser;
 
@@ -532,10 +532,43 @@ public class AlgebraicExpressionLexer extends Lexer {
         try {
             int _type = IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // AlgebraicExpression.g:127:12: ( LETTER )
-            // AlgebraicExpression.g:127:14: LETTER
+            // AlgebraicExpression.g:127:12: ( LETTER ( LETTER | DIGIT )* )
+            // AlgebraicExpression.g:127:14: LETTER ( LETTER | DIGIT )*
             {
             mLETTER(); 
+            // AlgebraicExpression.g:127:21: ( LETTER | DIGIT )*
+            loop12:
+            do {
+                int alt12=2;
+                int LA12_0 = input.LA(1);
+
+                if ( ((LA12_0>='0' && LA12_0<='9')||(LA12_0>='A' && LA12_0<='Z')||LA12_0=='_'||(LA12_0>='a' && LA12_0<='z')) ) {
+                    alt12=1;
+                }
+
+
+                switch (alt12) {
+            	case 1 :
+            	    // AlgebraicExpression.g:
+            	    {
+            	    if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
+            	        input.consume();
+
+            	    }
+            	    else {
+            	        MismatchedSetException mse = new MismatchedSetException(null,input);
+            	        recover(mse);
+            	        throw mse;}
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop12;
+                }
+            } while (true);
+
 
             }
 
@@ -556,18 +589,18 @@ public class AlgebraicExpressionLexer extends Lexer {
             // AlgebraicExpression.g:129:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
             {
             // AlgebraicExpression.g:129:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
-            int cnt12=0;
-            loop12:
+            int cnt13=0;
+            loop13:
             do {
-                int alt12=2;
-                int LA12_0 = input.LA(1);
+                int alt13=2;
+                int LA13_0 = input.LA(1);
 
-                if ( ((LA12_0>='\t' && LA12_0<='\n')||(LA12_0>='\f' && LA12_0<='\r')||LA12_0==' ') ) {
-                    alt12=1;
+                if ( ((LA13_0>='\t' && LA13_0<='\n')||(LA13_0>='\f' && LA13_0<='\r')||LA13_0==' ') ) {
+                    alt13=1;
                 }
 
 
-                switch (alt12) {
+                switch (alt13) {
             	case 1 :
             	    // AlgebraicExpression.g:
             	    {
@@ -585,12 +618,12 @@ public class AlgebraicExpressionLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt12 >= 1 ) break loop12;
+            	    if ( cnt13 >= 1 ) break loop13;
                         EarlyExitException eee =
-                            new EarlyExitException(12, input);
+                            new EarlyExitException(13, input);
                         throw eee;
                 }
-                cnt12++;
+                cnt13++;
             } while (true);
 
              _channel = HIDDEN; 
@@ -647,9 +680,9 @@ public class AlgebraicExpressionLexer extends Lexer {
 
     public void mTokens() throws RecognitionException {
         // AlgebraicExpression.g:1:8: ( PLUS | MINUS | MULT | DIV | POW | LPAR | RPAR | DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | WHITESPACE )
-        int alt13=11;
-        alt13 = dfa13.predict(input);
-        switch (alt13) {
+        int alt14=11;
+        alt14 = dfa14.predict(input);
+        switch (alt14) {
             case 1 :
                 // AlgebraicExpression.g:1:10: PLUS
                 {
@@ -734,7 +767,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
 
     protected DFA9 dfa9 = new DFA9(this);
-    protected DFA13 dfa13 = new DFA13(this);
+    protected DFA14 dfa14 = new DFA14(this);
     static final String DFA9_eotS =
         "\5\uffff";
     static final String DFA9_eofS =
@@ -788,20 +821,20 @@ public class AlgebraicExpressionLexer extends Lexer {
             return "118:1: FLOATING_POINT_LITERAL : ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT );";
         }
     }
-    static final String DFA13_eotS =
+    static final String DFA14_eotS =
         "\10\uffff\2\15\4\uffff\1\15";
-    static final String DFA13_eofS =
+    static final String DFA14_eofS =
         "\17\uffff";
-    static final String DFA13_minS =
+    static final String DFA14_minS =
         "\1\11\7\uffff\2\56\4\uffff\1\56";
-    static final String DFA13_maxS =
+    static final String DFA14_maxS =
         "\1\172\7\uffff\2\145\4\uffff\1\145";
-    static final String DFA13_acceptS =
+    static final String DFA14_acceptS =
         "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\2\uffff\1\11\1\12\1\13\1\10"+
         "\1\uffff";
-    static final String DFA13_specialS =
+    static final String DFA14_specialS =
         "\17\uffff}>";
-    static final String[] DFA13_transitionS = {
+    static final String[] DFA14_transitionS = {
             "\2\14\1\uffff\2\14\22\uffff\1\14\7\uffff\1\6\1\7\1\3\1\1\1\uffff"+
             "\1\2\1\12\1\4\1\10\11\11\7\uffff\32\13\3\uffff\1\5\1\13\1\uffff"+
             "\32\13",
@@ -821,34 +854,34 @@ public class AlgebraicExpressionLexer extends Lexer {
             "\1\12\1\uffff\12\16\13\uffff\1\12\37\uffff\1\12"
     };
 
-    static final short[] DFA13_eot = DFA.unpackEncodedString(DFA13_eotS);
-    static final short[] DFA13_eof = DFA.unpackEncodedString(DFA13_eofS);
-    static final char[] DFA13_min = DFA.unpackEncodedStringToUnsignedChars(DFA13_minS);
-    static final char[] DFA13_max = DFA.unpackEncodedStringToUnsignedChars(DFA13_maxS);
-    static final short[] DFA13_accept = DFA.unpackEncodedString(DFA13_acceptS);
-    static final short[] DFA13_special = DFA.unpackEncodedString(DFA13_specialS);
-    static final short[][] DFA13_transition;
+    static final short[] DFA14_eot = DFA.unpackEncodedString(DFA14_eotS);
+    static final short[] DFA14_eof = DFA.unpackEncodedString(DFA14_eofS);
+    static final char[] DFA14_min = DFA.unpackEncodedStringToUnsignedChars(DFA14_minS);
+    static final char[] DFA14_max = DFA.unpackEncodedStringToUnsignedChars(DFA14_maxS);
+    static final short[] DFA14_accept = DFA.unpackEncodedString(DFA14_acceptS);
+    static final short[] DFA14_special = DFA.unpackEncodedString(DFA14_specialS);
+    static final short[][] DFA14_transition;
 
     static {
-        int numStates = DFA13_transitionS.length;
-        DFA13_transition = new short[numStates][];
+        int numStates = DFA14_transitionS.length;
+        DFA14_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA13_transition[i] = DFA.unpackEncodedString(DFA13_transitionS[i]);
+            DFA14_transition[i] = DFA.unpackEncodedString(DFA14_transitionS[i]);
         }
     }
 
-    class DFA13 extends DFA {
+    class DFA14 extends DFA {
 
-        public DFA13(BaseRecognizer recognizer) {
+        public DFA14(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 13;
-            this.eot = DFA13_eot;
-            this.eof = DFA13_eof;
-            this.min = DFA13_min;
-            this.max = DFA13_max;
-            this.accept = DFA13_accept;
-            this.special = DFA13_special;
-            this.transition = DFA13_transition;
+            this.decisionNumber = 14;
+            this.eot = DFA14_eot;
+            this.eof = DFA14_eof;
+            this.min = DFA14_min;
+            this.max = DFA14_max;
+            this.accept = DFA14_accept;
+            this.special = DFA14_special;
+            this.transition = DFA14_transition;
         }
         public String getDescription() {
             return "1:1: Tokens : ( PLUS | MINUS | MULT | DIV | POW | LPAR | RPAR | DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | WHITESPACE );";

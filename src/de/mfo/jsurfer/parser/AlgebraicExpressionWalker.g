@@ -88,7 +88,7 @@ expr returns [ PolynomialOperation op, Integer decimal ]
                     {
                         $op = new PolynomialNegation( $e1.op );
                     }
-                }                
+                }
             }
         | ^( MULT e1 = expr e2 = expr )
             {
@@ -116,7 +116,7 @@ expr returns [ PolynomialOperation op, Integer decimal ]
                     catch( ClassCastException cce2 )
                     {
                         throw new RecognitionException();
-                    }                    
+                    }
                 }
             }
         | ^( POW e1 = expr e2 = expr )
@@ -169,7 +169,7 @@ expr returns [ PolynomialOperation op, Integer decimal ]
                         throw new RecognitionException();
                     }
                 }
-                
+
             }
         | pe = primary_expr { $op = $pe.op; $decimal = pe.decimal; }
 	;
