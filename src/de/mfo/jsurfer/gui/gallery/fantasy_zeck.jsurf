@@ -44,7 +44,7 @@ light_status_2=ON
 light_status_1=ON
 light_status_0=ON
 camera_height=2.0
-surface_equation=x^2+y^2-z^3*(1-z) \= 0 
+surface_equation=x^2+y^2-z^3*(1-z)
 camera_transform=1.0 0.0 0.0 -0.0 0.0 1.0 0.0 -0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0
 back_material_ambient_intensity=0.4
 back_material_color=0.7137255 0.77254903 1.0
