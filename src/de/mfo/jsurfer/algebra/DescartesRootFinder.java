@@ -110,6 +110,11 @@ public class DescartesRootFinder implements RealRootFinder
                 {
                     // evtl. mehr als eine NST in (0,1) -> teile Interval (0,1) in zwei teile
                     double c = 0.5 * ( pi.l + pi.u );
+                    if( c == pi.l ) // we have reached maximum precision
+                    {
+                        results[ results_length++ ] = pi.l;
+                        break;
+                    }
                     double[] stretchedA = stretchNormalize0_5( pi.a );
                     if( cand_length + 2 >= cand.length )
                     {
@@ -172,6 +177,8 @@ public class DescartesRootFinder implements RealRootFinder
             {
                 // evtl. mehr als eine NST in (0,1) -> teile Interval (0,1) in zwei teile
                 double c = 0.5 * ( pi.l + pi.u );
+                if( c == pi.l ) // we have reached maximum precision
+                    return c;
                 double[] stretchedA = stretchNormalize0_5( pi.a );
                 if( cand_length + 2 >= cand.length )
                 {

@@ -104,7 +104,7 @@ public class BernsteinDescartesRootFinder implements RealRootFinder
                 double[] first = pi.a;
                 double[] second = new double[ pi.a.length ];
                 deCasteljau( first, second );
-                if( second[ 0 ] == 0.0 )
+                if( second[ 0 ] == 0.0 || c == pi.l ) // terminate, if c is the root or if we have reached machine precision without any result
                     return c;
                 cand[ cand_length++ ] = new PolyInterval( second, c, pi.u );
                 
