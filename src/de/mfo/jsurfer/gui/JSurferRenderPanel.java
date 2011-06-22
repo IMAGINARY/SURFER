@@ -182,7 +182,7 @@ public class JSurferRenderPanel extends JComponent
 
     public JSurferRenderPanel()
     {
-        renderCoordinatenSystem=true;
+        renderCoordinatenSystem = true;
         renderSize = new Dimension( 150, 150 );
 
         firstRun = true;
@@ -320,8 +320,6 @@ public class JSurferRenderPanel extends JComponent
 
             private void drawCylinder( GL2 gl, double bottomRadius, double topRadius, double height )
             {
-                //renderCoordinatenSystem=true;
-                if (renderCoordinatenSystem==false)return;
                 GLU glu = new GLU();
                 GLUquadric gluQuadric = glu.gluNewQuadric();
                 glu.gluQuadricNormals( gluQuadric, GLU.GLU_SMOOTH );
@@ -340,65 +338,8 @@ public class JSurferRenderPanel extends JComponent
                 gl.glPopAttrib();
             }
 
-            @Override
-            public void display( GLAutoDrawable glautodrawable ) {
-                System.out.println("display GL called");
-
-                GL2 gl = glautodrawable.getGL().getGL2();
-
-                gl.glEnable( GL2.GL_TEXTURE_2D );
-                gl.glBindTexture( GL2.GL_TEXTURE_2D, textureId );
-
-                gl.glPixelStorei( GL2.GL_UNPACK_ALIGNMENT, 1 );
-
-                ImgBuffer tmpImg = currentSurfaceImage;
-                if( tmpImg != null )
-                {
-                    gl.glTexImage2D( GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, tmpImg.width, tmpImg.height, 0, GL2.GL_BGRA, GL2.GL_UNSIGNED_BYTE, java.nio.IntBuffer.wrap( tmpImg.rgbBuffer ) );
-                }
-
-                gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP );
-                gl.glTexParameteri ( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP );
-                gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR );
-		gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR );
-                Color3f bg_color = JSurferRenderPanel.this.asr.getBackgroundColor();
-                float[] borderColor={ bg_color.x, bg_color.y, bg_color.z, 1.0f };
-                gl.glTexParameterfv( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_BORDER_COLOR, borderColor, 0 ); // set texture border to background color to guarantee correct texture interpolation at the boundary
-
-                gl.glTexEnvf( GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_DECAL );
-
-                gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
-
-                gl.glMatrixMode( GL2.GL_MODELVIEW );
-                gl.glLoadIdentity();
-                
-                float position0[] = { 0f, 0f, 10f, 1.0f };
-                gl.glLightfv( GL2.GL_LIGHT0, GL2.GL_POSITION, position0, 0 );
-
-                gl.glDisable( GL2.GL_LIGHTING );
-                gl.glEnable( GL2.GL_TEXTURE_2D );
-
-                int w = glautodrawable.getWidth();
-                int h = glautodrawable.getHeight();
-
-                gl.glMatrixMode( GL2.GL_PROJECTION );
-                gl.glPushMatrix();
-                gl.glLoadIdentity();
-                gl.glOrtho(0, w, 0, h, -2, 2 );
-
-                gl.glBegin( GL2.GL_QUADS );
-                    gl.glColor3d( 1, 1, 1 );
-                    gl.glTexCoord2d( 1.0, 1.0 );
-                    gl.glVertex3d( w, 0, -1.5 );
-                    gl.glTexCoord2d( 1.0, 0.0 );
-                    gl.glVertex3d( w, h, -1.5 );
-                    gl.glTexCoord2d( 0.0, 0.0 );
-                    gl.glVertex3d( 0, h, -1.5 );
-                    gl.glTexCoord2d( 0.0, 1.0 );
-                    gl.glVertex3d( 0, 0, -1.5 );
-                gl.glEnd();
-                gl.glPopMatrix();
-
+            private void drawCoordinateSystem( GL2 gl )
+            {
                 gl.glMatrixMode( GL2.GL_MODELVIEW );
 
                 gl.glTranslated(1- 0.08, 0.08, 0 );
@@ -411,11 +352,11 @@ public class JSurferRenderPanel extends JComponent
                                r.m01, r.m11, r.m21, r.m31,
                                r.m02, r.m12, r.m22, r.m32,
                                r.m03, r.m13, r.m23, r.m33 };
-                
+
                 gl.glScaled( 1, -1, -1 );
                 gl.glMultMatrixf( rf, 0 );
                 gl.glScaled( 1, -1, -1 );
-                
+
                 double radiusCyl = 0.04;
                 double tipLength = 0.33;
                 double radiusTip = 0.125;
@@ -476,6 +417,67 @@ public class JSurferRenderPanel extends JComponent
                 gl.glTranslated( 0, 0, 1 - tipLength );
                 drawCylinder( gl, radiusTip, 0, tipLength ); // tip of z-axis
                 gl.glPopMatrix();
+            }
+
+            @Override
+            public void display( GLAutoDrawable glautodrawable ) {
+                GL2 gl = glautodrawable.getGL().getGL2();
+
+                gl.glEnable( GL2.GL_TEXTURE_2D );
+                gl.glBindTexture( GL2.GL_TEXTURE_2D, textureId );
+
+                gl.glPixelStorei( GL2.GL_UNPACK_ALIGNMENT, 1 );
+
+                ImgBuffer tmpImg = currentSurfaceImage;
+                if( tmpImg != null )
+                {
+                    gl.glTexImage2D( GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA, tmpImg.width, tmpImg.height, 0, GL2.GL_BGRA, GL2.GL_UNSIGNED_BYTE, java.nio.IntBuffer.wrap( tmpImg.rgbBuffer ) );
+                }
+
+                gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP );
+                gl.glTexParameteri ( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP );
+                gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR );
+		gl.glTexParameteri( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR );
+                Color3f bg_color = JSurferRenderPanel.this.asr.getBackgroundColor();
+                float[] borderColor={ bg_color.x, bg_color.y, bg_color.z, 1.0f };
+                gl.glTexParameterfv( GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_BORDER_COLOR, borderColor, 0 ); // set texture border to background color to guarantee correct texture interpolation at the boundary
+
+                gl.glTexEnvf( GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_DECAL );
+
+                gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT );
+
+                gl.glMatrixMode( GL2.GL_MODELVIEW );
+                gl.glLoadIdentity();
+                
+                float position0[] = { 0f, 0f, 10f, 1.0f };
+                gl.glLightfv( GL2.GL_LIGHT0, GL2.GL_POSITION, position0, 0 );
+
+                gl.glDisable( GL2.GL_LIGHTING );
+                gl.glEnable( GL2.GL_TEXTURE_2D );
+
+                int w = glautodrawable.getWidth();
+                int h = glautodrawable.getHeight();
+
+                gl.glMatrixMode( GL2.GL_PROJECTION );
+                gl.glPushMatrix();
+                gl.glLoadIdentity();
+                gl.glOrtho(0, w, 0, h, -2, 2 );
+
+                gl.glBegin( GL2.GL_QUADS );
+                    gl.glColor3d( 1, 1, 1 );
+                    gl.glTexCoord2d( 1.0, 1.0 );
+                    gl.glVertex3d( w, 0, -1.5 );
+                    gl.glTexCoord2d( 1.0, 0.0 );
+                    gl.glVertex3d( w, h, -1.5 );
+                    gl.glTexCoord2d( 0.0, 0.0 );
+                    gl.glVertex3d( 0, h, -1.5 );
+                    gl.glTexCoord2d( 0.0, 1.0 );
+                    gl.glVertex3d( 0, 0, -1.5 );
+                gl.glEnd();
+                gl.glPopMatrix();
+
+                if( renderCoordinatenSystem )
+                    drawCoordinateSystem( gl );
             }
         });
         return glcanvas;

@@ -47,7 +47,7 @@ def AP: AlgebraicExpressionButtonPanel = AlgebraicExpressionButtonPanel{
 var scene: Scene;
 def stage: Stage =Stage{
     title: "First JavaFX Application"
-    fullScreen: true
+    fullScreen: false
     scene: scene = Scene {
         width: 192*4
         height: 108*4
