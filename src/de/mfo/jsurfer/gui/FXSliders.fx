@@ -12,7 +12,10 @@ package de.mfo.jsurfer.gui;
 public class FXSliders {
     public var surferPanel:FXSurferPanel;
     public var fxdButtons:javafx.fxd.FXDNode;
-    public var getScale:function():Number;
+    public var getScale:function (n:Number, w:Number):Number;
+    public var sceneWidth:Number;
+    public var sceneHeight:Number;
+    public-init var scene:javafx.scene.Scene;
     var sliderWidth:Number;//=bind fxdButtons.getNode("Slider_Plus_Parameter_Middle_Background").layoutBounds.width;
     var DragStartY:Number;
     /*var timeline = javafx.animation.Timeline {
@@ -29,6 +32,10 @@ public class FXSliders {
 	def max = fxdButtons.getNode("Slider_A_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_A_Knob").layoutBounds.height*0.0;
         var value:Number=ParA;if (value<0)value=0;if (value>1)value=1;
         fxdButtons.getNode("Slider_A_Knob").translateY = (value)*(max-min);
+        //ParA=value
+        //value*=100;
+
+        textValueA.content="{(javafx.util.Math.round(value*100) as Double)/100}"
     };
     var ParB:Number=bind surferPanel.b  on replace
     {
@@ -36,6 +43,8 @@ public class FXSliders {
 	def max = fxdButtons.getNode("Slider_B_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_B_Knob").layoutBounds.height*0.0;
         var value:Number=ParB;if (value<0)value=0;if (value>1)value=1;
         fxdButtons.getNode("Slider_B_Knob").translateY = (value)*(max-min);
+        //ParB=value
+        textValueB.content="{(javafx.util.Math.round(value*100) as Double)/100}"
     };
     var ParC:Number=bind surferPanel.c  on replace
     {
@@ -43,7 +52,7 @@ public class FXSliders {
 	def max = fxdButtons.getNode("Slider_C_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_C_Knob").layoutBounds.height*0.0;
         var value:Number=ParC;if (value<0)value=0;if (value>1)value=1;
         fxdButtons.getNode("Slider_C_Knob").translateY = (value)*(max-min);
-
+        textValueC.content="{(javafx.util.Math.round(value*100) as Double)/100}"
     };
     var ParD:Number=bind surferPanel.d  on replace
     {
@@ -51,6 +60,7 @@ public class FXSliders {
 	def max = fxdButtons.getNode("Slider_D_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_D_Knob").layoutBounds.height*0.0;
         var value:Number=ParD;if (value<0)value=0;if (value>1)value=1;
         fxdButtons.getNode("Slider_D_Knob").translateY = (value)*(max-min);
+        textValueD.content="{(javafx.util.Math.round(value*100) as Double)/100}"
     };
     var ParAUse:Boolean = bind surferPanel.usedA on replace
     {
@@ -74,6 +84,7 @@ public class FXSliders {
         def min = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.minY;
         def max = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.height*0.0;
         fxdButtons.getNode("Slider_Zoom_Knob").translateY = (zoomScale)*(max-min);
+        textValueZoom.content="{(javafx.util.Math.round((javafx.util.Math.pow(10,-zoomScale*4+2))*100) as Double)/100} x"
     };
     function setZoom()
     {
@@ -221,12 +232,135 @@ public class FXSliders {
     }
     function sliderMouseDrag(ev:javafx.scene.input.MouseEvent, s:String) : Number
     {
-        return DragStartY + ev.dragY/getScale();
+        return DragStartY + ev.dragY/getScale(sceneHeight,sceneWidth);
     }
+    public function setDescription():Void
+    {
+        //Slider_D_Value Slider_D_Name
+        for (s in ["A","B","C","D","Zoom"])
+        {
+            fxdButtons.getNode("Slider_{s}_Value").visible=false;
+            fxdButtons.getNode("Slider_{s}_Name").visible=false;
+        }
+            //textValue{s};
+            textValueA=javafx.scene.text.Text{};
+            textValueB=javafx.scene.text.Text{};
+            textValueC=javafx.scene.text.Text{};
+            textValueD=javafx.scene.text.Text{};
+            textValueZoom=javafx.scene.text.Text{};
+            textNameA=javafx.scene.text.Text{};
+            textNameB=javafx.scene.text.Text{};
+            textNameC=javafx.scene.text.Text{};
+            textNameD=javafx.scene.text.Text{};
+            textNameZoom=javafx.scene.text.Text
+            {
+                //id:"TextSliderNameZoom"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "Zoom" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textNameZoom.boundsInLocal.width/2
+                translateY: bind fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_Zoom").visible
+            };
+            textNameA=javafx.scene.text.Text
+            {
+                //id:"TextSliderNameA"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_A_Name").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "a" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_A_Name").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_A_Name").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textNameA.boundsInLocal.width/2+fxdButtons.getNode("Slider_A").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_A_Name").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_A").visible
+            };
+            textNameB=javafx.scene.text.Text
+            {
+                id:"TextSliderNameB"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_B_Name").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "b" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_B_Name").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_B_Name").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textNameB.boundsInLocal.width/2+fxdButtons.getNode("Slider_B").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_B_Name").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_B").visible
+            };
+            textNameC=javafx.scene.text.Text
+            {
+                id:"TextSliderNameC"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_C_Name").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "c" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_C_Name").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_C_Name").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textNameC.boundsInLocal.width/2+fxdButtons.getNode("Slider_C").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_C_Name").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_C").visible
+            };
+            textNameD=javafx.scene.text.Text
+            {
+                id:"TextSliderNameD"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_D_Name").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "d" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_D_Name").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_D_Name").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textNameD.boundsInLocal.width/2-fxdButtons.getNode("Slider_D").translateX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_D").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_D_Name").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_D").visible
+            };
+            textValueZoom=javafx.scene.text.Text
+            {
+                id:"TextSliderValueZoom"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_Zoom_Value").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "{zoomScale}" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_Zoom_Value").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_Zoom_Value").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textValueZoom.boundsInLocal.width/2
+                translateY: bind fxdButtons.getNode("Slider_Zoom_Value").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_Zoom").visible
+            };
+            textValueA=javafx.scene.text.Text
+            {
+                id:"TextSliderValueA"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_A_Value").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "{ParA}" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_A_Value").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_A_Value").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textValueA.boundsInLocal.width/2+fxdButtons.getNode("Slider_A").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_A_Value").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_A").visible
+            };
+            textValueB=javafx.scene.text.Text
+            {
+                id:"TextSliderValueB"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_B_Value").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "{ParB}" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_B_Value").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_B_Value").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textValueB.boundsInLocal.width/2+fxdButtons.getNode("Slider_B").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_B_Value").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_B").visible
+            };
+            textValueC=javafx.scene.text.Text
+            {
+                id:"TextSliderValueC"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_C_Value").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "{ParC}" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_C_Value").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_C_Value").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textValueC.boundsInLocal.width/2+fxdButtons.getNode("Slider_C").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_C_Value").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_C").visible
+            };
+            textValueD=javafx.scene.text.Text
+            {
+                id:"TextSliderValueD"
+                font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_D_Value").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+                content: "{ParD}" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                translateX: bind fxdButtons.getNode("Slider_D_Value").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_D_Value").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textValueD.boundsInLocal.width/2+fxdButtons.getNode("Slider_D").translateX*getScale(sceneHeight,sceneWidth)
+                translateY: bind fxdButtons.getNode("Slider_D_Value").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+                visible: bind fxdButtons.getNode("Slider_D").visible
+            };
+
+        
+
+    }
+    public var textValueA:javafx.scene.text.Text;
+    public var textValueB:javafx.scene.text.Text;
+    public var textValueC:javafx.scene.text.Text;
+    public var textValueD:javafx.scene.text.Text;
+    public var textValueZoom:javafx.scene.text.Text;
+    public var textNameA:javafx.scene.text.Text;
+    public var textNameB:javafx.scene.text.Text;
+    public var textNameC:javafx.scene.text.Text;
+    public var textNameD:javafx.scene.text.Text;
+    public var textNameZoom:javafx.scene.text.Text;
     public function set(): Void
     {
+        setDescription();
         setZoom();
-        setParameter()
+        setParameter();
 
     }
 

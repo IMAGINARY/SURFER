@@ -45,7 +45,10 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
     var sliders:FXSliders= FXSliders {
         surferPanel: bind surferPanel;
         fxdButtons: fxdButtons;
-        getScale:function():Number{return getScale(height,width)};
+        getScale: getScale,
+        sceneWidth: bind width;
+        sceneHeight:bind height;
+        scene:scene
     }
     def loadURL:function(url:java.net.URL):Void=function(url:java.net.URL)
     {
@@ -220,9 +223,11 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         //Nimbus Sans L Regular Surfer.ttf
         //var f:Font=java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT , new File("{__DIR__}Nimbus Sans L Regular Surfer.ttf"));
         //System.out.println("__DIR__:{__DIR__}");
+        
         var input:InputStream = getClass().getResourceAsStream("/de/mfo/jsurfer/gui/Nimbus Sans L Regular Surfer.ttf");
         var f:Font=java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT , input);
         f=f.deriveFont(T.minY*getScale(height,width)*0.08);
+        //var testfont:javafx.scene.text.Font=f;
         test.setFont(f);
         test.setBorder( BorderFactory.createEmptyBorder() );
         textField0.setFont(f);
@@ -441,6 +446,16 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
                             surferPanel,
 
                             SurfaceExpression,
+                            sliders.textValueA,
+                            sliders.textValueB,
+                            sliders.textValueC,
+                            sliders.textValueD,
+                            sliders.textValueZoom,
+                            sliders.textNameA,
+                            sliders.textNameB,
+                            sliders.textNameC,
+                            sliders.textNameD,
+                            sliders.textNameZoom,
                             //fxlabe,
                             javafx.scene.Group{
                                 content:[EqualNull]

@@ -68,7 +68,7 @@ public class FXGalleryMini extends CustomNode
                                         id: "FXGalleryChooser{gallery} {i}"
                                         font: bind javafx.scene.text.Font.font
                                         (
-                                            "Helvetica",
+                                            "Arial",
                                              javafx.scene.text.FontWeight.REGULAR,
                                              ((width-3*5-2*20)/3*0.9)*0.4*0.25
                                         )

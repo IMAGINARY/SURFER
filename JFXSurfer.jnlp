@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="JFXSurfer.jnlp">
+    <information>
+        <title>JFXSurfer</title>
+        <vendor>Mathematisches Forschungsinstitut Oberwolfach</vendor>
+        <homepage href=""/>
+        <description>JFXSurfer</description>
+        <icon kind="splash" href="http://dl.javafx.com/1.3/splash.png"/>
+        <offline-allowed/>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.5+"/>
+		<extension name="JOGL" href="http://download.java.net/media/jogl/jsr-231-2.x-webstart/jogl-all-awt.jnlp"/>
+        <extension name="JavaFX Runtime" href="http://dl.javafx.com/1.3/javafx-rt.jnlp"/>
+        <jar href="JFXSurfer.jar" main="true" size="10541580"/>
+        <jar href="lib/colorpicker.jar" size="72593"/>
+        <jar href="lib/PDFRenderer.jar" size="2100435"/>
+        <jar href="lib/vecmath.jar" size="328221"/>
+        <jar href="lib/gluegen-rt.jar" size="33554"/>
+        <jar href="lib/jogl.all.jar" size="1611470"/>
+        <jar href="lib/nativewindow.all.jar" size="94074"/>
+    </resources>
+    <application-desc main-class="com.sun.javafx.runtime.main.Main" progress-class="com.javafx.progressbar.ProgressManager">
+        <argument>MainJavaFXScript=jfxsurfer.Main</argument>
+    </application-desc>
+    <update check="timeout"/>
+</jnlp>
