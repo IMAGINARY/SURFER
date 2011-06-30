@@ -321,10 +321,10 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         //Button_Axis
         //surferPanel.drawCoordinatenSystem=true;
         //System.out.println("Button Axis inni");
-        fxdButtons.getNode("Button_Pressed_Axis").visible=true;
-        fxdButtons.getNode("Button_Over_Axis").visible=false;
-        fxdButtons.getNode("Button_Axis").visible=false;
-        fxdButtons.getNode("Button_Pressed_Axis").onMousePressed=function(e:MouseEvent):Void
+        //fxdButtons.getNode("Button_Pressed_Axis").visible=true;
+        //fxdButtons.getNode("Button_Over_Axis").visible=false;
+        //fxdButtons.getNode("Button_Axis").visible=false;
+        /*fxdButtons.getNode("Button_Pressed_Axis").onMousePressed=function(e:MouseEvent):Void
         {
             fxdButtons.getNode("Button_Pressed_Axis").visible=false;
             fxdButtons.getNode("Button_Axis").visible=true;

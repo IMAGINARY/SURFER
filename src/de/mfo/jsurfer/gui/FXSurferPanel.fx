@@ -41,12 +41,12 @@ public class FXSurferPanel extends CustomNode {
 }
 */
     public var renderer: JSurferRenderPanel=new JSurferRenderPanel() ;
-    public var drawCoordinatenSystem:Boolean =true on replace
+    /*public var drawCoordinatenSystem:Boolean =true on replace
     {
         System.out.println("drawCoordinatenSystem({drawCoordinatenSystem})");
         renderer.drawCoordinatenSystem(drawCoordinatenSystem);
         renderer.repaintImage();
-    };
+    };*/
 
     public var frontColor: Color3f on replace
     {

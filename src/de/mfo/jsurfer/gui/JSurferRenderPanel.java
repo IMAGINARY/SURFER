@@ -109,7 +109,9 @@ public class JSurferRenderPanel extends JComponent
             {
                 ImgBuffer ib = ( ImgBuffer ) get();
                 currentSurfaceImage = ib != null ? ib : currentSurfaceImage;
+                drawCoordinatenSystem(false);
                 repaint();
+
             }
             catch( java.util.concurrent.CancellationException ce ) {}
             catch( java.util.concurrent.ExecutionException ce ) {}
@@ -182,7 +184,7 @@ public class JSurferRenderPanel extends JComponent
 
     public JSurferRenderPanel()
     {
-        renderCoordinatenSystem = true;
+        renderCoordinatenSystem = false;
         renderSize = new Dimension( 150, 150 );
 
         firstRun = true;
@@ -714,6 +716,7 @@ public class JSurferRenderPanel extends JComponent
         rsd.dragTo( me.getPoint() );
         refreshImage = true;
         refreshImageAntiAliased = false;
+        drawCoordinatenSystem(true);
         scheduleSurfaceRepaint();
     }
 
