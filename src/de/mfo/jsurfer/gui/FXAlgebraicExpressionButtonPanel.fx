@@ -41,6 +41,7 @@ public class FXAlgebraicExpressionButtonPanel
     public var ExpressionField: javax.swing.JTextField=new javax.swing.JTextField("x^2+y^2+z^2+2*x*y*z-1");
     public var NullField: javax.swing.JLabel=new javax.swing.JLabel("=0");
     public var pos:Number;
+    def caret:javax.swing.text.Caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
     var correctExpression:Boolean= bind surferPanel.correctExpression on replace
     {
         fxdLayoutFile.getNode("Button_Correct").visible=surferPanel.correctExpression;
@@ -49,7 +50,7 @@ public class FXAlgebraicExpressionButtonPanel
 
     var inside : Boolean=false;
     var pressedButton : String="";
-
+    def size:Number=0.05;
 
     public function setTextField()
     {
@@ -81,9 +82,16 @@ public class FXAlgebraicExpressionButtonPanel
         EqualNull.content=[sw2];
         var input:java.io.InputStream = getClass().getResourceAsStream("/de/mfo/jsurfer/gui/Nimbus Sans L Regular Surfer.ttf");
         var f:java.awt.Font=java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT , input);
-        f=f.deriveFont(T.minY*getScale(sceneHeight,sceneWidth)*0.08);
+        f=f.deriveFont(T.minY*getScale(sceneHeight,sceneWidth)*size);
         ExpressionField.setFont(f);
         ExpressionField.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
+        
+        
+
+        caret.setBlinkRate(500);
+        ExpressionField.setCaret(caret);
+        //ExpressionField.setCaretPosition(1);
+        caret.setVisible(true);
         NullField.setFont(f);
         NullField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         SurfaceExpression.layoutX=T.minX*getScale(sceneHeight,sceneWidth);
@@ -279,6 +287,7 @@ public class FXAlgebraicExpressionButtonPanel
             fxdLayoutFile.getNode("Button_{s}").effect=javafx.scene.effect.GaussianBlur{};
         }
         enabled=false;
+        caret.setBlinkRate(0);
 
     }
     public function setBusy()
@@ -294,6 +303,7 @@ public class FXAlgebraicExpressionButtonPanel
             fxdLayoutFile.getNode("Button_{s}").effect=null;
         }
         enabled=true;
+        caret.setBlinkRate(500);
     }
 
 

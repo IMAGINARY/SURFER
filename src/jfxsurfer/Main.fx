@@ -5,7 +5,7 @@
 
 package jfxsurfer;
 
-import de.mfo.jsurfer.gui.AlgebraicExpressionButtonPanel;
+//import de.mfo.jsurfer.gui.AlgebraicExpressionButtonPanel;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
@@ -38,8 +38,8 @@ function toggleFullscreenKey(e:KeyEvent):Void
 
 javax.swing.UIManager.setLookAndFeel( javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
 
-def AP: AlgebraicExpressionButtonPanel = AlgebraicExpressionButtonPanel{
-                x: 0, y:0, width:bind scene.width, height:bind scene.height, expression: "Text"
+def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
+                x: 0, y:0, width:bind scene.width, height:bind scene.height
                 onKeyReleased:toggleFullscreenKey
             }
 
@@ -52,13 +52,13 @@ def stage: Stage =Stage{
         width: 192*4
         height: 108*4
         content: [
-                    AP
+                    GUI
                     //TestCode.testGallery()
         ]
     }
 
 };
-AP.requestFocus();
+GUI.requestFocus();
 
 
 
