@@ -31,7 +31,8 @@ public class TabField {
     public var galleryMiniNode:javafx.scene.Node;
     public var surferPanel:FXSurferPanel;
     public var loadSurface:function(url:java.net.URL):Void;
-
+    public var disableButtons:function():Void;
+    public var enableButtons:function():Void;
     public var germanGallerys :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.GERMAN )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.GERMAN  );
     public var englishGallerys:de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.ENGLISH)-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.ENGLISH );
     
@@ -262,7 +263,7 @@ public class TabField {
         multiGalleryText.visible=true;
         multiGalleryMini.visible=true;
         sliders.setVisibility(false);
-
+        disableButtons();
     }
     function setInfoState()
     {
@@ -280,6 +281,7 @@ public class TabField {
         multiGalleryText.visible=false;
         multiGalleryMini.visible=false;
         sliders.setVisibility(true);
+        enableButtons();
     }
     function setColorState()
     {
@@ -297,6 +299,7 @@ public class TabField {
         multiGalleryText.visible=false;
         multiGalleryMini.visible=false;
         sliders.setVisibility(true);
+        enableButtons();
     }
     public function setHelpState()
     {
