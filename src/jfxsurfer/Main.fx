@@ -6,6 +6,7 @@
 package jfxsurfer;
 
 //import de.mfo.jsurfer.gui.AlgebraicExpressionButtonPanel;
+//import de.mfo.jsurfer.gui.FXImpressum;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
@@ -41,18 +42,35 @@ javax.swing.UIManager.setLookAndFeel( javax.swing.UIManager.getCrossPlatformLook
 def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
                 x: 0, y:0, width:bind scene.width, height:bind scene.height
                 onKeyReleased:toggleFullscreenKey
+                visible:bind not GUI.showImpressum
             }
+/*var timeline = javafx.animation.Timeline
+{
+    keyFrames: javafx.animation.KeyFrame {
+    time: 100ms
+    action: function() {GUI.showImpressum=false}
+    }
+}*/
 
+var impressum:de.mfo.jsurfer.gui.FXImpressum=de.mfo.jsurfer.gui.FXImpressum
+{
+    width:bind scene.width,
+    height:bind scene.height
+    language: bind GUI.language
+    visible: bind GUI.showImpressum
+    onMouseClicked: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
+}
 
 var scene: Scene;
 def stage: Stage =Stage{
     title: "First JavaFX Application"
-    fullScreen: false
+    fullScreen: true
     scene: scene = Scene {
         width: 192*4
         height: 108*4
         content: [
-                    GUI
+                    GUI,
+                    impressum
                     //TestCode.testGallery()
         ]
     }
