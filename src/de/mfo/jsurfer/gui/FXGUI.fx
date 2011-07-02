@@ -13,7 +13,7 @@ import java.lang.System;
 
 public class FXGUI extends javafx.scene.CustomNode
 {
-    
+    public var showImpressum:Boolean=false;
     def fxdLayoutFile:javafx.fxd.FXDNode = javafx.fxd.FXDNode
 	{
                 url:    "{__DIR__}surfer_touchscreen_1920_x_1080.fxz"
@@ -27,8 +27,9 @@ public class FXGUI extends javafx.scene.CustomNode
         sceneHeight:bind height,
         fxdLayoutFile:fxdLayoutFile,
         surferPanel: bind surferPanel
+        showImpressum:function(){showImpressum=true;}
     }
-    var language:java.util.Locale=bind AlgebraicExpressionButtonPanel.language;
+    public var language:java.util.Locale=bind AlgebraicExpressionButtonPanel.language;
     
     var sliders:FXSliders= FXSliders {
         surferPanel: bind surferPanel,
