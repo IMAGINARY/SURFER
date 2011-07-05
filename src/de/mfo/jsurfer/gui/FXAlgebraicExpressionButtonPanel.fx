@@ -5,6 +5,11 @@
 
 package de.mfo.jsurfer.gui;
 
+
+import java.awt.event.KeyEvent;
+import javax.swing.KeyStroke;
+import java.lang.System;
+
 /**
  * @author Panda
  */
@@ -93,8 +98,7 @@ public class FXAlgebraicExpressionButtonPanel
         f=f.deriveFont(T.minY*getScale(sceneHeight,sceneWidth)*size);
         ExpressionField.setFont(f);
         ExpressionField.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
-        
-        
+        ExpressionField.setDisabledTextColor( java.awt.Color.BLACK );
 
         caret.setBlinkRate(500);
         ExpressionField.setCaret(caret);
@@ -199,12 +203,16 @@ public class FXAlgebraicExpressionButtonPanel
 
     public function backspace()
     {
-        pos = ExpressionField.getSelectionStart();
-        expression = ExpressionField.getText();
-        if( pos == ExpressionField.getSelectionEnd() )
-            pos--;// no text is selected; just remove one character
-        ExpressionField.setText( "{expression.substring(0,pos)}{expression.substring(ExpressionField.getSelectionEnd())}" );
-        ExpressionField.setCaretPosition( pos );
+//        def keyCode:Integer = KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ).getKeyCode();
+//        def keyChar:Character = KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ).getKeyChar();
+        var c:Character = "\b".charAt( 0 );
+        var ke:KeyEvent;
+        ke = new KeyEvent( ExpressionField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_BACK_SPACE, c ) ;
+        ExpressionField.dispatchEvent( ke );
+        ke = new KeyEvent( ExpressionField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, 0, c ) ;
+        ExpressionField.dispatchEvent( ke );
+        ke = new KeyEvent( ExpressionField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_BACK_SPACE, c ) ;
+        ExpressionField.dispatchEvent( ke );
     }
 
     public function CompleteDelete()
@@ -214,14 +222,14 @@ public class FXAlgebraicExpressionButtonPanel
         ExpressionField.setCaretPosition(pos);
     }
 
-    public function insertStringInTextfield(c:String)
+    public function insertStringInTextfield(s:String)
     {
-        pos=ExpressionField.getCaretPosition();
-        expression=ExpressionField.getText();
-        expression="{expression.substring(0,pos)}{c}{expression.substring(pos)}";
-        pos+=c.length();
-        ExpressionField.setText(expression);
-        ExpressionField.setCaretPosition(pos);
+        for( i in [ 0 .. s.length() - 1 ]  )
+        {
+            var c:Character = s.charAt( i );
+            var ke:KeyEvent = new KeyEvent( ExpressionField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyStroke.getKeyStroke( c ).getKeyCode(), c ) ;
+            ExpressionField.dispatchEvent( ke );
+        }
     }
 
     public function setChar(c:String )
@@ -286,7 +294,7 @@ public class FXAlgebraicExpressionButtonPanel
     public function setIdle()
     {
         ExpressionField.setEnabled(false);
-        NullField.setEnabled(false);
+        //NullField.setEnabled(false);
         EqualNull.effect=javafx.scene.effect.GaussianBlur{};
         SurfaceExpression.effect=javafx.scene.effect.GaussianBlur{};
         fxdLayoutFile.getNode("Button_Correct").effect=javafx.scene.effect.GaussianBlur{};
@@ -302,7 +310,7 @@ public class FXAlgebraicExpressionButtonPanel
     public function setBusy()
     {
         ExpressionField.setEnabled(true);
-        NullField.setEnabled(true);
+        //NullField.setEnabled(true);
         EqualNull.effect=null;
         SurfaceExpression.effect=null;
         fxdLayoutFile.getNode("Button_Correct").effect=null;
