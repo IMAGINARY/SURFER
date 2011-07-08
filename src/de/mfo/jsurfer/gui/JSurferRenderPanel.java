@@ -109,7 +109,7 @@ public class JSurferRenderPanel extends JComponent
             {
                 ImgBuffer ib = ( ImgBuffer ) get();
                 currentSurfaceImage = ib != null ? ib : currentSurfaceImage;
-                drawCoordinatenSystem(false);
+                //drawCoordinatenSystem(false);
                 repaint();
 
             }
@@ -369,8 +369,8 @@ public class JSurferRenderPanel extends JComponent
                 float specularMatX[] = { 0.727811f, 0.626959f, 0.626959f, 1f };
                 float shininessX[] = { 76.8f };
 
-                float ambientMatY[] = { 0.01175f, 0.1745f, 0.01175f, 1f };
-                float diffuseMatY[] = { 0.04136f, 0.61424f, 0.04136f, 1f };
+                float ambientMatY[] = { 0.01175f, 0.1745f, 0.08725f, 1f };
+                float diffuseMatY[] = { 0.04136f, 0.61424f, 0.30712f, 1f };
                 float specularMatY[] = { 0.626959f, 0.727811f, 0.626959f, 1f };
                 float shininessY[] = { 76.8f };
 
@@ -716,7 +716,7 @@ public class JSurferRenderPanel extends JComponent
         rsd.dragTo( me.getPoint() );
         refreshImage = true;
         refreshImageAntiAliased = false;
-        drawCoordinatenSystem(true);
+        //drawCoordinatenSystem(true);
         scheduleSurfaceRepaint();
     }
 

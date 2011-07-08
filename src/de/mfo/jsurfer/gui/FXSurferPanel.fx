@@ -224,6 +224,18 @@ public class FXSurferPanel extends CustomNode {
             height: bind height
             maxHeight: bind height
          };
+         //drawCoordinatenSystem
+         onMousePressed=function(e: javafx.scene.input.MouseEvent): Void
+         {
+             renderer.drawCoordinatenSystem(true);
+             renderer.repaintImage();
+         };
+
+         onMouseReleased=function(e: javafx.scene.input.MouseEvent): Void
+         {
+             renderer.drawCoordinatenSystem(false);
+             renderer.repaintImage();
+         };
 
         return Group {
                     translateX: bind x translateY: bind y;
