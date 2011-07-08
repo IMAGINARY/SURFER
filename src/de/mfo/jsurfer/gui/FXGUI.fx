@@ -48,25 +48,15 @@ public class FXGUI extends javafx.scene.CustomNode
         {
             surferPanel.renderer.loadFromFile( url);
             surferPanel.renderer.repaintImage();
-
             try{surferPanel.a=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a");}catch(e: java.lang.Exception  ){}
             try{surferPanel.b=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("b");}catch(e: java.lang.Exception  ){}
             try{surferPanel.c=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("c");}catch(e: java.lang.Exception  ){}
             try{surferPanel.d=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("d");}catch(e: java.lang.Exception  ){}
-
-            //surferPanel.b=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("b");
-            //surferPanel.c=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("c");
-            //surferPanel.d=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("d");
+            surferPanel.scale=surferPanel.renderer.getScale()/4+0.5;
             def FrontColor:javax.vecmath.Color3f=surferPanel.renderer.getAlgebraicSurfaceRenderer().getFrontMaterial().getColor();
             def BackColor :javax.vecmath.Color3f=surferPanel.renderer.getAlgebraicSurfaceRenderer().getBackMaterial() .getColor();
-            //System.out.println("FrontColor{FrontColor.x},{FrontColor.y},{FrontColor.z}");
-            //System.out.println("BackColor{BackColor.x},{BackColor.y},{BackColor.z}");
             tabField.frontColor.setColor(FrontColor);
             tabField.backColor.setColor(BackColor);
-            //renderer.getAlgebraicSurfaceRenderer().setParameterValue("a", a);
-            //surferPanel.a=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a");
-            //System.out.println("loaded Par a:{surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("a")}");
-            //surferPanel.b=surferPanel.renderer.getAlgebraicSurfaceRenderer().getParameterValue("b");
             AlgebraicExpressionButtonPanel.ExpressionField.setText(surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString());
         }
         catch(e: java.lang.Exception  )
