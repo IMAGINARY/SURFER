@@ -54,7 +54,7 @@ public class FXAlgebraicExpressionButtonPanel
     public var ExpressionField: javax.swing.JTextField=new javax.swing.JTextField("x^2+y^2+z^2+2*x*y*z-1");
     public var NullField: javax.swing.JLabel=new javax.swing.JLabel("=0");
     public var pos:Number;
-    def caret:javax.swing.text.Caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
+    var caret:javax.swing.text.Caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
     var correctExpression:Boolean= bind surferPanel.correctExpression on replace
     {
         fxdLayoutFile.getNode("Button_Correct").visible=surferPanel.correctExpression;
@@ -113,7 +113,7 @@ public class FXAlgebraicExpressionButtonPanel
     }
     function setButtons()
     {
-	for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Help","Imprint"])
+	for (s in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
 	{
            fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
            fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;
@@ -122,7 +122,7 @@ public class FXAlgebraicExpressionButtonPanel
                if(not enabled)return;
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Help","Imprint"])
+               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_{s}").onMouseExited  =function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -136,7 +136,7 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Help","Imprint"])
+               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_Over_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -149,7 +149,7 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Help","Imprint"])
+               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_Pressed_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -159,29 +159,50 @@ public class FXAlgebraicExpressionButtonPanel
                if (e.button== javafx.scene.input.MouseButton.PRIMARY){if(e.primaryButtonDown){Press(s);}else {Release(s);}}
            };
 	}
+        //"Button_Complete_Delete"
+        fxdLayoutFile.getNode("Button_Complete_Delete").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
+        {
+            CompleteDelete();
+        }
+        fxdLayoutFile.getNode("Button_Over_Complete_Delete").visible=false;
+        fxdLayoutFile.getNode("Button_Pressed_Complete_Delete").visible=false;
+
+        //"Button_Over_draw"
+        fxdLayoutFile.getNode("Button_Over_Wrong").visible=false;
+        fxdLayoutFile.getNode("Button_Pressed_Wrong").visible=false;
+        fxdLayoutFile.getNode("Button_Pressed_draw").visible=false;
+        fxdLayoutFile.getNode("Button_Over_draw").visible=false;
         //language
-        fxdLayoutFile.getNode("Button_Pressed_German").visible=true;
+        fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
         fxdLayoutFile.getNode("Button_Over_German").visible=false;
-        fxdLayoutFile.getNode("Button_Cursor_German").visible=false;
+        fxdLayoutFile.getNode("Button_German").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
         fxdLayoutFile.getNode("Button_Over_English").visible=false;
-        fxdLayoutFile.getNode("Button_Cursor_English").visible=true;
-        fxdLayoutFile.getNode("Button_Cursor_German").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
+        fxdLayoutFile.getNode("Button_English").visible=true;
+        fxdLayoutFile.getNode("Button_German").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
         {
-            fxdLayoutFile.getNode("Button_Pressed_German").visible=true;
-            fxdLayoutFile.getNode("Button_Cursor_German").visible=false;
-            fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
-            fxdLayoutFile.getNode("Button_Cursor_English").visible=true;
+            //fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
+            fxdLayoutFile.getNode("Button_German").visible=false;
+            //fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
+            fxdLayoutFile.getNode("Button_English").visible=true;
             language=java.util.Locale.GERMAN;
+            System.out.println("German pressed");
         }
-        fxdLayoutFile.getNode("Button_Cursor_English").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
+        fxdLayoutFile.getNode("Button_English").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
         {
-            fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
-            fxdLayoutFile.getNode("Button_Cursor_German").visible=true;
-            fxdLayoutFile.getNode("Button_Pressed_English").visible=true;
-            fxdLayoutFile.getNode("Button_Cursor_English").visible=false;
+            //fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
+            fxdLayoutFile.getNode("Button_German").visible=true;
+            //fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
+            fxdLayoutFile.getNode("Button_English").visible=false;
             language=java.util.Locale.ENGLISH;
+            System.out.println("English pressed");
         }
+        //"Imprint"
+        fxdLayoutFile.getNode("Button_Imprint").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
+        {
+            timeline.playFromStart();
+        }
+
 
 
     }
@@ -243,7 +264,7 @@ public class FXAlgebraicExpressionButtonPanel
         else if (c=="Cursor_Left"){back();}
         else if (c=="Cursor_Right"){forward();}
         else if (c=="Delete"){backspace();}
-        else if (c=="Complete_Delete"){CompleteDelete();}
+        //else if (c=="Complete_Delete"){CompleteDelete();}
         else if (c=="Plus"){insertStringInTextfield("+");}
         else if (c=="Minus"){insertStringInTextfield("-");}
         else if (c=="Times"){insertStringInTextfield("*");}
@@ -254,9 +275,9 @@ public class FXAlgebraicExpressionButtonPanel
         else if (c=="Bracket_close"){insertStringInTextfield(")");}
         else if (c=="Comma"){insertStringInTextfield(".");}
         else if (c=="Correct"){/*Nothing Happens*/}
-        else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
+        //else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
         else if (c=="Help"){/*ToDo Help*/}
-        else if (c=="Imprint"){timeline.playFromStart();}
+        //else if (c=="Imprint"){timeline.playFromStart();}
     }
 
     function Press(s: String)
@@ -299,12 +320,14 @@ public class FXAlgebraicExpressionButtonPanel
         SurfaceExpression.effect=javafx.scene.effect.GaussianBlur{};
         fxdLayoutFile.getNode("Button_Correct").effect=javafx.scene.effect.GaussianBlur{};
         fxdLayoutFile.getNode("Button_Wrong").effect=javafx.scene.effect.GaussianBlur{};
+        fxdLayoutFile.getNode("Formula_Box").effect=javafx.scene.effect.GaussianBlur{};
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=javafx.scene.effect.GaussianBlur{};
         }
         enabled=false;
-        caret.setBlinkRate(0);
+        //caret.setBlinkRate(0);
+        //ExpressionField.setCaret(caret);
 
     }
     public function setBusy()
@@ -315,12 +338,15 @@ public class FXAlgebraicExpressionButtonPanel
         SurfaceExpression.effect=null;
         fxdLayoutFile.getNode("Button_Correct").effect=null;
         fxdLayoutFile.getNode("Button_Wrong").effect=null;
+        fxdLayoutFile.getNode("Formula_Box").effect=null;
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=null;
         }
         enabled=true;
-        caret.setBlinkRate(500);
+        //caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
+        //caret.setBlinkRate(500);
+        //ExpressionField.setCaret(caret);
     }
 
 

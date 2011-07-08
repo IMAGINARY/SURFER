@@ -344,25 +344,27 @@ public class AlgebraicExpressionButtonPanel extends CustomNode {
         //"Button_Cursor_German"
         fxdButtons.getNode("Button_Pressed_German").visible=true;
         fxdButtons.getNode("Button_Over_German").visible=false;
-        fxdButtons.getNode("Button_Cursor_German").visible=false;
+        fxdButtons.getNode("Button_German").visible=false;
         fxdButtons.getNode("Button_Pressed_English").visible=false;
         fxdButtons.getNode("Button_Over_English").visible=false;
-        fxdButtons.getNode("Button_Cursor_English").visible=true;
-        fxdButtons.getNode("Button_Cursor_German").onMousePressed=function(e:MouseEvent):Void
-        {
-            fxdButtons.getNode("Button_Pressed_German").visible=true;
-            fxdButtons.getNode("Button_Cursor_German").visible=false;
-            fxdButtons.getNode("Button_Pressed_English").visible=false;
-            fxdButtons.getNode("Button_Cursor_English").visible=true;
-            language=java.util.Locale.GERMAN;
-        }
-        fxdButtons.getNode("Button_Cursor_English").onMousePressed=function(e:MouseEvent):Void
+        fxdButtons.getNode("Button_English").visible=true;
+        fxdButtons.getNode("Button_German").onMousePressed=function(e:MouseEvent):Void
         {
             fxdButtons.getNode("Button_Pressed_German").visible=false;
-            fxdButtons.getNode("Button_Cursor_German").visible=true;
-            fxdButtons.getNode("Button_Pressed_English").visible=true;
-            fxdButtons.getNode("Button_Cursor_English").visible=false;
+            fxdButtons.getNode("Button_German").visible=false;
+            fxdButtons.getNode("Button_Pressed_English").visible=false;
+            fxdButtons.getNode("Button_English").visible=true;
+            language=java.util.Locale.GERMAN;
+            System.out.println("German pressed");
+        }
+        fxdButtons.getNode("Button_English").onMousePressed=function(e:MouseEvent):Void
+        {
+            fxdButtons.getNode("Button_Pressed_German").visible=false;
+            fxdButtons.getNode("Button_German").visible=true;
+            fxdButtons.getNode("Button_Pressed_English").visible=false;
+            fxdButtons.getNode("Button_English").visible=false;
             language=java.util.Locale.ENGLISH;
+            System.out.println("German pressed");
         }
         
 
