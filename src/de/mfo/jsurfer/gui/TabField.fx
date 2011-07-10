@@ -144,7 +144,7 @@ public class TabField {
             height:bind G.height*getScale(sceneHeight,sceneWidth),
             //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:germanGallerys,
+            gallerys:englishGallerys,
             gallery:bind englishGalleryChooser.gallery
         };
         multiGalleryText=LanguageSwitchNode
