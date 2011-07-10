@@ -33,6 +33,7 @@ public class TabField {
     public var loadSurface:function(url:java.net.URL):Void;
     public var disableButtons:function():Void;
     public var enableButtons:function():Void;
+    public-init var fxdLayoutFile:javafx.fxd.FXDNode;
     public var germanGallerys :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.GERMAN )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.GERMAN  );
     public var englishGallerys:de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.ENGLISH)-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.ENGLISH );
     
@@ -50,8 +51,13 @@ public class TabField {
     public var multiGalleryChooser:LanguageSwitchNode;
     public var multiGalleryText:LanguageSwitchNode;
     public var multiGalleryMini:LanguageSwitchNode;
-    
-    
+
+    public var tabTextColorEng:javafx.scene.text.Text;
+    public var tabTextInfoEng:javafx.scene.text.Text;
+    public var tabTextGalleryEng:javafx.scene.text.Text;
+    public var tabTextColorGer:javafx.scene.text.Text;
+    public var tabTextInfoGer:javafx.scene.text.Text;
+    public var tabTextGalleryGer:javafx.scene.text.Text;
     /*[
         new de.mfo.jsurfer.gui.Gallery(0 ),
         new de.mfo.jsurfer.gui.Gallery(1 ),
@@ -309,9 +315,80 @@ public class TabField {
         englishGalleryMini.surface=0;
         setGalleryState();
     }
+    function setTextField()
+    {
+        tabTextColorGer=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Farben" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextColorGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Color").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.GERMAN)
+        };
+        tabTextColorEng=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Colours" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextColorGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Color").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.ENGLISH)
+        };
+        fxdLayoutFile.getNode("Tab_Text_Color").visible=false;
 
+        tabTextInfoGer=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Info" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextInfoGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Info").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.GERMAN)
+        };
+        tabTextInfoEng=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Info" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextInfoGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Info").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.ENGLISH)
+        };
+        fxdLayoutFile.getNode("Tab_Text_Info").visible=false;
+
+        tabTextGalleryGer=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Start" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextGalleryGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.GERMAN)
+        };
+        tabTextGalleryEng=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Start" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextGalleryGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.ENGLISH)
+        };
+        fxdLayoutFile.getNode("Tab_Text_Gallery").visible=false;
+
+
+
+  /*var tabTextColor:javafx.scene.text.Text;
+    var tabTextInfo:javafx.scene.text.Text;
+    var tabTextGallery:javafx.scene.text.Text;
+    var keyboardTextParameters:javafx.scene.text.Text;
+    var keyboardTextOperations:javafx.scene.text.Text;
+    var keyboardTextXYZ:javafx.scene.text.Text;*/
+    //"Tab_Text_Color"
+    //"Tab_Text_Info"
+    //"Tab_Text_Gallery"
+    //"Text_Keyboard_Parameters"
+    //"Text_Keyboard_Operations"
+    //"Text_Keyboard_XYZ"
+    }
     public function set()
     {
+        setTextField();
         setColoChooser();
         setGalleryChooser();
         setButtons();

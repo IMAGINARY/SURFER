@@ -23,6 +23,13 @@ public class FXAlgebraicExpressionButtonPanel
         action: function() {showImpressum();}
         }
     }
+    public-init var keyboardTextParametersEng:javafx.scene.text.Text;
+    public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
+    public-init var keyboardTextXYZEng:javafx.scene.text.Text;
+
+    public-init var keyboardTextParametersGer:javafx.scene.text.Text;
+    public-init var keyboardTextOperationsGer:javafx.scene.text.Text;
+    public-init var keyboardTextXYZGer:javafx.scene.text.Text;
     public var language:java.util.Locale=java.util.Locale.GERMAN;
     public-init var getScale:function (n:Number, w:Number):Number;
     public-init var showImpressum:function ():Void;
@@ -34,6 +41,7 @@ public class FXAlgebraicExpressionButtonPanel
     {
         setButtons();
         setTextField();
+        setTextField2();
         ExpressionField.getDocument().addDocumentListener
         (
             javax.swing.event.DocumentListener
@@ -206,7 +214,74 @@ public class FXAlgebraicExpressionButtonPanel
 
 
     }
+    function setTextField2()
+    {
+        keyboardTextParametersGer=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Parameter" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.GERMAN)
+        };
+        keyboardTextParametersEng=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Parameter" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.ENGLISH)
+        };
+        fxdLayoutFile.getNode("Text_Keyboard_Parameters").visible=false;
 
+        keyboardTextOperationsGer=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Rechenoperationen" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.GERMAN)
+        };
+        keyboardTextOperationsEng=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Arithmetic operations" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.ENGLISH)
+        };
+        fxdLayoutFile.getNode("Text_Keyboard_Operations").visible=false;
+
+        keyboardTextXYZGer=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Variablen" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.GERMAN)
+        };
+        keyboardTextXYZEng=javafx.scene.text.Text
+        {
+            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
+            content: "Variables" textAlignment:javafx.scene.text.TextAlignment.CENTER
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
+            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
+            visible: bind (language==java.util.Locale.ENGLISH)
+        };
+        fxdLayoutFile.getNode("Text_Keyboard_XYZ").visible=false;
+  /*var tabTextColor:javafx.scene.text.Text;
+    var tabTextInfo:javafx.scene.text.Text;
+    var tabTextGallery:javafx.scene.text.Text;
+    var keyboardTextParameters:javafx.scene.text.Text;
+    var keyboardTextOperations:javafx.scene.text.Text;
+    var keyboardTextXYZ:javafx.scene.text.Text;*/
+    //"Tab_Text_Color"
+    //"Tab_Text_Info"
+    //"Tab_Text_Gallery"
+    //"Text_Keyboard_Parameters"
+    //"Text_Keyboard_Operations"
+    //"Text_Keyboard_XYZ"
+    }
     public function forward()
     {
         pos=ExpressionField.getCaretPosition();
@@ -321,6 +396,15 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Correct").effect=javafx.scene.effect.GaussianBlur{};
         fxdLayoutFile.getNode("Button_Wrong").effect=javafx.scene.effect.GaussianBlur{};
         fxdLayoutFile.getNode("Formula_Box").effect=javafx.scene.effect.GaussianBlur{};
+
+        keyboardTextParametersEng.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextOperationsEng.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextXYZEng.effect=javafx.scene.effect.GaussianBlur{};
+
+        keyboardTextParametersGer.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextOperationsGer.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextXYZGer.effect=javafx.scene.effect.GaussianBlur{};
+
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=javafx.scene.effect.GaussianBlur{};
@@ -339,6 +423,15 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Correct").effect=null;
         fxdLayoutFile.getNode("Button_Wrong").effect=null;
         fxdLayoutFile.getNode("Formula_Box").effect=null;
+
+        keyboardTextParametersEng.effect=null;
+        keyboardTextOperationsEng.effect=null;
+        keyboardTextXYZEng.effect=null;
+
+        keyboardTextParametersGer.effect=null;
+        keyboardTextOperationsGer.effect=null;
+        keyboardTextXYZGer.effect=null;
+
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=null;

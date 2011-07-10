@@ -89,8 +89,17 @@ public class FXGUI extends javafx.scene.CustomNode
         loadSurface:loadURL
         disableButtons:function(){AlgebraicExpressionButtonPanel.setIdle();}
         enableButtons:function(){AlgebraicExpressionButtonPanel.setBusy();}
+        fxdLayoutFile:fxdLayoutFile
     }
-
+    
+    
+    //"Tab_Text_Color"
+    //"Tab_Text_Info"
+    //"Tab_Text_Gallery"
+    //"Text_Keyboard_Parameters"
+    //"Text_Keyboard_Operations"
+    //"Text_Keyboard_XYZ"
+    
     /*var correctExpression:Boolean= bind surferPanel.correctExpression on replace
     {
         fxdButtons.getNode("Button_Correct").visible=surferPanel.correctExpression;
@@ -160,6 +169,7 @@ public class FXGUI extends javafx.scene.CustomNode
         fxdLayoutFile.getNode("Surfer_Rendering").visible=false;
     }
 
+    
 
     
 
@@ -224,6 +234,18 @@ public class FXGUI extends javafx.scene.CustomNode
                             sliders.textNameC,
                             sliders.textNameD,
                             sliders.textNameZoom,
+                            tabField.tabTextColorEng,
+                            tabField.tabTextInfoEng,
+                            tabField.tabTextGalleryEng,
+                            AlgebraicExpressionButtonPanel.keyboardTextParametersEng,
+                            AlgebraicExpressionButtonPanel.keyboardTextOperationsEng,
+                            AlgebraicExpressionButtonPanel.keyboardTextXYZEng,
+                            tabField.tabTextColorGer,
+                            tabField.tabTextInfoGer,
+                            tabField.tabTextGalleryGer,
+                            AlgebraicExpressionButtonPanel.keyboardTextParametersGer,
+                            AlgebraicExpressionButtonPanel.keyboardTextOperationsGer,
+                            AlgebraicExpressionButtonPanel.keyboardTextXYZGer,
                             //fxlabe,
                             /*javafx.scene.Group{
                                 content:[EqualNull]
