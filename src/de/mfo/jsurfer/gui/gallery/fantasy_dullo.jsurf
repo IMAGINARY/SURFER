@@ -1,10 +1,10 @@
 #jSurfer surface description
-#Thu Feb 17 14:19:13 CET 2011
+#Fri Jul 08 16:58:33 CEST 2011
 front_material_specular_iIntensity=0.5
 camera_type=ORTHOGRAPHIC_CAMERA
 back_material_specular_iIntensity=0.5
-surface_parameter_b=0.5948410630226135
-surface_parameter_a=0.58055579662323
+surface_parameter_b=0.41559362411499023
+surface_parameter_a=0.41736117005348206
 light_position_7=0.0 0.0 0.0
 light_position_6=0.0 0.0 0.0
 light_position_5=0.0 0.0 0.0
@@ -14,19 +14,19 @@ light_position_2=0.0 -100.0 100.0
 camera_fov_y=60.0
 light_position_1=100.0 100.0 100.0
 light_position_0=-100.0 100.0 100.0
-front_material_color=0.8117647 0.27058825 0.3764706
+front_material_color=0.9411765 0.25882354 0.05882353
 background_color=1.0 1.0 1.0
 light_intensity_7=1.0
 front_material_ambient_intensity=0.4
 light_intensity_6=1.0
-scale_factor=0.20000054
+scale_factor=0.11388256
 light_intensity_5=1.0
 light_intensity_4=1.0
 light_intensity_3=1.0
 light_intensity_2=0.3
 light_intensity_1=0.7
 light_intensity_0=0.5
-rotation_matrix=-0.8408531 0.16338098 -0.5160293 0.0 -0.5126786 -0.5461755 0.6624692 0.0 -0.17360584 0.8215879 0.5430124 0.0 0.0 0.0 0.0 1.0
+rotation_matrix=-0.9975637 0.06831278 -0.014604302 0.0 -0.050649248 -0.56332713 0.82468677 0.0 0.048110377 0.82340914 0.5654113 0.0 0.0 0.0 0.0 1.0
 light_color_7=1.0 1.0 1.0
 light_color_6=1.0 1.0 1.0
 front_material_diffuse_intensity=0.8
@@ -49,6 +49,6 @@ camera_height=2.0
 surface_equation=(x^2+y^2+z^2+a^2-b^2)^2-4*b^2*(x^2+y^2)
 camera_transform=1.0 0.0 0.0 -0.0 0.0 1.0 0.0 -0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0
 back_material_ambient_intensity=0.4
-back_material_color=0.8509804 0.6 0.10980392
+back_material_color=0.87058824 0.41960785 0.101960786
 back_material_shininess=30.0
 back_material_diffuse_intensity=0.8

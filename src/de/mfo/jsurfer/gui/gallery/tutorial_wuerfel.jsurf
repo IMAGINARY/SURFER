@@ -1,5 +1,5 @@
 #jSurfer surface description
-#Fri May 20 09:17:21 CEST 2011
+#Fri Jul 08 17:07:01 CEST 2011
 front_material_specular_iIntensity=0.5
 camera_type=ORTHOGRAPHIC_CAMERA
 back_material_specular_iIntensity=0.5
@@ -12,7 +12,7 @@ light_position_2=0.0 -100.0 100.0
 camera_fov_y=60.0
 light_position_1=100.0 100.0 100.0
 light_position_0=-100.0 100.0 100.0
-front_material_color=0.9019608 0.7137255 0.105882354
+front_material_color=0.92156863 0.27058825 0.06666667
 background_color=1.0 1.0 1.0
 light_intensity_7=1.0
 front_material_ambient_intensity=0.4
