@@ -3,8 +3,10 @@
 front_material_specular_iIntensity=0.5
 camera_type=ORTHOGRAPHIC_CAMERA
 back_material_specular_iIntensity=0.5
-surface_parameter_b=0.41559362411499023
-surface_parameter_a=0.41736117005348206
+surface_parameter_b=0.5
+#0.41559362411499023
+surface_parameter_a=0.5
+#0.41736117005348206
 light_position_7=0.0 0.0 0.0
 light_position_6=0.0 0.0 0.0
 light_position_5=0.0 0.0 0.0
