@@ -58,6 +58,8 @@ public class TabField {
     public var tabTextColorGer:javafx.scene.text.Text;
     public var tabTextInfoGer:javafx.scene.text.Text;
     public var tabTextGalleryGer:javafx.scene.text.Text;
+    var pointerGallery:Integer=0;
+    var pointerSurface:Integer=0;
     /*[
         new de.mfo.jsurfer.gui.Gallery(0 ),
         new de.mfo.jsurfer.gui.Gallery(1 ),
@@ -104,8 +106,9 @@ public class TabField {
             height:bind R.height*getScale(sceneHeight,sceneWidth),
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
+            gallery:bind pointerGallery
             gallerys:germanGallerys
-            setSurfaceNull:function():Void{germanGalleryMini.surface=0;}
+            setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
         };
        englishGalleryChooser=FXGalleryChooser
         {
@@ -114,8 +117,9 @@ public class TabField {
             height:bind R.height*getScale(sceneHeight,sceneWidth),
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
+            gallery:bind pointerGallery
             gallerys:englishGallerys
-            setSurfaceNull:function():Void{englishGalleryMini.surface=0;}
+            setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
         };
         multiGalleryChooser=LanguageSwitchNode
         {
@@ -141,7 +145,7 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:germanGallerys,
-            gallery:bind germanGalleryChooser.gallery
+            gallery:bind pointerGallery
         };
 
        englishGalleryText=FXGalleryText
@@ -151,7 +155,7 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:englishGallerys,
-            gallery:bind englishGalleryChooser.gallery
+            gallery:bind pointerGallery
         };
         multiGalleryText=LanguageSwitchNode
         {
@@ -176,10 +180,11 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:germanGallerys,
-            gallery:bind germanGalleryChooser.gallery
-            surface:0
-            press:function():Void
+            gallery:bind pointerGallery
+            surface:bind pointerSurface
+            press:function(s:Integer):Void
             {
+                pointerSurface=s;
                 setInfoState();
                 loadSurface(germanGallerys[germanGalleryMini.gallery].getEntries()[ germanGalleryMini.surface ].getJSurfURL());
 
@@ -193,13 +198,13 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:englishGallerys,
-            gallery:bind englishGalleryChooser.gallery
-            surface:0
-            press:function():Void
+            gallery:bind pointerGallery
+            surface:bind pointerSurface
+            press:function(s:Integer):Void
             {
+                pointerSurface=s;
                 setInfoState();
                 loadSurface(englishGallerys[englishGalleryMini.gallery].getEntries()[ englishGalleryMini.surface ].getJSurfURL());
-
             }
         };
         multiGalleryMini=LanguageSwitchNode
@@ -224,8 +229,8 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:germanGallerys,
-            gallery:bind germanGalleryChooser.gallery,
-            surface: bind germanGalleryMini.surface
+            gallery:bind pointerGallery,
+            surface: bind pointerSurface
         };
         englishSurfaceInfo=FXSurfaceInfo
        {
@@ -234,8 +239,8 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:englishGallerys,
-            gallery:bind englishGalleryChooser.gallery,
-            surface: bind englishGalleryMini.surface
+            gallery:bind pointerGallery,
+            surface: bind pointerSurface
         };
         multiSurfaceInfo=LanguageSwitchNode
         {

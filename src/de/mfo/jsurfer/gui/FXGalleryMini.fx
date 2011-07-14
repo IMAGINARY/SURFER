@@ -22,7 +22,8 @@ public class FXGalleryMini extends CustomNode
     public var gallerys:de.mfo.jsurfer.gui.Gallery[];
     public var gallery:Integer;
     public var surface:Integer;
-    public var press:function():Void;
+    public var press:function(s:Integer):Void;
+
 
     var galleryNodes:javafx.scene.layout.Tile[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])javafx.scene.layout.Tile{};;
     public override function create(): javafx.scene.Node
@@ -54,7 +55,7 @@ public class FXGalleryMini extends CustomNode
                         [
                             javafx.scene.layout.VBox
                             {
-                                onMousePressed :bind function(e: javafx.scene.input.MouseEvent): Void {surface=i;press();}
+                                onMousePressed :bind function(e: javafx.scene.input.MouseEvent): Void {press(i);}
                                 content:
                                 [
                                     javafx.scene.image.ImageView
