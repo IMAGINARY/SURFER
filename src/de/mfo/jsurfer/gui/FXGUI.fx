@@ -14,6 +14,8 @@ import java.lang.System;
 public class FXGUI extends javafx.scene.CustomNode
 {
     public var showImpressum:Boolean=false;
+    
+
     def fxdLayoutFile:javafx.fxd.FXDNode = javafx.fxd.FXDNode
 	{
                 url:    "{__DIR__}surfer_touchscreen_1920_x_1080.fxz"
@@ -92,7 +94,11 @@ public class FXGUI extends javafx.scene.CustomNode
         fxdLayoutFile:fxdLayoutFile
     }
     
-    
+    public function setScreenSaver():Void
+    {
+        showImpressum=false;
+        tabField.setHelpState();
+    }
     //"Tab_Text_Color"
     //"Tab_Text_Info"
     //"Tab_Text_Gallery"

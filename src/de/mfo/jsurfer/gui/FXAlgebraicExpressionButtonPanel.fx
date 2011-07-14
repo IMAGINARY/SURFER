@@ -16,13 +16,13 @@ import java.lang.System;
 
 public class FXAlgebraicExpressionButtonPanel
 {
-    var timeline = javafx.animation.Timeline
+    /*var timeline = javafx.animation.Timeline
     {
         keyFrames: javafx.animation.KeyFrame {
         time: 100ms
         action: function() {showImpressum();}
         }
-    }
+    }*/
     public-init var keyboardTextParametersEng:javafx.scene.text.Text;
     public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
     public-init var keyboardTextXYZEng:javafx.scene.text.Text;
@@ -206,9 +206,10 @@ public class FXAlgebraicExpressionButtonPanel
             System.out.println("English pressed");
         }
         //"Imprint"
-        fxdLayoutFile.getNode("Button_Imprint").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
+        fxdLayoutFile.getNode("Button_Imprint").onMouseClicked=function(e:javafx.scene.input.MouseEvent):Void
         {
-            timeline.playFromStart();
+            //timeline.playFromStart();
+            showImpressum();
         }
 
 

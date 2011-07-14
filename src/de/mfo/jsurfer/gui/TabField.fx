@@ -314,10 +314,12 @@ public class TabField {
     }
     public function setHelpState()
     {
-        germanGalleryChooser.gallery=0;
-        germanGalleryMini.surface=0;
-        englishGalleryChooser.gallery=0;
-        englishGalleryMini.surface=0;
+        //germanGalleryChooser.gallery=0;
+        //germanGalleryMini.surface=0;
+        //englishGalleryChooser.gallery=0;
+        //englishGalleryMini.surface=0;
+        pointerGallery=0;
+        pointerSurface=0;
         setGalleryState();
     }
     function setTextField()

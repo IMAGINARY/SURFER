@@ -10,6 +10,7 @@ package jfxsurfer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
+import java.lang.System;
 
 var oldStageX = 0.0;
 var oldStageY = 0.0;
@@ -61,6 +62,26 @@ var impressum:de.mfo.jsurfer.gui.FXImpressum=de.mfo.jsurfer.gui.FXImpressum
     onMouseClicked: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
 }
 
+var timeline = javafx.animation.Timeline
+{
+    keyFrames: javafx.animation.KeyFrame
+    {
+        time: 1m
+        action: function()
+        {
+            System.out.println("Time is up");
+            //renderer.repaintImage();
+            GUI.setScreenSaver();
+        }
+    }
+}
+function somethingHappend():Void
+{
+    //System.out.println("somethingHappend");
+    timeline.playFromStart();
+    
+}
+
 var scene: Scene;
 def stage: Stage =Stage{
     title: "First JavaFX Application"
@@ -69,10 +90,28 @@ def stage: Stage =Stage{
         width: 192*4
         height: 108*4
         content: [
+                    
+                    
+                    javafx.scene.shape.Rectangle 
+                    {
+                        width:bind scene.width, height:bind scene.height
+                        fill: javafx.scene.paint.Color.rgb(255, 255, 255)
+                        onKeyPressed:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
+                        onKeyReleased:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
+                        onKeyTyped:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
+                        onMouseClicked:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMouseDragged:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMouseEntered:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMouseExited:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMouseMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMousePressed:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMouseReleased:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+                        onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+
+                    },
                     GUI,
-                    impressum
-                    //TestCode.testGallery()
-        ]
+                    impressum,
+                 ]
     }
 
 };
