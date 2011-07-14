@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-06-20 15:15:13
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-07-14 17:31:41
 
 package de.mfo.jsurfer.parser;
 
@@ -15,7 +15,7 @@ import org.antlr.runtime.tree.*;
 
 public class AlgebraicExpressionParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "PLUS", "MINUS", "MULT", "DIV", "POW", "LPAR", "RPAR", "IDENTIFIER", "DECIMAL_LITERAL", "FLOATING_POINT_LITERAL", "DIGIT", "EXPONENT", "LETTER", "WHITESPACE"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "PLUS", "MINUS", "MULT", "DIV", "POW", "LPAR", "RPAR", "IDENTIFIER", "DECIMAL_LITERAL", "FLOATING_POINT_LITERAL", "DIGIT", "EXPONENT", "LETTER", "WHITESPACE", "ERRCHAR"
     };
     public static final int EOF=-1;
     public static final int PLUS=4;
@@ -32,6 +32,7 @@ public class AlgebraicExpressionParser extends Parser {
     public static final int EXPONENT=15;
     public static final int LETTER=16;
     public static final int WHITESPACE=17;
+    public static final int ERRCHAR=18;
 
     // delegates
     // delegators
@@ -92,10 +93,18 @@ public class AlgebraicExpressionParser extends Parser {
             throw new MismatchedTokenException(ttype, input);
         }
 
+        @Override
         public java.lang.Object recoverFromMismatchedSet( IntStream input, RecognitionException e, BitSet follow )
             throws RecognitionException
         {
             throw e;
+        }
+
+        @Override
+        protected Object recoverFromMismatchedToken( IntStream input, int ttype, BitSet follow )
+            throws RecognitionException
+        {
+            throw new MismatchedTokenException( ttype, input );
         }
 
 
@@ -105,7 +114,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "start"
-    // AlgebraicExpression.g:79:1: start : add_expr EOF ;
+    // AlgebraicExpression.g:87:1: start : add_expr EOF ;
     public final AlgebraicExpressionParser.start_return start() throws RecognitionException {
         AlgebraicExpressionParser.start_return retval = new AlgebraicExpressionParser.start_return();
         retval.start = input.LT(1);
@@ -119,8 +128,8 @@ public class AlgebraicExpressionParser extends Parser {
         Object EOF2_tree=null;
 
         try {
-            // AlgebraicExpression.g:80:2: ( add_expr EOF )
-            // AlgebraicExpression.g:80:4: add_expr EOF
+            // AlgebraicExpression.g:88:2: ( add_expr EOF )
+            // AlgebraicExpression.g:88:4: add_expr EOF
             {
             root_0 = (Object)adaptor.nil();
 
@@ -157,7 +166,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "add_expr"
-    // AlgebraicExpression.g:83:1: add_expr : mult_expr ( PLUS mult_expr | MINUS mult_expr )* ;
+    // AlgebraicExpression.g:91:1: add_expr : mult_expr ( PLUS mult_expr | MINUS mult_expr )* ;
     public final AlgebraicExpressionParser.add_expr_return add_expr() throws RecognitionException {
         AlgebraicExpressionParser.add_expr_return retval = new AlgebraicExpressionParser.add_expr_return();
         retval.start = input.LT(1);
@@ -177,8 +186,8 @@ public class AlgebraicExpressionParser extends Parser {
         Object MINUS6_tree=null;
 
         try {
-            // AlgebraicExpression.g:84:2: ( mult_expr ( PLUS mult_expr | MINUS mult_expr )* )
-            // AlgebraicExpression.g:84:4: mult_expr ( PLUS mult_expr | MINUS mult_expr )*
+            // AlgebraicExpression.g:92:2: ( mult_expr ( PLUS mult_expr | MINUS mult_expr )* )
+            // AlgebraicExpression.g:92:4: mult_expr ( PLUS mult_expr | MINUS mult_expr )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -188,7 +197,7 @@ public class AlgebraicExpressionParser extends Parser {
             state._fsp--;
 
             adaptor.addChild(root_0, mult_expr3.getTree());
-            // AlgebraicExpression.g:84:14: ( PLUS mult_expr | MINUS mult_expr )*
+            // AlgebraicExpression.g:92:14: ( PLUS mult_expr | MINUS mult_expr )*
             loop1:
             do {
                 int alt1=3;
@@ -204,7 +213,7 @@ public class AlgebraicExpressionParser extends Parser {
 
                 switch (alt1) {
             	case 1 :
-            	    // AlgebraicExpression.g:84:16: PLUS mult_expr
+            	    // AlgebraicExpression.g:92:16: PLUS mult_expr
             	    {
             	    PLUS4=(Token)match(input,PLUS,FOLLOW_PLUS_in_add_expr146); 
             	    PLUS4_tree = (Object)adaptor.create(PLUS4);
@@ -220,7 +229,7 @@ public class AlgebraicExpressionParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // AlgebraicExpression.g:84:34: MINUS mult_expr
+            	    // AlgebraicExpression.g:92:34: MINUS mult_expr
             	    {
             	    MINUS6=(Token)match(input,MINUS,FOLLOW_MINUS_in_add_expr153); 
             	    MINUS6_tree = (Object)adaptor.create(MINUS6);
@@ -267,7 +276,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "mult_expr"
-    // AlgebraicExpression.g:87:1: mult_expr : neg_expr ( MULT neg_expr | DIV neg_expr )* ;
+    // AlgebraicExpression.g:95:1: mult_expr : neg_expr ( MULT neg_expr | DIV neg_expr )* ;
     public final AlgebraicExpressionParser.mult_expr_return mult_expr() throws RecognitionException {
         AlgebraicExpressionParser.mult_expr_return retval = new AlgebraicExpressionParser.mult_expr_return();
         retval.start = input.LT(1);
@@ -287,8 +296,8 @@ public class AlgebraicExpressionParser extends Parser {
         Object DIV11_tree=null;
 
         try {
-            // AlgebraicExpression.g:88:2: ( neg_expr ( MULT neg_expr | DIV neg_expr )* )
-            // AlgebraicExpression.g:88:4: neg_expr ( MULT neg_expr | DIV neg_expr )*
+            // AlgebraicExpression.g:96:2: ( neg_expr ( MULT neg_expr | DIV neg_expr )* )
+            // AlgebraicExpression.g:96:4: neg_expr ( MULT neg_expr | DIV neg_expr )*
             {
             root_0 = (Object)adaptor.nil();
 
@@ -298,7 +307,7 @@ public class AlgebraicExpressionParser extends Parser {
             state._fsp--;
 
             adaptor.addChild(root_0, neg_expr8.getTree());
-            // AlgebraicExpression.g:88:13: ( MULT neg_expr | DIV neg_expr )*
+            // AlgebraicExpression.g:96:13: ( MULT neg_expr | DIV neg_expr )*
             loop2:
             do {
                 int alt2=3;
@@ -314,7 +323,7 @@ public class AlgebraicExpressionParser extends Parser {
 
                 switch (alt2) {
             	case 1 :
-            	    // AlgebraicExpression.g:88:15: MULT neg_expr
+            	    // AlgebraicExpression.g:96:15: MULT neg_expr
             	    {
             	    MULT9=(Token)match(input,MULT,FOLLOW_MULT_in_mult_expr174); 
             	    MULT9_tree = (Object)adaptor.create(MULT9);
@@ -330,7 +339,7 @@ public class AlgebraicExpressionParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // AlgebraicExpression.g:88:32: DIV neg_expr
+            	    // AlgebraicExpression.g:96:32: DIV neg_expr
             	    {
             	    DIV11=(Token)match(input,DIV,FOLLOW_DIV_in_mult_expr181); 
             	    DIV11_tree = (Object)adaptor.create(DIV11);
@@ -377,7 +386,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "neg_expr"
-    // AlgebraicExpression.g:91:1: neg_expr : ( MINUS pow_expr | pow_expr );
+    // AlgebraicExpression.g:99:1: neg_expr : ( MINUS pow_expr | pow_expr );
     public final AlgebraicExpressionParser.neg_expr_return neg_expr() throws RecognitionException {
         AlgebraicExpressionParser.neg_expr_return retval = new AlgebraicExpressionParser.neg_expr_return();
         retval.start = input.LT(1);
@@ -393,7 +402,7 @@ public class AlgebraicExpressionParser extends Parser {
         Object MINUS13_tree=null;
 
         try {
-            // AlgebraicExpression.g:92:9: ( MINUS pow_expr | pow_expr )
+            // AlgebraicExpression.g:100:9: ( MINUS pow_expr | pow_expr )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -411,7 +420,7 @@ public class AlgebraicExpressionParser extends Parser {
             }
             switch (alt3) {
                 case 1 :
-                    // AlgebraicExpression.g:92:11: MINUS pow_expr
+                    // AlgebraicExpression.g:100:11: MINUS pow_expr
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -429,7 +438,7 @@ public class AlgebraicExpressionParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // AlgebraicExpression.g:93:11: pow_expr
+                    // AlgebraicExpression.g:101:11: pow_expr
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -467,7 +476,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "pow_expr"
-    // AlgebraicExpression.g:96:1: pow_expr : unary_expr ( POW pow_expr )? ;
+    // AlgebraicExpression.g:104:1: pow_expr : unary_expr ( POW pow_expr )? ;
     public final AlgebraicExpressionParser.pow_expr_return pow_expr() throws RecognitionException {
         AlgebraicExpressionParser.pow_expr_return retval = new AlgebraicExpressionParser.pow_expr_return();
         retval.start = input.LT(1);
@@ -483,8 +492,8 @@ public class AlgebraicExpressionParser extends Parser {
         Object POW17_tree=null;
 
         try {
-            // AlgebraicExpression.g:97:2: ( unary_expr ( POW pow_expr )? )
-            // AlgebraicExpression.g:97:4: unary_expr ( POW pow_expr )?
+            // AlgebraicExpression.g:105:2: ( unary_expr ( POW pow_expr )? )
+            // AlgebraicExpression.g:105:4: unary_expr ( POW pow_expr )?
             {
             root_0 = (Object)adaptor.nil();
 
@@ -494,7 +503,7 @@ public class AlgebraicExpressionParser extends Parser {
             state._fsp--;
 
             adaptor.addChild(root_0, unary_expr16.getTree());
-            // AlgebraicExpression.g:97:15: ( POW pow_expr )?
+            // AlgebraicExpression.g:105:15: ( POW pow_expr )?
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -503,7 +512,7 @@ public class AlgebraicExpressionParser extends Parser {
             }
             switch (alt4) {
                 case 1 :
-                    // AlgebraicExpression.g:97:17: POW pow_expr
+                    // AlgebraicExpression.g:105:17: POW pow_expr
                     {
                     POW17=(Token)match(input,POW,FOLLOW_POW_in_pow_expr242); 
                     POW17_tree = (Object)adaptor.create(POW17);
@@ -547,7 +556,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "unary_expr"
-    // AlgebraicExpression.g:100:1: unary_expr : ( primary_expr | IDENTIFIER LPAR add_expr RPAR );
+    // AlgebraicExpression.g:108:1: unary_expr : ( primary_expr | IDENTIFIER LPAR add_expr RPAR );
     public final AlgebraicExpressionParser.unary_expr_return unary_expr() throws RecognitionException {
         AlgebraicExpressionParser.unary_expr_return retval = new AlgebraicExpressionParser.unary_expr_return();
         retval.start = input.LT(1);
@@ -567,7 +576,7 @@ public class AlgebraicExpressionParser extends Parser {
         Object RPAR23_tree=null;
 
         try {
-            // AlgebraicExpression.g:101:9: ( primary_expr | IDENTIFIER LPAR add_expr RPAR )
+            // AlgebraicExpression.g:109:9: ( primary_expr | IDENTIFIER LPAR add_expr RPAR )
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -598,7 +607,7 @@ public class AlgebraicExpressionParser extends Parser {
             }
             switch (alt5) {
                 case 1 :
-                    // AlgebraicExpression.g:101:11: primary_expr
+                    // AlgebraicExpression.g:109:11: primary_expr
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -612,7 +621,7 @@ public class AlgebraicExpressionParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // AlgebraicExpression.g:102:4: IDENTIFIER LPAR add_expr RPAR
+                    // AlgebraicExpression.g:110:4: IDENTIFIER LPAR add_expr RPAR
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -656,7 +665,7 @@ public class AlgebraicExpressionParser extends Parser {
     };
 
     // $ANTLR start "primary_expr"
-    // AlgebraicExpression.g:105:1: primary_expr : ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | LPAR add_expr RPAR );
+    // AlgebraicExpression.g:113:1: primary_expr : ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | LPAR add_expr RPAR );
     public final AlgebraicExpressionParser.primary_expr_return primary_expr() throws RecognitionException {
         AlgebraicExpressionParser.primary_expr_return retval = new AlgebraicExpressionParser.primary_expr_return();
         retval.start = input.LT(1);
@@ -678,7 +687,7 @@ public class AlgebraicExpressionParser extends Parser {
         Object RPAR29_tree=null;
 
         try {
-            // AlgebraicExpression.g:106:2: ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | LPAR add_expr RPAR )
+            // AlgebraicExpression.g:114:2: ( DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | LPAR add_expr RPAR )
             int alt6=4;
             switch ( input.LA(1) ) {
             case DECIMAL_LITERAL:
@@ -710,7 +719,7 @@ public class AlgebraicExpressionParser extends Parser {
 
             switch (alt6) {
                 case 1 :
-                    // AlgebraicExpression.g:106:4: DECIMAL_LITERAL
+                    // AlgebraicExpression.g:114:4: DECIMAL_LITERAL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -722,7 +731,7 @@ public class AlgebraicExpressionParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // AlgebraicExpression.g:107:4: FLOATING_POINT_LITERAL
+                    // AlgebraicExpression.g:115:4: FLOATING_POINT_LITERAL
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -734,7 +743,7 @@ public class AlgebraicExpressionParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // AlgebraicExpression.g:108:4: IDENTIFIER
+                    // AlgebraicExpression.g:116:4: IDENTIFIER
                     {
                     root_0 = (Object)adaptor.nil();
 
@@ -746,7 +755,7 @@ public class AlgebraicExpressionParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // AlgebraicExpression.g:109:4: LPAR add_expr RPAR
+                    // AlgebraicExpression.g:117:4: LPAR add_expr RPAR
                     {
                     root_0 = (Object)adaptor.nil();
 

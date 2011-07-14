@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-06-20 15:15:14
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 AlgebraicExpression.g 2011-07-14 17:31:42
 
 package de.mfo.jsurfer.parser;
 
@@ -24,6 +24,7 @@ public class AlgebraicExpressionLexer extends Lexer {
     public static final int EXPONENT=15;
     public static final int LETTER=16;
     public static final int WHITESPACE=17;
+    public static final int ERRCHAR=18;
 
     // delegates
     // delegators
@@ -183,10 +184,10 @@ public class AlgebraicExpressionLexer extends Lexer {
         try {
             int _type = DECIMAL_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // AlgebraicExpression.g:116:17: ( ( '0' | '1' .. '9' ( '0' .. '9' )* ) )
-            // AlgebraicExpression.g:116:19: ( '0' | '1' .. '9' ( '0' .. '9' )* )
+            // AlgebraicExpression.g:124:17: ( ( '0' | '1' .. '9' ( '0' .. '9' )* ) )
+            // AlgebraicExpression.g:124:19: ( '0' | '1' .. '9' ( '0' .. '9' )* )
             {
-            // AlgebraicExpression.g:116:19: ( '0' | '1' .. '9' ( '0' .. '9' )* )
+            // AlgebraicExpression.g:124:19: ( '0' | '1' .. '9' ( '0' .. '9' )* )
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -204,17 +205,17 @@ public class AlgebraicExpressionLexer extends Lexer {
             }
             switch (alt2) {
                 case 1 :
-                    // AlgebraicExpression.g:116:21: '0'
+                    // AlgebraicExpression.g:124:21: '0'
                     {
                     match('0'); 
 
                     }
                     break;
                 case 2 :
-                    // AlgebraicExpression.g:116:27: '1' .. '9' ( '0' .. '9' )*
+                    // AlgebraicExpression.g:124:27: '1' .. '9' ( '0' .. '9' )*
                     {
                     matchRange('1','9'); 
-                    // AlgebraicExpression.g:116:36: ( '0' .. '9' )*
+                    // AlgebraicExpression.g:124:36: ( '0' .. '9' )*
                     loop1:
                     do {
                         int alt1=2;
@@ -227,7 +228,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                         switch (alt1) {
                     	case 1 :
-                    	    // AlgebraicExpression.g:116:36: '0' .. '9'
+                    	    // AlgebraicExpression.g:124:36: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -261,14 +262,14 @@ public class AlgebraicExpressionLexer extends Lexer {
         try {
             int _type = FLOATING_POINT_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // AlgebraicExpression.g:119:2: ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT )
+            // AlgebraicExpression.g:127:2: ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT )
             int alt9=3;
             alt9 = dfa9.predict(input);
             switch (alt9) {
                 case 1 :
-                    // AlgebraicExpression.g:119:4: ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )?
+                    // AlgebraicExpression.g:127:4: ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )?
                     {
-                    // AlgebraicExpression.g:119:4: ( DIGIT )+
+                    // AlgebraicExpression.g:127:4: ( DIGIT )+
                     int cnt3=0;
                     loop3:
                     do {
@@ -282,7 +283,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                         switch (alt3) {
                     	case 1 :
-                    	    // AlgebraicExpression.g:119:4: DIGIT
+                    	    // AlgebraicExpression.g:127:4: DIGIT
                     	    {
                     	    mDIGIT(); 
 
@@ -299,7 +300,7 @@ public class AlgebraicExpressionLexer extends Lexer {
                     } while (true);
 
                     match('.'); 
-                    // AlgebraicExpression.g:119:15: ( DIGIT )*
+                    // AlgebraicExpression.g:127:15: ( DIGIT )*
                     loop4:
                     do {
                         int alt4=2;
@@ -312,7 +313,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                         switch (alt4) {
                     	case 1 :
-                    	    // AlgebraicExpression.g:119:15: DIGIT
+                    	    // AlgebraicExpression.g:127:15: DIGIT
                     	    {
                     	    mDIGIT(); 
 
@@ -324,7 +325,7 @@ public class AlgebraicExpressionLexer extends Lexer {
                         }
                     } while (true);
 
-                    // AlgebraicExpression.g:119:22: ( EXPONENT )?
+                    // AlgebraicExpression.g:127:22: ( EXPONENT )?
                     int alt5=2;
                     int LA5_0 = input.LA(1);
 
@@ -333,7 +334,7 @@ public class AlgebraicExpressionLexer extends Lexer {
                     }
                     switch (alt5) {
                         case 1 :
-                            // AlgebraicExpression.g:119:22: EXPONENT
+                            // AlgebraicExpression.g:127:22: EXPONENT
                             {
                             mEXPONENT(); 
 
@@ -346,10 +347,10 @@ public class AlgebraicExpressionLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // AlgebraicExpression.g:120:4: '.' ( DIGIT )+ ( EXPONENT )?
+                    // AlgebraicExpression.g:128:4: '.' ( DIGIT )+ ( EXPONENT )?
                     {
                     match('.'); 
-                    // AlgebraicExpression.g:120:8: ( DIGIT )+
+                    // AlgebraicExpression.g:128:8: ( DIGIT )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -363,7 +364,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // AlgebraicExpression.g:120:8: DIGIT
+                    	    // AlgebraicExpression.g:128:8: DIGIT
                     	    {
                     	    mDIGIT(); 
 
@@ -379,7 +380,7 @@ public class AlgebraicExpressionLexer extends Lexer {
                         cnt6++;
                     } while (true);
 
-                    // AlgebraicExpression.g:120:15: ( EXPONENT )?
+                    // AlgebraicExpression.g:128:15: ( EXPONENT )?
                     int alt7=2;
                     int LA7_0 = input.LA(1);
 
@@ -388,7 +389,7 @@ public class AlgebraicExpressionLexer extends Lexer {
                     }
                     switch (alt7) {
                         case 1 :
-                            // AlgebraicExpression.g:120:15: EXPONENT
+                            // AlgebraicExpression.g:128:15: EXPONENT
                             {
                             mEXPONENT(); 
 
@@ -401,9 +402,9 @@ public class AlgebraicExpressionLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // AlgebraicExpression.g:121:4: ( DIGIT )+ EXPONENT
+                    // AlgebraicExpression.g:129:4: ( DIGIT )+ EXPONENT
                     {
-                    // AlgebraicExpression.g:121:4: ( DIGIT )+
+                    // AlgebraicExpression.g:129:4: ( DIGIT )+
                     int cnt8=0;
                     loop8:
                     do {
@@ -417,7 +418,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // AlgebraicExpression.g:121:4: DIGIT
+                    	    // AlgebraicExpression.g:129:4: DIGIT
                     	    {
                     	    mDIGIT(); 
 
@@ -450,8 +451,8 @@ public class AlgebraicExpressionLexer extends Lexer {
     // $ANTLR start "EXPONENT"
     public final void mEXPONENT() throws RecognitionException {
         try {
-            // AlgebraicExpression.g:125:10: ( ( 'e' | 'E' ) ( PLUS | MINUS )? ( DIGIT )+ )
-            // AlgebraicExpression.g:125:12: ( 'e' | 'E' ) ( PLUS | MINUS )? ( DIGIT )+
+            // AlgebraicExpression.g:133:10: ( ( 'e' | 'E' ) ( PLUS | MINUS )? ( DIGIT )+ )
+            // AlgebraicExpression.g:133:12: ( 'e' | 'E' ) ( PLUS | MINUS )? ( DIGIT )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -462,7 +463,7 @@ public class AlgebraicExpressionLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // AlgebraicExpression.g:125:26: ( PLUS | MINUS )?
+            // AlgebraicExpression.g:133:26: ( PLUS | MINUS )?
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -488,7 +489,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
             }
 
-            // AlgebraicExpression.g:125:44: ( DIGIT )+
+            // AlgebraicExpression.g:133:44: ( DIGIT )+
             int cnt11=0;
             loop11:
             do {
@@ -502,7 +503,7 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                 switch (alt11) {
             	case 1 :
-            	    // AlgebraicExpression.g:125:44: DIGIT
+            	    // AlgebraicExpression.g:133:44: DIGIT
             	    {
             	    mDIGIT(); 
 
@@ -532,11 +533,11 @@ public class AlgebraicExpressionLexer extends Lexer {
         try {
             int _type = IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // AlgebraicExpression.g:127:12: ( LETTER ( LETTER | DIGIT )* )
-            // AlgebraicExpression.g:127:14: LETTER ( LETTER | DIGIT )*
+            // AlgebraicExpression.g:135:12: ( LETTER ( LETTER | DIGIT )* )
+            // AlgebraicExpression.g:135:14: LETTER ( LETTER | DIGIT )*
             {
             mLETTER(); 
-            // AlgebraicExpression.g:127:21: ( LETTER | DIGIT )*
+            // AlgebraicExpression.g:135:21: ( LETTER | DIGIT )*
             loop12:
             do {
                 int alt12=2;
@@ -585,10 +586,10 @@ public class AlgebraicExpressionLexer extends Lexer {
         try {
             int _type = WHITESPACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // AlgebraicExpression.g:129:12: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
-            // AlgebraicExpression.g:129:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            // AlgebraicExpression.g:137:12: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
+            // AlgebraicExpression.g:137:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
             {
-            // AlgebraicExpression.g:129:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            // AlgebraicExpression.g:137:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
             int cnt13=0;
             loop13:
             do {
@@ -641,8 +642,8 @@ public class AlgebraicExpressionLexer extends Lexer {
     // $ANTLR start "DIGIT"
     public final void mDIGIT() throws RecognitionException {
         try {
-            // AlgebraicExpression.g:131:16: ( '0' .. '9' )
-            // AlgebraicExpression.g:131:18: '0' .. '9'
+            // AlgebraicExpression.g:139:16: ( '0' .. '9' )
+            // AlgebraicExpression.g:139:18: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -657,7 +658,7 @@ public class AlgebraicExpressionLexer extends Lexer {
     // $ANTLR start "LETTER"
     public final void mLETTER() throws RecognitionException {
         try {
-            // AlgebraicExpression.g:135:2: ( 'A' .. 'Z' | 'a' .. 'z' | '_' )
+            // AlgebraicExpression.g:143:2: ( 'A' .. 'Z' | 'a' .. 'z' | '_' )
             // AlgebraicExpression.g:
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
@@ -678,9 +679,29 @@ public class AlgebraicExpressionLexer extends Lexer {
     }
     // $ANTLR end "LETTER"
 
+    // $ANTLR start "ERRCHAR"
+    public final void mERRCHAR() throws RecognitionException {
+        try {
+            int _type = ERRCHAR;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // AlgebraicExpression.g:148:9: ( . )
+            // AlgebraicExpression.g:148:11: .
+            {
+            matchAny(); 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "ERRCHAR"
+
     public void mTokens() throws RecognitionException {
-        // AlgebraicExpression.g:1:8: ( PLUS | MINUS | MULT | DIV | POW | LPAR | RPAR | DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | WHITESPACE )
-        int alt14=11;
+        // AlgebraicExpression.g:1:8: ( PLUS | MINUS | MULT | DIV | POW | LPAR | RPAR | DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | WHITESPACE | ERRCHAR )
+        int alt14=12;
         alt14 = dfa14.predict(input);
         switch (alt14) {
             case 1 :
@@ -760,6 +781,13 @@ public class AlgebraicExpressionLexer extends Lexer {
 
                 }
                 break;
+            case 12 :
+                // AlgebraicExpression.g:1:105: ERRCHAR
+                {
+                mERRCHAR(); 
+
+                }
+                break;
 
         }
 
@@ -818,26 +846,26 @@ public class AlgebraicExpressionLexer extends Lexer {
             this.transition = DFA9_transition;
         }
         public String getDescription() {
-            return "118:1: FLOATING_POINT_LITERAL : ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT );";
+            return "126:1: FLOATING_POINT_LITERAL : ( ( DIGIT )+ '.' ( DIGIT )* ( EXPONENT )? | '.' ( DIGIT )+ ( EXPONENT )? | ( DIGIT )+ EXPONENT );";
         }
     }
     static final String DFA14_eotS =
-        "\10\uffff\2\15\4\uffff\1\15";
+        "\10\uffff\2\25\1\15\14\uffff\1\25\2\uffff";
     static final String DFA14_eofS =
-        "\17\uffff";
+        "\32\uffff";
     static final String DFA14_minS =
-        "\1\11\7\uffff\2\56\4\uffff\1\56";
+        "\1\0\7\uffff\2\56\1\60\14\uffff\1\56\2\uffff";
     static final String DFA14_maxS =
-        "\1\172\7\uffff\2\145\4\uffff\1\145";
+        "\1\uffff\7\uffff\2\145\1\71\14\uffff\1\145\2\uffff";
     static final String DFA14_acceptS =
-        "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\2\uffff\1\11\1\12\1\13\1\10"+
-        "\1\uffff";
+        "\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\3\uffff\1\12\1\13\1\14\1\1"+
+        "\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\uffff\1\12\1\13";
     static final String DFA14_specialS =
-        "\17\uffff}>";
+        "\1\0\31\uffff}>";
     static final String[] DFA14_transitionS = {
-            "\2\14\1\uffff\2\14\22\uffff\1\14\7\uffff\1\6\1\7\1\3\1\1\1\uffff"+
-            "\1\2\1\12\1\4\1\10\11\11\7\uffff\32\13\3\uffff\1\5\1\13\1\uffff"+
-            "\32\13",
+            "\11\15\2\14\1\15\2\14\22\15\1\14\7\15\1\6\1\7\1\3\1\1\1\15\1"+
+            "\2\1\12\1\4\1\10\11\11\7\15\32\13\3\15\1\5\1\13\1\15\32\13\uff85"+
+            "\15",
             "",
             "",
             "",
@@ -845,13 +873,24 @@ public class AlgebraicExpressionLexer extends Lexer {
             "",
             "",
             "",
-            "\1\12\1\uffff\12\12\13\uffff\1\12\37\uffff\1\12",
-            "\1\12\1\uffff\12\16\13\uffff\1\12\37\uffff\1\12",
+            "\1\26\1\uffff\12\26\13\uffff\1\26\37\uffff\1\26",
+            "\1\26\1\uffff\12\27\13\uffff\1\26\37\uffff\1\26",
+            "\12\26",
             "",
             "",
             "",
             "",
-            "\1\12\1\uffff\12\16\13\uffff\1\12\37\uffff\1\12"
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\26\1\uffff\12\27\13\uffff\1\26\37\uffff\1\26",
+            "",
+            ""
     };
 
     static final short[] DFA14_eot = DFA.unpackEncodedString(DFA14_eotS);
@@ -884,7 +923,49 @@ public class AlgebraicExpressionLexer extends Lexer {
             this.transition = DFA14_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( PLUS | MINUS | MULT | DIV | POW | LPAR | RPAR | DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | WHITESPACE );";
+            return "1:1: Tokens : ( PLUS | MINUS | MULT | DIV | POW | LPAR | RPAR | DECIMAL_LITERAL | FLOATING_POINT_LITERAL | IDENTIFIER | WHITESPACE | ERRCHAR );";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            IntStream input = _input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 : 
+                        int LA14_0 = input.LA(1);
+
+                        s = -1;
+                        if ( (LA14_0=='+') ) {s = 1;}
+
+                        else if ( (LA14_0=='-') ) {s = 2;}
+
+                        else if ( (LA14_0=='*') ) {s = 3;}
+
+                        else if ( (LA14_0=='/') ) {s = 4;}
+
+                        else if ( (LA14_0=='^') ) {s = 5;}
+
+                        else if ( (LA14_0=='(') ) {s = 6;}
+
+                        else if ( (LA14_0==')') ) {s = 7;}
+
+                        else if ( (LA14_0=='0') ) {s = 8;}
+
+                        else if ( ((LA14_0>='1' && LA14_0<='9')) ) {s = 9;}
+
+                        else if ( (LA14_0=='.') ) {s = 10;}
+
+                        else if ( ((LA14_0>='A' && LA14_0<='Z')||LA14_0=='_'||(LA14_0>='a' && LA14_0<='z')) ) {s = 11;}
+
+                        else if ( ((LA14_0>='\t' && LA14_0<='\n')||(LA14_0>='\f' && LA14_0<='\r')||LA14_0==' ') ) {s = 12;}
+
+                        else if ( ((LA14_0>='\u0000' && LA14_0<='\b')||LA14_0=='\u000B'||(LA14_0>='\u000E' && LA14_0<='\u001F')||(LA14_0>='!' && LA14_0<='\'')||LA14_0==','||(LA14_0>=':' && LA14_0<='@')||(LA14_0>='[' && LA14_0<=']')||LA14_0=='`'||(LA14_0>='{' && LA14_0<='\uFFFF')) ) {s = 13;}
+
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 14, _s, input);
+            error(nvae);
+            throw nvae;
         }
     }
  

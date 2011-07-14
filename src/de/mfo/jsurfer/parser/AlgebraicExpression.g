@@ -58,10 +58,18 @@ package de.mfo.jsurfer.parser;
         throw new MismatchedTokenException(ttype, input);
     }
 
+    @Override
     public java.lang.Object recoverFromMismatchedSet( IntStream input, RecognitionException e, BitSet follow )
         throws RecognitionException
     {
         throw e;
+    }
+
+    @Override
+    protected Object recoverFromMismatchedToken( IntStream input, int ttype, BitSet follow )
+        throws RecognitionException
+    {
+        throw new MismatchedTokenException( ttype, input );
     }
 }
 
@@ -136,3 +144,5 @@ LETTER
 	|	'a'..'z'
 	|	'_'
 	;
+
+ERRCHAR : .;
