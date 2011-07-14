@@ -14,6 +14,7 @@ import java.util.*;
 public class BernsteinDescartesRootFinder implements RealRootFinder
 {
     boolean makeSquarefree;
+    public static final double EPSILON = 1e-6;
 
     class PolyInterval
     {
@@ -104,8 +105,8 @@ public class BernsteinDescartesRootFinder implements RealRootFinder
                 double[] first = pi.a;
                 double[] second = new double[ pi.a.length ];
                 deCasteljau( first, second );
-                if( second[ 0 ] == 0.0 || c == pi.l ) // terminate, if c is the root or if we have reached machine precision without any result
-                    return c;
+                if( second[ 0 ] == 0.0 || Math.abs( c - pi.l ) < EPSILON ) // terminate, if c is the root or if we have reached machine precision without any result
+                    return pi.l;
                 cand[ cand_length++ ] = new PolyInterval( second, c, pi.u );
                 
                 pi.u = c;
@@ -125,9 +126,8 @@ public class BernsteinDescartesRootFinder implements RealRootFinder
        
         assert fl * fu < 0.0 : "tried bisection on interval without sign change";
         
-        while( ( float ) center != old_center )
+        while( Math.abs( upperBound - lowerBound ) > EPSILON )
         {
-            old_center = ( float ) center;
             center = 0.5 * ( lowerBound + upperBound );
             double fc = a[ a.length - 1 ];
             for( int i = a.length - 2; i >= 0; i-- )
@@ -148,7 +148,7 @@ public class BernsteinDescartesRootFinder implements RealRootFinder
                 fl = fc;
             }
         }
-        return center;
+        return lowerBound;
     }
     
     private int countSignChanges( double[] a )
