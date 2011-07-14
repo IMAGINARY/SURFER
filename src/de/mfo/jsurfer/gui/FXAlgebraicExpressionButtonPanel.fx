@@ -409,6 +409,8 @@ public class FXAlgebraicExpressionButtonPanel
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=javafx.scene.effect.GaussianBlur{};
+            fxdLayoutFile.getNode("Button_Over_{s}").effect=javafx.scene.effect.GaussianBlur{};
+            fxdLayoutFile.getNode("Button_Pressed_{s}").effect=javafx.scene.effect.GaussianBlur{};
         }
         enabled=false;
         //caret.setBlinkRate(0);
@@ -436,6 +438,8 @@ public class FXAlgebraicExpressionButtonPanel
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=null;
+            fxdLayoutFile.getNode("Button_Over_{s}").effect=null;
+            fxdLayoutFile.getNode("Button_Pressed_{s}").effect=null;
         }
         enabled=true;
         //caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
