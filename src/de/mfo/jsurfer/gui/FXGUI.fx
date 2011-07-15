@@ -14,7 +14,7 @@ import java.lang.System;
 public class FXGUI extends javafx.scene.CustomNode
 {
     public var showImpressum:Boolean=false;
-    
+    public var realHeight:Number=bind fxdLayoutFile.layoutBounds.maxY*getScale(height,width);
 
     def fxdLayoutFile:javafx.fxd.FXDNode = javafx.fxd.FXDNode
 	{
@@ -212,7 +212,8 @@ public class FXGUI extends javafx.scene.CustomNode
 
 
 
-
+                        translateX: bind x
+                        translateY: bind y
                         content:
                         [
                             javafx.scene.Group

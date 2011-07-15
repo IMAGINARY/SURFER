@@ -10,7 +10,7 @@ package jfxsurfer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
-import java.lang.System;
+//import java.lang.System;
 
 var oldStageX = 0.0;
 var oldStageY = 0.0;
@@ -41,7 +41,7 @@ function toggleFullscreenKey(e:KeyEvent):Void
 javax.swing.UIManager.setLookAndFeel( javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
 
 def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
-                x: 0, y:0, width:bind scene.width, height:bind scene.height
+                x: 0, y:bind scene.height- GUI.realHeight, width:bind scene.width, height:bind scene.height
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
             }
@@ -66,11 +66,10 @@ var timeline = javafx.animation.Timeline
 {
     keyFrames: javafx.animation.KeyFrame
     {
-        time: 1m
+        time: 3.5m
         action: function()
         {
-            System.out.println("Time is up");
-            //renderer.repaintImage();
+            //System.out.println("Time is up");
             GUI.setScreenSaver();
         }
     }
@@ -84,7 +83,7 @@ function somethingHappend():Void
 
 var scene: Scene;
 def stage: Stage =Stage{
-    title: "First JavaFX Application"
+    title: "Surfer"
     fullScreen: true
     scene: scene = Scene {
         width: 192*4

@@ -14,8 +14,8 @@ import javafx.scene.CustomNode;
 public class FXGalleryChooser extends CustomNode
 {
     public-init var language: java.util.Locale;
-    public var x: Number;
-    public var y: Number;
+    //public var x: Number;
+    //public var y: Number;
     public var width: Number;
     public var height: Number;
     public var gallerys:de.mfo.jsurfer.gui.Gallery[];
@@ -26,7 +26,7 @@ public class FXGalleryChooser extends CustomNode
     {
         return javafx.scene.Group
         {
-            translateX: bind x translateY: bind y;
+            /*translateX: bind x*/ translateY: bind height/20;
             content:
             [
                 javafx.scene.layout.Stack
@@ -42,7 +42,7 @@ public class FXGalleryChooser extends CustomNode
                         javafx.scene.layout.VBox
                         {
                             padding: javafx.geometry.Insets { top: 4 right: 4 bottom: 4 left: 4}
-                            spacing: 4
+                            spacing: bind height/10
                             nodeHPos: javafx.geometry.HPos.CENTER
                             content: for (i in [0..n-1])createButton(i)
 
