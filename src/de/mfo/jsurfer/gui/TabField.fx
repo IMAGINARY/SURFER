@@ -318,7 +318,7 @@ public class TabField {
         //germanGalleryMini.surface=0;
         //englishGalleryChooser.gallery=0;
         //englishGalleryMini.surface=0;
-        pointerGallery=0;
+        pointerGallery=1;
         pointerSurface=0;
         setGalleryState();
     }
