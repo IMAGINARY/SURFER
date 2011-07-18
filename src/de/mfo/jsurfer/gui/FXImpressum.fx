@@ -30,6 +30,7 @@ public class FXImpressum  extends javafx.scene.CustomNode
                     url: "{__DIR__}Impressum_de.png"}
 
                     fitWidth:bind width
+                    fitHeight:bind height
                     preserveRatio: true
                     visible:bind (java.util.Locale.GERMAN==language)
                 },
@@ -39,6 +40,7 @@ public class FXImpressum  extends javafx.scene.CustomNode
                     url: "{__DIR__}Impressum_en.png"}
 
                     fitWidth:bind width
+                    fitHeight:bind height
                     preserveRatio: true
                     visible:bind (java.util.Locale.ENGLISH==language)
                 }

@@ -57,6 +57,7 @@ var impressum:de.mfo.jsurfer.gui.FXImpressum=de.mfo.jsurfer.gui.FXImpressum
 {
     width:bind scene.width,
     height:bind scene.height
+    translateY:bind scene.height- GUI.realHeight
     language: bind GUI.language
     visible: bind GUI.showImpressum
     onMouseClicked: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
