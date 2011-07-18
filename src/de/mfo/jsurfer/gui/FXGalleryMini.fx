@@ -66,7 +66,7 @@ public class FXGalleryMini extends CustomNode
                                     }
                                     javafx.scene.text.Text
                                     {
-                                        id: "FXGalleryChooser{gallery} {i}"
+                                        id: "FXGalleryChooser{language }{gallery} {i}"
                                         font: bind javafx.scene.text.Font.font
                                         (
                                             "Arial",
@@ -74,8 +74,9 @@ public class FXGalleryMini extends CustomNode
                                              ((width-3*5-2*20)/3*0.9)*0.4*0.25
                                         )
                                         content: "{gallerys[g].getEntries()[ i ].getName()}"
-                                        textAlignment:javafx.scene.text.TextAlignment.CENTER
-                                        translateX: bind ((width-3*5-2*20)/3*0.7-scene.lookup("FXGalleryChooser{gallery} {i}").boundsInLocal.width)/2
+                                        //content: "FXGalleryChooser|{language.getDisplayCountry() }|{gallery} {i}({java.util.Locale.GERMAN.getDisplayCountry()})({java.util.Locale.GERMAN})"
+                                        //textAlignment:javafx.scene.text.TextAlignment.CENTER
+                                        translateX: bind ((width-3*5-2*20)/3*0.7-scene.lookup("FXGalleryChooser{language}{gallery} {i}").boundsInLocal.width)/2
                                         //translateY: bind (height-4*5)/5*0.2
                                         //textOrigin: javafx.scene.text.TextOrigin.BASELINE
 
