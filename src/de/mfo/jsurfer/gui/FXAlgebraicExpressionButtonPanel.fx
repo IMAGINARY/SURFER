@@ -221,7 +221,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
             content: "Parameter" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
             translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
             visible: bind (language==java.util.Locale.GERMAN)
         };
@@ -229,7 +229,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
             content: "Parameter" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
             translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
             visible: bind (language==java.util.Locale.ENGLISH)
         };
@@ -239,7 +239,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
             content: "Rechenoperationen" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
             translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
             visible: bind (language==java.util.Locale.GERMAN)
         };
@@ -247,7 +247,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
             content: "Arithmetic operations" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
             translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
             visible: bind (language==java.util.Locale.ENGLISH)
         };
@@ -257,7 +257,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
             content: "Variablen" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
             translateY: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
             visible: bind (language==java.util.Locale.GERMAN)
         };
@@ -265,7 +265,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
             content: "Variables" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
+            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
             translateY: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
             visible: bind (language==java.util.Locale.ENGLISH)
         };
