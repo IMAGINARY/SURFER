@@ -21,25 +21,25 @@ public class FXSliders {
     var ParA:Number= bind surferPanel.a on replace
     {
         var value:Number=ParA;if (value<0)value=0;if (value>1)value=1;
-        fxdButtons.getNode("Slider_A_Knob").translateY = (1-value)*(max("A")-min("A"));
+        fxdButtons.getNode("Slider_A_Knob").translateY =fxdButtons.getNode("Slider_A_Knob").layoutBounds.height*0.25+ (1-value)*(max("A")-min("A"));
         textValueA.content="{ValueToString(value)}"
     };
     var ParB:Number=bind surferPanel.b  on replace
     {
         var value:Number=ParB;if (value<0)value=0;if (value>1)value=1;
-        fxdButtons.getNode("Slider_B_Knob").translateY = (1-value)*(max("B")-min("B"));
+        fxdButtons.getNode("Slider_B_Knob").translateY =fxdButtons.getNode("Slider_B_Knob").layoutBounds.height*0.25+ (1-value)*(max("B")-min("B"));
         textValueB.content="{ValueToString(value)}"
     };
     var ParC:Number=bind surferPanel.c  on replace
     {
         var value:Number=ParC;if (value<0)value=0;if (value>1)value=1;
-        fxdButtons.getNode("Slider_C_Knob").translateY = (1-value)*(max("C")-min("C"));
+        fxdButtons.getNode("Slider_C_Knob").translateY =fxdButtons.getNode("Slider_C_Knob").layoutBounds.height*0.25+ (1-value)*(max("C")-min("C"));
         textValueC.content="{ValueToString(value)}"
     };
     var ParD:Number=bind surferPanel.d  on replace
     {
         var value:Number=ParD;if (value<0)value=0;if (value>1)value=1;
-        fxdButtons.getNode("Slider_D_Knob").translateY = (1-value)*(max("D")-min("D"));
+        fxdButtons.getNode("Slider_D_Knob").translateY =fxdButtons.getNode("Slider_D_Knob").layoutBounds.height*0.25+ (1-value)*(max("D")-min("D"));
         textValueD.content="{ValueToString(value)}"
     };
     var ParAUse:Boolean = bind surferPanel.usedA on replace
@@ -61,7 +61,7 @@ public class FXSliders {
     }
     var zoomScale:Number=bind surferPanel.scale on replace
     {
-        fxdButtons.getNode("Slider_Zoom_Knob").translateY = (zoomScale)*(max("Zoom")-min("Zoom"));
+        fxdButtons.getNode("Slider_Zoom_Knob").translateY =fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.height*0.25+ (zoomScale)*(max("Zoom")-min("Zoom"));
         //"{ValueToString(zoomScale)}"
         //textValueZoom.content="{(javafx.util.Math.round((javafx.util.Math.pow(10,-zoomScale*4+2))*100) as Double)/100} x"
         textValueZoom.content="{ValueToString(javafx.util.Math.pow(10,-zoomScale*4+2))} x"
@@ -344,17 +344,17 @@ public class FXSliders {
     }
     function min(s:String):Number
     {
-        return fxdButtons.getNode("Slider_{s}_Shaft").layoutBounds.minY;//+fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height*0.5;
+        return fxdButtons.getNode("Slider_{s}_Shaft").layoutBounds.minY+fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height*0.25;
         //def max = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.height*0.5;
     }
     function max(s:String):Number
     {
-        return fxdButtons.getNode("Slider_{s}_Shaft").layoutBounds.maxY;//-fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height*0.5;
+        return fxdButtons.getNode("Slider_{s}_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height*0.25;
         //def max = fxdButtons.getNode("Slider_Zoom_Shaft").layoutBounds.maxY-fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.height*0.5;
     }
     function y(n:Number, s:String):Number
     {
-        return n*(1-fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height)-fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height*0.5;
+        return n*(1-fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height)-fxdButtons.getNode("Slider_{s}_Knob").layoutBounds.height*0.25;
     }
 
 
