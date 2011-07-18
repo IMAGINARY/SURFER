@@ -56,8 +56,8 @@ public class Gallery {
             //System.out.println( keys.nextElement() );
 
         this.number = number;
-        this.key = rb.getString( "gallery_" + number + "_key" );
-        this.name = rb.getString( key );
+        this.key = rb.getString( "gallery_" + number + "_key" ).trim();
+        this.name = rb.getString( key ).trim();
         this.iconURL = getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" );
         this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
 
@@ -202,7 +202,7 @@ public class Gallery {
                 throws IOException
         {
             this.key = key;
-            this.name = rb.getString( key );
+            this.name = rb.getString( key ).trim();
             this.iconURL = getResource( "gallery/" + key + "_icon.png" );
             this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
             this.jsurf_file_url = getResource( "gallery/" + key + ".jsurf" );
