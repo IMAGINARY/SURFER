@@ -206,7 +206,7 @@ public class FXAlgebraicExpressionButtonPanel
             System.out.println("English pressed");
         }
         //"Imprint"
-        fxdLayoutFile.getNode("Button_Imprint").onMouseClicked=function(e:javafx.scene.input.MouseEvent):Void
+        fxdLayoutFile.getNode("Button_Imprint").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
         {
             //timeline.playFromStart();
             showImpressum();

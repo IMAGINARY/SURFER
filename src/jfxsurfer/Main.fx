@@ -60,7 +60,7 @@ var impressum:de.mfo.jsurfer.gui.FXImpressum=de.mfo.jsurfer.gui.FXImpressum
     translateY:bind scene.height- GUI.realHeight
     language: bind GUI.language
     visible: bind GUI.showImpressum
-    onMouseClicked: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
+    onMousePressed: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
 }
 
 var timeline = javafx.animation.Timeline

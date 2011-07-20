@@ -184,6 +184,11 @@ public class TabField {
             surface:bind pointerSurface
             press:function(s:Integer):Void
             {
+
+                germanSurfaceInfo.gallery=pointerGallery;
+                germanSurfaceInfo.surface=s;
+                englishSurfaceInfo.gallery=pointerGallery;
+                englishSurfaceInfo.surface=s;
                 pointerSurface=s;
                 setInfoState();
                 loadSurface(germanGallerys[germanGalleryMini.gallery].getEntries()[ germanGalleryMini.surface ].getJSurfURL());
@@ -202,6 +207,10 @@ public class TabField {
             surface:bind pointerSurface
             press:function(s:Integer):Void
             {
+                germanSurfaceInfo.gallery=pointerGallery;
+                germanSurfaceInfo.surface=s;
+                englishSurfaceInfo.gallery=pointerGallery;
+                englishSurfaceInfo.surface=s;
                 pointerSurface=s;
                 setInfoState();
                 loadSurface(englishGallerys[englishGalleryMini.gallery].getEntries()[ englishGalleryMini.surface ].getJSurfURL());
@@ -229,8 +238,8 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:germanGallerys,
-            gallery:bind pointerGallery,
-            surface: bind pointerSurface
+            gallery:/*bind*/ pointerGallery,
+            surface:/* bind*/ pointerSurface
         };
         englishSurfaceInfo=FXSurfaceInfo
        {
@@ -239,8 +248,8 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:englishGallerys,
-            gallery:bind pointerGallery,
-            surface: bind pointerSurface
+            gallery:/*bind*/ pointerGallery,
+            surface:/* bind*/ pointerSurface
         };
         multiSurfaceInfo=LanguageSwitchNode
         {
