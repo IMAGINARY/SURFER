@@ -22,24 +22,24 @@ public class Camera {
     }
     
     private CameraType cameraType;
-    private float fovY;
-    private float height;
-    private Matrix4f transform;
+    private double fovY;
+    private double height;
+    private Matrix4d transform;
 
     public Camera()
     {
         this.cameraType = CameraType.ORTHOGRAPHIC_CAMERA;
-        this.fovY = 60.0f;
-        this.height = 2.0f;
-        this.transform = new Matrix4f();
+        this.fovY = 60.0;
+        this.height = 2.0;
+        this.transform = new Matrix4d();
         this.transform.setIdentity();
     }
     
-    public void lookAt( Point3f camPosition, Point3f pointOfInterest, Vector3f upVector )
+    public void lookAt( Point3d camPosition, Point3d pointOfInterest, Vector3d upVector )
     {
-        Vector3f x = new Vector3f();
-        Vector3f y = new Vector3f();
-        Vector3f z = new Vector3f();
+        Vector3d x = new Vector3d();
+        Vector3d y = new Vector3d();
+        Vector3d z = new Vector3d();
         
         z.sub( camPosition, pointOfInterest );
         z.normalize();
@@ -49,11 +49,11 @@ public class Camera {
         
         y.cross( z, x );
    
-        this.transform.setColumn( 0, new Vector4f( x ) );
-        this.transform.setColumn( 1, new Vector4f( y ) );
-        this.transform.setColumn( 2, new Vector4f( z ) );
+        this.transform.setColumn( 0, new Vector4d( x ) );
+        this.transform.setColumn( 1, new Vector4d( y ) );
+        this.transform.setColumn( 2, new Vector4d( z ) );
 
-        this.transform.setColumn( 3, new Vector4f( -camPosition.x, -camPosition.y, -camPosition.z, 1f ) );
+        this.transform.setColumn( 3, new Vector4d( -camPosition.x, -camPosition.y, -camPosition.z, 1f ) );
     }
     
     public void setCameraType( CameraType camType )
@@ -71,26 +71,26 @@ public class Camera {
         this.fovY = fovy;
     }
     
-    public float getFoVY()
+    public double getFoVY()
     {
         return this.fovY;
     }
     
-    public void setHeight( float height )
+    public void setHeight( double height )
     {
         this.height = height;
     }
     
-    public float getHeight()
+    public double getHeight()
     {
         return this.height;
     }
     
-    public Matrix4f getTransform()
+    public Matrix4d getTransform()
     {
         return this.transform;
     }
-    
+
     public Properties saveProperties( Properties props, String prefix, String suffix )
     {
         props.setProperty( prefix + "type" + suffix, cameraType.toString() );
@@ -108,14 +108,14 @@ public class Camera {
 
         String fov_y_key = prefix + "fov_y" + suffix;
         if( props.containsKey( fov_y_key ) )
-            fovY = Float.parseFloat( props.getProperty( fov_y_key ) );
+            fovY = Double.parseDouble( props.getProperty( fov_y_key ) );
 
         String height_key = prefix + "height" + suffix;
         if( props.containsKey( height_key ) )
-            height = Float.parseFloat( props.getProperty( height_key ) );
+            height = Double.parseDouble( props.getProperty( height_key ) );
 
         String transform_key = prefix + "transform" + suffix;
         if( props.containsKey( transform_key ) )
-            transform = BasicIO.fromMatrix4fString( props.getProperty( transform_key ) );
+            transform = BasicIO.fromMatrix4dString( props.getProperty( transform_key ) );
     }
 }

@@ -11,13 +11,13 @@ import java.util.*;
  *
  * @author Christian Stussak <christian at knorf.de>
  */
-public class ValueCalculator extends AbstractVisitor< Double, Void >
+public class ValueCalculator extends AbstractVisitor< java.lang.Double, Void >
 {
     private double x;
     private double y;
     private double z;
     
-    private Map< String, Double > dict;
+    private Map< String, java.lang.Double > dict;
     
     public ValueCalculator()
     {
@@ -30,7 +30,7 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
         this.y = y;
         this.z = z;
         
-        this.dict = new HashMap< String, Double >();
+        this.dict = new HashMap< String, java.lang.Double >();
     }
     
     public double getX()
@@ -78,7 +78,7 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
         }
         catch( NullPointerException npe )
         {
-            return Double.NaN;
+            return java.lang.Double.NaN;
         }
     }
 
@@ -92,37 +92,37 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
         this.dict.put( name, value );
     }
     
-    public Double visit( PolynomialAddition pa, Void param )
+    public java.lang.Double visit( PolynomialAddition pa, Void param )
     {
         return pa.firstOperand.accept( this, ( Void ) null ) + pa.secondOperand.accept( this, ( Void ) null );
     }
             
-    public Double visit( PolynomialSubtraction ps, Void param )
+    public java.lang.Double visit( PolynomialSubtraction ps, Void param )
     {
         return ps.firstOperand.accept( this, ( Void ) null ) - ps.secondOperand.accept( this, ( Void ) null );
     }
 
-    public Double visit( PolynomialMultiplication pm, Void param )
+    public java.lang.Double visit( PolynomialMultiplication pm, Void param )
     {
         return pm.firstOperand.accept( this, ( Void ) null ) * pm.secondOperand.accept( this, ( Void ) null );
     }
 
-    public Double visit( PolynomialPower pp, Void param )
+    public java.lang.Double visit( PolynomialPower pp, Void param )
     {
         return Math.pow( pp.base.accept( this, ( Void ) null ), ( double ) pp.exponent );
     }
 
-    public Double visit( PolynomialNegation pn, Void param )
+    public java.lang.Double visit( PolynomialNegation pn, Void param )
     {
         return -pn.operand.accept( this, ( Void ) null );
     }    
     
-    public Double visit( PolynomialDoubleDivision pdd, Void param )
+    public java.lang.Double visit( PolynomialDoubleDivision pdd, Void param )
     {
         return pdd.dividend.accept( this,( Void ) null ) / pdd.divisor.accept( this,( Void ) null );
     }
 
-    public Double visit( PolynomialVariable pv, Void param )
+    public java.lang.Double visit( PolynomialVariable pv, Void param )
     {
         switch( pv.variable )
         {
@@ -137,7 +137,7 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
         }
     }
     
-    public Double visit( DoubleBinaryOperation dbop, Void param )
+    public java.lang.Double visit( DoubleBinaryOperation dbop, Void param )
     {
         double firstOperand = dbop.firstOperand.accept( this, ( Void ) null );
         double secondOperand = dbop.secondOperand.accept( this, ( Void ) null );
@@ -161,7 +161,7 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
         }
     }
 
-    public Double visit( DoubleUnaryOperation duop, Void param )
+    public java.lang.Double visit( DoubleUnaryOperation duop, Void param )
     {
         double operand = duop.operand.accept( this, ( Void ) null );
         
@@ -200,15 +200,15 @@ public class ValueCalculator extends AbstractVisitor< Double, Void >
         }
     }
 
-    public Double visit( DoubleVariable dv, Void param )
+    public java.lang.Double visit( DoubleVariable dv, Void param )
     {
-        Double d = this.dict.get( dv.name );
+        java.lang.Double d = this.dict.get( dv.name );
         if( d == null )
             throw new UnsupportedOperationException( "no value has been assigned to parameter '" + dv.name + "'" );
         return d;
     }
     
-    public Double visit( DoubleValue dv, Void param )
+    public java.lang.Double visit( DoubleValue dv, Void param )
     {
         return dv.value;
     }

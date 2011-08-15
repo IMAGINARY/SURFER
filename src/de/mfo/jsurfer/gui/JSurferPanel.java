@@ -247,17 +247,17 @@ public class JSurferPanel extends JPanel
         LightSource[] lights = new LightSource[ AlgebraicSurfaceRenderer.MAX_LIGHTS ];
 
         lights[ 0 ] = new LightSource();
-        lights[ 0 ].setPosition( new Point3f( -100f, 100f, 100f ) );
+        lights[ 0 ].setPosition( new Point3d( -100f, 100f, 100f ) );
         lights[ 0 ].setIntensity( 0.5f );
         lights[ 0 ].setColor( new Color3f( 1f, 1f, 1f ) );
 
         lights[ 1 ] = new LightSource();
-        lights[ 1 ].setPosition( new Point3f( 100f, 100f, 100f ) );
+        lights[ 1 ].setPosition( new Point3d( 100f, 100f, 100f ) );
         lights[ 1 ].setIntensity( 0.7f );
         lights[ 1 ].setColor( new Color3f( 1f, 1f, 1f ) );
 
         lights[ 2 ] = new LightSource();
-        lights[ 2 ].setPosition( new Point3f( 0f, -100f, 100f ) );
+        lights[ 2 ].setPosition( new Point3d( 0f, -100f, 100f ) );
         lights[ 2 ].setIntensity( 0.3f );
         lights[ 2 ].setColor( new Color3f( 1f, 1f, 1f ) );
 

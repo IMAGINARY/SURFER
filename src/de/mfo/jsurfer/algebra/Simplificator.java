@@ -13,11 +13,11 @@ import java.util.*;
  */
 public class Simplificator extends AbstractVisitor< PolynomialOperation, Void >
 {
-    private Map< String, Double > dict;
+    private Map< String, java.lang.Double > dict;
 
     public Simplificator()
     {
-        this.dict = new HashMap< String, Double >();
+        this.dict = new HashMap< String, java.lang.Double >();
     }
 
     public double getParameterValue( String name )
@@ -30,7 +30,7 @@ public class Simplificator extends AbstractVisitor< PolynomialOperation, Void >
         return this.dict.keySet();
     }
 
-    public Set< Map.Entry< String, Double > > getKnownParameters()
+    public Set< Map.Entry< String, java.lang.Double > > getKnownParameters()
     {
         return this.dict.entrySet();
     }

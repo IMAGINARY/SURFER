@@ -35,7 +35,7 @@ public class SturmChainRootFinder2 implements RealRootFinder
      * @param upperBound
      * @return
      */
-    public double findFirstRootIn( UnivariatePolynomial p, double lowerBound, double upperBound ) { return Double.NaN; }
+    public double findFirstRootIn( UnivariatePolynomial p, double lowerBound, double upperBound ) { return java.lang.Double.NaN; }
     
 /*
  

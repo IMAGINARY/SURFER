@@ -18,14 +18,14 @@ public class LightSource {
     public enum Status { ON, OFF }
 
     private Status status;
-    private Point3f position;
+    private Point3d position;
     private Color3f color;
     private float intensity;
 
 
     public LightSource() {
         this.status = Status.ON;
-        this.position = new Point3f( 0.0f, 0.0f, 0.0f );
+        this.position = new Point3d( 0.0, 0.0, 0.0 );
         this.color = new Color3f( 1.0f, 1.0f, 1.0f );
         this.intensity = 1.0f;
     }
@@ -40,7 +40,7 @@ public class LightSource {
         return this.status;
     }
 
-    public void setPosition(Point3f position)
+    public void setPosition(Point3d position)
             throws NullPointerException {
         if (position == null) {
             throw new NullPointerException();
@@ -48,7 +48,7 @@ public class LightSource {
         this.position = position;
     }
 
-    public Point3f getPosition() {
+    public Point3d getPosition() {
         return position;
     }
 
@@ -89,7 +89,7 @@ public class LightSource {
 
         String position_key = prefix + "position" + suffix;
         if( props.containsKey( position_key ) )
-            position = BasicIO.fromPoint3fString( props.getProperty( position_key ) );
+            position = BasicIO.fromPoint3dString( props.getProperty( position_key ) );
 
         String color_key = prefix + "color" + suffix;
         if( props.containsKey( color_key ) )

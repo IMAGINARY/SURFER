@@ -11,6 +11,15 @@ package de.mfo.jsurfer.algebra;
  */
 public class UnivariatePolynomial {
 
+    public static final UnivariatePolynomial ZERO;
+    public static final UnivariatePolynomial ONE;
+
+    static
+    {
+        ZERO = new UnivariatePolynomial( 0.0 );
+        ONE = new UnivariatePolynomial( 1.0 );
+    }
+
     private double[] a;
     private int degree;
     
@@ -29,20 +38,54 @@ public class UnivariatePolynomial {
 
     public UnivariatePolynomial( double[] coeffs, boolean copy )
     {
-        this.setCoeffs( coeffs, copy );
+        if( copy )
+        {
+            this.a = new double[ coeffs.length ];
+            System.arraycopy( coeffs, 0, this.a, 0, coeffs.length );
+        }
+        else
+        {
+            this.a = coeffs;
+        }
+        this.degree = coeffs.length - 1;
     }
     
     public UnivariatePolynomial( UnivariatePolynomial p )
     {
         this.setCoeffs( p.a, true );
     }
+
+    private UnivariatePolynomial( int degree, double[] coeffs )
+    {
+        this.a = new double[ degree + 1 ];
+        System.arraycopy( coeffs, 0, this.a, 0, this.a.length );
+        this.degree = degree;
+    }
+
+    public boolean isZero()
+    {
+        for( double c : a )
+            if( c != 0.0 )
+                return false;
+        return true;
+    }
+
+    public boolean isOne()
+    {
+        if( a[ 0 ] != 1.0 )
+            return false;
+        for( int i = a.length - 1; i > 0; --i )
+            if( a[ i ] != 0.0 )
+                return false;
+        return true;
+    }
     
-    public void setCoeff( int which, double value )
+    private void setCoeff( int which, double value )
     {
         this.a[ which ] = value;
     }
 
-    public void setCoeffs( double[] coeffs, boolean copy )
+    private void setCoeffs( double[] coeffs, boolean copy )
     {
         if( copy )
         {
@@ -81,7 +124,7 @@ public class UnivariatePolynomial {
         return result;
     }
     
-    public UnivariatePolynomial add( UnivariatePolynomial p    )
+    public UnivariatePolynomial add( UnivariatePolynomial p )
     {
         UnivariatePolynomial result;
         UnivariatePolynomial summand;
@@ -97,63 +140,255 @@ public class UnivariatePolynomial {
         }
         for( int i = 0; i < summand.a.length; i++ )
                 result.a[ i ] += summand.a[ i ];
-        return result;
+        return result.compact();
     }
 
-    public UnivariatePolynomial sub( UnivariatePolynomial p    )
+    public UnivariatePolynomial add( double d )
     {
-        return this.add( p.neg() );
+        if( d == 0.0 )
+            return this;
+        UnivariatePolynomial result = new UnivariatePolynomial( this );
+        result.a[ 0 ] += d;
+        return result.compact();
     }
-    
-    public UnivariatePolynomial mult( UnivariatePolynomial p    )
+
+    public UnivariatePolynomial sub( UnivariatePolynomial p )
     {
-        UnivariatePolynomial result = new UnivariatePolynomial( this.degree + p.degree );
-        for( int i = 0; i < this.a.length; i++ )
-            for( int j = 0; j < p.a.length; j++ )
-                result.a[ i + j ] += this.a[ i ] * p.a[ j ];
-        return result;
+        return this.add( p.neg() ).compact();
+    }
+
+    public UnivariatePolynomial sub( double d )
+    {
+        if( d == 0.0 )
+            return this;
+        else
+            return this.add( -d );
+    }
+
+    UnivariatePolynomial mult( UnivariatePolynomial p, int min_degree )
+    {
+        if( p.degree == 1 )
+        {
+            UnivariatePolynomial result = new UnivariatePolynomial( Math.max( this.degree + p.degree, min_degree + 1 ) );
+            result.a[ 0 ] = this.a[ 0 ] * p.a[ 0 ];
+            for( int i = 1; i < result.a.length - 1; i++ )
+                result.a[ i ] = this.a[ i ] * p.a[ 0 ] + this.a[ i - 1 ] * p.a[ 1 ];
+            result.a[ result.a.length - 1 ] = this.a[ this.degree ] * p.a[ 1 ];
+            return result.compact();
+        }
+        else if( this.degree == 1 )
+        {
+            return p.mult( this, min_degree );
+        }
+        else
+        {
+            UnivariatePolynomial result = new UnivariatePolynomial( Math.max( this.degree + p.degree, min_degree + 1 ) );
+            for( int i = 0; i < this.a.length; i++ )
+                for( int j = 0; j < p.a.length; j++ )
+                    result.a[ i + j ] += this.a[ i ] * p.a[ j ];
+            return result.compact();
+        }
+    }
+
+    public UnivariatePolynomial mult( UnivariatePolynomial p )
+    {
+        if( p.isOne() || this.isZero() )
+            return this;
+        else if( p.isZero() || this.isOne() )
+            return p;
+        else
+            return this.mult( p, 0 );
     }
     
     public UnivariatePolynomial mult( double d )
     {
-        UnivariatePolynomial result = new UnivariatePolynomial( this.degree );
-        for( int i = 0; i < this.a.length; i++ )
-            result.a[ i ] = this.a[ i ] * d;
+        if( d == 0.0 )
+            return ZERO;
+        else if( d == 1.0 )
+            return this;
+        else
+        {
+            UnivariatePolynomial result = new UnivariatePolynomial( this.degree );
+            for( int i = 0; i < this.a.length; i++ )
+                result.a[ i ] = this.a[ i ] * d;
+            return result.compact();
+        }
+    }
+
+    public UnivariatePolynomial mult_add( UnivariatePolynomial factor, double summand )
+    {
+        UnivariatePolynomial result = this.mult( factor );
+        result.a[ 0 ] += summand;
         return result;
-    }    
+    }
+
+    public UnivariatePolynomial mult_add( UnivariatePolynomial factor, UnivariatePolynomial summand )
+    {
+        if( factor.isOne() || this.isZero() )
+            return this.add( summand );
+        else if( factor.isZero() || this.isOne() )
+            return factor.add( summand );
+        else
+        {
+            UnivariatePolynomial result = this.mult( factor, summand.degree );
+            for( int i = 0; i <= summand.degree; ++i )
+                result.a[ i ] += summand.a[ i ];
+            return result;
+       }
+    }
+
+    public UnivariatePolynomial add_mult( double summand, UnivariatePolynomial factor )
+    {
+        if( factor.isOne() )
+            return this.add( summand );
+        else if( factor.isZero() )
+            return ZERO;
+        else
+        {
+            UnivariatePolynomial result = new UnivariatePolynomial( this.degree + factor.degree );
+            double tmp = this.a[ 0 ] + summand;
+            for( int j = 0; j < factor.a.length; j++ )
+                result.a[ 0 + j ] += tmp * factor.a[ j ];
+            for( int i = 1; i < this.a.length; i++ )
+                for( int j = 0; j < factor.a.length; j++ )
+                    result.a[ i + j ] += this.a[ i ] * factor.a[ j ];
+            return result.compact();
+        }
+    }
 
     public UnivariatePolynomial pow( int exp )
     {
         if( exp == 0 )
         {
-            return new UnivariatePolynomial( 1.0 );
+            return ONE;
+        }
+        else if( exp == 1 )
+        {
+            return this;
         }
         else
         {
-            UnivariatePolynomial result = this;
-            UnivariatePolynomial x = this;
-            
-            exp--;
-            while( exp > 0 )
+            if( this.degree == 1 )
             {
-                if( ( exp & 1 ) == 1 )
+                double a0 = a[ 0 ];
+                double a1 = a[ 1 ];
+                double[] powers_0 = new double[ exp + 1 ];
+                double[] powers_1 = new double[ exp + 1 ];
+                powers_0[ 0 ] = 1.0;
+                powers_0[ 1 ] = a0;
+                powers_1[ 0 ] = 1.0;
+                powers_1[ 1 ] = a1;
+                for( int i = 2; i <= exp; i++ )
                 {
-                    result = result.mult( x );
-                    exp--;
+                        powers_0[ i ] = powers_0[ i - 1 ] * a0;
+                        powers_1[ i ] = powers_1[ i - 1 ] * a1;
                 }
-                x = x.mult( x );
-                exp /= 2;
+
+                // compute coefficients of polynomials by binomial expansion
+                UnivariatePolynomial res = new UnivariatePolynomial( exp );
+                int a1_exp = exp;
+                int a0_exp = 0;
+                long bin_coeff = 1;
+                for( int deg = exp; deg >= 0; deg-- )
+                {
+                        res.a[ deg ] = ( ( double ) bin_coeff ) * powers_1[ a1_exp ] * powers_0[ a0_exp ];
+                        a0_exp++;
+                        bin_coeff = ( bin_coeff * a1_exp ) / a0_exp;
+                        a1_exp--;
+                }
+                return new UnivariatePolynomial( res );
             }
-            return result;
+            else
+            {
+                UnivariatePolynomial result = this;
+                UnivariatePolynomial x = this;
+
+                exp--;
+                while( exp > 0 )
+                {
+                    if( ( exp & 1 ) == 1 )
+                    {
+                        result = result.mult( x );
+                        exp--;
+                    }
+                    x = x.mult( x );
+                    exp /= 2;
+                }
+                return result.compact();
+            }
         }
     }
-    
+
+    public UnivariatePolynomial pow( int exp, UnivariatePolynomial[] cache )
+    {
+        if( cache[ exp ] == null )
+        {
+            if (exp == 0)
+            {
+                cache[ exp ] = ONE;
+            }
+            else if( exp == 1 )
+            {
+                cache[ exp ] = this;
+            }
+            else
+            {
+                if( false && this.degree == 1 )
+                {
+                    double a0 = a[ 0 ];
+                    double a1 = a[ 1 ];
+                    double[] powers_0 = new double[ exp + 1 ];
+                    double[] powers_1 = new double[ exp + 1 ];
+                    powers_0[ 0 ] = 1.0;
+                    powers_0[ 1 ] = a0;
+                    powers_1[ 0 ] = 1.0;
+                    powers_1[ 1 ] = a1;
+                    for( int i = 2; i <= exp; i++ )
+                    {
+                            powers_0[ i ] = powers_0[ i - 1 ] * a0;
+                            powers_1[ i ] = powers_1[ i - 1 ] * a1;
+                    }
+
+                    // compute coefficients of polynomials by binomial expansion
+                    UnivariatePolynomial res = new UnivariatePolynomial( exp );
+                    int a1_exp = exp;
+                    int a0_exp = 0;
+                    long bin_coeff = 1;
+                    for( int deg = exp; deg >= 0; deg-- )
+                    {
+                            res.a[ deg ] = ( ( double ) bin_coeff ) * powers_1[ a1_exp ] * powers_0[ a0_exp ];
+                            a0_exp++;
+                            bin_coeff = ( bin_coeff * a1_exp ) / a0_exp;
+                            a1_exp--;
+                    }
+                    return new UnivariatePolynomial( res );
+                }
+                else
+                {
+                    UnivariatePolynomial sqrt = pow( exp / 2, cache );
+                    cache[ exp ] = sqrt.mult( sqrt );
+                    if( ( exp & 1 ) == 1 )
+                        cache[ exp ] = cache[ exp ].mult( this );
+                }
+            }
+        }
+        return cache[ exp ];
+    }
+
+    public UnivariatePolynomial substitute( UnivariatePolynomial xPoly )
+    {
+        UnivariatePolynomial result = new UnivariatePolynomial( a[ a.length - 1 ] );
+        for( int i = a.length - 2; i >= 0; --i )
+            result = result.mult( xPoly ).add( a[ i ] );
+        return result;
+    }
+
     public UnivariatePolynomial div( double d )
     {
         UnivariatePolynomial result = new UnivariatePolynomial( this );
         for( int i = 0; i < result.a.length; i++ )
             result.a[ i ] = result.a[ i ] / d;
-        return result;
+        return result.compact();
     }
 
     private double[] _reduce(double[] a, int degA, double[] b, int degB) {
@@ -203,19 +438,29 @@ public class UnivariatePolynomial {
     
     public UnivariatePolynomial mod( UnivariatePolynomial other )
     {
-        return new UnivariatePolynomial( _mod( this.a, degree(), other.a, other.degree() ), false );
+        return new UnivariatePolynomial( _mod( this.a, degree(), other.a, other.degree() ), false ).compact();
     }
     
     public UnivariatePolynomial div( UnivariatePolynomial other) {
-        return new UnivariatePolynomial( _reduce( this.a, degree(), other.a, other.degree() ), false );
+        return new UnivariatePolynomial( _reduce( this.a, degree(), other.a, other.degree() ), false ).compact();
     }
     
     public double evaluateAt( double where )
     {
-        double result = this.a[ this.a.length - 1 ];
-        for( int i = this.a.length - 2; i >= 0; i-- )
-            result = result * where + this.a[ i ];
-        return result;
+        if( Math.abs( where ) <= 1.0 )
+        {
+            double result = this.a[ this.a.length - 1 ];
+            for( int i = this.a.length - 2; i >= 0; i-- )
+                result = result * where + this.a[ i ];
+            return result;
+        }
+        else
+        {
+            double result = this.a[ 0 ];
+            for( int i = 1; i < this.a.length; i++ )
+                result = result / where + this.a[ i ];
+            return result * Math.pow( where, this.a.length - 1 );
+        }
     }
 
     public UnivariatePolynomial shrink()
@@ -330,7 +575,7 @@ public class UnivariatePolynomial {
         double[] hornerCoeffs = new double[ this.a.length ];
         System.arraycopy( this.a , 0, hornerCoeffs, 0, this.a.length );
         
-        double lastNonZeroCoeff = Double.NaN;
+        double lastNonZeroCoeff = java.lang.Double.NaN;
         for( int i = 1; i <= this.a.length; i++ )
         {
             for( int j = hornerCoeffs.length - 2; j >= i - 1; j-- )
@@ -355,7 +600,7 @@ public class UnivariatePolynomial {
         for( int i = 0; i < this.a.length; i++ )
             hornerCoeffs[ i ] = this.a[ this.a.length - i - 1 ];
         
-        double lastNonZeroCoeff = Double.NaN;
+        double lastNonZeroCoeff = java.lang.Double.NaN;
         for( int i = 1; i <= this.a.length; i++ )
         {
             for( int j = hornerCoeffs.length - 2; j >= i - 1; j-- )
@@ -493,12 +738,19 @@ public class UnivariatePolynomial {
         }
         return 1.0 / rootBound;
     }
-    
+
+    @Override
     public String toString()
     {
-        return java.util.Arrays.toString( this.a );
+        String s = "" + a[ 0 ];
+        for( int i = 1; i < a.length; ++i )
+            if( a[ i ] < 0.0 )
+                s = s + "-" + (-a[ i ] ) + "x" + ( i == 1 ? "" : "^" + i );
+            else
+                s = s + "+" + a[ i ] + "x" + ( i == 1 ? "" : "^" + i );
+        return s;
     }
-    
+
     public static UnivariatePolynomial fromRealRoots( double ... roots )
     {
         UnivariatePolynomial result = new UnivariatePolynomial( 1.0 );
@@ -517,4 +769,12 @@ public class UnivariatePolynomial {
         }
         return a;
     }
+
+    // returns either this or a new polynomial with the leading zero coefficients removed
+    UnivariatePolynomial compact()
+    {
+        int newDegree = degree;
+        for( ; newDegree > 0 && a[ newDegree ] == 0.0; --newDegree ) { /* just find the true degree */ }
+        return newDegree == degree ? this : new UnivariatePolynomial( newDegree, a );
+    }    
 }

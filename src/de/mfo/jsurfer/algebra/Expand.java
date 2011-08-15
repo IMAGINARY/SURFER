@@ -21,8 +21,7 @@ public class Expand extends AbstractVisitor< XYZPolynomial, Void >
     public XYZPolynomial visit( PolynomialAddition pa, Void param )
     {
         XYZPolynomial first = pa.firstOperand.accept( this,( Void ) null );
-        XYZPolynomial second = pa.secondOperand.accept( this,( Void ) null );
-        
+        XYZPolynomial second = pa.secondOperand.accept( this,( Void ) null );        
         return first.add( second );
     }
     
@@ -66,11 +65,11 @@ public class Expand extends AbstractVisitor< XYZPolynomial, Void >
         switch( pv.variable )
         {
             case x:
-                return new XYZPolynomial( new XYZPolynomial.Term( 1.0, 1, 0, 0 ) );
+                return XYZPolynomial.X;
             case y:
-                return new XYZPolynomial( new XYZPolynomial.Term( 1.0, 0, 1, 0 ) );
+                return XYZPolynomial.Y;
             case z:
-                return new XYZPolynomial( new XYZPolynomial.Term( 1.0, 0, 0, 1 ) );
+                return XYZPolynomial.Z;
             default:
                 throw new UnsupportedOperationException();                
         }

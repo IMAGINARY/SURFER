@@ -15,19 +15,19 @@ import javax.vecmath.*;
 public class RotateSphericalDragger
 {
     Point lastLocation;
-    Matrix4f rotation;
-    float xSpeed;
-    float ySpeed;
+    Matrix4d rotation;
+    double xSpeed;
+    double ySpeed;
     
     public RotateSphericalDragger()
     {
-        this( 1f, 1f );
+        this( 1, 1 );
     }
     
-    public RotateSphericalDragger( float xSpeed, float ySpeed )
+    public RotateSphericalDragger( double xSpeed, double ySpeed )
     {
         lastLocation = new Point();
-        rotation = new Matrix4f();
+        rotation = new Matrix4d();
         rotation.setIdentity();
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
@@ -40,16 +40,16 @@ public class RotateSphericalDragger
     
     public void dragTo( Point p )
     {
-        float xAngle = -( lastLocation.x - p.x ) * xSpeed;
-        float yAngle = ( lastLocation.y - p.y ) * ySpeed;
+        double xAngle = -( lastLocation.x - p.x ) * xSpeed;
+        double yAngle = ( lastLocation.y - p.y ) * ySpeed;
         
-        Matrix4f rotX = new Matrix4f();
+        Matrix4d rotX = new Matrix4d();
         rotX.setIdentity();
-        rotX.rotX( ( float ) ( Math.PI / 180.0 ) * yAngle );
+        rotX.rotX( ( Math.PI / 180.0 ) * yAngle );
 
-        Matrix4f rotY = new Matrix4f();
+        Matrix4d rotY = new Matrix4d();
         rotY.setIdentity();
-        rotY.rotY( ( float ) ( Math.PI / 180.0 ) * xAngle );
+        rotY.rotY( ( Math.PI / 180.0 ) * xAngle );
         
         rotation.mul( rotX );
         rotation.mul( rotY );
@@ -57,32 +57,32 @@ public class RotateSphericalDragger
         lastLocation = new Point( p );
     }
     
-    public Matrix4f getRotation()
+    public Matrix4d getRotation()
     {
-        return new Matrix4f( rotation );
+        return new Matrix4d( rotation );
     }
     
-    public void setRotation( Matrix4f m )
+    public void setRotation( Matrix4d m )
     {
-        rotation = new Matrix4f( m );
+        rotation = new Matrix4d( m );
     }
     
-    public float getXSpeed()
+    public double getXSpeed()
     {
         return xSpeed;
     }
     
-    public void setXSpeed( float xSpeed )
+    public void setXSpeed( double xSpeed )
     {
         this.xSpeed = xSpeed;
     }
     
-    public float getYSpeed()
+    public double getYSpeed()
     {
         return ySpeed;
     }
     
-    public void setYSpeed( float ySpeed )
+    public void setYSpeed( double ySpeed )
     {
         this.ySpeed = ySpeed;
     }

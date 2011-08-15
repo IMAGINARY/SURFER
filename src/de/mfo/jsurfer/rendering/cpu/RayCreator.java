@@ -13,28 +13,28 @@ import de.mfo.jsurfer.algebra.*;
  *
  * @author Christian Stussak <christian at knorf.de>
  */
-abstract class RayCreator
+public abstract class RayCreator
 {
-    private Matrix4f surfaceTransform_x_modelViewInverseMatrix;
-    private Matrix4f modelViewInverseMatrix;
-    private Matrix4f modelView_x_surfaceTransformInverseMatrix;
-    
-    RayCreator( Matrix4f transformMatrix, Matrix4f surfaceTransformMatrix, Camera cam )
-    {
-        Matrix4f modelViewMatrix = new Matrix4f( cam.getTransform() );
-        modelViewMatrix.mul( transformMatrix );
-        modelViewInverseMatrix = new Matrix4f( modelViewMatrix );
-        modelViewInverseMatrix.invert();
+    Matrix4d cameraSpaceToSurfaceSpaceMatrix;
+    Matrix4d cameraSpaceToClippingSpaceMatrix;
+    Matrix4d surfaceSpaceNormalToCameraSpaceNormalMatrix;
 
-        surfaceTransform_x_modelViewInverseMatrix = new Matrix4f( surfaceTransformMatrix );
-        surfaceTransform_x_modelViewInverseMatrix.mul( modelViewInverseMatrix );
-        Matrix4f surfaceTransformInverseMatrix = new Matrix4f( surfaceTransformMatrix );
-        surfaceTransformInverseMatrix.invert();
-        modelView_x_surfaceTransformInverseMatrix = new Matrix4f( modelViewMatrix );
-        modelView_x_surfaceTransformInverseMatrix.mul( surfaceTransformInverseMatrix );
+    RayCreator( Matrix4d transformMatrix, Matrix4d surfaceTransformMatrix, Camera cam )
+    {
+        Matrix4d c_i = new Matrix4d( cam.getTransform() );
+        c_i.invert();
+
+        cameraSpaceToClippingSpaceMatrix = new Matrix4d( transformMatrix );
+        cameraSpaceToClippingSpaceMatrix.mul( c_i );
+
+        cameraSpaceToSurfaceSpaceMatrix = new Matrix4d( surfaceTransformMatrix );
+        cameraSpaceToSurfaceSpaceMatrix.mul( cameraSpaceToClippingSpaceMatrix );
+
+        surfaceSpaceNormalToCameraSpaceNormalMatrix = new Matrix4d( cameraSpaceToSurfaceSpaceMatrix );
+        surfaceSpaceNormalToCameraSpaceNormalMatrix.invert();
     }
-    
-    public static RayCreator createRayCreator( Matrix4f transformMatrix, Matrix4f surfaceTransformMatrix, Camera cam, int width, int height )
+
+    public static RayCreator createRayCreator( Matrix4d transformMatrix, Matrix4d surfaceTransformMatrix, Camera cam, int width, int height )
     {
         switch( cam.getCameraType() )
         {
@@ -46,49 +46,89 @@ abstract class RayCreator
                 throw new UnsupportedOperationException();
         }
     }
-    
-    public Vector3f cameraSpaceToSurfaceSpace( Vector3f v )
+
+    public Vector3d cameraSpaceToSurfaceSpace( Vector3d v )
     {
-        Vector4f t_v = new Vector4f( v );
-        surfaceTransform_x_modelViewInverseMatrix.transform( t_v );
-        return new Vector3f( t_v.x, t_v.y, t_v.z );
+        Vector4d t_v = new Vector4d( v );
+        cameraSpaceToSurfaceSpaceMatrix.transform( t_v );
+        return new Vector3d( t_v.x, t_v.y, t_v.z );
     }
 
-    public Point3f cameraSpaceToSurfaceSpace( Point3f p )
+
+    public Point3d cameraSpaceToSurfaceSpace( Point3d p )
     {
-        Point3f t_p = new Point3f( p );
-        surfaceTransform_x_modelViewInverseMatrix.transform( t_p );
+        Point3d t_p = new Point3d( p );
+        cameraSpaceToSurfaceSpaceMatrix.transform( t_p );
         return t_p;
     }
 
-    public Vector3f cameraSpaceToClippingSpace( Vector3f v )
+    public Vector3d cameraSpaceToClippingSpace( Vector3d v )
     {
-        Vector4f t_v = new Vector4f( v );
-        modelViewInverseMatrix.transform( t_v );
-        return new Vector3f( t_v.x, t_v.y, t_v.z );
+        Vector4d t_v = new Vector4d( v );
+        cameraSpaceToClippingSpaceMatrix.transform( t_v );
+        return new Vector3d( t_v.x, t_v.y, t_v.z );
     }
 
-    public Point3f cameraSpaceToClippingSpace( Point3f p )
+    public Point3d cameraSpaceToClippingSpace( Point3d p )
     {
-        Point3f t_p = new Point3f( p );
-        modelViewInverseMatrix.transform( t_p );
+        Point3d t_p = new Point3d( p );
+        cameraSpaceToClippingSpaceMatrix.transform( t_p );
         return t_p;
     }
-    
-    public Vector3f surfaceSpaceNormalToCameraSpaceNormal( Vector3f n )
+
+    public Vector3d surfaceSpaceNormalToCameraSpaceNormal( Vector3d n )
     {
-        Vector3f t_n = new Vector3f( n );
-        modelView_x_surfaceTransformInverseMatrix.transform( t_n );
+        Vector3d t_n = new Vector3d( n );
+        surfaceSpaceNormalToCameraSpaceNormalMatrix.transform( t_n );
         return t_n;
     }
-    
-    public abstract Ray createCameraSpaceRay( float u, float v );
-    public abstract Ray createSurfaceSpaceRay( float u, float v );
-    public abstract Ray createClippingSpaceRay( float u, float v );
 
-    public abstract float getEyeLocation();
-    
+    public abstract Ray createCameraSpaceRay( double u, double v );
+    public abstract Ray createSurfaceSpaceRay( double u, double v );
+    public abstract Ray createClippingSpaceRay( double u, double v );
+
+    public abstract double getEyeLocationOnRay();
+
     public abstract PolynomialOperation getXForSomeA();
     public abstract PolynomialOperation getYForSomeA();
-    public abstract PolynomialOperation getZForSomeA();    
+    public abstract PolynomialOperation getZForSomeA();
+
+    // get the intervals, for which u and v are in the viewport
+    public abstract Vector2d getUInterval();
+    public abstract Vector2d getVInterval();
+    
+    // transform (u,v) \in [0,1]^2 into local viewport coordinates
+    public abstract double transformU( double u );
+    public abstract double transformV( double v );
+
+    public static void decomposeTRS( Matrix4d A, Matrix4d T, Matrix4d R, Matrix4d S )
+    {
+        assert A.m03 == 0.0 && A.m13 == 0.0 && A.m23 == 0.0 : "projective transformations are currently not supported";
+
+        AffineDecomposition.AffineParts ap = AffineDecomposition.decompAffine( A );
+
+        T.setIdentity();
+        T.setTranslation( ap.t );
+
+        R.setIdentity();
+        R.setRotation( ap.q );
+
+        S.setIdentity();
+        S.setM00( ap.k.x );
+        S.setM11( ap.k.y );
+        S.setM22( ap.k.z );
+
+        {
+            Matrix4d stretch_rotation = new Matrix4d();
+            stretch_rotation.setIdentity();
+            stretch_rotation.setRotation( ap.u );
+
+            Matrix4d rotated_stretch = new Matrix4d( stretch_rotation );
+            rotated_stretch.mul( S );
+            stretch_rotation.transpose();
+            rotated_stretch.mul( stretch_rotation );
+
+            assert S.epsilonEquals( rotated_stretch, 1e-10 ) : "shear transformations are currently not supported";
+        }
+    }
 }

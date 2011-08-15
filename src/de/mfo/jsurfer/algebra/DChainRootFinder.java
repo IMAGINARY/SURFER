@@ -40,16 +40,16 @@ public class DChainRootFinder implements RealRootFinder
         switch( p.degree() )
         {
             case 0:
-                return Double.NaN;
+                return java.lang.Double.NaN;
             case 1:
             {
                 double[] roots = _solveLinear( p.getCoeff( 0 ), p.getCoeff( 1 ), lowerBound, upperBound );
-                return roots.length > 0 ? roots[ 0 ] : Double.NaN;
+                return roots.length > 0 ? roots[ 0 ] : java.lang.Double.NaN;
             }
             case 2:
             {
                 double[] roots = _solveQuadratic( p.getCoeff( 0 ), p.getCoeff( 1 ), p.getCoeff( 2 ), lowerBound, upperBound );
-                return roots.length > 0 ? roots[ 0 ] : Double.NaN;
+                return roots.length > 0 ? roots[ 0 ] : java.lang.Double.NaN;
             }
             default:
             {
@@ -62,7 +62,7 @@ public class DChainRootFinder implements RealRootFinder
                 if( _findFirstRootIn( searchStruct, searchStruct.length - 1, upperBound, upperBound, root ) )
                     return root[ 0 ];
                 else
-                    return Double.NaN;
+                    return java.lang.Double.NaN;
  
 //                // another possibility: calculate all roots in interval and choose smallest
 //                double[] roots = findAllRootsIn( p, lowerBound, upperBound );
@@ -74,14 +74,14 @@ public class DChainRootFinder implements RealRootFinder
     private boolean _findFirstRootIn( SearchStruct[] searchStructs, int startWith, double searchUpperBound, double largestPossibleRoot, double[] root )
     {
         SearchStruct ss = searchStructs[ startWith ];
-        double divider = Double.NaN;
+        double divider = java.lang.Double.NaN;
         
         // calculate root of current polynomial in interval [lowerBound,upperBound)
         if( ss.poly.degree() == 1 )
         {
             divider = - ss.poly.getCoeff( 0 ) / ss.poly.getCoeff( 1 );
             if( divider < ss.smallestPossibleRoot || divider >= searchUpperBound )
-                divider = Double.NaN;
+                divider = java.lang.Double.NaN;
         }
         else
         {
@@ -100,7 +100,7 @@ public class DChainRootFinder implements RealRootFinder
         }
         
         // if base case isn't reached, search for root of lower derivate
-        boolean dividerIsNotNaN = !Double.isNaN( divider );
+        boolean dividerIsNotNaN = !java.lang.Double.isNaN( divider );
         if( startWith == 0 && dividerIsNotNaN )
         {
             root[ 0 ] = divider;

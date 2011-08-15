@@ -8,6 +8,7 @@ package de.mfo.jsurfer.rendering.cpu;
 import de.mfo.jsurfer.algebra.*;
 import de.mfo.jsurfer.rendering.*;
 import javax.vecmath.*;
+import de.mfo.jsurfer.rendering.cpu.clipping.*;
 
 /**
  *
@@ -20,9 +21,9 @@ class DrawcallStaticData
     int height;
     
     CoefficientCalculator coefficientCalculator;
-    RowSubstitutor someA;
+    RowSubstitutor surfaceRowSubstitutor;
+    RowSubstitutorForGradient gradientRowSubstitutor;
     RealRootFinder realRootFinder;
-    GradientCalculator gradientCalculator;
     
     LightSource[] lightSources;
     Color3f frontAmbientColor;
@@ -35,4 +36,5 @@ class DrawcallStaticData
     float antiAliasingThreshold;
     
     RayCreator rayCreator;
+    Clipper rayClipper;
 }

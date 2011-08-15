@@ -7,8 +7,8 @@ package de.mfo.jsurfer.algebra;
 
 /**
  *
- * @author Christian Stussak <christian at knorf.de>
+ * @author stussak
  */
-public interface ColumnSubstitutor {
-    public UnivariatePolynomial setU( double u );
+public interface RowSubstitutorForGradient {
+    public ColumnSubstitutorForGradient setV( double v );
 }

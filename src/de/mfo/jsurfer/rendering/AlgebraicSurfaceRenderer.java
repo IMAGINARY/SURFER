@@ -36,8 +36,8 @@ public abstract class AlgebraicSurfaceRenderer
     private Material frontMaterial;
     private Material backMaterial;
     private LightSource[] lightSources;
-    private Matrix4f transform;
-    private Matrix4f surfaceTransform;
+    private Matrix4d transform;
+    private Matrix4d surfaceTransform;
     private Color3f backgroundColor;
 
     public AlgebraicSurfaceRenderer()
@@ -53,9 +53,9 @@ public abstract class AlgebraicSurfaceRenderer
             this.lightSources[ i ] = new LightSource();
             this.lightSources[ i ].setStatus(LightSource.Status.OFF);
         }
-        this.transform = new Matrix4f();
+        this.transform = new Matrix4d();
         this.transform.setIdentity();
-        this.surfaceTransform = new Matrix4f();
+        this.surfaceTransform = new Matrix4d();
         this.surfaceTransform.setIdentity();
         this.backgroundColor = new Color3f( 1.0f, 1.0f, 1.0f );
 
@@ -152,7 +152,7 @@ public abstract class AlgebraicSurfaceRenderer
         return this.parameterSubstitutor.getParameterValue( name );
     }
 
-    public Set< Map.Entry< String, Double > > getAssignedParameters()
+    public Set< Map.Entry< String, java.lang.Double > > getAssignedParameters()
     {
         return this.parameterSubstitutor.getKnownParameters();
     }
@@ -175,30 +175,30 @@ public abstract class AlgebraicSurfaceRenderer
         return this.camera;
     }
 
-    public void setTransform( Matrix4f m )
+    public void setTransform( Matrix4d m )
             throws NullPointerException
     {
         if( m == null )
             throw new NullPointerException();
-        this.transform = new Matrix4f( m );
+        this.transform = new Matrix4d( m );
     }
 
-    public Matrix4f getTransform()
+    public Matrix4d getTransform()
     {
-        return new Matrix4f( this.transform );
+        return new Matrix4d( this.transform );
     }
 
-    public void setSurfaceTransform( Matrix4f m )
+    public void setSurfaceTransform( Matrix4d m )
             throws NullPointerException
     {
         if( m == null )
             throw new NullPointerException();
-        this.surfaceTransform =  new Matrix4f( m );
+        this.surfaceTransform =  new Matrix4d( m );
     }
 
-    public Matrix4f getSurfaceTransform()
+    public Matrix4d getSurfaceTransform()
     {
-        return new Matrix4f( this.surfaceTransform );
+        return new Matrix4d( this.surfaceTransform );
     }
 
     /**

@@ -75,11 +75,11 @@ public class AlgebraicExpressionWalker extends TreeParser {
         {
             try
             {
-                return Double.parseDouble( text );
+                return java.lang.Double.parseDouble( text );
             }
             catch( NumberFormatException nfe )
             {
-                return Double.NaN;
+                return java.lang.Double.NaN;
             }
         }
 

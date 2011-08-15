@@ -52,16 +52,16 @@ public class TestMain
         {
             long startTime = System.currentTimeMillis();
 
-            Matrix4f scale = new Matrix4f();
+            Matrix4d scale = new Matrix4d();
             scale.setIdentity();
-            scale.setScale( 1f / ( 0.2808988764044944f / 0.9f ) );
+            scale.setScale( 1 / ( 0.2808988764044944 / 0.9 ) );
 
-            Matrix4f translation = new Matrix4f();
+            Matrix4d translation = new Matrix4d();
             translation.setIdentity();
-            translation.setTranslation( new Vector3f( 0f, 0.0f, 0.0f ) );
+            translation.setTranslation( new Vector3d( 0f, 0.0f, 0.0f ) );
             translation.setScale( 1f );
 
-            Matrix4f surfaceTransform = rsd.getRotation();
+            Matrix4d surfaceTransform = rsd.getRotation();
             surfaceTransform.mul( scale );
 
             c.setSurfaceTransform( surfaceTransform );
@@ -103,17 +103,17 @@ public class TestMain
  */
         
         LightSource lightSource0 = new LightSource();
-        lightSource0.setPosition( new Point3f( 100f, -100f, 100f ) );
+        lightSource0.setPosition( new Point3d( 100f, -100f, 100f ) );
         lightSource0.setIntensity( 0.5f );
         lightSource0.setColor( new Color3f( 1f, 1f, 1f ) );
 
         LightSource lightSource1 = new LightSource();
-        lightSource1.setPosition( new Point3f( -100f, -100f, 100f ) );
+        lightSource1.setPosition( new Point3d( -100f, -100f, 100f ) );
         lightSource1.setIntensity( 0.7f );
         lightSource1.setColor( new Color3f( 1f, 1f, 1f ) );
 
         LightSource lightSource2 = new LightSource();
-        lightSource2.setPosition( new Point3f( 0f, 100f, 100f ) );
+        lightSource2.setPosition( new Point3d( 0f, 100f, 100f ) );
         lightSource2.setIntensity( 0.3f );
         lightSource2.setColor( new Color3f( 1f, 1f, 1f ) );
 
@@ -143,10 +143,10 @@ public class TestMain
         camera.setFoVY( 60 );
         //camera.setCameraType( Camera.CameraType.PERSPECTIVE_CAMERA );
         camera.setCameraType( Camera.CameraType.ORTHOGRAPHIC_CAMERA );
-        camera.lookAt( new Point3f( 0f, 0f, 2f ), new Point3f( 0f, 0f, 0f ), new Vector3f( 0f, 1f, 0f ) );
+        camera.lookAt( new Point3d( 0f, 0f, 2f ), new Point3d( 0f, 0f, 0f ), new Vector3d( 0f, 1f, 0f ) );
 
         c.setCamera( camera );
-        c.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_1x1 );
+        c.setAntiAliasingPattern( AntiAliasingPattern.OG_1x1 );
 
         try
         {

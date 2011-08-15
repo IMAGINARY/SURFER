@@ -65,7 +65,7 @@ interface Function {
     public double valueAt(double x);
 }
 
-abstract class Polynomial implements Function {
+abstract class SturmPolynomial implements Function {
     /**
      * Returns the coefficients array of the polynomial
      * 
@@ -79,7 +79,7 @@ abstract class Polynomial implements Function {
      * 
      * @return the derivation
      */
-    public abstract Polynomial diff();
+    public abstract SturmPolynomial diff();
 
     /**
      * Calculates the remainder of the polynomial division of <code>this</code>
@@ -89,9 +89,9 @@ abstract class Polynomial implements Function {
      *            the divisor (must not be constant)
      * @return the remainder of the polynomial division
      */
-    public abstract Polynomial mod(Polynomial other);
+    public abstract SturmPolynomial mod(SturmPolynomial other);
 
-    public abstract Polynomial div(Polynomial other);    
+    public abstract SturmPolynomial div(SturmPolynomial other);
     
     /**
      * Multiplies the polynomial by a real scalar
@@ -100,7 +100,7 @@ abstract class Polynomial implements Function {
      *            the scalar to multiply the polynomial by
      * @return the multiplied polynomial
      */
-    public abstract Polynomial multiply(double scalar);
+    public abstract SturmPolynomial multiply(double scalar);
 
     /**
      * Determines the degree of the polynomial
@@ -110,11 +110,11 @@ abstract class Polynomial implements Function {
      */
     public abstract int degree();
     
-    public static Polynomial gcd( Polynomial a, Polynomial b )
+    public static SturmPolynomial gcd( SturmPolynomial a, SturmPolynomial b )
     {
         while( b.degree() != -1 )
         {
-            Polynomial t = b;
+            SturmPolynomial t = b;
             b = a.mod( b );
             a = t;
         }
@@ -122,7 +122,7 @@ abstract class Polynomial implements Function {
     }
 }
 
-class MyPolynomial extends Polynomial
+class MyPolynomial extends SturmPolynomial
 {
     UnivariatePolynomial p;
     
@@ -141,7 +141,7 @@ class MyPolynomial extends Polynomial
         return p.getCoeffs();
     }
 
-    public Polynomial diff()
+    public SturmPolynomial diff()
     {
         return new MyPolynomial( p.derive() );
     }
@@ -191,15 +191,15 @@ class MyPolynomial extends Polynomial
         }
     }
 
-    public Polynomial mod(Polynomial other) {
+    public SturmPolynomial mod(SturmPolynomial other) {
         return new MyPolynomial( new UnivariatePolynomial( mod( toArray(), degree(), other.toArray(), other.degree() ) ) );
     }
     
-    public Polynomial div(Polynomial other) {
+    public SturmPolynomial div(SturmPolynomial other) {
         return new MyPolynomial( new UnivariatePolynomial( reduce( toArray(), degree(), other.toArray(), other.degree() ) ) );
     }
 
-    public Polynomial multiply(double scalar)
+    public SturmPolynomial multiply(double scalar)
     {
         return new MyPolynomial( p.mult( scalar ) );
     }
@@ -241,7 +241,7 @@ class Solve {
      *            precision)
      * @return the zero
      */
-    public static double solve(Polynomial poly, int num, double lower,
+    public static double solve(SturmPolynomial poly, int num, double lower,
             double upper, double precision, int iterations) {
         return bisection(calculateSturm(poly), num, lower, upper, precision,
                 iterations);
@@ -267,7 +267,7 @@ class Solve {
      *            precision)
      * @return the zero
      */
-    public static double solve(Polynomial poly, int num, double lower,
+    public static double solve(SturmPolynomial poly, int num, double lower,
             double upper, int iterations) {
         return bisection(calculateSturm(poly), num, lower, upper,
                 FLOATING_POINT_PRECISION, iterations);
@@ -284,7 +284,7 @@ class Solve {
      *            tolerance in comparing function values
      * @return the result of the "w" function defined by Sturm
      */
-    private static int w(Polynomial[] sturm, double x, double precision) {
+    private static int w(SturmPolynomial[] sturm, double x, double precision) {
         int signChanges = 0;
         int lastNonZero = 0;
         // run through the array
@@ -323,10 +323,10 @@ class Solve {
      *            precision)
      * @return the zero
      */
-    private static double bisection(Polynomial[] sturm, int num, double lower,
+    private static double bisection(SturmPolynomial[] sturm, int num, double lower,
             double upper, double precision, int iterations) {
         
-        Polynomial p = sturm[ sturm.length - 1 ];
+        SturmPolynomial p = sturm[ sturm.length - 1 ];
         
         // define the point where to start counting the zeroes
         double t = lower;
@@ -361,15 +361,15 @@ class Solve {
         // so the middle of this interval might be a good guess
         
         if (w(sturm, upper, precision) - w(sturm, t, precision) == 0 )
-            return Double.NaN;
+            return java.lang.Double.NaN;
         else
             return (upper + lower) / 2;
     }
     
-    private static double bisect( Polynomial p, double lowerBound, double upperBound, double fl, double fu )
+    private static double bisect( SturmPolynomial p, double lowerBound, double upperBound, double fl, double fu )
     {
         double center = lowerBound;
-        double old_center = Double.NaN;
+        double old_center = java.lang.Double.NaN;
         double[] a = p.toArray();
         
         //for( int it = 14; it > 0; it-- ) // 14 iterations work quite good in most cases
@@ -406,10 +406,10 @@ class Solve {
      *            the polynomial function
      * @return the Sturm chain of <code>function</code> as array
      */
-    public static Polynomial[] calculateSturm(Polynomial function) {
-        List<Polynomial> sturm = new LinkedList<Polynomial>();
+    public static SturmPolynomial[] calculateSturm(SturmPolynomial function) {
+        List<SturmPolynomial> sturm = new LinkedList<SturmPolynomial>();
         
-        Polynomial gcd = Polynomial.gcd( function, function.diff() );
+        SturmPolynomial gcd = SturmPolynomial.gcd( function, function.diff() );
         
         if( gcd.degree() > 0 )
             // Polynomial not squarefree!
@@ -425,9 +425,9 @@ class Solve {
         }
 
         // convert the list to an array for efficiency purposes
-        Polynomial[] result = new MyPolynomial[sturm.size()];
+        SturmPolynomial[] result = new MyPolynomial[sturm.size()];
         int i = 0;
-        for (Polynomial poly : sturm) {
+        for (SturmPolynomial poly : sturm) {
             result[i] = poly;
             i++;
         }

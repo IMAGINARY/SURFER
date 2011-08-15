@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 import java.util.*;
 
 import de.mfo.jsurfer.debug.*;
-import java.awt.*;
+//import java.awt.*;
 
 /**
  *
@@ -26,7 +26,6 @@ public class RenderingTask implements Callable<Void>
     private int xEnd;
     private int yEnd;
     private DrawcallStaticData dcsd;
-    private boolean interrupted;
 
     public RenderingTask( DrawcallStaticData dcsd, int xStart, int yStart, int xEnd, int yEnd )
     {
@@ -35,46 +34,51 @@ public class RenderingTask implements Callable<Void>
         this.yStart = yStart;
         this.xEnd = xEnd;
         this.yEnd = yEnd;
-        this.interrupted = false;
     }
-
-    public boolean isInterrupted() { return this.interrupted; }
-    public void interrupt() { this.interrupted = true; }
 
     public Void call()
     {
-        try
-        {
-            render();
-        } catch( Throwable t )
-        {
-            if( !isInterrupted() )
-            {
-                System.err.println( "Uncaught exception in thread " + Thread.currentThread() + ": " + t );
-                t.printStackTrace();
-            }
-        }
+        render();
         return null;
+    }
+
+    private class ColumnSubstitutorPair
+    {
+        ColumnSubstitutorPair( ColumnSubstitutor scs, ColumnSubstitutorForGradient gcs )
+        {
+            this.scs = scs;
+            this.gcs = gcs;
+        }
+
+        ColumnSubstitutor scs;
+        ColumnSubstitutorForGradient gcs;
     }
 
     protected void render()
     {
         switch( dcsd.antiAliasingPattern )
         {
-            case PATTERN_1x1:
+            case OG_1x1:
             {
                 // no antialising -> sample pixel center
-                for( int y = yStart; y <= yEnd && !this.interrupted; y++ )
+                int internal_width = xEnd - xStart + 1;
+                int internal_height = yEnd - yStart + 1;
+                double u_start = dcsd.rayCreator.transformU( xStart / ( dcsd.width - 1.0 ) );
+                double v_start = dcsd.rayCreator.transformV( yStart / ( dcsd.height - 1.0 ) );
+                double u_incr = ( dcsd.rayCreator.getUInterval().y - dcsd.rayCreator.getUInterval().x ) / ( dcsd.width - 1.0 );
+                double v_incr = ( dcsd.rayCreator.getVInterval().y - dcsd.rayCreator.getVInterval().x ) / ( dcsd.height - 1.0 );
+                for( int y = 0; y < internal_height; y++ )
                 {
-                    float v = -y / ( dcsd.height - 1.0f );
-                    ColumnSubstitutor someB = dcsd.someA.setV( v );
+                    double v = v_start + y * v_incr;
+                    ColumnSubstitutor scs = dcsd.surfaceRowSubstitutor.setV( v );
+                    ColumnSubstitutorForGradient gcs = dcsd.gradientRowSubstitutor.setV( v );
                 
-                    for( int x = xStart; x <= xEnd && !this.interrupted; x++ )
+                    for( int x = 0; x < internal_width; x++ )
                     {
-                        float u = -x / ( dcsd.width - 1.0f );
-                        UnivariatePolynomial p = someB.setU( u );
-
-                        dcsd.colorBuffer[ dcsd.width * y + x ] = tracePolynomial( p, u, v ).get().getRGB();                        
+                        if( Thread.interrupted() )
+                            return;
+                        double u = u_start + x * u_incr;
+                        dcsd.colorBuffer[ dcsd.width * ( yStart + y ) + xStart + x ] = tracePolynomial( scs, gcs, u, v ).get().getRGB();
                         //dcsd.colorBuffer[ dcsd.width * y + x ] = traceRay( u, v ).get().getRGB();
                     }
                 }
@@ -84,106 +88,104 @@ public class RenderingTask implements Callable<Void>
             {
                 // all other antialiasing modes
                 // first sample canvas at pixel corners and cast primary rays
-                Color3f[] internalColorBuffer = new Color3f[ ( xEnd - xStart + 2 ) * ( yEnd - yStart + 2 ) ];
-                for( int y = yStart; y <= yEnd + 1 && !this.interrupted; y++ )
+                int internal_width = xEnd - xStart + 2;
+                int internal_height = yEnd - yStart + 2;
+                Color3f[] internalColorBuffer = new Color3f[ internal_width * internal_height ];
+                
+                ColumnSubstitutor scs = null;
+                ColumnSubstitutorForGradient gcs = null;
+                HashMap< java.lang.Double, ColumnSubstitutorPair > csp_hm = new HashMap< java.lang.Double, ColumnSubstitutorPair >();
+                double u_start = dcsd.rayCreator.transformU( ( xStart - 0.5 ) / ( dcsd.width - 1.0 ) );
+                double v_start = dcsd.rayCreator.transformV( ( yStart - 0.5 ) / ( dcsd.height - 1.0 ) );
+                double u_incr = ( dcsd.rayCreator.getUInterval().y - dcsd.rayCreator.getUInterval().x ) / ( dcsd.width - 1.0 );
+                double v_incr = ( dcsd.rayCreator.getVInterval().y - dcsd.rayCreator.getVInterval().x ) / ( dcsd.height - 1.0 );
+                double v = 0.0;
+                for( int y = 0; y < internal_height; ++y )
                 {
-                    int internalColorBufferIndex = ( xEnd - xStart + 2 ) * ( y - yStart );
-                    float v = -( y - 0.5f ) / ( dcsd.height - 1.0f );
-                    ColumnSubstitutor someB = dcsd.someA.setV( v );
+                    csp_hm.clear(); csp_hm.put( v, new ColumnSubstitutorPair( scs, gcs ) );
+
+                    v = v_start + y * v_incr;
+                    scs = dcsd.surfaceRowSubstitutor.setV( v );
+                    gcs = dcsd.gradientRowSubstitutor.setV( v );
                     
-                    for( int x = xStart; x <= xEnd + 1 && !this.interrupted; x++ )
+                    csp_hm.put( v, new ColumnSubstitutorPair( scs, gcs ) );
+
+                    for( int x = 0; x < internal_width; ++x )
                     {
+                        if( Thread.interrupted() )
+                            return;
+
                         // current position on viewing plane
-                        float u = -( x - 0.5f ) / ( dcsd.width - 1.0f );
-                        UnivariatePolynomial p = someB.setU( u );
-
+                        double u = u_start + x * u_incr;
                         // trace rays corresponding to (u,v)-coordinates on viewing plane
-                        internalColorBuffer[internalColorBufferIndex++] = tracePolynomial( p, u, v );
-                    }
-                }
 
-                // antialias pixels
-                int ulIndex = 0; // index of color of upper left corner of the current pixel
-                for( int y = yStart; y <= yEnd && !this.interrupted; y++ )
-                {
-                    int colorBufferIndex = dcsd.width * y + xStart;
-                    for( int x = xStart; x <= xEnd && !this.interrupted; x++ )
-                    {
-                        Color3f ulColor = internalColorBuffer[ulIndex];
-                        Color3f urColor = internalColorBuffer[ulIndex + 1];
-                        Color3f llColor = internalColorBuffer[ulIndex + ( xEnd - xStart + 2 )];
-                        Color3f lrColor = internalColorBuffer[ulIndex + ( xEnd - xStart + 2 ) + 1];
+                        internalColorBuffer[ y * internal_width + x ] = tracePolynomial( scs, gcs, u, v );
+                        if( x > 0 && y > 0 )
+                        {
+                            Color3f ulColor = internalColorBuffer[ y * internal_width + x - 1 ];
+                            Color3f urColor = internalColorBuffer[ y * internal_width + x ];
+                            Color3f llColor = internalColorBuffer[ ( y - 1 ) * internal_width + x - 1];
+                            Color3f lrColor = internalColorBuffer[ ( y - 1 ) * internal_width + x ];
 
-                        dcsd.colorBuffer[colorBufferIndex++] = antiAliasPixel( x, y, dcsd.antiAliasingPattern, ulColor, urColor, llColor, lrColor ).get().getRGB();
-                        ulIndex++;
+                            dcsd.colorBuffer[ ( yStart + y - 1 ) * dcsd.width + ( xStart + x - 1 ) ] = antiAliasPixel( u - u_incr, v - v_incr, u_incr, v_incr, dcsd.antiAliasingPattern, ulColor, urColor, llColor, lrColor, csp_hm ).get().getRGB();
+                        }
                     }
-                    ulIndex++;
                 }
             }
         }
     }
 
-    private Color3f antiAliasPixel( int x, int y, AntiAliasingPattern aap, Color3f ulColor, Color3f urColor, Color3f llColor, Color3f lrColor )
+    private Color3f antiAliasPixel( double ll_u, double ll_v, double u_incr, double v_incr, AntiAliasingPattern aap, Color3f ulColor, Color3f urColor, Color3f llColor, Color3f lrColor, HashMap< java.lang.Double, ColumnSubstitutorPair > csp_hm )
     {
-        // adaptive sampling
+        // first average pixel-corner colors
         Color3f finalColor;
+
+        // adaptive supersampling
         float thresholdSqr = dcsd.antiAliasingThreshold * dcsd.antiAliasingThreshold;
-        if( colorDiffSqr( ulColor, urColor ) > thresholdSqr ||
+        if( aap != AntiAliasingPattern.OG_2x2 && ( colorDiffSqr( ulColor, urColor ) > thresholdSqr ||
             colorDiffSqr( ulColor, llColor ) > thresholdSqr ||
             colorDiffSqr( ulColor, lrColor ) > thresholdSqr ||
             colorDiffSqr( urColor, llColor ) > thresholdSqr ||
             colorDiffSqr( urColor, lrColor ) > thresholdSqr ||
-            colorDiffSqr( llColor, lrColor ) > thresholdSqr )
+            colorDiffSqr( llColor, lrColor ) > thresholdSqr ) )
         {
-            if(false)
-            return new Color3f( Color.BLACK );
             // anti-alias pixel with advanced sampling pattern
             finalColor = new Color3f();
-            finalColor.scaleAdd( aap.getWeight( 0, 0 ), ulColor, finalColor );
-            finalColor.scaleAdd( aap.getWeight( 0, aap.getSize() - 1 ), urColor, finalColor );
-            finalColor.scaleAdd( aap.getWeight( aap.getSize() - 1, 0 ), llColor, finalColor );
-            finalColor.scaleAdd( aap.getWeight( aap.getSize() - 1, aap.getSize() - 1 ), lrColor, finalColor );
+            for( AntiAliasingPattern.SamplingPoint sp : aap )
+            {
+                if( Thread.interrupted() )
+                    return finalColor;
 
-            // first row (ul- and ur-samples left out)
-            {
-                int row = 0;
-                float v = -( y - 0.5f + row / ( ( float ) ( aap.getSize() - 1 ) ) ) / ( dcsd.height - 1.0f );
-                ColumnSubstitutor someB = dcsd.someA.setV( v );
-                for( int col = 1; col < aap.getSize() - 1; col++ )
+                Color3f ss_color;
+                if( sp.getU() == 0.0 && sp.getV() == 0.0 )
+                    ss_color = llColor;
+                else if( sp.getU() == 0.0 && sp.getV() == 1.0 )
+                    ss_color = ulColor;
+                else if( sp.getU() == 1.0 && sp.getV() == 1.0 )
+                    ss_color = urColor;
+                else if( sp.getU() == 1.0 && sp.getV() == 0.0 )
+                    ss_color = lrColor;
+                else
                 {
-                    float u = -( x - 0.5f + col / ( ( float ) ( aap.getSize() - 1 ) ) ) / ( dcsd.width - 1.0f );
-                    UnivariatePolynomial p = someB.setU( u );
-                    finalColor.scaleAdd( aap.getWeight( row, col ), tracePolynomial( p, u, v ), finalColor );
+                    // color of this sample point is not known -> calculate
+                    double v = ll_v + sp.getV() * v_incr;
+                    double u = ll_u + sp.getU() * u_incr;
+                    ColumnSubstitutorPair csp = csp_hm.get( v );
+                    if( csp == null )
+                    {
+                        csp = new ColumnSubstitutorPair( dcsd.surfaceRowSubstitutor.setV( v ), dcsd.gradientRowSubstitutor.setV( v ) );
+                        csp_hm.put( v, csp );
+                    }
+                    ss_color = tracePolynomial( csp.scs, csp.gcs, u, v );
                 }
-            }
-            // second row to row before last
-            for( int row = 1; row < aap.getSize() - 1; row++ )
-            {
-                float v = -( y - 0.5f + row / ( ( float ) ( aap.getSize() - 1 ) ) ) / ( dcsd.height - 1.0f );
-                ColumnSubstitutor someB = dcsd.someA.setV( v );
-                for( int col = 0; col < aap.getSize(); col++ )
-                {
-                    float u = -( x - 0.5f + col / ( ( float ) ( aap.getSize() - 1 ) ) ) / ( dcsd.width - 1.0f );
-                    UnivariatePolynomial p = someB.setU( u );
-                    finalColor.scaleAdd( aap.getWeight( row, col ), tracePolynomial( p, u, v ), finalColor );
-                }
-            }
-            // last row (ll- and lr-samples left out)
-            {
-                int row = aap.getSize() - 1;
-                float v = -( y - 0.5f + row / ( ( float ) ( aap.getSize() - 1 ) ) ) / ( dcsd.height - 1.0f );
-                ColumnSubstitutor someB = dcsd.someA.setV( v );
-                for( int col = 1; col < aap.getSize() - 1; col++ )
-                {
-                    float u = -( x - 0.5f + col / ( ( float ) ( aap.getSize() - 1 ) ) ) / ( dcsd.width - 1.0f );
-                    UnivariatePolynomial p = someB.setU( u );
-                    finalColor.scaleAdd( aap.getWeight( row, col ), tracePolynomial( p, u, v ), finalColor );
-                }
+                finalColor.scaleAdd( sp.getWeight(), ss_color, finalColor );
+                
+                if( false )
+                    return new Color3f( 0, 0, 0 ); // paint pixels, that are supposed to be anti-aliased in black
             }
         }
         else
         {
-            // just use average of pixel-corner colors
             finalColor = new Color3f( ulColor );
             finalColor.add( urColor );
             finalColor.add( llColor );
@@ -196,76 +198,94 @@ public class RenderingTask implements Callable<Void>
         return finalColor;
     }
 
-    private Color3f tracePolynomial( UnivariatePolynomial surfacePoly, float u, float v )
+    private Color3f tracePolynomial( ColumnSubstitutor scs, ColumnSubstitutorForGradient gcs, double u, double v )
     {
         // create rays
         Ray ray = dcsd.rayCreator.createCameraSpaceRay( u, v );
         Ray clippingRay = dcsd.rayCreator.createClippingSpaceRay( u, v );
         Ray surfaceRay = dcsd.rayCreator.createSurfaceSpaceRay( u, v );
 
-        Point3f eye = Helper.interpolate1D( ray.o, ray.d, dcsd.rayCreator.getEyeLocation() );
+        Point3d eye = ray.at( dcsd.rayCreator.getEyeLocationOnRay() );
+        UnivariatePolynomialVector3d gradientPolys = null;
 
         // optimize rays and root-finder parameters
         //optimizeRays( ray, clippingRay, surfaceRay );
 
-        // clip ray against unit sphere
-        Vector2f interval = new Vector2f();
-        if( clipToSphere( clippingRay, interval ) )
+        // clip ray
+        List< Vector2d > intervals = dcsd.rayClipper.clipRay( clippingRay );
+        if( !intervals.isEmpty() )
         {
-            // adjust interval, so that it does not start before the eye point
-            float eyeLocation = ( float ) dcsd.rayCreator.getEyeLocation();
-            if( interval.x < eyeLocation && eyeLocation < interval.y )
-                interval.x = Math.max( interval.x, eyeLocation );            
-            
-            // intersect ray with surface and shade pixel
-            float[] hit = new float[ 1 ];
-            if( intersectPolynomial( surfacePoly, interval.x, interval.y, hit ) )
-                return shade( ray, surfaceRay, hit[ 0 ], eye );
-            else
-                return  dcsd.backgroundColor;
+            UnivariatePolynomial surfacePoly = scs.setU( u );
+            for( Vector2d interval : intervals )
+            {
+                // adjust interval, so that it does not start before the eye point
+                double eyeLocation = dcsd.rayCreator.getEyeLocationOnRay();
+                if( interval.x < eyeLocation && eyeLocation < interval.y )
+                    interval.x = Math.max( interval.x, eyeLocation );
+
+                // intersect ray with surface and shade pixel
+                //double[] hits = dcsd.realRootFinder.findAllRootsIn( surfacePoly, interval.x, interval.y );
+                double[] hits = { dcsd.realRootFinder.findFirstRootIn( surfacePoly, interval.x, interval.y ) };
+                if( java.lang.Double.isNaN( hits[ 0 ]  ))
+                    hits = new double[ 0 ];
+                for( double hit : hits )
+                {
+                    if( dcsd.rayClipper.clipPoint( surfaceRay.at( hit ), true ) )
+                    {
+                        if( gradientPolys == null )
+                            gradientPolys = gcs.setU( u );
+                        Vector3d n_surfaceSpace = gradientPolys.setT( hit );
+                        Vector3d n_cameraSpace = dcsd.rayCreator.surfaceSpaceNormalToCameraSpaceNormal( n_surfaceSpace );
+
+                        return shade( ray.at( hit ), n_cameraSpace, eye );
+                    }
+                }
+            }
         }
-        else
-        {
-            return dcsd.backgroundColor;
-        }
+        return dcsd.backgroundColor;
     }
     
-    private Color3f traceRay( float u, float v )
-    {
-        // create rays
-        Ray ray = dcsd.rayCreator.createCameraSpaceRay( u, v );
-        Ray clippingRay = dcsd.rayCreator.createClippingSpaceRay( u, v );
-        Ray surfaceRay = dcsd.rayCreator.createSurfaceSpaceRay( u, v );
-
-        Point3f eye = Helper.interpolate1D( ray.o, ray.d, dcsd.rayCreator.getEyeLocation() );
-
-        // optimize rays and root-finder parameters
-        //optimizeRays( ray, clippingRay, surfaceRay );
-        
-        //System.out.println( u + "," + v + ":("+surfaceRay.o.x+","+surfaceRay.o.y+","+surfaceRay.o.z+")"+"("+surfaceRay.d.x+","+surfaceRay.d.y+","+surfaceRay.d.z+")t" );
-
-
-        // clip ray against unit sphere
-        Vector2f interval = new Vector2f();
-        if( clipToSphere( clippingRay, interval ) )
-        {
-            // adjust interval, so that it does not start before the eye point
-            float eyeLocation = ( float ) dcsd.rayCreator.getEyeLocation();
-            if( interval.x < eyeLocation && eyeLocation < interval.y )
-                interval.x = Math.max( interval.x, eyeLocation );            
-            
-            // intersect ray with surface and shade pixel
-            float[] hit = new float[ 1 ];
-            if( intersect( surfaceRay, interval.x, interval.y, hit ) )
-                return shade( ray, surfaceRay, hit[ 0 ], eye );
-            else
-                return dcsd.backgroundColor;
-        }
-        else
-        {
-            return dcsd.backgroundColor;
-        }
-    }
+//    private Color3f traceRay( double u, double v )
+//    {
+//        // create rays
+//        Ray ray = dcsd.rayCreator.createCameraSpaceRay( u, v );
+//        Ray clippingRay = dcsd.rayCreator.createClippingSpaceRay( u, v );
+//        Ray surfaceRay = dcsd.rayCreator.createSurfaceSpaceRay( u, v );
+//
+//        Point3d eye = Helper.interpolate1D( ray.o, ray.d, dcsd.rayCreator.getEyeLocationOnRay() );
+//        UnivariatePolynomialVector3d gradientPolys = null;
+//
+//        // optimize rays and root-finder parameters
+//        //optimizeRays( ray, clippingRay, surfaceRay );
+//
+//        //System.out.println( u + "," + v + ":("+surfaceRay.o.x+","+surfaceRay.o.y+","+surfaceRay.o.z+")"+"("+surfaceRay.d.x+","+surfaceRay.d.y+","+surfaceRay.d.z+")t" );
+//
+//        // clip ray
+//        List< Vector2d > intervals = dcsd.rayClipper.clipRay( clippingRay );
+//        for( Vector2d interval : intervals )
+//        {
+//            // adjust interval, so that it does not start before the eye point
+//            double eyeLocation = dcsd.rayCreator.getEyeLocationOnRay();
+//
+//            if( interval.x < eyeLocation && eyeLocation < interval.y )
+//                interval.x = Math.max( interval.x, eyeLocation );
+//
+//            // intersect ray with surface and shade pixel
+//            double[] hit = new double[ 1 ];
+//            if( intersect( surfaceRay, interval.x, interval.y, hit ) )
+//                if( dcsd.rayClipper.clipPoint( surfaceRay.at( hit[ 0 ] ), true ) )
+//                {
+//                        if( gradientPolys == null )
+//                            gradientPolys = gcs.setU( u );
+//                        Vector3d n_surfaceSpace = gradientPolys.setT( hit );
+//                        Vector3d n_cameraSpace = dcsd.rayCreator.surfaceSpaceNormalToCameraSpaceNormal( n_surfaceSpace );
+//
+//                        return shade( ray.at( hit ), n_cameraSpace, eye );
+//                }
+//                    return shade( ray, surfaceRay, hit[ 0 ], eye );
+//        }
+//        return dcsd.backgroundColor;
+//    }
 
     private float colorDiffSqr( Color3f c1, Color3f c2 )
     {
@@ -274,14 +294,14 @@ public class RenderingTask implements Callable<Void>
         return diff.dot( diff );
     }
 
-    protected boolean intersectPolynomial( UnivariatePolynomial p, float rayStart, float rayEnd, float[] hit )
+    protected boolean intersectPolynomial( UnivariatePolynomial p, double rayStart, double rayEnd, double[] hit )
     {   
         //System.out.println( p );
-        hit[ 0 ] = ( float ) dcsd.realRootFinder.findFirstRootIn( p, rayStart, rayEnd );
-        return !Float.isNaN( hit[ 0 ] );
+        hit[ 0 ] = dcsd.realRootFinder.findFirstRootIn( p, rayStart, rayEnd );
+        return !java.lang.Double.isNaN( hit[ 0 ] );
     }
-    
-    protected boolean intersect( Ray r, float rayStart, float rayEnd, float[] hit )
+
+    protected boolean intersect( Ray r, double rayStart, double rayEnd, double[] hit )
     {
         UnivariatePolynomial x = new UnivariatePolynomial( r.o.x, r.d.x );
         UnivariatePolynomial y = new UnivariatePolynomial( r.o.y, r.d.y );
@@ -290,61 +310,67 @@ public class RenderingTask implements Callable<Void>
         UnivariatePolynomial p = dcsd.coefficientCalculator.calculateCoefficients( x, y, z );
         p = p.shrink();
 
-        hit[ 0] = ( float ) dcsd.realRootFinder.findFirstRootIn( p, rayStart, rayEnd );
-        return !Float.isNaN( hit[ 0 ] );
+        hit[ 0 ] = ( float ) dcsd.realRootFinder.findFirstRootIn( p, rayStart, rayEnd );
+        return !java.lang.Double.isNaN( hit[ 0 ] );
     }
 
-    protected boolean clipToSphere( Ray r, Vector2f interval )
+    boolean blowUpChooseMaterial( Point3d p )
     {
-        Vector3f my_o = new Vector3f( r.o );
-        Vector3f my_d = new Vector3f( r.d );
-        float length = my_d.length();
-        my_d.scale( 1.0f / length );
-
-        // solve algebraic
-        float B = -my_o.dot( my_d );
-        float C = my_o.dot( my_o ) - 1.0f;
-        float D = B * B - C;
-
-        if( D < 0.0f )
-            return false;
-
-        float sqrtD = ( float ) Math.sqrt( D );
-        interval.set( B - sqrtD, B + sqrtD );
-        interval.scale( 1.0f / length );
-        return true;
-    }
-
-    protected Color3f shade( Ray ray, Ray surfaceRay, float hit, Point3f eye )
-    {
-        // compute normal
-        Point3f hitPoint = new Point3f();
-        hitPoint.scaleAdd( hit, ray.d, ray.o );
-        Point3f surfaceHitPoint = new Point3f();
-        surfaceHitPoint.scaleAdd( hit, surfaceRay.d, surfaceRay.o );
-        Vector3f n = dcsd.gradientCalculator.calculateGradient( surfaceHitPoint );
-
-        // transform normal from surface space to camera space
-        n = dcsd.rayCreator.surfaceSpaceNormalToCameraSpaceNormal( n );
+        double R;
+        if( dcsd.rayClipper instanceof de.mfo.jsurfer.rendering.cpu.clipping.ClipBlowUpSurface )
+            R = ( ( de.mfo.jsurfer.rendering.cpu.clipping.ClipBlowUpSurface ) dcsd.rayClipper ).get_R();
+        else
+            R = 1.0;
         
+	double u = p.x;
+	double tmp = Math.sqrt( p.y*p.y + p.z*p.z );
+	double v = R + tmp;
+	double dist = u * u + v * v;
+	if( dist > 1.0 )
+		v = R - tmp; // choose the solution inside the disc
+	return ( 3.0 * dist ) % 2.0 < 1.0;
+    }
+
+    /**
+     * Calculates the shading in camera space
+     * @param p The hit point on the surface in camera space.
+     * @param n The surface normal at the hit point in camera space.
+     * @param eye The eye point in camera space.
+     * @return
+     */
+    protected Color3f shade( Point3d p, Vector3d n, Point3d eye )
+    {        
         // normalize only if point is not singular
-        float nLength = n.length();
+        float nLength = (float) n.length();
         if( nLength != 0.0f )
             n.scale( 1.0f / nLength );
 
         // compute view vector
-        Vector3f v = new Vector3f( eye );
-        v.sub( hitPoint );
-
-        // compute, which material to use
-        if( n.dot( v ) > 0.0f )
+        Vector3d v = new Vector3d( eye );
+        v.sub( p );
+        v.normalize();
+/*
+        // for blowup-visualization
+        if( n.dot( v ) < 0.0f )
+            n.negate();
+        if( blowUpChooseMaterial( surfaceHitPoint ) )
         {
             return shadeWithMaterial( hitPoint, v, n, dcsd.frontAmbientColor, dcsd.frontLightProducts );
         }
         else
         {
-            n.negate();
             return shadeWithMaterial( hitPoint, v, n, dcsd.backAmbientColor, dcsd.backLightProducts );
+        }
+*/
+        // compute, which material to use
+        if( n.dot( v ) > 0.0f )
+        {
+            return shadeWithMaterial( p, v, n, dcsd.frontAmbientColor, dcsd.frontLightProducts );
+        }
+        else
+        {
+            n.negate();
+            return shadeWithMaterial( p, v, n, dcsd.backAmbientColor, dcsd.backLightProducts );
         }
     }
 
@@ -357,10 +383,10 @@ public class RenderingTask implements Callable<Void>
      * @param material Surface material.
      * @return
      */
-    protected Color3f shadeWithMaterial( Point3f hitPoint, Vector3f v, Vector3f n, Color3f ambientColor, LightProducts[] lightProducts )
+    protected Color3f shadeWithMaterial( Point3d hitPoint, Vector3d v, Vector3d n, Color3f ambientColor, LightProducts[] lightProducts )
     {
-        Vector3f l = new Vector3f();
-        Vector3f h = new Vector3f();
+        Vector3d l = new Vector3d();
+        Vector3d h = new Vector3d();
 
         Color3f color = new Color3f( ambientColor );
 
@@ -371,7 +397,7 @@ public class RenderingTask implements Callable<Void>
             l.sub( lightSource.getPosition(), hitPoint );
             l.normalize();
 
-            float lambertTerm = n.dot( l );
+            float lambertTerm = (float) n.dot( l );
             if( lambertTerm > 0.0f )
             {
                 // compute diffuse color component
@@ -391,3 +417,4 @@ public class RenderingTask implements Callable<Void>
     }
 }
     
+

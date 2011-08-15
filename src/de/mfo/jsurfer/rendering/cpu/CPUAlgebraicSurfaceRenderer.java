@@ -5,6 +5,7 @@
 package de.mfo.jsurfer.rendering.cpu;
 
 import de.mfo.jsurfer.rendering.*;
+import de.mfo.jsurfer.rendering.cpu.clipping.*;
 import de.mfo.jsurfer.algebra.*;
 import javax.vecmath.*;
 import java.util.concurrent.*;
@@ -20,10 +21,10 @@ import java.awt.*;
 public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
 {
     private ExecutorService threadPoolExecutor;
-    Collection< Callable< Void > > currentRenderingTasks;
-    Object drawMutex;
+    Object drawMutex = new Object();
+    volatile Thread drawThread;
     
-    public DrawcallStaticData collectDrawCallStaticData( int[] colorBuffer, int width, int height )
+    public synchronized DrawcallStaticData collectDrawCallStaticData( int[] colorBuffer, int width, int height )
     {
         DrawcallStaticData dcsd = new DrawcallStaticData();
         
@@ -33,11 +34,11 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         
         dcsd.coefficientCalculator = new PolynomialExpansionCoefficientCalculator( getSurfaceExpression() );
 //        dcsd.realRootFinder = new DChainRootFinder();
-//        dcsd.realRootFinder = new SturmChainRootFinder(); 
-//        dcsd.realRootFinder = new DescartesRootFinder( false );
+//        dcsd.realRootFinder = new SturmChainRootFinder();
+        dcsd.realRootFinder = new DescartesRootFinder( false );
+        //dcsd.realRootFinder = new ClosedFormRootFinder();
 //        dcsd.realRootFinder = new GPUSuitableDescartesRootFinder2( false );
-        dcsd.realRootFinder = new BernsteinDescartesRootFinder( false );
-        dcsd.gradientCalculator = new FastGradientCalculator( getGradientXExpression(), getGradientYExpression(), getGradientZExpression() );
+        //dcsd.realRootFinder = new BernsteinDescartesRootFinder( false );
 
         dcsd.frontAmbientColor = new Color3f( getFrontMaterial().getColor() );
         dcsd.frontAmbientColor.scale( getFrontMaterial().getAmbientIntensity() );
@@ -72,8 +73,16 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         dcsd.antiAliasingThreshold = aaThreshold;
                 
         dcsd.rayCreator = RayCreator.createRayCreator( getTransform(), getSurfaceTransform(), getCamera(), width, height );
-        dcsd.someA = new RowSubstitutor( getSurfaceExpression(), dcsd.rayCreator.getXForSomeA(), dcsd.rayCreator.getYForSomeA(), dcsd.rayCreator.getZForSomeA() );
-        
+        dcsd.rayClipper = new ClipToSphere();
+        //dcsd.rayClipper = new ClipToTorus( 0.5, 0.5 );
+        //dcsd.rayClipper = new ClipBlowUpSurface( 1.0, 1.0 );
+        //dcsd.someA = new PolynomialExpansionRowSubstitutor( getSurfaceExpression(), dcsd.rayCreator.getXForSomeA(), dcsd.rayCreator.getYForSomeA(), dcsd.rayCreator.getZForSomeA() );
+        dcsd.surfaceRowSubstitutor = new TransformedPolynomialRowSubstitutor( getSurfaceExpression(), dcsd.rayCreator.getXForSomeA(), dcsd.rayCreator.getYForSomeA(), dcsd.rayCreator.getZForSomeA() );
+        dcsd.gradientRowSubstitutor = new TransformedPolynomialRowSubstitutorForGradient( getGradientXExpression(), getGradientYExpression(), getGradientZExpression(), dcsd.rayCreator.getXForSomeA(), dcsd.rayCreator.getYForSomeA(), dcsd.rayCreator.getZForSomeA() );
+        //dcsd.gradientRowSubstitutor = new FastRowSubstitutorForGradient( getGradientXExpression(), getGradientYExpression(), getGradientZExpression(), dcsd.rayCreator );
+
+        //System.out.println( getSurfaceExpression().accept( new ToStringVisitor(), null ) );
+
         return dcsd;
     }
 
@@ -88,12 +97,10 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
             }
         }
 
-        threadPoolExecutor = Executors.newFixedThreadPool( ( int ) ( Runtime.getRuntime().availableProcessors() * 2.0 ), new PriorityThreadFactory() );
-        //threadPoolExecutor = Executors.newFixedThreadPool( 1 );
-        currentRenderingTasks = new LinkedList< Callable< Void > >();
-        drawMutex = new Object();
+        threadPoolExecutor = Executors.newCachedThreadPool( new PriorityThreadFactory() );
+        //threadPoolExecutor = Executors.newSingleThreadExecutor();
         this.setAntiAliasingMode( AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
-        this.setAntiAliasingPattern( AntiAliasingPattern.PATTERN_4x4 );
+        this.setAntiAliasingPattern( AntiAliasingPattern.OG_4x4 );
     }
 
     public enum AntiAliasingMode
@@ -111,7 +118,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         if( mode == AntiAliasingMode.SUPERSAMPLING )
             this.aaThreshold = 0.0f;
         else
-            this.aaThreshold = 0.045f;
+            this.aaThreshold = 0.3f;
     }
 
     public AntiAliasingMode getAntiAliasingMode()
@@ -131,35 +138,51 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
 
     public void draw( int[] colorBuffer, int width, int height )
     {
+        DrawcallStaticData dcsd = collectDrawCallStaticData( colorBuffer, width, height );
+
         synchronized( drawMutex )
         {
-            DrawcallStaticData dcsd = collectDrawCallStaticData( colorBuffer, width, height );
-
-            stopDrawing();
-            LinkedList< Callable< Void > > tmpCurrentRenderingTasks = new LinkedList< Callable< Void > >();
+            drawThread = Thread.currentThread();
+            LinkedList< Future< ? > > currentRenderingTasks = new LinkedList< Future< ? > >();
             int xStep = width / Math.min( width, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
             int yStep = height / Math.min( height, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
+
             for( int x = 0; x < width; x += xStep )
-                for( int y = 0; y < height; y += yStep )
-                   tmpCurrentRenderingTasks.add( new RenderingTask( dcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) );
-            currentRenderingTasks = tmpCurrentRenderingTasks;
-            try
+                for( int y = 0; y < height && !Thread.interrupted(); y += yStep )
+                    currentRenderingTasks.add( threadPoolExecutor.submit( new RenderingTask( dcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) ) );
+
+            boolean isInterrupted = false;
+            for( Future< ? > f : currentRenderingTasks )
             {
-                threadPoolExecutor.invokeAll( currentRenderingTasks );
-                for( Callable< Void > rt : currentRenderingTasks )
-                    if( ( ( RenderingTask ) rt ).isInterrupted() )
-                        throw new RuntimeException( "Rendering interrupted" );
-            } catch( InterruptedException ie )
-            {
-                throw new RuntimeException( ie );
+                try
+                {
+                    f.get();
+                }
+                catch( InterruptedException ie )
+                {
+                    // either this thread is interrupted while waiting
+                    isInterrupted = true;
+                }
+                catch( ExecutionException ee )
+                {
+                    
+                }
+                if( isInterrupted )
+                    f.cancel( true );
+                isInterrupted = isInterrupted || Thread.interrupted(); // or while it was not waiting
+                isInterrupted = isInterrupted || f.isCancelled(); // or one of the worker threads is interrupted
             }
-            currentRenderingTasks = new LinkedList< Callable< Void > >();
+
+            drawThread = null;
+            if( isInterrupted )
+                throw new RuntimeException( "Rendering interrupted" );
         }
     }
 
     public void stopDrawing()
     {
-        for( Callable< Void > rt : currentRenderingTasks )
-            ( ( RenderingTask ) rt ).interrupt();
+        Thread tmp_thread = drawThread;
+        if( tmp_thread != null )
+            tmp_thread.interrupt();
     }
 }

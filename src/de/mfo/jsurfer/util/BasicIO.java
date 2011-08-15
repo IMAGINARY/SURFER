@@ -15,6 +15,11 @@ import javax.vecmath.*;
  */
 public class BasicIO {
 
+    public static String toString( Tuple3d t )
+    {
+        return t.x + " " + t.y + " " + t.z;
+    }
+
     public static String toString( Tuple3f t )
     {
         return t.x + " " + t.y + " " + t.z;
@@ -31,17 +36,23 @@ public class BasicIO {
         return c;
     }
 
-    public static Point3f fromPoint3fString( String s )
+    public static Point3d fromPoint3dString( String s )
     {
-        return new Point3f( fromColor3fString( s ) );        
+        Scanner scanner = new Scanner( s );
+        scanner.useLocale(Locale.US);
+        Point3d c = new Point3d();
+        c.x = scanner.nextDouble();
+        c.y = scanner.nextDouble();
+        c.z = scanner.nextDouble();
+        return c;
     }
 
-    public static Vector3f fromVector3fString( String s )
+    public static Vector3d fromVector3dString( String s )
     {
-        return new Vector3f( fromColor3fString( s ) );
+        return new Vector3d( fromPoint3dString( s ) );
     }    
 
-    public static String toString( Matrix4f m )
+    public static String toString( Matrix4d m )
     {
         return m.m00 + " " + m.m01 + " " + m.m02 + " " + m.m03 + " " +
                 m.m10 + " " + m.m11 + " " + m.m12 + " " + m.m13 + " " +
@@ -49,27 +60,27 @@ public class BasicIO {
                 m.m30 + " " + m.m31 + " " + m.m32 + " " + m.m33;
     }
 
-    public static Matrix4f fromMatrix4fString( String s )
+    public static Matrix4d fromMatrix4dString( String s )
     {
         Scanner scanner = new Scanner( s );
         scanner.useLocale(Locale.US);
-        Matrix4f m = new Matrix4f();
-        m.m00 = scanner.nextFloat();
-        m.m01 = scanner.nextFloat();
-        m.m02 = scanner.nextFloat();
-        m.m03 = scanner.nextFloat();
-        m.m10 = scanner.nextFloat();
-        m.m11 = scanner.nextFloat();
-        m.m12 = scanner.nextFloat();
-        m.m13 = scanner.nextFloat();
-        m.m20 = scanner.nextFloat();
-        m.m21 = scanner.nextFloat();
-        m.m22 = scanner.nextFloat();
-        m.m23 = scanner.nextFloat();
-        m.m30 = scanner.nextFloat();
-        m.m31 = scanner.nextFloat();
-        m.m32 = scanner.nextFloat();
-        m.m33 = scanner.nextFloat();
+        Matrix4d m = new Matrix4d();
+        m.m00 = scanner.nextDouble();
+        m.m01 = scanner.nextDouble();
+        m.m02 = scanner.nextDouble();
+        m.m03 = scanner.nextDouble();
+        m.m10 = scanner.nextDouble();
+        m.m11 = scanner.nextDouble();
+        m.m12 = scanner.nextDouble();
+        m.m13 = scanner.nextDouble();
+        m.m20 = scanner.nextDouble();
+        m.m21 = scanner.nextDouble();
+        m.m22 = scanner.nextDouble();
+        m.m23 = scanner.nextDouble();
+        m.m30 = scanner.nextDouble();
+        m.m31 = scanner.nextDouble();
+        m.m32 = scanner.nextDouble();
+        m.m33 = scanner.nextDouble();
         return m;
     }
 

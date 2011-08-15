@@ -20,17 +20,24 @@ public class FastGradientCalculator implements GradientCalculator
     public FastGradientCalculator( PolynomialOperation gradientXExpression, PolynomialOperation gradientYExpression, PolynomialOperation gradientZExpression )
     {
         Expand e = new Expand();
-        
+
+        try
+        {
         this.gradientXPoly = gradientXExpression.accept( e, ( Void ) null );
         this.gradientYPoly = gradientYExpression.accept( e, ( Void ) null );
         this.gradientZPoly = gradientZExpression.accept( e, ( Void ) null );
+        }
+        catch( Throwable t )
+        {
+            t.printStackTrace();
+        }
     }
     
     public Vector3d calculateGradient( Point3d p )
     {
-        double x = gradientXPoly.evaluateAt( p.x, p.y, p.z );
-        double y = gradientYPoly.evaluateAt( p.x, p.y, p.z );
-        double z = gradientZPoly.evaluateAt( p.x, p.y, p.z );
+        double x = gradientXPoly.evaluateXYZ( p.x, p.y, p.z );
+        double y = gradientYPoly.evaluateXYZ( p.x, p.y, p.z );
+        double z = gradientZPoly.evaluateXYZ( p.x, p.y, p.z );
 
         return new Vector3d( x, y, z );
     }

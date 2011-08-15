@@ -161,17 +161,17 @@ public class FXSurferPanel extends CustomNode {
         //LightSource[] lights = new LightSource[ AlgebraicSurfaceRenderer.MAX_LIGHTS ];
 
         var light0:LightSource=new LightSource();
-        light0.setPosition( new Point3f( -100, 100, 100 ) );
-        light0.setIntensity( 0.5 );
+        light0.setPosition( new Point3d( -100, 100, 100 ) );
+        light0.setIntensity( 0.7 );
         light0.setColor( new Color3f( 1, 1, 1 ) );
 
         var light1:LightSource=new LightSource();
-        light1.setPosition( new Point3f( 100, 100, 100 ) );
-        light1.setIntensity( 0.7 );
+        light1.setPosition( new Point3d( 100, 100, 100 ) );
+        light1.setIntensity( 0.5 );
         light1.setColor( new Color3f( 1, 1, 1 ) );
 
         var light2:LightSource=new LightSource();
-        light2.setPosition( new Point3f( 0, -100, 100 ) );
+        light2.setPosition( new Point3d( 0, -100, 100 ) );
         light2.setIntensity( 0.3 );
         light2.setColor( new Color3f( 1, 1, 1 ) );
 
@@ -289,7 +289,7 @@ var p:PolynomialOperation;
                usedC=PAR.remove("c");
                usedD=PAR.remove("d");
                System.out.println("PAR leer({usedA},{usedB},{usedC},{usedD}):{PAR}");
-               if (not PAR.isEmpty() or degree>15)
+               if (not PAR.isEmpty() or degree>30)
                {
                    renderer.getAlgebraicSurfaceRenderer().setSurfaceFamily(old);
                    System.out.println("falsch {oldString}");

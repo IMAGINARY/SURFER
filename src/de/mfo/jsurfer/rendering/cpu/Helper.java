@@ -13,13 +13,13 @@ import javax.vecmath.*;
  */
 final class Helper
 {
-    static Point3f interpolate1D( Point3f p, Vector3f d, float t )
+    static Point3d interpolate1D( Point3d p, Vector3d d, double t )
     {
-        return new Point3f( p.x + d.x * t, p.y + d.y * t, p.z + d.z * t );
+        return new Point3d( p.x + d.x * t, p.y + d.y * t, p.z + d.z * t );
     }
 
-    static Point3f interpolate2D( Point3f p, Vector3f dx, Vector3f dy, float u, float v )
+    static Point3d interpolate2D( Point3d p, Vector3d dx, Vector3d dy, double u, double v )
     {
-        return new Point3f( p.x + dx.x * u + dy.x * v, p.y + dx.y * u + dy.y * v, p.z + dx.z * u + dy.z * v );
+        return new Point3d( p.x + dx.x * u + dy.x * v, p.y + dx.y * u + dy.y * v, p.z + dx.z * u + dy.z * v );
     }
 }
