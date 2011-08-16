@@ -19,7 +19,7 @@ is divided into following sections:
   - cleanup
 
         -->
-<project xmlns:javafxproject1="http://www.netbeans.org/ns/javafx-project/1" xmlns:javafxproject2="http://www.netbeans.org/ns/javafx-project/2" xmlns:javafxproject3="http://www.netbeans.org/ns/javafx-project/3" basedir=".." default="default" name="JFXSurferNewAlgebraSystem-impl">
+<project xmlns:javafxproject1="http://www.netbeans.org/ns/javafx-project/1" xmlns:javafxproject2="http://www.netbeans.org/ns/javafx-project/2" xmlns:javafxproject3="http://www.netbeans.org/ns/javafx-project/3" basedir=".." default="default" name="JFXSurfer-impl">
     <target depends="jar" description="Build whole project." name="default"/>
     <!--
                     ======================

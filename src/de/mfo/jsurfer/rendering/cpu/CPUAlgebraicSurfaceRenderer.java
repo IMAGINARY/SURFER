@@ -98,7 +98,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         }
 
         threadPoolExecutor = Executors.newCachedThreadPool( new PriorityThreadFactory() );
-        //threadPoolExecutor = Executors.newSingleThreadExecutor();
+        //threadPoolExecutor = Executors.newSingleThreadExecutor( new PriorityThreadFactory() );
         this.setAntiAliasingMode( AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
         this.setAntiAliasingPattern( AntiAliasingPattern.OG_4x4 );
     }

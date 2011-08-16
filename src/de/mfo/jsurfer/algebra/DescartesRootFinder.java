@@ -312,62 +312,6 @@ public class DescartesRootFinder implements RealRootFinder
         return tmp_result;
     }
 
-
-    public double findFirstRootInOld( UnivariatePolynomial p, double lowerBound, double upperBound )
-    {
-        //if( false )
-        //return new DescartesRootFinderBigDecimal().findFirstRootIn( DescartesRootFinderBigDecimal.convertFromDouble(p.getCoeffs()), new BigDecimal( lowerBound ), new BigDecimal( upperBound ) ).doubleValue();
-
-        p = p.shrink();
-        if( makeSquarefree )
-        {
-            // make p squarefree
-            UnivariatePolynomial gcd = UnivariatePolynomial.gcd( p, p.derive() );
-            if( gcd.degree() > 0 )
-                // Polynomial not squarefree!
-                p = p.div( gcd );
-        }
-
-        // move all roots in (lowerBound,upperBound) into (0,1)
-        p = p.shift( lowerBound ).stretch( upperBound - lowerBound );
-        if( p.getCoeff( 0 ) == 0.0 )
-            return lowerBound;
-
-        // isolate and refine first root in (0,1)
-        PolyInterval[] cand = new PolyInterval[ 10 ];
-        int cand_length = 0;
-        cand[ cand_length++ ] = new PolyInterval( p.getCoeffs(), 0.0, 1.0 );
-        while( cand_length != 0 )
-        {
-            PolyInterval pi = cand[ --cand_length ];
-            if( pi.shift )
-                pi.a = shift1( pi.a );
-            if( pi.a[ 0 ] == 0.0 )
-                return pi.l;
-            int v = descartesRuleOfSignReverseShift1( pi.a );
-            if( v == 1 )
-                return bisect( p, pi.l, pi.u ) * ( upperBound - lowerBound ) + lowerBound;
-            else if( v > 1 )
-            {
-                // evtl. mehr als eine NST in (0,1) -> teile Interval (0,1) in zwei teile
-                double c = 0.5 * ( pi.l + pi.u );
-                if( c == pi.l ) // we have reached maximum precision
-                    return c;
-                double[] stretchedA = stretchNormalize0_5( pi.a );
-                if( cand_length + 2 >= cand.length )
-                {
-                    // resize candidate stack
-                    PolyInterval[] newCand = new PolyInterval[ 2 * cand.length ];
-                    System.arraycopy( cand, 0, newCand, 0, cand.length );
-                    cand = newCand;
-                }
-                cand[ cand_length++ ] = new PolyInterval( stretchedA, true, c, pi.u );
-                cand[ cand_length++ ] = new PolyInterval( stretchedA, false, pi.l, c );
-            }
-        }
-        return java.lang.Double.NaN;
-    }
-
     private static double adjustIntervalAndBisect( UnivariatePolynomial p, double lowerBound, double upperBound, double strictLowerBound, double strictUpperBound )
     {
         double fl = p.evaluateAt( lowerBound );
@@ -408,7 +352,10 @@ public class DescartesRootFinder implements RealRootFinder
             }
         }
 
-        return bisect( p, lowerBound, upperBound, fl, fu );
+        if( fl * fu <= 0.0 )
+            return bisect( p, lowerBound, upperBound, fl, fu );
+        else
+            return java.lang.Double.NaN;
     }
 
     private static double bisect( UnivariatePolynomial p, double lowerBound, double upperBound )
@@ -525,6 +472,8 @@ public class DescartesRootFinder implements RealRootFinder
                 lastNonZeroCoeff = hornerCoeffs[ i - 1 ];
             }
         }
+        if( hornerCoeffs[ 0 ] == 0.0 )
+            ++signChanges;
 
         return signChanges;
     }

@@ -34,7 +34,6 @@ import javax.media.opengl.awt.GLJPanel;
 import java.awt.BorderLayout;
 
 import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
 
 /**
  * This panel displays an algebraic surface in its center. All settings of the used
@@ -60,16 +59,14 @@ public class JSurferRenderPanel extends JComponent
 
     CPUAlgebraicSurfaceRenderer asr;
     ImgBuffer currentSurfaceImage;
-    boolean refreshImage;
-    boolean refreshImageAntiAliased;
-    boolean renderSizeChanged;
     boolean resizeImageWithComponent;
     boolean renderCoordinatenSystem;
     Dimension renderSize;
+    Dimension minLowResRenderSize;
+    Dimension maxLowResRenderSize;
     RotateSphericalDragger rsd;
     Matrix4d scale;
     RenderWorker rw;
-    boolean firstRun;
     GLJPanel glcanvas;
 
     class RenderWorker extends Thread
@@ -77,6 +74,8 @@ public class JSurferRenderPanel extends JComponent
         Semaphore semaphore = new Semaphore( 0 );
         boolean finish = false;
         boolean is_drawing_hi_res = false;
+        double time_per_pixel = 1000.0;
+        final double desired_fps = 15.0;
 
         public void finish()
         {
@@ -103,10 +102,15 @@ public class JSurferRenderPanel extends JComponent
                 {
                     int available_permits = semaphore.availablePermits();
                     semaphore.acquire( Math.max( 1, available_permits ) ); // wait for new task and grab all permits
+                    long minPixels = JSurferRenderPanel.this.minLowResRenderSize.width * JSurferRenderPanel.this.minLowResRenderSize.height;
+                    long maxPixels = JSurferRenderPanel.this.maxLowResRenderSize.width * JSurferRenderPanel.this.maxLowResRenderSize.height;
+                    long numPixelsAt15FPS = ( long ) ( 1.0 / ( desired_fps * time_per_pixel ) );
+                    long pixelsToUse = Math.max( minPixels, Math.min( maxPixels, numPixelsAt15FPS ) );
+                    JSurferRenderPanel.this.renderSize = new Dimension( (int) Math.sqrt( pixelsToUse ), (int) Math.sqrt( pixelsToUse ) );
 
                     // render low res
                     {
-                        ImgBuffer ib = draw( renderSize.width, renderSize.height, AntiAliasingPattern.QUINCUNX );
+                        ImgBuffer ib = draw( renderSize.width, renderSize.height, AntiAliasingPattern.QUINCUNX, true );
                         if( ib != null )
                         {
                             currentSurfaceImage =  ib;
@@ -124,7 +128,7 @@ public class JSurferRenderPanel extends JComponent
                     {
                         //System.out.println( "drawing hi res");
                         is_drawing_hi_res = true;
-                        ImgBuffer ib = draw( JSurferRenderPanel.this.getWidth(), JSurferRenderPanel.this.getHeight(), AntiAliasingPattern.OG_4x4 );
+                        ImgBuffer ib = draw( JSurferRenderPanel.this.getWidth(), JSurferRenderPanel.this.getHeight(), AntiAliasingPattern.OG_4x4, false );
                         if( ib != null )
                         {
                             currentSurfaceImage =  ib;
@@ -141,6 +145,11 @@ public class JSurferRenderPanel extends JComponent
         }
 
         public ImgBuffer draw( int width, int height, AntiAliasingPattern aap )
+        {
+            return draw( width, height, aap, false );
+        }
+
+        public ImgBuffer draw( int width, int height, AntiAliasingPattern aap, boolean save_fps )
         {
             // create color buffer
             ImgBuffer ib = new ImgBuffer( width, height );
@@ -163,7 +172,10 @@ public class JSurferRenderPanel extends JComponent
                 long t_start = System.nanoTime();
                 asr.draw( ib.rgbBuffer, width, height );
                 long t_end = System.nanoTime();
-                System.err.println( 1000000000.0 / ( t_end - t_start ) + "fps" );
+                double fps = 1000000000.0 / ( t_end - t_start );
+                System.err.println( fps + "fps at " + width +"x" + height );
+                if( save_fps )
+                    time_per_pixel = ( ( t_end - t_start ) / 1000000000.0 ) / ( width * height );
                 return ib;
             }
             catch( Throwable t )
@@ -177,12 +189,10 @@ public class JSurferRenderPanel extends JComponent
     public JSurferRenderPanel()
     {
         renderCoordinatenSystem = false;
-        renderSize = new Dimension( 150, 150 );
+        minLowResRenderSize = new Dimension( 150, 150 );
+        maxLowResRenderSize = new Dimension( 512, 512 );
+        //renderSize = minLowResRenderSize;
 
-        firstRun = true;
-        refreshImage = true;
-        refreshImageAntiAliased = true;
-        renderSizeChanged = true;
         resizeImageWithComponent = false;
 
         asr = new CPUAlgebraicSurfaceRenderer();
@@ -485,15 +495,6 @@ public class JSurferRenderPanel extends JComponent
     public void setResizeImageWithComponent( boolean resize )
     {
         resizeImageWithComponent = resize;
-        if( resizeImageWithComponent )
-        {
-            renderSize = getSize();
-            renderSize.width = Math.max( 1, renderSize.width );
-            renderSize.height = Math.max( 1, renderSize.height );
-            renderSizeChanged = true;
-            refreshImage = true;
-            scheduleSurfaceRepaint();
-        }
     }
 
     public boolean getResizeWithComponent()
@@ -503,33 +504,38 @@ public class JSurferRenderPanel extends JComponent
 
     public void repaintImage()
     {
-        refreshImage = true;
         scheduleSurfaceRepaint();
     }
 
     public Dimension getPreferredSize()
     {
-        return new Dimension( renderSize.width, renderSize.height );
+        return new Dimension( minLowResRenderSize.width, minLowResRenderSize.height );
     }
 
-    public void setRenderSize( Dimension d )
+
+    public void setMinLowResRenderSize( Dimension d )
     {
-        if( !resizeImageWithComponent )
-        {
-            if( !d.equals( renderSize ) )
-            {
-                renderSizeChanged = true;
-                refreshImage = true;
-                refreshImageAntiAliased = false;
-                renderSize = new Dimension( d );
-                scheduleSurfaceRepaint();
-            }
-        }
+        this.minLowResRenderSize = d;
+    }
+
+    public void setMaxLowResRenderSize( Dimension d )
+    {
+        this.maxLowResRenderSize = d;
+    }
+
+    public Dimension getMinLowResRenderSize()
+    {
+        return this.minLowResRenderSize;
+    }
+
+    public Dimension getMaxLowResRenderSize()
+    {
+        return this.maxLowResRenderSize;
     }
 
     public Dimension getRenderSize()
     {
-        return renderSize;
+        return this.renderSize;
     }
 
     public void setScale( double scaleFactor )
@@ -551,15 +557,18 @@ public class JSurferRenderPanel extends JComponent
     public void saveToPNG( java.io.File f, int width, int height )
             throws java.io.IOException
     {
-        Dimension oldDim = getRenderSize();
-        setRenderSize( new Dimension( width, height ) );
+        Dimension oldMinDim = getMinLowResRenderSize();
+        Dimension oldMaxDim = getMaxLowResRenderSize();
+        setMinLowResRenderSize( new Dimension( width, height ) );
+        setMaxLowResRenderSize( new Dimension( width, height ) );
         scheduleSurfaceRepaint();
         try
         {
             javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.draw( width, height, AntiAliasingPattern.OG_4x4 ) ), "png", f );
         }
         catch( java.util.concurrent.CancellationException ce ) {}
-        setRenderSize( oldDim );
+        setMinLowResRenderSize( oldMinDim );
+        setMaxLowResRenderSize( oldMaxDim );
         scheduleSurfaceRepaint();
     }
 
@@ -669,13 +678,6 @@ public class JSurferRenderPanel extends JComponent
     {
         rsd.setXSpeed( 180.0f / this.getWidth() );
         rsd.setYSpeed( 180.0f / this.getHeight() );
-        if( resizeImageWithComponent )
-        {
-            renderSize = new Dimension( Math.max( 1, this.getWidth() ), Math.max( 1, this.getHeight() ) );
-            renderSizeChanged = true;
-            refreshImage = true;
-            refreshImageAntiAliased = false;
-        }
         scheduleSurfaceRepaint();
         repaint();
     }
@@ -689,8 +691,6 @@ public class JSurferRenderPanel extends JComponent
     protected void mouseDragged( MouseEvent me )
     {
         rsd.dragTo( me.getPoint() );
-        refreshImage = true;
-        refreshImageAntiAliased = false;
         //drawCoordinatenSystem(true);
         scheduleSurfaceRepaint();
     }
@@ -705,8 +705,6 @@ public class JSurferRenderPanel extends JComponent
 
         this.setScale(this.getScale()-units/50.0 );
         //this.setScale(0);
-        refreshImage = true;
-        refreshImageAntiAliased = false;
         scheduleSurfaceRepaint();
     }
 

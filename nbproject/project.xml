@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.javafx.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/javafx-project/3">
-            <name>JFXSurferNewAlgebraSystem</name>
+            <name>JFXSurfer</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <source-roots>
                 <root id="src.dir"/>
