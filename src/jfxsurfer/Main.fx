@@ -71,7 +71,7 @@ var timeline = javafx.animation.Timeline
         action: function()
         {
             //System.out.println("Time is up");
-            //GUI.setScreenSaver();
+            GUI.setScreenSaver();
         }
     }
 }
