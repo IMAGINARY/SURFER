@@ -41,7 +41,7 @@ function toggleFullscreenKey(e:KeyEvent):Void
 javax.swing.UIManager.setLookAndFeel( javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
 
 def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
-                x: 0, y:bind scene.height- GUI.realHeight, width:bind scene.width, height:bind scene.height
+                x: 0, y:bind GUI.realHeight(scene.height,scene.width), width:bind scene.width, height:bind scene.height
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
             }
@@ -57,7 +57,7 @@ var impressum:de.mfo.jsurfer.gui.FXImpressum=de.mfo.jsurfer.gui.FXImpressum
 {
     width:bind scene.width,
     height:bind scene.height
-    translateY:bind scene.height- GUI.realHeight
+    translateY:bind GUI.realHeight(scene.height,scene.width)
     language: bind GUI.language
     visible: bind GUI.showImpressum
     onMousePressed: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
@@ -71,7 +71,7 @@ var timeline = javafx.animation.Timeline
         action: function()
         {
             //System.out.println("Time is up");
-            GUI.setScreenSaver();
+            //GUI.setScreenSaver();
         }
     }
 }

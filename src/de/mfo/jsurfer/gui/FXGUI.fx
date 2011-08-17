@@ -14,8 +14,17 @@ import java.lang.System;
 public class FXGUI extends javafx.scene.CustomNode
 {
     public var showImpressum:Boolean=false;
-    public var realHeight:Number=bind fxdLayoutFile.layoutBounds.maxY*getScale(height,width);
-
+    //public var realHeight:Number=bind fxdLayoutFile.layoutBounds.maxY*getScale(height,width);
+    //public var
+    public function realHeight(n:Number, w:Number):Number
+        {
+            var tmp:Number = w/fxdLayoutFile.layoutBounds.maxX;
+            if (tmp*(fxdLayoutFile.layoutBounds.maxY)>n)
+            {
+                tmp=n/fxdLayoutFile.layoutBounds.maxY;
+            }
+            return (n-tmp*fxdLayoutFile.layoutBounds.maxY);
+        }
     def fxdLayoutFile:javafx.fxd.FXDNode = javafx.fxd.FXDNode
 	{
                 url:    "{__DIR__}surfer_touchscreen_1920_x_1080.fxz"
