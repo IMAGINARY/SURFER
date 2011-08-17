@@ -38,7 +38,15 @@ public class RenderingTask implements Callable<Void>
 
     public Void call()
     {
-        render();
+        try
+        {
+            render();
+        }
+        catch( RuntimeException re )
+        {
+            re.printStackTrace();
+            throw re;
+        }
         return null;
     }
 
@@ -224,7 +232,7 @@ public class RenderingTask implements Callable<Void>
                     interval.x = Math.max( interval.x, eyeLocation );
 
                 // intersect ray with surface and shade pixel
-                //double[] hits = dcsd.realRootFinder.findAllRootsIn( surfacePoly, interval.x, interval.y );
+                //double[] hits = hits = dcsd.realRootFinder.findAllRootsIn( surfacePoly, interval.x, interval.y );
                 double[] hits = { dcsd.realRootFinder.findFirstRootIn( surfacePoly, interval.x, interval.y ) };
                 if( java.lang.Double.isNaN( hits[ 0 ]  ))
                     hits = new double[ 0 ];
@@ -350,16 +358,16 @@ public class RenderingTask implements Callable<Void>
         v.sub( p );
         v.normalize();
 /*
-        // for blowup-visualization
+        // special coloring for blowup-visualization
         if( n.dot( v ) < 0.0f )
             n.negate();
-        if( blowUpChooseMaterial( surfaceHitPoint ) )
+        if( blowUpChooseMaterial( dcsd.rayCreator.cameraSpaceToSurfaceSpace( p ) ) )
         {
-            return shadeWithMaterial( hitPoint, v, n, dcsd.frontAmbientColor, dcsd.frontLightProducts );
+            return shadeWithMaterial( p, v, n, dcsd.frontAmbientColor, dcsd.frontLightProducts );
         }
         else
         {
-            return shadeWithMaterial( hitPoint, v, n, dcsd.backAmbientColor, dcsd.backLightProducts );
+            return shadeWithMaterial( p, v, n, dcsd.backAmbientColor, dcsd.backLightProducts );
         }
 */
         // compute, which material to use
