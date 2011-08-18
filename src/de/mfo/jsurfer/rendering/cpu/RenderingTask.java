@@ -45,7 +45,7 @@ public class RenderingTask implements Callable<Void>
         catch( RenderingInterruptedException rie )
         {
             // rendering interrupted .. that's ok
-            System.err.println( "... interrupted" );
+            //System.err.println( "... interrupted" );
         }
         catch( RuntimeException re )
         {

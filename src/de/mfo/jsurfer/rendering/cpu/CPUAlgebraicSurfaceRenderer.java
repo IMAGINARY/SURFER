@@ -20,7 +20,6 @@ import java.awt.*;
  */
 public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
 {
-    private ExecutorService threadPoolExecutor;
     Object drawMutex = new Object();
     volatile Thread drawThread;
     ThreadGroup tg; // just to know, which threads are active and do rendering
@@ -90,24 +89,24 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     public CPUAlgebraicSurfaceRenderer()
     {
         super();
-        class PriorityThreadFactory implements ThreadFactory {
 
-            public PriorityThreadFactory()
-            {
-                CPUAlgebraicSurfaceRenderer.this.tg = new ThreadGroup( "Group of rendering threads of " + this );
-            }
+        this.setAntiAliasingMode( AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
+        this.setAntiAliasingPattern( AntiAliasingPattern.OG_4x4 );
+        this.tg = new ThreadGroup( "Group of rendering threads of " + this );
+    }
 
+    ExecutorService createExecutorService()
+    {
+        class PriorityThreadFactory implements ThreadFactory
+        {
             public Thread newThread(Runnable r) {
                 Thread t = new Thread( CPUAlgebraicSurfaceRenderer.this.tg, r);
                 t.setPriority( Thread.MIN_PRIORITY );
                 return t;
             }
         }
-
-        threadPoolExecutor = Executors.newCachedThreadPool( new PriorityThreadFactory() );
-        //threadPoolExecutor = Executors.newSingleThreadExecutor( new PriorityThreadFactory() );
-        this.setAntiAliasingMode( AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
-        this.setAntiAliasingPattern( AntiAliasingPattern.OG_4x4 );
+        return Executors.newFixedThreadPool( 4 * Runtime.getRuntime().availableProcessors(), new PriorityThreadFactory() );
+        //return Executors.newSingleThreadExecutor( new PriorityThreadFactory() );
     }
 
     public enum AntiAliasingMode
@@ -147,6 +146,8 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     {
         DrawcallStaticData dcsd = collectDrawCallStaticData( colorBuffer, width, height );
 
+        ExecutorService threadPoolExecutor = createExecutorService();
+
         synchronized( drawMutex )
         {
             drawThread = Thread.currentThread();
@@ -158,32 +159,36 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
                 for( int y = 0; y < height && !Thread.interrupted(); y += yStep )
                     currentRenderingTasks.add( threadPoolExecutor.submit( new RenderingTask( dcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) ) );
 
-            boolean isInterrupted = false;
-            for( Future< ? > f : currentRenderingTasks )
+            try
             {
-                if( isInterrupted )
-                    f.cancel( true );
-                try
+                for( Future< ? > f : currentRenderingTasks )
                 {
-                    f.get();
-                }
-                catch( InterruptedException ie )
-                {
-                    // either this thread is interrupted while waiting
-                    isInterrupted = true;
-                    f.cancel( true );
-                }
-                catch( ExecutionException ee )
-                {
-                    
-                }
-                isInterrupted = isInterrupted || Thread.interrupted(); // or while it was not waiting
-                isInterrupted = isInterrupted || f.isCancelled(); // or one of the worker threads is interrupted
-            }
+                    try
+                    {
+                        f.get();
+                    }
+                    catch( InterruptedException ie )
+                    {
+                        // either this thread is interrupted while waiting
+                        threadPoolExecutor.shutdownNow();
+                        throw new RenderingInterruptedException( "Rendering interrupted" );
+                    }
+                    catch( ExecutionException ee )
+                    {
 
-            drawThread = null;
-            if( isInterrupted )
-                throw new RuntimeException( "Rendering interrupted" );
+                    }
+                    if( Thread.interrupted() ) // or while it was not waiting
+                    {
+                        threadPoolExecutor.shutdownNow();
+                        throw new RenderingInterruptedException( "Rendering interrupted" );
+                    }
+                }
+            }
+            finally
+            {
+                drawThread = null;
+                threadPoolExecutor.shutdownNow();
+            }
         }
     }
 
