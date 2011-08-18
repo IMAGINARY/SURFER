@@ -42,6 +42,11 @@ public class RenderingTask implements Callable<Void>
         {
             render();
         }
+        catch( RenderingInterruptedException rie )
+        {
+            // rendering interrupted .. that's ok
+            System.err.println( "... interrupted" );
+        }
         catch( RuntimeException re )
         {
             re.printStackTrace();
@@ -121,7 +126,7 @@ public class RenderingTask implements Callable<Void>
                     for( int x = 0; x < internal_width; ++x )
                     {
                         if( Thread.interrupted() )
-                            return;
+                            throw new RenderingInterruptedException();
 
                         // current position on viewing plane
                         double u = u_start + x * u_incr;
@@ -150,19 +155,19 @@ public class RenderingTask implements Callable<Void>
 
         // adaptive supersampling
         float thresholdSqr = dcsd.antiAliasingThreshold * dcsd.antiAliasingThreshold;
-        if( aap != AntiAliasingPattern.OG_2x2 && ( colorDiffSqr( ulColor, urColor ) > thresholdSqr ||
-            colorDiffSqr( ulColor, llColor ) > thresholdSqr ||
-            colorDiffSqr( ulColor, lrColor ) > thresholdSqr ||
-            colorDiffSqr( urColor, llColor ) > thresholdSqr ||
-            colorDiffSqr( urColor, lrColor ) > thresholdSqr ||
-            colorDiffSqr( llColor, lrColor ) > thresholdSqr ) )
+        if( aap != AntiAliasingPattern.OG_2x2 && ( colorDiffSqr( ulColor, urColor ) >= thresholdSqr ||
+            colorDiffSqr( ulColor, llColor ) >= thresholdSqr ||
+            colorDiffSqr( ulColor, lrColor ) >= thresholdSqr ||
+            colorDiffSqr( urColor, llColor ) >= thresholdSqr ||
+            colorDiffSqr( urColor, lrColor ) >= thresholdSqr ||
+            colorDiffSqr( llColor, lrColor ) >= thresholdSqr ) )
         {
             // anti-alias pixel with advanced sampling pattern
             finalColor = new Color3f();
             for( AntiAliasingPattern.SamplingPoint sp : aap )
             {
                 if( Thread.interrupted() )
-                    return finalColor;
+                    throw new RenderingInterruptedException();
 
                 Color3f ss_color;
                 if( sp.getU() == 0.0 && sp.getV() == 0.0 )

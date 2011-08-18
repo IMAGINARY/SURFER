@@ -21,6 +21,7 @@ import de.mfo.jsurfer.rendering.*;
 import de.mfo.jsurfer.rendering.cpu.*;
 import de.mfo.jsurfer.parser.*;
 import de.mfo.jsurfer.util.*;
+import static de.mfo.jsurfer.rendering.cpu.CPUAlgebraicSurfaceRenderer.AntiAliasingMode;
 
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
@@ -84,12 +85,12 @@ public class JSurferRenderPanel extends JComponent
 
         public void scheduleRepaint()
         {
+            // schedule redraw
+            semaphore.release();
+
             // try to ensure, that high resolution drawing is canceled
             if( is_drawing_hi_res )
                 JSurferRenderPanel.this.asr.stopDrawing();
-
-            // schedule redraw
-            semaphore.release();
         }
 
         @Override
@@ -110,7 +111,7 @@ public class JSurferRenderPanel extends JComponent
 
                     // render low res
                     {
-                        ImgBuffer ib = draw( renderSize.width, renderSize.height, AntiAliasingPattern.QUINCUNX, true );
+                        ImgBuffer ib = draw( renderSize.width, renderSize.height, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX, true );
                         if( ib != null )
                         {
                             currentSurfaceImage =  ib;
@@ -118,7 +119,7 @@ public class JSurferRenderPanel extends JComponent
                         }
                     }
 
-                    if( semaphore.tryAcquire( 100, TimeUnit.MILLISECONDS) ) // wait some time, then start with high res drawing
+                    if( semaphore.tryAcquire( 100, TimeUnit.MILLISECONDS ) ) // wait some time, then start with high res drawing
                     {
                         semaphore.release();
                         continue;
@@ -126,9 +127,24 @@ public class JSurferRenderPanel extends JComponent
 
                     // render high res, if no new low res rendering is scheduled
                     {
+                        is_drawing_hi_res = true;
+                        ImgBuffer ib = draw( JSurferRenderPanel.this.getWidth(), JSurferRenderPanel.this.getHeight(), AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4, false );
+                        if( ib != null )
+                        {
+                            currentSurfaceImage =  ib;
+                            JSurferRenderPanel.this.repaint();
+                        }
+                        is_drawing_hi_res = false;
+                    }
+
+                    if( semaphore.availablePermits() > 0 ) // restart, if user has changes the view
+                        continue;
+
+                    // render high res with even better quality
+                    {
                         //System.out.println( "drawing hi res");
                         is_drawing_hi_res = true;
-                        ImgBuffer ib = draw( JSurferRenderPanel.this.getWidth(), JSurferRenderPanel.this.getHeight(), AntiAliasingPattern.OG_4x4, false );
+                        ImgBuffer ib = draw( JSurferRenderPanel.this.getWidth(), JSurferRenderPanel.this.getHeight(), AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4, false );
                         if( ib != null )
                         {
                             currentSurfaceImage =  ib;
@@ -144,12 +160,12 @@ public class JSurferRenderPanel extends JComponent
             }
         }
 
-        public ImgBuffer draw( int width, int height, AntiAliasingPattern aap )
+        public ImgBuffer draw( int width, int height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode aam, AntiAliasingPattern aap )
         {
-            return draw( width, height, aap, false );
+            return draw( width, height, aam, aap, false );
         }
 
-        public ImgBuffer draw( int width, int height, AntiAliasingPattern aap, boolean save_fps )
+        public ImgBuffer draw( int width, int height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode aam, AntiAliasingPattern aap, boolean save_fps )
         {
             // create color buffer
             ImgBuffer ib = new ImgBuffer( width, height );
@@ -163,7 +179,7 @@ public class JSurferRenderPanel extends JComponent
             tm.mul( scale );
             asr.setTransform( rsd.getRotation() );
             asr.setSurfaceTransform( scale );
-            asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
+            asr.setAntiAliasingMode( aam );
             asr.setAntiAliasingPattern( aap );
             setOptimalCameraDistance( asr.getCamera() );
 
@@ -564,7 +580,7 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
         try
         {
-            javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.draw( width, height, AntiAliasingPattern.OG_4x4 ) ), "png", f );
+            javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.draw( width, height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4 ) ), "png", f );
         }
         catch( java.util.concurrent.CancellationException ce ) {}
         setMinLowResRenderSize( oldMinDim );

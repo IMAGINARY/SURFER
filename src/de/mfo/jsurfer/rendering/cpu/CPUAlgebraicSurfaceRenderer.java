@@ -23,6 +23,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     private ExecutorService threadPoolExecutor;
     Object drawMutex = new Object();
     volatile Thread drawThread;
+    ThreadGroup tg; // just to know, which threads are active and do rendering
     
     public synchronized DrawcallStaticData collectDrawCallStaticData( int[] colorBuffer, int width, int height )
     {
@@ -90,8 +91,14 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
     {
         super();
         class PriorityThreadFactory implements ThreadFactory {
+
+            public PriorityThreadFactory()
+            {
+                CPUAlgebraicSurfaceRenderer.this.tg = new ThreadGroup( "Group of rendering threads of " + this );
+            }
+
             public Thread newThread(Runnable r) {
-                Thread t = new Thread(r);
+                Thread t = new Thread( CPUAlgebraicSurfaceRenderer.this.tg, r);
                 t.setPriority( Thread.MIN_PRIORITY );
                 return t;
             }
@@ -154,6 +161,8 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
             boolean isInterrupted = false;
             for( Future< ? > f : currentRenderingTasks )
             {
+                if( isInterrupted )
+                    f.cancel( true );
                 try
                 {
                     f.get();
@@ -162,13 +171,12 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
                 {
                     // either this thread is interrupted while waiting
                     isInterrupted = true;
+                    f.cancel( true );
                 }
                 catch( ExecutionException ee )
                 {
                     
                 }
-                if( isInterrupted )
-                    f.cancel( true );
                 isInterrupted = isInterrupted || Thread.interrupted(); // or while it was not waiting
                 isInterrupted = isInterrupted || f.isCancelled(); // or one of the worker threads is interrupted
             }
