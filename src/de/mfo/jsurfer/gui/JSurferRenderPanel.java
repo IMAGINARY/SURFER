@@ -77,6 +77,7 @@ public class JSurferRenderPanel extends JComponent
         boolean is_drawing_hi_res = false;
         double time_per_pixel = 1000.0;
         final double desired_fps = 15.0;
+        boolean skip_hi_res = false;
 
         public void finish()
         {
@@ -93,6 +94,16 @@ public class JSurferRenderPanel extends JComponent
                 JSurferRenderPanel.this.asr.stopDrawing();
         }
 
+        public void stopHighResolutionRendering()
+        {
+            semaphore.drainPermits(); // remove all currently available permits
+            skip_hi_res = true;
+
+            // try to ensure, that current high resolution rendering is canceled
+            if( is_drawing_hi_res )
+                JSurferRenderPanel.this.asr.stopDrawing();
+        }
+
         @Override
         public void run()
         {
@@ -103,6 +114,7 @@ public class JSurferRenderPanel extends JComponent
                 {
                     int available_permits = semaphore.availablePermits();
                     semaphore.acquire( Math.max( 1, available_permits ) ); // wait for new task and grab all permits
+                    skip_hi_res = false;
                     long minPixels = JSurferRenderPanel.this.minLowResRenderSize.width * JSurferRenderPanel.this.minLowResRenderSize.height;
                     long maxPixels = JSurferRenderPanel.this.maxLowResRenderSize.width * JSurferRenderPanel.this.maxLowResRenderSize.height;
                     maxPixels = Math.max( 1, Math.min( maxPixels, JSurferRenderPanel.this.getWidth() * JSurferRenderPanel.this.getHeight() ) );
@@ -126,6 +138,8 @@ public class JSurferRenderPanel extends JComponent
                         semaphore.release();
                         continue;
                     }
+                    else if( skip_hi_res )
+                        continue;
 
                     // render high res, if no new low res rendering is scheduled
                     {
@@ -140,6 +154,8 @@ public class JSurferRenderPanel extends JComponent
                     }
 
                     if( semaphore.availablePermits() > 0 ) // restart, if user has changes the view
+                        continue;
+                    else if( skip_hi_res )
                         continue;
 
                     // render high res with even better quality
