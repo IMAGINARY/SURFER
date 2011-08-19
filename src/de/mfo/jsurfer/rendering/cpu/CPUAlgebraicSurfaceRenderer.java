@@ -33,6 +33,9 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         dcsd.height = height;
         
         dcsd.coefficientCalculator = new PolynomialExpansionCoefficientCalculator( getSurfaceExpression() );
+        if( this.getSurfaceTotalDegree() <= 4 )
+            dcsd.realRootFinder = new ClosedFormRootFinder();
+        else
 //        dcsd.realRootFinder = new DChainRootFinder();
 //        dcsd.realRootFinder = new SturmChainRootFinder();
         dcsd.realRootFinder = new DescartesRootFinder( false );

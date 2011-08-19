@@ -24,6 +24,7 @@ public abstract class AlgebraicSurfaceRenderer
 
     private String surfaceExpressionFamilyString;
     private PolynomialOperation surfaceExpressionFamily;
+    private int surfaceTotalDegree;
 
     private PolynomialOperation surfaceExpression;
     private PolynomialOperation gradientXExpression;
@@ -76,6 +77,7 @@ public abstract class AlgebraicSurfaceRenderer
         this.surfaceExpressionFamilyString = expressionString;
         this.clearExpressionCache();
         this.parameterSubstitutor = new Simplificator(); // forget about old values of parameters
+        this.surfaceTotalDegree = this.surfaceExpressionFamily.accept( new DegreeCalculator(), ( Void ) null );
     }
 
     public void setSurfaceFamily( PolynomialOperation expression )
@@ -133,6 +135,11 @@ public abstract class AlgebraicSurfaceRenderer
         if( this.gradientZExpression == null )
             this.gradientZExpression = getSurfaceExpression().accept( new Differentiator( PolynomialVariable.Var.z ), ( Void ) null );
         return this.gradientZExpression;
+    }
+
+    public int getSurfaceTotalDegree()
+    {
+        return this.surfaceTotalDegree;
     }
 
     public void setParameterValue( String name, double value )
