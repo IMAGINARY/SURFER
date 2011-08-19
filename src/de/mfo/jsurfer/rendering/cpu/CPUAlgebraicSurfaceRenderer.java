@@ -33,7 +33,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
         dcsd.height = height;
         
         dcsd.coefficientCalculator = new PolynomialExpansionCoefficientCalculator( getSurfaceExpression() );
-        if( this.getSurfaceTotalDegree() <= 4 )
+        if( this.getSurfaceTotalDegree() < 2 )
             dcsd.realRootFinder = new ClosedFormRootFinder();
         else
 //        dcsd.realRootFinder = new DChainRootFinder();
@@ -178,7 +178,14 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
                     }
                     catch( ExecutionException ee )
                     {
-
+                        threadPoolExecutor.shutdownNow();
+                        throw new RenderingInterruptedException( "Rendering interrupted" );
+                    }
+                    catch( Throwable t )
+                    {
+                        t.printStackTrace(); // we did not except this exception
+                        threadPoolExecutor.shutdownNow();
+                        throw new RenderingInterruptedException( "Rendering interrupted by unexpected cause", t );
                     }
                     if( Thread.interrupted() ) // or while it was not waiting
                     {

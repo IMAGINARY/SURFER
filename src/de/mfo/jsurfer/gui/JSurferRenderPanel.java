@@ -212,6 +212,10 @@ public class JSurferRenderPanel extends JComponent
                     time_per_pixel = ( ( t_end - t_start ) / 1000000000.0 ) / ( width * height );
                 return ib;
             }
+            catch( RenderingInterruptedException rie )
+            {
+                return null;
+            }
             catch( Throwable t )
             {
                 System.out.println( t );
