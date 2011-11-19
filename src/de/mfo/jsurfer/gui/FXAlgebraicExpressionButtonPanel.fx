@@ -9,6 +9,7 @@ package de.mfo.jsurfer.gui;
 import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 import java.lang.System;
+import java.lang.String;
 
 /**
  * @author Panda
@@ -51,6 +52,20 @@ public class FXAlgebraicExpressionButtonPanel
                 override function removeUpdate( e ){surferPanel.surfaceExpressionChanged(ExpressionField.getText());}
             }
         );
+        ExpressionField.addKeyListener( java.awt.event.KeyListener
+        {
+          override function keyPressed( keyEvent:KeyEvent ) { rewrite( keyEvent ); }
+          override function keyReleased( keyEvent:KeyEvent ) { rewrite( keyEvent ); }
+          override function keyTyped( keyEvent:KeyEvent ) { rewrite( keyEvent ); }
+          function rewrite( keyEvent:KeyEvent )
+          {
+              System.out.println(keyEvent);
+              if( keyEvent.getKeyCode() == KeyEvent.VK_COMMA )
+                keyEvent.setKeyCode( KeyEvent.VK_COLON );
+              if( keyEvent.getKeyChar() == ",".charAt( 0 ) )
+                keyEvent.setKeyChar( ".".charAt( 0 ) );
+          }
+        } );
     }
 
     public var SurfaceExpression:javafx.scene.layout.HBox= new javafx.scene.layout.HBox();
