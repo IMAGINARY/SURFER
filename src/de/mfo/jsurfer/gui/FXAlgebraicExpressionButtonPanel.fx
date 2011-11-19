@@ -107,7 +107,22 @@ public class FXAlgebraicExpressionButtonPanel
         ExpressionField.setFont(f);
         ExpressionField.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
         ExpressionField.setDisabledTextColor( java.awt.Color.BLACK );
+		ExpressionField.addFocusListener
+		(
+			java.awt.event.FocusListener
+			{
+				override function focusGained( e )
+                {
+                    //do nothing
+                }
+                override function focusLost( e )
+                {
+                    ExpressionField.requestFocus();
+                }
 
+            }
+		);
+		ExpressionField.requestFocus();
         caret.setBlinkRate(500);
         ExpressionField.setCaret(caret);
         //ExpressionField.setCaretPosition(1);
