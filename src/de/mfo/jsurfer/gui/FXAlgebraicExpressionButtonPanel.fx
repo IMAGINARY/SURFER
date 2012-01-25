@@ -54,17 +54,29 @@ public class FXAlgebraicExpressionButtonPanel
         );
         ExpressionField.addKeyListener( java.awt.event.KeyListener
         {
-          override function keyPressed( keyEvent:KeyEvent ) { rewrite( keyEvent ); }
-          override function keyReleased( keyEvent:KeyEvent ) { rewrite( keyEvent ); }
-          override function keyTyped( keyEvent:KeyEvent ) { rewrite( keyEvent ); }
-          function rewrite( keyEvent:KeyEvent )
+          override function keyPressed( keyEvent:KeyEvent ) { rewrite( keyEvent/*,KEY_PRESSED*/  ); }
+          override function keyReleased( keyEvent:KeyEvent ) { rewrite( keyEvent/*, KEY_RELEASED*/); }
+          override function keyTyped( keyEvent:KeyEvent ) { rewrite( keyEvent, ); }
+          function rewrite( keyEvent:KeyEvent/*, type:Integer*/ )
           {
               System.out.println(keyEvent);
               if( keyEvent.getKeyCode() == KeyEvent.VK_COMMA )
                 keyEvent.setKeyCode( KeyEvent.VK_COLON );
               if( keyEvent.getKeyChar() == ",".charAt( 0 ) )
                 keyEvent.setKeyChar( ".".charAt( 0 ) );
+              /*if( keyEvent.getKeyChar() == "p".charAt( 0 ) ){
+                  print();keyEvent.consume()
+                  }*/
+              if(   (keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_MASK
+                    or keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_DOWN_MASK) and
+                    keyEvent.getKeyCode()==java.awt.event.KeyEvent.VK_P and
+                    keyEvent.getID()==java.awt.event.KeyEvent.KEY_RELEASED)
+              {print();}
+              /*if(keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_DOWN_MASK)System.out.println("CRT");
+              if(keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_MASK)System.out.println("CRT2");
+              if(keyEvent.getKeyCode()==java.awt.event.KeyEvent.VK_P)System.out.println("P");*/
           }
+
         } );
     }
 
@@ -407,6 +419,34 @@ public class FXAlgebraicExpressionButtonPanel
             fxdLayoutFile.getNode("Button_{s}").visible=false;
             fxdLayoutFile.getNode("Button_Over_{s}").visible=true;
             fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;/**/
+        }
+    }
+
+    function print()
+    {
+        System.out.println("Print aufrufen!!!!!");
+        var f:java.io.File=new java.io.File("test.png") ;
+        try{surferPanel.renderer.saveToPNG(f,128,128)}
+        catch(e:java.io.IOException)
+        {
+            System.out.println(e);
+        }
+        var f2:java.io.File=new java.io.File("test.tex") ;
+        try{surferPanel.renderer.saveString(f2,"{ExpressionField.getText()}")}
+        catch(e:java.io.IOException)
+        {
+            System.out.println(e);
+        }
+        
+        try
+        {
+            var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("c:\\test.bat");
+            System.out.println("Print Test Line.");
+        }
+        catch (e:java.lang.Exception)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

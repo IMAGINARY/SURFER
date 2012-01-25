@@ -609,7 +609,14 @@ public class JSurferRenderPanel extends JComponent
         setMaxLowResRenderSize( oldMaxDim );
         scheduleSurfaceRepaint();
     }
-
+    public void saveString(java.io.File file, java.lang.String string)
+            throws java.io.IOException
+    {
+        java.io.FileWriter writer=new java.io.FileWriter(file ,false);
+        writer.write(string);
+        writer.flush();
+        writer.close();
+    }
     static BufferedImage createBufferedImageFromRGB( ImgBuffer ib )
     {
         int w = ib.width;
