@@ -424,23 +424,34 @@ public class FXAlgebraicExpressionButtonPanel
 
     function print()
     {
-        System.out.println("Print aufrufen!!!!!");
-        var f:java.io.File=new java.io.File("test.png") ;
-        try{surferPanel.renderer.saveToPNG(f,128,128)}
+        System.out.println("Print called!!!!!");
+        var print_dir:String = "printing{java.io.File.separator}";
+        var f:java.io.File=new java.io.File( "{print_dir}print_tmp.png" );
+        System.out.println( "writing image to {f.getAbsolutePath()}" );
+        try{surferPanel.renderer.saveToPNG(f,1280,1280)}
         catch(e:java.io.IOException)
         {
             System.out.println(e);
         }
-        var f2:java.io.File=new java.io.File("test.tex") ;
-        try{surferPanel.renderer.saveString(f2,"{ExpressionField.getText()}")}
+        var f2:java.io.File=new java.io.File("{print_dir}print_tmp.tex") ;
+        System.out.println( "writing TeX to {f2.getAbsolutePath()}" );
+        try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( ExpressionField.getText() ) )}
         catch(e:java.io.IOException)
         {
             System.out.println(e);
         }
-        
+
+        var f3:java.io.File=new java.io.File("{print_dir}print_tmp.jsurf") ;
+        try{surferPanel.renderer.saveToFile(f3.toURL());}
+        catch (e:java.lang.Exception)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
         try
         {
-            var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("c:\\test.bat");
+            var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("bash {print_dir}print.sh");
             System.out.println("Print Test Line.");
         }
         catch (e:java.lang.Exception)

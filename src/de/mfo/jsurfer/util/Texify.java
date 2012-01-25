@@ -60,14 +60,24 @@ public class Texify
 		}
 		s = sb.toString();
 
-		// texify paranthesis
+
+                // texify paranthesis
 		s = s.replaceAll( "([a-zA-Z]+)\\(", "{$1(" ); // opname(...) -> {opname(...)}
 		s = s.replaceAll( "([+-/\\*\\^])\\(", "$1{(" ); // infixop( -> infixop{(
+		while( s.matches( ".*\\(\\(.*" ) )
+		{
+			s = s.replaceAll( "\\(\\(", "({(" ); // (( --> ({(
+		}
+		s = s.replaceAll( "^\\(", "{(" ); // ( at beginning -> {(
 		s = s.replaceAll( "\\)", ")}" ); // ) -> )}
 		s = s.replaceAll( "\\(", "\\\\left(" );
 		s = s.replaceAll( "\\)", "\\\\right)" );
 
-		// texify numeric exponents
+
+                // replace *
+                s = s.replaceAll( "\\*", "\\\\cdot{}" );
+
+		// texify numerical exponents
 		s = s.replaceAll( "\\^(\\d+)", "\\^{$1}" );
 
 		// texify special operators
@@ -81,6 +91,6 @@ public class Texify
 		for( int i = 0; i < ops3.length; i++ )
 			s = s.replaceAll( ops3[ i ], "\\\\" + ops1[ i ] + "^{-1}" );
 
-		return s;
+		return "\\ensuremath{" + s + "}";
 	}
 }

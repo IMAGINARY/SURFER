@@ -602,7 +602,7 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
         try
         {
-            javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.draw( width, height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4 ) ), "png", f );
+            javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.draw( width, height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4 ) ), "png", f );
         }
         catch( java.util.concurrent.CancellationException ce ) {}
         setMinLowResRenderSize( oldMinDim );
