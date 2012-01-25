@@ -1,0 +1,80 @@
+\documentclass[a5paper]{article}
+
+\usepackage[margin=7mm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{calc}
+\usepackage{ifthen}
+%\usepackage{flexisym}
+\usepackage{breqn}
+\usepackage{parskip}
+
+\pagestyle{empty}
+
+\newlength{\fmaxH}
+\newlength{\fmaxW}
+\newlength{\fAspect}
+
+\newlength{\fnbW}
+\newlength{\fnbH}
+\newlength{\fnbAspect}
+\newlength{\fnbScaledH}
+\newlength{\fbW}
+\newlength{\fbH}
+\newlength{\fbAspect}
+
+\begin{document}%
+	\begin{center}%
+		\includegraphics[width=\linewidth]{surferprintheader}%
+		\\[7mm]%
+		\includegraphics[width=0.8\linewidth,angle=180]{print_tmp}\\[2mm]%
+		\vspace{1ex}%
+		\vfill%
+%
+		\setlength{\fmaxW}{0.9\linewidth}%
+		\setlength{\fmaxH}{1.83cm}%
+		\setlength{\fAspect}{\fmaxH / \fmaxW}%
+%
+		\newsavebox{\formulaNoBreaks}%
+		\sbox{\formulaNoBreaks}{\input{print_tmp}}%
+%		
+		\settowidth{\fnbW}{\usebox{\formulaNoBreaks}}%
+		\settototalheight{\fnbH}{\usebox{\formulaNoBreaks}}%
+%
+		\ifthenelse%
+			{\lengthtest{\fnbW<\linewidth}}%
+			{	
+				\setlength{\fnbScaledH}{\fmaxW * \ratio{\fnbH}{\fnbW}}
+				\ifthenelse{\lengthtest{\fnbScaledH<\fmaxH}}
+					{\resizebox*{!}{\fnbScaledH}{\usebox{\formulaNoBreaks}}}
+					{\resizebox*{!}{\fmaxH}{\usebox{\formulaNoBreaks}}}
+			}%
+			{%
+				\newsavebox{\formulaBreaks}%
+				\newboolean{formulaDone}%
+				\setboolean{formulaDone}{false}%
+				\newlength{\fmaxWProduct}%
+				\setlength{\fmaxWProduct}{\fmaxW}%
+%
+				\whiledo{\not\boolean{formulaDone}}%
+				{%
+						\savebox{\formulaBreaks}{%
+							\parbox{\fmaxWProduct}{%
+								\vspace{-\bigskipamount}%
+								\begin{dmath*}[compact]0=\input{print_tmp}\end{dmath*}%
+								\vspace{-\bigskipamount}%
+							}%
+						}%
+						\settowidth{\fbW}{\usebox{\formulaBreaks}}%
+						\settototalheight{\fbH}{\usebox{\formulaBreaks}}%
+						\ifthenelse{\lengthtest{\fbH<\fmaxH}}%
+							{\resizebox*{\fmaxW}{!}{\usebox{\formulaBreaks}}\setboolean{formulaDone}{true}}%
+							{}%
+						\setlength{\fmaxWProduct}{1.1\fmaxWProduct}%
+				}%
+			}%
+		\vfill%
+		\vspace{1ex}%		
+		\includegraphics[width=\linewidth]{surferprintfooter}%
+	\end{center}%
+\end{document}
