@@ -753,12 +753,25 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
     }
 
+    public void loadFromString( String s )
+            throws Exception
+    {
+        Properties props = new Properties();
+        props.load( new ByteArrayInputStream( s.getBytes() ) );
+        loadFromProperties( props );
+    }
+
     public void loadFromFile( URL url )
             throws IOException, Exception
     {
         Properties props = new Properties();
         props.load( url.openStream() );
+        loadFromProperties( props );
+    }
 
+    public void loadFromProperties( Properties props )
+            throws Exception
+    {
         asr.setSurfaceFamily( props.getProperty( "surface_equation" ) );
 
         Set< Map.Entry< Object, Object > > entries = props.entrySet();
