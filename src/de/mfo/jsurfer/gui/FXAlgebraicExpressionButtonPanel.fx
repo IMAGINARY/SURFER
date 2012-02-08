@@ -163,7 +163,10 @@ public class FXAlgebraicExpressionButtonPanel
     }
     function setButtons()
     {
-	for (s in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
+        fxdLayoutFile.getNode("Buttons Over").visible=true;
+        fxdLayoutFile.getNode("Buttons Pressed").visible=true;
+        fxdLayoutFile.getNode("Buttons normal state").visible=true;
+	for (s in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
 	{
            fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
            fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;
@@ -172,7 +175,7 @@ public class FXAlgebraicExpressionButtonPanel
                if(not enabled)return;
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
+               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_{s}").onMouseExited  =function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -186,7 +189,7 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
+               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_Over_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -199,7 +202,7 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"/*,"Help"/*,"Imprint"*/])
+               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_Pressed_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -395,6 +398,7 @@ public class FXAlgebraicExpressionButtonPanel
         else if (c=="Correct"){/*Nothing Happens*/}
         //else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
         else if (c=="Help"){/*ToDo Help*/}
+        else if (c=="Print"){print();}
         //else if (c=="Imprint"){timeline.playFromStart();}
     }
 
@@ -487,7 +491,7 @@ public class FXAlgebraicExpressionButtonPanel
         keyboardTextOperationsGer.effect=javafx.scene.effect.GaussianBlur{};
         keyboardTextXYZGer.effect=javafx.scene.effect.GaussianBlur{};
 
-        for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
+        for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=javafx.scene.effect.GaussianBlur{};
             fxdLayoutFile.getNode("Button_Over_{s}").effect=javafx.scene.effect.GaussianBlur{};
@@ -516,7 +520,7 @@ public class FXAlgebraicExpressionButtonPanel
         keyboardTextOperationsGer.effect=null;
         keyboardTextXYZGer.effect=null;
 
-        for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma"])
+        for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
         {
             fxdLayoutFile.getNode("Button_{s}").effect=null;
             fxdLayoutFile.getNode("Button_Over_{s}").effect=null;
