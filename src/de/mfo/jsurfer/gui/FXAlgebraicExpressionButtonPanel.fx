@@ -168,6 +168,7 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Buttons normal state").visible=true;
 	for (s in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
 	{
+           fxdLayoutFile.getNode("Button_{s}").visible=true;
            fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
            fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;
            fxdLayoutFile.getNode("Button_{s}").onMouseEntered =function(e: javafx.scene.input.MouseEvent): Void
