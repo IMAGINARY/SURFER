@@ -44,6 +44,7 @@ def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
                 x: 0, y:bind GUI.realHeight(scene.height,scene.width), width:bind scene.width, height:bind scene.height
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
+                showPrint:false
             }
 /*var timeline = javafx.animation.Timeline
 {

@@ -14,6 +14,7 @@ import java.lang.System;
 public class FXGUI extends javafx.scene.CustomNode
 {
     public var showImpressum:Boolean=false;
+    public-init var showPrint:Boolean;
     //public var realHeight:Number=bind fxdLayoutFile.layoutBounds.maxY*getScale(height,width);
     //public var
     public function realHeight(n:Number, w:Number):Number
@@ -37,8 +38,9 @@ public class FXGUI extends javafx.scene.CustomNode
         sceneWidth: bind width,
         sceneHeight:bind height,
         fxdLayoutFile:fxdLayoutFile,
-        surferPanel: bind surferPanel
-        showImpressum:function(){showImpressum=true;}
+        surferPanel: bind surferPanel,
+        showImpressum:function(){showImpressum=true;},
+        showPrint:showPrint
     }
     public var language:java.util.Locale=bind AlgebraicExpressionButtonPanel.language;
     
@@ -154,15 +156,15 @@ public class FXGUI extends javafx.scene.CustomNode
 
 
 
-        function getScale(n:Number, w:Number):Number
+    function getScale(n:Number, w:Number):Number
+    {
+        var tmp:Number = w/fxdLayoutFile.layoutBounds.maxX;
+        if (tmp*(fxdLayoutFile.layoutBounds.maxY)>n)
         {
-            var tmp:Number = w/fxdLayoutFile.layoutBounds.maxX;
-            if (tmp*(fxdLayoutFile.layoutBounds.maxY)>n)
-            {
-                tmp=n/fxdLayoutFile.layoutBounds.maxY;
-            }
-            return tmp;
+            tmp=n/fxdLayoutFile.layoutBounds.maxY;
         }
+        return tmp;
+    }
 
     function setRenderPanel()
     {
@@ -182,6 +184,7 @@ public class FXGUI extends javafx.scene.CustomNode
         surferPanel.surfaceExpressionChanged(AlgebraicExpressionButtonPanel.ExpressionField.getText());
 
         fxdLayoutFile.getNode("Surfer_Rendering").visible=false;
+        //surferPanel.visible=false;
     }
 
     
@@ -228,8 +231,14 @@ public class FXGUI extends javafx.scene.CustomNode
                             javafx.scene.Group
                             {
                                 transforms: bind javafx.scene.transform.Transform.scale(getScale(height,width),getScale(height,width));
-                                content:[fxdLayoutFile]
-                            },
+                                content:
+                                [
+                                    fxdLayoutFile,
+                                    //AlgebraicExpressionButtonPanel.popUp,
+                                    //AlgebraicExpressionButtonPanel.languageText
+                                ]
+
+                            }
                             tabField.frontColor,
                             tabField.backColor,
                             tabField.multiSurfaceInfo,
@@ -240,6 +249,7 @@ public class FXGUI extends javafx.scene.CustomNode
 
                             AlgebraicExpressionButtonPanel.SurfaceExpression,
                             AlgebraicExpressionButtonPanel.EqualNull,
+                            
                             sliders.textValueA,
                             sliders.textValueB,
                             sliders.textValueC,
@@ -253,15 +263,29 @@ public class FXGUI extends javafx.scene.CustomNode
                             tabField.tabTextColorEng,
                             tabField.tabTextInfoEng,
                             tabField.tabTextGalleryEng,
-                            AlgebraicExpressionButtonPanel.keyboardTextParametersEng,
-                            AlgebraicExpressionButtonPanel.keyboardTextOperationsEng,
-                            AlgebraicExpressionButtonPanel.keyboardTextXYZEng,
+                            //AlgebraicExpressionButtonPanel.keyboardTextParametersEng,
+                            //AlgebraicExpressionButtonPanel.keyboardTextOperationsEng,
+                            //AlgebraicExpressionButtonPanel.keyboardTextXYZEng,
                             tabField.tabTextColorGer,
                             tabField.tabTextInfoGer,
                             tabField.tabTextGalleryGer,
-                            AlgebraicExpressionButtonPanel.keyboardTextParametersGer,
-                            AlgebraicExpressionButtonPanel.keyboardTextOperationsGer,
-                            AlgebraicExpressionButtonPanel.keyboardTextXYZGer,
+                            //AlgebraicExpressionButtonPanel.keyboardTextParametersGer,
+                            //AlgebraicExpressionButtonPanel.keyboardTextOperationsGer,
+                            //AlgebraicExpressionButtonPanel.keyboardTextXYZGer,
+                            javafx.scene.Group
+                            {
+                                transforms: bind javafx.scene.transform.Transform.scale(getScale(height,width),getScale(height,width));
+                                content:
+                                [
+                                    //fxdLayoutFile,
+                                    AlgebraicExpressionButtonPanel.popUp,
+                                    AlgebraicExpressionButtonPanel.languageText,
+                                    AlgebraicExpressionButtonPanel.keyboardTextParameters,
+                                    AlgebraicExpressionButtonPanel.keyboardTextOperations,
+                                    AlgebraicExpressionButtonPanel.keyboardTextXYZ,
+                                ]
+
+                            }
                             //fxlabe,
                             /*javafx.scene.Group{
                                 content:[EqualNull]

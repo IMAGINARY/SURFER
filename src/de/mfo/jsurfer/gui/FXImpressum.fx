@@ -43,6 +43,36 @@ public class FXImpressum  extends javafx.scene.CustomNode
                     fitHeight:bind height
                     preserveRatio: true
                     visible:bind (java.util.Locale.ENGLISH==language)
+                },
+                javafx.scene.image.ImageView
+                {
+                   image : javafx.scene.image.Image {
+                    url: "{__DIR__}Impressum_po.png"}
+
+                    fitWidth:bind width
+                    fitHeight:bind height
+                    preserveRatio: true
+                    visible:bind (new java.util.Locale("po")==language)
+                },
+                javafx.scene.image.ImageView
+                {
+                   image : javafx.scene.image.Image {
+                    url: "{__DIR__}Impressum_ru.png"}
+
+                    fitWidth:bind width
+                    fitHeight:bind height
+                    preserveRatio: true
+                    visible:bind (new java.util.Locale("ru")==language)
+                },
+                javafx.scene.image.ImageView
+                {
+                   image : javafx.scene.image.Image {
+                    url: "{__DIR__}Impressum_sr.png"}
+
+                    fitWidth:bind width
+                    fitHeight:bind height
+                    preserveRatio: true
+                    visible:bind (new java.util.Locale("sr")==language)
                 }
             ]
         }

@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.KeyStroke;
 import java.lang.System;
 import java.lang.String;
+import java.util.Locale;
 
 /**
  * @author Panda
@@ -24,13 +25,18 @@ public class FXAlgebraicExpressionButtonPanel
         action: function() {showImpressum();}
         }
     }*/
-    public-init var keyboardTextParametersEng:javafx.scene.text.Text;
-    public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
-    public-init var keyboardTextXYZEng:javafx.scene.text.Text;
+    public-init var showPrint:Boolean;
+    //public-init var keyboardTextParametersEng:javafx.scene.text.Text;
+    //public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
+    //public-init var keyboardTextXYZEng:javafx.scene.text.Text;
 
-    public-init var keyboardTextParametersGer:javafx.scene.text.Text;
-    public-init var keyboardTextOperationsGer:javafx.scene.text.Text;
-    public-init var keyboardTextXYZGer:javafx.scene.text.Text;
+    public-init var keyboardTextParameters:javafx.scene.Group;
+    public-init var keyboardTextOperations:javafx.scene.Group;
+    public-init var keyboardTextXYZ:javafx.scene.Group;
+
+    //public-init var keyboardTextParametersGer:javafx.scene.text.Text;
+    //public-init var keyboardTextOperationsGer:javafx.scene.text.Text;
+    //public-init var keyboardTextXYZGer:javafx.scene.text.Text;
     public var language:java.util.Locale=java.util.Locale.GERMAN;
     public-init var getScale:function (n:Number, w:Number):Number;
     public-init var showImpressum:function ():Void;
@@ -38,9 +44,12 @@ public class FXAlgebraicExpressionButtonPanel
     public var sceneHeight:Number;
     public-init var fxdLayoutFile:javafx.fxd.FXDNode;
     public var surferPanel:FXSurferPanel;
+    public var popUp:javafx.scene.Group;
+    public var languageText:javafx.scene.Group;
     public function set()
     {
         setButtons();
+        setPopUp();
         setTextField();
         setTextField2();
         ExpressionField.getDocument().addDocumentListener
@@ -166,7 +175,7 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Buttons Over").visible=true;
         fxdLayoutFile.getNode("Buttons Pressed").visible=true;
         fxdLayoutFile.getNode("Buttons normal state").visible=true;
-	for (s in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
+	for (s in["Cursor_Left","Cursor_Right","Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
 	{
            fxdLayoutFile.getNode("Button_{s}").visible=true;
            fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
@@ -212,6 +221,8 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.button== javafx.scene.input.MouseButton.PRIMARY){if(e.primaryButtonDown){Press(s);}else {Release(s);}}
            };
+
+
 	}
         //"Button_Complete_Delete"
         fxdLayoutFile.getNode("Button_Complete_Delete").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
@@ -258,76 +269,339 @@ public class FXAlgebraicExpressionButtonPanel
             showImpressum();
         }
 
+        
+        if (not showPrint)
+        {
+           fxdLayoutFile.getNode("Button_Print").visible=false;
+           fxdLayoutFile.getNode("Button_Pressed_Print").visible=false;
+           fxdLayoutFile.getNode("Button_Over_Print").visible=false;
+        }
 
 
     }
+    function setPopUp()
+    {
+
+        def deltaX:Number=fxdLayoutFile.getNode("Button_Language").boundsInLocal.maxX-fxdLayoutFile.getNode("Button_Foldout_Lower").boundsInLocal.maxX;
+        def deltaY:Number=fxdLayoutFile.getNode("Button_Language").boundsInLocal.minY-fxdLayoutFile.getNode("Button_Foldout_Lower").boundsInLocal.maxY;
+        //def offset1:Number=fxdLayoutFile.getNode("Button_Foldout_Lower").boundsInLocal.height;
+        def offset:Number=fxdLayoutFile.getNode("Button_Foldout_Middle").boundsInLocal.height;
+        //def lb=fxdLayoutFile.getNode("Button_Language");
+        def lang1 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))as javafx.scene.Node;
+        def lang2 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
+        def lang3 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
+        def lang4 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
+        def lang5 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))as javafx.scene.Node;
+        fxdLayoutFile.getNode("Button_Foldout_Lower").visible=false;
+        fxdLayoutFile.getNode("Button_Foldout_Middle").visible=false;
+        fxdLayoutFile.getNode("Button_Foldout_Upper").visible=false;
+        
+        fxdLayoutFile.getNode("Button_Over_Foldout_Lower").visible=false;
+        fxdLayoutFile.getNode("Button_Over_Foldout_Middle").visible=false;
+        fxdLayoutFile.getNode("Button_Over_Foldout_Upper").visible=false;
+        
+        fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower").visible=false;
+        fxdLayoutFile.getNode("Button_Pressed_Foldout_Middle").visible=false;
+        fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper").visible=false;
+
+        lang3.translateY+=-offset;
+        lang4.translateY+=-offset-offset;
+        lang5.translateY+=-offset-offset; 
+        lang1.visible=true;lang2.visible=true;lang3.visible=true;lang4.visible=true;lang5.visible=true;
+        lang1.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=java.util.Locale.ENGLISH;popUp.visible=false;}
+        lang2.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=java.util.Locale.GERMAN;popUp.visible=false;}
+        lang3.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("ru");popUp.visible=false;}
+        lang4.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("po");popUp.visible=false;}
+        lang5.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("sr");popUp.visible=false;}
+        var inside:Boolean=false;
+        def timeline = javafx.animation.Timeline
+        {
+            keyFrames: javafx.animation.KeyFrame
+            {
+                time: 2.0s
+                action: function()
+                {
+                    //System.out.println("Time is up");
+                    //timeline.autoReverse=inside;
+                    if(not inside) popUp.visible=false;
+                }
+            }
+        }
+        
+        fxdLayoutFile.getNode("Button_Language").onMouseEntered=function(e:javafx.scene.input.MouseEvent):Void
+        {
+            popUp.visible=true;
+            //timeline.playFromStart();
+            timeline.autoReverse=true;
+        }
+        fxdLayoutFile.getNode("Button_Language").onMouseMoved=function(e:javafx.scene.input.MouseEvent):Void
+        {
+            popUp.visible=true;
+            //timeline.playFromStart();
+            timeline.autoReverse=true;
+        }
+        fxdLayoutFile.getNode("Button_Language").onMouseExited=function(e:javafx.scene.input.MouseEvent):Void
+        {
+            //popUp.visible=true;
+            timeline.playFromStart();
+            timeline.autoReverse=false;
+        }
+        
+        popUp=javafx.scene.Group
+        {
+            content: 
+            [
+                lang1,lang2,lang3,lang4,lang5 ,
+                javafx.scene.text.Text
+                {
+                    x:lang1.boundsInLocal.minX+0.1*lang1.boundsInLocal.width
+                    y:lang1.boundsInLocal.minY+0.8*lang1.boundsInLocal.height
+                    font: javafx.scene.text.Font { size: lang1.boundsInLocal.height }
+                    content: "en"
+                }
+                javafx.scene.text.Text
+                {
+                    x:lang2.boundsInLocal.minX+0.1*lang2.boundsInLocal.width
+                    y:lang2.boundsInLocal.minY+0.8*lang2.boundsInLocal.height
+                    font: javafx.scene.text.Font { size: lang2.boundsInLocal.height }
+                    content: "de"
+                }
+                javafx.scene.text.Text
+                {
+                    x:lang3.boundsInLocal.minX+0.1*lang3.boundsInLocal.width
+                    y:lang3.boundsInLocal.minY+0.8*lang3.boundsInLocal.height-offset
+                    font: javafx.scene.text.Font { size: lang3.boundsInLocal.height }
+                    content: "ru"
+                }
+                javafx.scene.text.Text
+                {
+                    x:lang4.boundsInLocal.minX+0.1*lang4.boundsInLocal.width
+                    y:lang4.boundsInLocal.minY+0.8*lang4.boundsInLocal.height-offset-offset
+                    font: javafx.scene.text.Font { size: lang4.boundsInLocal.height }
+                    content: "po"
+                }
+                javafx.scene.text.Text
+                {
+                    x:lang5.boundsInLocal.minX+0.1*lang5.boundsInLocal.width
+                    y:lang5.boundsInLocal.minY+0.8*lang5.boundsInLocal.height-offset-offset
+                    font: javafx.scene.text.Font { size: lang5.boundsInLocal.height }
+                    content: "sr"
+                }
+                
+            ]
+            translateX: deltaX;
+            translateY: deltaY;
+            onMouseMoved:function(e:javafx.scene.input.MouseEvent):Void{inside=true;timeline.autoReverse=true;}
+            onMouseEntered:function(e:javafx.scene.input.MouseEvent):Void{inside=true;timeline.autoReverse=true;}
+            onMouseExited:function(e:javafx.scene.input.MouseEvent):Void{inside=false;timeline.autoReverse=false;timeline.playFromStart();}
+        }
+        popUp.visible=false;
+        //def RU:java.util.Locale=new java.util.Locale("ru");//=Locale("ru");
+        languageText=javafx.scene.Group
+        {
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    content: "ru"
+                    visible: bind language==new java.util.Locale("ru")
+                }
+                javafx.scene.text.Text
+                {
+                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    content: "po"
+                    visible: bind language==new java.util.Locale("po")
+                }
+                javafx.scene.text.Text
+                {
+                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    content: "sr"
+                    visible: bind language==new java.util.Locale("sr")
+                }
+                javafx.scene.text.Text
+                {
+                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    content: "de"
+                    visible: bind language==java.util.Locale.GERMAN
+                }
+                javafx.scene.text.Text
+                {
+                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    content: "en"
+                    visible: bind language==java.util.Locale.ENGLISH
+                }
+                
+            ]
+            translateX: fxdLayoutFile.getNode("Button_Language").boundsInLocal.minX;
+            translateY: fxdLayoutFile.getNode("Button_Language").boundsInLocal.minY;
+
+        }
+    }
+    
     function setTextField2()
     {
-        keyboardTextParametersGer=javafx.scene.text.Text
+        keyboardTextParameters=javafx.scene.Group
         {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Parameter" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.GERMAN)
-        };
-        keyboardTextParametersEng=javafx.scene.text.Text
-        {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Parameter" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextParametersEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Parameters").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.ENGLISH)
-        };
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
+                    content: "Parameter"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
+                    visible: bind (language==java.util.Locale.GERMAN)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
+                    content: "Parameter"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
+                    visible: bind (language==java.util.Locale.ENGLISH)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
+                    content: "ЏАВГДЕЖЗRU"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("ru"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
+                    content: "ParameterPO"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("po"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
+                    content: "ParameterSR"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("sr"))
+                }
+            ]
+        }
+
         fxdLayoutFile.getNode("Text_Keyboard_Parameters").visible=false;
 
-        keyboardTextOperationsGer=javafx.scene.text.Text
+        keyboardTextOperations=javafx.scene.Group
         {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Rechenoperationen" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.GERMAN)
-        };
-        keyboardTextOperationsEng=javafx.scene.text.Text
-        {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Arithmetic operations" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextOperationsEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_Operations").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.ENGLISH)
-        };
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
+                    content: "Rechenoperationen" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
+                    visible: bind (language==java.util.Locale.GERMAN)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
+                    content: "Arithmetic operations" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
+                    visible: bind (language==java.util.Locale.ENGLISH)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
+                    content: "RechenoperationenRU" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("ru"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
+                    content: "RechenoperationenPO" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("po"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
+                    content: "RechenoperationenSR" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("sr"))
+                }
+            ]
+        }
+        
         fxdLayoutFile.getNode("Text_Keyboard_Operations").visible=false;
 
-        keyboardTextXYZGer=javafx.scene.text.Text
+        keyboardTextXYZ=javafx.scene.Group
         {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Variablen" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.GERMAN)
-        };
-        keyboardTextXYZEng=javafx.scene.text.Text
-        {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Variables" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.minX*getScale(sceneHeight,sceneWidth)//+fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-keyboardTextXYZEng.boundsInLocal.width/2+fxdLayoutFile.getNode("Text_Keyboard_XYZ").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.ENGLISH)
-        };
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
+                    content: "Variablen" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
+                    visible: bind (language==java.util.Locale.GERMAN)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
+                    content: "Variables" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
+                    visible: bind (language==java.util.Locale.ENGLISH)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
+                    content: "VariablenRU" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("ru"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
+                    content: "VariablenPO" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("po"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
+                    content: "VariablenSR" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
+                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
+                    visible: bind (language==new java.util.Locale("sr"))
+                }
+            ]
+        }
+
         fxdLayoutFile.getNode("Text_Keyboard_XYZ").visible=false;
-  /*var tabTextColor:javafx.scene.text.Text;
-    var tabTextInfo:javafx.scene.text.Text;
-    var tabTextGallery:javafx.scene.text.Text;
-    var keyboardTextParameters:javafx.scene.text.Text;
-    var keyboardTextOperations:javafx.scene.text.Text;
-    var keyboardTextXYZ:javafx.scene.text.Text;*/
-    //"Tab_Text_Color"
-    //"Tab_Text_Info"
-    //"Tab_Text_Gallery"
-    //"Text_Keyboard_Parameters"
-    //"Text_Keyboard_Operations"
-    //"Text_Keyboard_XYZ"
     }
     public function forward()
     {
@@ -399,7 +673,7 @@ public class FXAlgebraicExpressionButtonPanel
         else if (c=="Correct"){/*Nothing Happens*/}
         //else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
         else if (c=="Help"){/*ToDo Help*/}
-        else if (c=="Print"){print();}
+        else if (c=="Print"){if(showPrint)print();}
         //else if (c=="Imprint"){timeline.playFromStart();}
     }
 
@@ -468,6 +742,7 @@ public class FXAlgebraicExpressionButtonPanel
 
     function Standard(s: String)
     {
+        if (s=="Print" and not showPrint) return;
         fxdLayoutFile.getNode("Button_{s}").visible=true;
         fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;
@@ -484,13 +759,13 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Wrong").effect=javafx.scene.effect.GaussianBlur{};
         fxdLayoutFile.getNode("Formula_Box").effect=javafx.scene.effect.GaussianBlur{};
 
-        keyboardTextParametersEng.effect=javafx.scene.effect.GaussianBlur{};
-        keyboardTextOperationsEng.effect=javafx.scene.effect.GaussianBlur{};
-        keyboardTextXYZEng.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextParameters.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextOperations.effect=javafx.scene.effect.GaussianBlur{};
+        keyboardTextXYZ.effect=javafx.scene.effect.GaussianBlur{};
 
-        keyboardTextParametersGer.effect=javafx.scene.effect.GaussianBlur{};
-        keyboardTextOperationsGer.effect=javafx.scene.effect.GaussianBlur{};
-        keyboardTextXYZGer.effect=javafx.scene.effect.GaussianBlur{};
+        //keyboardTextParametersGer.effect=javafx.scene.effect.GaussianBlur{};
+        //keyboardTextOperationsGer.effect=javafx.scene.effect.GaussianBlur{};
+        //keyboardTextXYZGer.effect=javafx.scene.effect.GaussianBlur{};
 
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
         {
@@ -513,13 +788,13 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Wrong").effect=null;
         fxdLayoutFile.getNode("Formula_Box").effect=null;
 
-        keyboardTextParametersEng.effect=null;
-        keyboardTextOperationsEng.effect=null;
-        keyboardTextXYZEng.effect=null;
+        keyboardTextParameters.effect=null;
+        keyboardTextOperations.effect=null;
+        keyboardTextXYZ.effect=null;
 
-        keyboardTextParametersGer.effect=null;
-        keyboardTextOperationsGer.effect=null;
-        keyboardTextXYZGer.effect=null;
+        //keyboardTextParametersGer.effect=null;
+        //keyboardTextOperationsGer.effect=null;
+        //keyboardTextXYZGer.effect=null;
 
         for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
         {
