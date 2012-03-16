@@ -34,30 +34,43 @@ public class TabField {
     public var disableButtons:function():Void;
     public var enableButtons:function():Void;
     public-init var fxdLayoutFile:javafx.fxd.FXDNode;
-    public var germanGallerys :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.GERMAN )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.GERMAN  );
-    public var englishGallerys:de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.ENGLISH)-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.ENGLISH );
+    public var germanGallerys    :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.GERMAN   )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.GERMAN    );
+    public var englishGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.ENGLISH  )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.ENGLISH   );
+    public var russianGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ru"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("ru") );
+    //public var portugueseGallerys:de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("po"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("po") );
+    //public var serbianGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("sr"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("sr") );
     
-    public var germanSurfaceInfo:FXSurfaceInfo;
-    public var germanGalleryChooser:FXGalleryChooser;
-    public var germanGalleryText:FXGalleryText;
-    public var germanGalleryMini:FXGalleryMini;
+    //public var germanSurfaceInfo:FXSurfaceInfo;
+    //public var germanGalleryChooser:FXGalleryChooser;
+    //public var germanGalleryText:FXGalleryText;
+    //public var germanGalleryMini:FXGalleryMini;
 
-    public var englishSurfaceInfo:FXSurfaceInfo;
-    public var englishGalleryChooser:FXGalleryChooser;
-    public var englishGalleryText:FXGalleryText;
-    public var englishGalleryMini:FXGalleryMini;
+    //public var englishSurfaceInfo:FXSurfaceInfo;
+    //public var englishGalleryChooser:FXGalleryChooser;
+    //public var englishGalleryText:FXGalleryText;
+    //public var englishGalleryMini:FXGalleryMini;
 
-    public var multiSurfaceInfo:LanguageSwitchNode;
-    public var multiGalleryChooser:LanguageSwitchNode;
-    public var multiGalleryText:LanguageSwitchNode;
-    public var multiGalleryMini:LanguageSwitchNode;
+    //public var multiSurfaceInfo:LanguageSwitchNode;
+    //public var multiGalleryChooser:LanguageSwitchNode;
+    //public var multiGalleryText:LanguageSwitchNode;
+    //public var multiGalleryMini:LanguageSwitchNode;
 
-    public var tabTextColorEng:javafx.scene.text.Text;
+    public var SurfaceInfo:javafx.scene.Group;
+    public var GalleryChooser:javafx.scene.Group;
+    public var GalleryText:javafx.scene.Group;
+    public var GalleryMini:javafx.scene.Group;
+
+    /*public var tabTextColorEng:javafx.scene.text.Text;
     public var tabTextInfoEng:javafx.scene.text.Text;
     public var tabTextGalleryEng:javafx.scene.text.Text;
     public var tabTextColorGer:javafx.scene.text.Text;
     public var tabTextInfoGer:javafx.scene.text.Text;
-    public var tabTextGalleryGer:javafx.scene.text.Text;
+    public var tabTextGalleryGer:javafx.scene.text.Text;*/
+    
+    public var tabTextColor:javafx.scene.Group;
+    public var tabTextInfo:javafx.scene.Group;
+    public var tabTextGallery:javafx.scene.Group;
+    
     var pointerGallery:Integer=0;
     var pointerSurface:Integer=0;
     /*[
@@ -97,9 +110,69 @@ public class TabField {
     function setGalleryChooser()
     {
         //fxdButtons.getNode("Surfer").visible=true;
-       var R:javafx.geometry.Bounds=tabBoxNode.layoutBounds;
+        var R:javafx.geometry.Bounds=tabBoxNode.layoutBounds;
         //System.out.println("RenderPanelOrG:{R.minX},{R.minY},{R.maxX},{R.maxY},{R.width},{R.height}");
-       germanGalleryChooser=FXGalleryChooser
+        GalleryChooser=javafx.scene.Group
+        {
+            content:
+            [
+                FXGalleryChooser
+                {
+                    language:java.util.Locale.GERMAN
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:germanGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind language==java.util.Locale.GERMAN
+                }
+                FXGalleryChooser
+                {
+                    language:java.util.Locale.ENGLISH
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:englishGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind language==java.util.Locale.ENGLISH
+                }
+                FXGalleryChooser
+                {
+                    language:new java.util.Locale("ru")
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:russianGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind language==new java.util.Locale("ru")
+                }
+                FXGalleryChooser
+                {
+                    language:new java.util.Locale("po")
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:englishGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind language==new java.util.Locale("po")
+                }
+                FXGalleryChooser
+                {
+                    language:new java.util.Locale("sr")
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:englishGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind language==new java.util.Locale("sr")
+                }
+
+            ]
+            translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
+            translateY:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
+        }
+
+       /*germanGalleryChooser=FXGalleryChooser
         {
             language:java.util.Locale.GERMAN
             width:bind R.width*getScale(sceneHeight,sceneWidth),
@@ -128,7 +201,7 @@ public class TabField {
             englishNode:englishGalleryChooser
             x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-        };
+        };*/
 
 
         tabBoxNode.visible=false;
@@ -136,8 +209,57 @@ public class TabField {
     function setGalleryText()
     {
         //fxdButtons.getNode("Surfer").visible=true;
-       var G:javafx.geometry.Bounds=galleryTextNode.layoutBounds;
+        var G:javafx.geometry.Bounds=galleryTextNode.layoutBounds;
         //System.out.println("RenderPanelOrG:{R.minX},{R.minY},{R.maxX},{R.maxY},{R.width},{R.height}");
+        GalleryText=javafx.scene.Group
+        {
+            content:
+            [
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:germanGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind language==java.util.Locale.GERMAN
+                }
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind language==java.util.Locale.ENGLISH
+                }
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:russianGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind language==new java.util.Locale("ru")
+                }
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind language==java.util.Locale.ENGLISH
+                }
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind language==java.util.Locale.ENGLISH
+                }
+            ]
+            translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
+            translateY:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
+        }
+/*        
        germanGalleryText=FXGalleryText
        {
             width:bind G.width*getScale(sceneHeight,sceneWidth),
@@ -164,15 +286,117 @@ public class TabField {
             englishNode:englishGalleryText
             x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-        };
+        };*/
         galleryTextNode.visible=false;
     }
+    /*function setNewPointer()
+    {
+        germanSurfaceInfo.gallery=pointerGallery;
+        germanSurfaceInfo.surface=s;
+        englishSurfaceInfo.gallery=pointerGallery;
+                englishSurfaceInfo.surface=s;
+                pointerSurface=s;
+    }*/
+
     function setGalleryMini()
     {
         //fxdButtons.getNode("Surfer").visible=true;
-       var G:javafx.geometry.Bounds=galleryMiniNode.layoutBounds;
+        var G:javafx.geometry.Bounds=galleryMiniNode.layoutBounds;
         //System.out.println("RenderPanelOrG:{R.minX},{R.minY},{R.maxX},{R.maxY},{R.width},{R.height}");
-       germanGalleryMini=FXGalleryMini
+        GalleryMini=javafx.scene.Group
+        {
+            content:
+            [
+                FXGalleryMini
+                {
+                    language:java.util.Locale.GERMAN
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:germanGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(germanGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind java.util.Locale.GERMAN==language
+                }
+                FXGalleryMini
+                {
+                    language:java.util.Locale.ENGLISH
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(englishGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind java.util.Locale.ENGLISH==language
+                }
+                FXGalleryMini
+                {
+                    language:new java.util.Locale("ru")
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:russianGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(russianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind new java.util.Locale("ru")==language
+                }
+                FXGalleryMini
+                {
+                   language:java.util.Locale.ENGLISH
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(englishGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind new java.util.Locale("po")==language
+                }
+                FXGalleryMini
+                {
+                   language:java.util.Locale.ENGLISH
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(englishGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind new java.util.Locale("sr")==language
+                }
+
+
+
+            ]
+            translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
+            translateY:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
+
+        }
+
+       /*germanGalleryMini=FXGalleryMini
        {
            language:java.util.Locale.GERMAN
             width:bind G.width*getScale(sceneHeight,sceneWidth),
@@ -223,23 +447,79 @@ public class TabField {
             englishNode:englishGalleryMini
             x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
             y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-        };
+        };*/
         galleryMiniNode.visible=false;
     }
     function setSurfaceInfo()
     {
         //fxdButtons.getNode("Surfer").visible=true;
-       var R:javafx.geometry.Bounds=tabBoxNode.layoutBounds;
+        var R:javafx.geometry.Bounds=tabBoxNode.layoutBounds;
         //System.out.println("RenderPanelOrG:{R.minX},{R.minY},{R.maxX},{R.maxY},{R.width},{R.height}");
-       germanSurfaceInfo=FXSurfaceInfo
+        SurfaceInfo=javafx.scene.Group
+        {
+            content:
+            [
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:germanGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind java.util.Locale.GERMAN==language
+                }
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind java.util.Locale.ENGLISH==language
+                }
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:russianGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind new java.util.Locale("ru")==language
+                }
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind new java.util.Locale("po")==language
+                }
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:englishGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind new java.util.Locale("sr")==language
+                }
+
+
+            ]
+            translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
+            translateY:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
+        }
+
+       /*germanSurfaceInfo=FXSurfaceInfo
        {
             width:bind R.width*getScale(sceneHeight,sceneWidth),
             height:bind R.height*getScale(sceneHeight,sceneWidth),
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:germanGallerys,
-            gallery:/*bind*/ pointerGallery,
-            surface:/* bind*/ pointerSurface
+            gallery:bind pointerGallery,
+            surface: bind pointerSurface
         };
         englishSurfaceInfo=FXSurfaceInfo
        {
@@ -248,8 +528,8 @@ public class TabField {
             //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
             gallerys:englishGallerys,
-            gallery:/*bind*/ pointerGallery,
-            surface:/* bind*/ pointerSurface
+            gallery:bind pointerGallery,
+            surface: bind pointerSurface
         };
         multiSurfaceInfo=LanguageSwitchNode
         {
@@ -258,7 +538,7 @@ public class TabField {
             englishNode:englishSurfaceInfo
             x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
             y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-        };
+        };*/
         tabBoxNode.visible=false;
     }
     function setButtons()
@@ -278,10 +558,10 @@ public class TabField {
         frontColor.visible=false;
         backColor.visible=false;
         surferPanel.visible=false;
-        multiSurfaceInfo.visible=false;
-        multiGalleryChooser.visible=true;
-        multiGalleryText.visible=true;
-        multiGalleryMini.visible=true;
+        SurfaceInfo.visible=false;
+        GalleryChooser.visible=true;
+        GalleryText.visible=true;
+        GalleryMini.visible=true;
         sliders.setVisibility(false);
         disableButtons();
     }
@@ -296,10 +576,10 @@ public class TabField {
         frontColor.visible=false;
         backColor.visible=false;
         surferPanel.visible=true;
-        multiSurfaceInfo.visible=true;
-        multiGalleryChooser.visible=false;
-        multiGalleryText.visible=false;
-        multiGalleryMini.visible=false;
+        SurfaceInfo.visible=true;
+        GalleryChooser.visible=false;
+        GalleryText.visible=false;
+        GalleryMini.visible=false;
         sliders.setVisibility(true);
         enableButtons();
     }
@@ -314,10 +594,10 @@ public class TabField {
         frontColor.visible=true;
         backColor.visible=true;
         surferPanel.visible=true;
-        multiSurfaceInfo.visible=false;
-        multiGalleryChooser.visible=false;
-        multiGalleryText.visible=false;
-        multiGalleryMini.visible=false;
+        SurfaceInfo.visible=false;
+        GalleryChooser.visible=false;
+        GalleryText.visible=false;
+        GalleryMini.visible=false;
         sliders.setVisibility(true);
         enableButtons();
     }
@@ -333,74 +613,150 @@ public class TabField {
     }
     function setTextField()
     {
-        tabTextColorGer=javafx.scene.text.Text
+        tabTextColor=javafx.scene.Group
         {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Farben" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextColorGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Color").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.GERMAN)
-        };
-        tabTextColorEng=javafx.scene.text.Text
-        {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Colours" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextColorGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Color").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.ENGLISH)
-        };
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
+                    content: "Farben" 
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==java.util.Locale.GERMAN)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
+                    content: "Colours" 
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==java.util.Locale.ENGLISH)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
+                    content: "ColoursRU" 
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("ru"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
+                    content: "ColoursPO" 
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("po"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
+                    content: "ColoursSR" 
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("sr"))
+                }
+                
+                
+                
+            ]
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Color").translateX+fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.width/2-tabTextColor.boundsInLocal.width/2
+            translateY: fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.maxY
+        }
+        
         fxdLayoutFile.getNode("Tab_Text_Color").visible=false;
 
-        tabTextInfoGer=javafx.scene.text.Text
+        tabTextInfo=javafx.scene.Group
         {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Info" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextInfoGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Info").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.GERMAN)
-        };
-        tabTextInfoEng=javafx.scene.text.Text
-        {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Info" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextInfoGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Info").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.ENGLISH)
-        };
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
+                    content: "Info"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==java.util.Locale.GERMAN)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
+                    content: "Info"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==java.util.Locale.ENGLISH)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
+                    content: "InfoRU"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("ru"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
+                    content: "InfoPO"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("po"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
+                    content: "InfoSR"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("sr"))
+                }
+                
+                
+            ]
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Info").translateX+fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.width/2-tabTextInfo.boundsInLocal.width/2
+            translateY: fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.maxY
+        }
         fxdLayoutFile.getNode("Tab_Text_Info").visible=false;
 
-        tabTextGalleryGer=javafx.scene.text.Text
+        tabTextGallery=javafx.scene.Group
         {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Start" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextGalleryGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.GERMAN)
-        };
-        tabTextGalleryEng=javafx.scene.text.Text
-        {
-            font: bind javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-            content: "Start" textAlignment:javafx.scene.text.TextAlignment.CENTER
-            translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-tabTextGalleryGer.boundsInLocal.width/2+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX*getScale(sceneHeight,sceneWidth)
-            translateY: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
-            visible: bind (language==java.util.Locale.ENGLISH)
-        };
+            content:
+            [
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
+                    content: "Start"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==java.util.Locale.GERMAN)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
+                    content: "Start"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==java.util.Locale.ENGLISH)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
+                    content: "StartRU"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("ru"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
+                    content: "StartPO"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("po"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
+                    content: "StartSR"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("sr"))
+                }
+
+
+
+            ]
+            translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.width/2-tabTextGallery.boundsInLocal.width/2
+            translateY: fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.maxY
+        }
+        
         fxdLayoutFile.getNode("Tab_Text_Gallery").visible=false;
-
-
-
-  /*var tabTextColor:javafx.scene.text.Text;
-    var tabTextInfo:javafx.scene.text.Text;
-    var tabTextGallery:javafx.scene.text.Text;
-    var keyboardTextParameters:javafx.scene.text.Text;
-    var keyboardTextOperations:javafx.scene.text.Text;
-    var keyboardTextXYZ:javafx.scene.text.Text;*/
-    //"Tab_Text_Color"
-    //"Tab_Text_Info"
-    //"Tab_Text_Gallery"
-    //"Text_Keyboard_Parameters"
-    //"Text_Keyboard_Operations"
-    //"Text_Keyboard_XYZ"
     }
     public function set()
     {

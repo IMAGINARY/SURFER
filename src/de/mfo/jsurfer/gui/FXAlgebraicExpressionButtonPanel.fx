@@ -331,12 +331,14 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Language").onMouseEntered=function(e:javafx.scene.input.MouseEvent):Void
         {
             popUp.visible=true;
+            inside=true;
             //timeline.playFromStart();
             timeline.autoReverse=true;
         }
         fxdLayoutFile.getNode("Button_Language").onMouseMoved=function(e:javafx.scene.input.MouseEvent):Void
         {
             popUp.visible=true;
+            inside=true;
             //timeline.playFromStart();
             timeline.autoReverse=true;
         }
@@ -345,6 +347,7 @@ public class FXAlgebraicExpressionButtonPanel
             //popUp.visible=true;
             timeline.playFromStart();
             timeline.autoReverse=false;
+            inside=false;
         }
         
         popUp=javafx.scene.Group
@@ -403,47 +406,53 @@ public class FXAlgebraicExpressionButtonPanel
             [
                 javafx.scene.text.Text
                 {
-                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
                     y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
                     font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "ru"
                     visible: bind language==new java.util.Locale("ru")
                 }
                 javafx.scene.text.Text
                 {
-                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
                     y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
                     font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "po"
                     visible: bind language==new java.util.Locale("po")
                 }
                 javafx.scene.text.Text
                 {
-                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
                     y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
                     font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "sr"
                     visible: bind language==new java.util.Locale("sr")
                 }
                 javafx.scene.text.Text
                 {
-                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
                     y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
                     font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "de"
                     visible: bind language==java.util.Locale.GERMAN
                 }
                 javafx.scene.text.Text
                 {
-                    x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
+                    //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
                     y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
                     font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "en"
                     visible: bind language==java.util.Locale.ENGLISH
                 }
                 
             ]
-            translateX: fxdLayoutFile.getNode("Button_Language").boundsInLocal.minX;
+            //translateX: bind fxdLayoutFile.getNode("Button_Language").boundsInLocal.minX+fxdLayoutFile.getNode("Button_Language").boundsInLocal.width/2-languageText.boundsInLocal.width/2;
+            translateX: bind fxdLayoutFile.getNode("Button_Language").boundsInLocal.minX+fxdLayoutFile.getNode("Button_Language").translateX+fxdLayoutFile.getNode("Button_Language").boundsInLocal.width/2-languageText.boundsInLocal.width/2.5
             translateY: fxdLayoutFile.getNode("Button_Language").boundsInLocal.minY;
 
         }
