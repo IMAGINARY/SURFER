@@ -47,12 +47,12 @@ public class FXImpressum  extends javafx.scene.CustomNode
                 javafx.scene.image.ImageView
                 {
                    image : javafx.scene.image.Image {
-                    url: "{__DIR__}Impressum_po.png"}
+                    url: "{__DIR__}Impressum_pt.png"}
 
                     fitWidth:bind width
                     fitHeight:bind height
                     preserveRatio: true
-                    visible:bind (new java.util.Locale("po")==language)
+                    visible:bind (new java.util.Locale("pt")==language)
                 },
                 javafx.scene.image.ImageView
                 {

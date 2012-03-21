@@ -37,7 +37,7 @@ public class FXAlgebraicExpressionButtonPanel
     //public-init var keyboardTextParametersGer:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsGer:javafx.scene.text.Text;
     //public-init var keyboardTextXYZGer:javafx.scene.text.Text;
-    public var language:java.util.Locale=java.util.Locale.GERMAN;
+    public var language:java.util.Locale=new java.util.Locale("pt");
     public-init var getScale:function (n:Number, w:Number):Number;
     public-init var showImpressum:function ():Void;
     public var sceneWidth:Number;
@@ -290,8 +290,8 @@ public class FXAlgebraicExpressionButtonPanel
         def lang1 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))as javafx.scene.Node;
         def lang2 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
         def lang3 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
-        def lang4 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
-        def lang5 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))as javafx.scene.Node;
+        def lang4 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))as javafx.scene.Node;
+        //def lang5 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))as javafx.scene.Node;
         fxdLayoutFile.getNode("Button_Foldout_Lower").visible=false;
         fxdLayoutFile.getNode("Button_Foldout_Middle").visible=false;
         fxdLayoutFile.getNode("Button_Foldout_Upper").visible=false;
@@ -305,14 +305,14 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper").visible=false;
 
         lang3.translateY+=-offset;
-        lang4.translateY+=-offset-offset;
-        lang5.translateY+=-offset-offset; 
-        lang1.visible=true;lang2.visible=true;lang3.visible=true;lang4.visible=true;lang5.visible=true;
+        lang4.translateY+=-offset;
+        //lang5.translateY+=-offset-offset;
+        lang1.visible=true;lang2.visible=true;lang3.visible=true;lang4.visible=true;//lang5.visible=true;
         lang1.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=java.util.Locale.ENGLISH;popUp.visible=false;}
         lang2.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=java.util.Locale.GERMAN;popUp.visible=false;}
         lang3.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("ru");popUp.visible=false;}
-        lang4.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("po");popUp.visible=false;}
-        lang5.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("sr");popUp.visible=false;}
+        lang4.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("pt");popUp.visible=false;}
+        //lang5.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("sr");popUp.visible=false;}
         var inside:Boolean=false;
         def timeline = javafx.animation.Timeline
         {
@@ -354,7 +354,7 @@ public class FXAlgebraicExpressionButtonPanel
         {
             content: 
             [
-                lang1,lang2,lang3,lang4,lang5 ,
+                lang1,lang2,lang3,lang4,//lang5 ,
                 javafx.scene.text.Text
                 {
                     x:lang1.boundsInLocal.minX+0.1*lang1.boundsInLocal.width
@@ -379,17 +379,18 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     x:lang4.boundsInLocal.minX+0.1*lang4.boundsInLocal.width
-                    y:lang4.boundsInLocal.minY+0.8*lang4.boundsInLocal.height-offset-offset
+                    y:lang4.boundsInLocal.minY+0.8*lang4.boundsInLocal.height-offset
                     font: javafx.scene.text.Font { size: lang4.boundsInLocal.height }
-                    content: "po"
+                    content: "pt"
                 }
+                /*
                 javafx.scene.text.Text
                 {
                     x:lang5.boundsInLocal.minX+0.1*lang5.boundsInLocal.width
                     y:lang5.boundsInLocal.minY+0.8*lang5.boundsInLocal.height-offset-offset
                     font: javafx.scene.text.Font { size: lang5.boundsInLocal.height }
                     content: "sr"
-                }
+                }*/
                 
             ]
             translateX: deltaX;
@@ -419,8 +420,8 @@ public class FXAlgebraicExpressionButtonPanel
                     y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
                     font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    content: "po"
-                    visible: bind language==new java.util.Locale("po")
+                    content: "pt"
+                    visible: bind language==new java.util.Locale("pt")
                 }
                 javafx.scene.text.Text
                 {
@@ -485,7 +486,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "ЏАВГДЕЖЗRU"
+                    content: "Параметр"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
@@ -494,11 +495,11 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "ParameterPO"
+                    content: "Parâmetro"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("po"))
+                    visible: bind (language==new java.util.Locale("pt"))
                 }
                 javafx.scene.text.Text
                 {
@@ -537,7 +538,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "RechenoperationenRU" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: "Арифметические операции" textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
                     visible: bind (language==new java.util.Locale("ru"))
@@ -545,10 +546,10 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "RechenoperationenPO" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: "Operações aritméticas" textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("po"))
+                    visible: bind (language==new java.util.Locale("pt"))
                 }
                 javafx.scene.text.Text
                 {
@@ -586,7 +587,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "VariablenRU" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: "Переменные" textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
                     visible: bind (language==new java.util.Locale("ru"))
@@ -594,10 +595,10 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "VariablenPO" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: "Variáveis" textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("po"))
+                    visible: bind (language==new java.util.Locale("pt"))
                 }
                 javafx.scene.text.Text
                 {

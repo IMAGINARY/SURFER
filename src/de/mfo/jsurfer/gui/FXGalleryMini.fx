@@ -66,7 +66,7 @@ public class FXGalleryMini extends CustomNode
                                     }
                                     javafx.scene.text.Text
                                     {
-                                        id: "FXGalleryChooser{language }{gallery} {i}"
+                                        id: "FXGalleryChooser{language}{gallery} {i}"
                                         font: bind javafx.scene.text.Font.font
                                         (
                                             "Arial",
