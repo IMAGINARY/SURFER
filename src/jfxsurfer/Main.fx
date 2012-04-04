@@ -41,7 +41,7 @@ function toggleFullscreenKey(e:KeyEvent):Void
 javax.swing.UIManager.setLookAndFeel( javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
 
 def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
-                x: 0, y:bind GUI.realHeight(scene.height,scene.width), width:bind scene.width, height:bind scene.height
+                x: 0, y:bind GUI.realHeight(1080,1920), width:1920, height:1080
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
                 showPrint:true
@@ -56,9 +56,9 @@ def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
 
 var impressum:de.mfo.jsurfer.gui.FXImpressum=de.mfo.jsurfer.gui.FXImpressum
 {
-    width:bind scene.width,
-    height:bind scene.height
-    translateY:bind GUI.realHeight(scene.height,scene.width)
+    width:1920
+    height:1080
+    translateY:bind GUI.realHeight(1080,1920)
     language: bind GUI.language
     visible: bind GUI.showImpressum
     onMousePressed: function(e: javafx.scene.input.MouseEvent): Void{GUI.showImpressum=false;}
@@ -86,16 +86,14 @@ function somethingHappend():Void
 var scene: Scene;
 def stage: Stage =Stage{
     title: "Surfer"
-    fullScreen: true
+    fullScreen: false
     scene: scene = Scene {
-        width: 192*4
-        height: 108*4
+        width: 192*6
+        height: 108*6
         content: [
-                    
-                    
-                    javafx.scene.shape.Rectangle 
+                    javafx.scene.shape.Rectangle
                     {
-                        width:bind scene.width, height:bind scene.height
+                        width: bind scene.width, height: bind scene.height
                         fill: javafx.scene.paint.Color.rgb(255, 255, 255)
                         onKeyPressed:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
                         onKeyReleased:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
@@ -110,8 +108,24 @@ def stage: Stage =Stage{
                         onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
 
                     },
-                    GUI,
-                    impressum,
+                    javafx.scene.Group
+                    {
+                        transforms: bind (
+                            if( scene.width / scene.height <= 1920.0 / 1080.0 )
+                            [
+                                javafx.scene.transform.Scale.scale( scene.width / 1920.0, scene.width / 1920.0 ),
+                                javafx.scene.transform.Translate.translate( 0, scene.height - 1080 * scene.width / 1920.0 )
+                            ]
+                            else
+                            [
+                                javafx.scene.transform.Scale.scale( scene.height / 1080.0, scene.height / 1080.0 )
+                            ])
+                        content:
+                        [
+                            GUI,
+                            impressum,
+                        ]
+                    }
                  ]
     }
 

@@ -11,6 +11,7 @@ package de.mfo.jsurfer.gui;
 
 
 import javafx.scene.CustomNode;
+import javafx.scene.control.Label;
 
 public class FXGalleryMini extends CustomNode
 {
@@ -25,7 +26,7 @@ public class FXGalleryMini extends CustomNode
     public var press:function(s:Integer):Void;
 
 
-    var galleryNodes:javafx.scene.layout.Tile[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])javafx.scene.layout.Tile{};;
+    var galleryNodes:javafx.scene.layout.Tile[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])javafx.scene.layout.Tile{};
     public override function create(): javafx.scene.Node
     {
         //galleryNodes=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(language)-1])javafx.scene.layout.Tile{};
@@ -36,54 +37,40 @@ public class FXGalleryMini extends CustomNode
             {
                 columns: 3
                 hgap: 20
-                vgap: 30
-                padding: bind javafx.geometry.Insets{top: 5 left: (width-((width-3*5-2*20)/3*0.9*3+15))/2}
+                vgap: 20
+                autoSizeTiles: false
+                tileWidth: bind (( width - 2*20-10 - 1 )/3.0)
+                padding: javafx.geometry.Insets{ top: 20 left: 10 }
                 nodeVPos: javafx.geometry.VPos.BOTTOM
-                nodeHPos: javafx.geometry.HPos.LEFT
+                nodeHPos: javafx.geometry.HPos.CENTER
                 layoutInfo:javafx.scene.layout.LayoutInfo
                 {
                     width: bind width  
                     height: bind height
                 }
 
-                content: bind
+                content:
                 [
                     for (i in [0..(gallerys[g].getEntries().length-1)])
-                    javafx.scene.Group
                     {
-                        content:
-                        [
-                            javafx.scene.layout.VBox
+                        Label {
+                            id: "FXGalleryChooser{language}{gallery} {i}"
+                            onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {press(i);}
+                            text: "{gallerys[g].getEntries()[ i ].getName()}"
+                            font: javafx.scene.text.Font.font( "Arial", javafx.scene.text.FontWeight.REGULAR, 19 )
+                            hpos: javafx.geometry.HPos.CENTER
+                            vpos: javafx.geometry.VPos.BOTTOM
+                            textOverrun: javafx.scene.control.OverrunStyle.ELLIPSES
+                            textWrap: false
+                            graphic: javafx.scene.image.ImageView
                             {
-                                onMousePressed :bind function(e: javafx.scene.input.MouseEvent): Void {press(i);}
-                                content:
-                                [
-                                    javafx.scene.image.ImageView
-                                    {
-                                        image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
-                                        fitWidth:bind (width-3*5-2*20)/3*0.7
-                                        preserveRatio: true
-                                    }
-                                    javafx.scene.text.Text
-                                    {
-                                        id: "FXGalleryChooser{language}{gallery} {i}"
-                                        font: bind javafx.scene.text.Font.font
-                                        (
-                                            "Arial",
-                                             javafx.scene.text.FontWeight.REGULAR,
-                                             ((width-3*5-2*20)/3*0.9)*0.4*0.25
-                                        )
-                                        content: "{gallerys[g].getEntries()[ i ].getName()}"
-                                        //content: "FXGalleryChooser|{language.getDisplayCountry() }|{gallery} {i}({java.util.Locale.GERMAN.getDisplayCountry()})({java.util.Locale.GERMAN})"
-                                        //textAlignment:javafx.scene.text.TextAlignment.CENTER
-                                        translateX: bind ((width-3*5-2*20)/3*0.7-scene.lookup("FXGalleryChooser{language}{gallery} {i}").boundsInLocal.width)/2
-                                        //translateY: bind (height-4*5)/5*0.2
-                                        //textOrigin: javafx.scene.text.TextOrigin.BASELINE
-
-                                    }
-                                ]
+                                image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
+                                fitWidth: 150
+                                preserveRatio: true
                             }
-                        ]
+                            graphicHPos: javafx.geometry.HPos.CENTER
+                            graphicVPos: javafx.geometry.VPos.TOP
+                        }
                     }
                 ]
             }
@@ -92,23 +79,7 @@ public class FXGalleryMini extends CustomNode
         return javafx.scene.Group
         {
             translateX: bind x translateY: bind y;
-            content:
-            [
-                javafx.scene.layout.Stack
-                {
-                    content:bind
-                    [
-                        /*javafx.scene.shape.Rectangle
-                        {
-                            x: 0  y: 0
-                            width: bind width  height: bind height
-                            fill: javafx.scene.paint.Color.rgb(0, 100, 200)
-                        }*/
-                        galleryNodes [gallery]
-                    ]
-                }
-            ]
+            content: bind [ galleryNodes[ gallery ] ]
         }
     }
-
 }

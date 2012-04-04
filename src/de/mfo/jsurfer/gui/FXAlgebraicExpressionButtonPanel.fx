@@ -137,9 +137,7 @@ public class FXAlgebraicExpressionButtonPanel
          };
         SurfaceExpression.content=[sw];
         EqualNull.content=[sw2];
-        var input:java.io.InputStream = getClass().getResourceAsStream("/de/mfo/jsurfer/gui/Nimbus Sans L Regular Surfer.ttf");
-        var f:java.awt.Font=java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT , input);
-        f=f.deriveFont(T.minY*getScale(sceneHeight,sceneWidth)*size);
+        var f=Globals.font.deriveFont(T.minY*getScale(sceneHeight,sceneWidth)*size);
         ExpressionField.setFont(f);
         ExpressionField.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
         ExpressionField.setDisabledTextColor( java.awt.Color.BLACK );
@@ -358,29 +356,29 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     x:lang1.boundsInLocal.minX+0.1*lang1.boundsInLocal.width
-                    y:lang1.boundsInLocal.minY+0.8*lang1.boundsInLocal.height
-                    font: javafx.scene.text.Font { size: lang1.boundsInLocal.height }
+                    y:lang1.boundsInLocal.minY+0.7*lang1.boundsInLocal.height
+                    font: javafx.scene.text.Font { size: lang1.boundsInLocal.height * 0.8 }
                     content: "en"
                 }
                 javafx.scene.text.Text
                 {
                     x:lang2.boundsInLocal.minX+0.1*lang2.boundsInLocal.width
-                    y:lang2.boundsInLocal.minY+0.8*lang2.boundsInLocal.height
-                    font: javafx.scene.text.Font { size: lang2.boundsInLocal.height }
+                    y:lang2.boundsInLocal.minY+0.7*lang2.boundsInLocal.height
+                    font: javafx.scene.text.Font { size: lang2.boundsInLocal.height * 0.8 }
                     content: "de"
                 }
                 javafx.scene.text.Text
                 {
                     x:lang3.boundsInLocal.minX+0.1*lang3.boundsInLocal.width
-                    y:lang3.boundsInLocal.minY+0.8*lang3.boundsInLocal.height-offset
-                    font: javafx.scene.text.Font { size: lang3.boundsInLocal.height }
+                    y:lang3.boundsInLocal.minY+0.7*lang3.boundsInLocal.height-offset
+                    font: javafx.scene.text.Font { size: lang3.boundsInLocal.height * 0.8 }
                     content: "ru"
                 }
                 javafx.scene.text.Text
                 {
                     x:lang4.boundsInLocal.minX+0.1*lang4.boundsInLocal.width
-                    y:lang4.boundsInLocal.minY+0.8*lang4.boundsInLocal.height-offset
-                    font: javafx.scene.text.Font { size: lang4.boundsInLocal.height }
+                    y:lang4.boundsInLocal.minY+0.7*lang4.boundsInLocal.height-offset
+                    font: javafx.scene.text.Font { size: lang4.boundsInLocal.height * 0.8 }
                     content: "pt"
                 }
                 /*
@@ -408,8 +406,8 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
-                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
-                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    y:0.7*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height * 0.8 }
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "ru"
                     visible: bind language==new java.util.Locale("ru")
@@ -417,8 +415,8 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
-                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
-                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    y:0.7*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height * 0.8 }
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "pt"
                     visible: bind language==new java.util.Locale("pt")
@@ -426,8 +424,8 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
-                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
-                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    y:0.7*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height * 0.8 }
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "sr"
                     visible: bind language==new java.util.Locale("sr")
@@ -435,8 +433,8 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
-                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
-                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    y:0.7*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height * 0.8 }
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "de"
                     visible: bind language==java.util.Locale.GERMAN
@@ -444,8 +442,8 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     //x:0.2*fxdLayoutFile.getNode("Button_Language").boundsInLocal.width
-                    y:0.8*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
-                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height }
+                    y:0.7*fxdLayoutFile.getNode("Button_Language").boundsInLocal.height
+                    font: javafx.scene.text.Font { size: fxdLayoutFile.getNode("Button_Language").boundsInLocal.height * 0.8 }
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     content: "en"
                     visible: bind language==java.util.Locale.ENGLISH
