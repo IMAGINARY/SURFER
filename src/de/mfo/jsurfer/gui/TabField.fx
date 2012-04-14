@@ -10,7 +10,7 @@ package de.mfo.jsurfer.gui;
  */
 
 public class TabField {
-    public var language: java.util.Locale;
+    public var language: java.util.Locale on replace { setTextField(); };
     public var sliders:FXSliders;
     public var frontColor: ColorChooser;
     public var backColor: ColorChooser;
@@ -38,7 +38,7 @@ public class TabField {
     public var englishGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.ENGLISH  )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.ENGLISH   );
     public var russianGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ru"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("ru") );
     public var portugueseGallerys:de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("pt"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("pt") );
-    //public var serbianGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("sr"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("sr") );
+    public var serbianGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("sr"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("sr") );
     
     //public var germanSurfaceInfo:FXSurfaceInfo;
     //public var germanGalleryChooser:FXGalleryChooser;
@@ -81,9 +81,7 @@ public class TabField {
         new de.mfo.jsurfer.gui.Gallery(4 )
     ];*/
 
-    
-
-    function setColoChooser()
+    function setColorChooser()
     {
         var F:javafx.geometry.Bounds=frontColorNode.layoutBounds;
         frontColor=ColorChooser
@@ -105,8 +103,8 @@ public class TabField {
                     };
         backColorNode.visible=false;
         frontColorNode.visible=false;
-
     }
+
     function setGalleryChooser()
     {
         //fxdButtons.getNode("Surfer").visible=true;
@@ -124,7 +122,7 @@ public class TabField {
                     gallery:bind pointerGallery
                     gallerys:germanGallerys
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind language==java.util.Locale.GERMAN
+                    visible: bind (language==java.util.Locale.GERMAN)
                 }
                 FXGalleryChooser
                 {
@@ -134,7 +132,7 @@ public class TabField {
                     gallery:bind pointerGallery
                     gallerys:englishGallerys
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind language==java.util.Locale.ENGLISH
+                    visible: bind (language==java.util.Locale.ENGLISH)
                 }
                 FXGalleryChooser
                 {
@@ -144,7 +142,7 @@ public class TabField {
                     gallery:bind pointerGallery
                     gallerys:russianGallerys
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind language==new java.util.Locale("ru")
+                    visible: bind (language==new java.util.Locale("ru"))
                 }
                 FXGalleryChooser
                 {
@@ -154,7 +152,7 @@ public class TabField {
                     gallery:bind pointerGallery
                     gallerys:portugueseGallerys
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind language==new java.util.Locale("pt")
+                    visible: bind (language==new java.util.Locale("pt"))
                 }
                 FXGalleryChooser
                 {
@@ -162,9 +160,9 @@ public class TabField {
                     width:bind R.width*getScale(sceneHeight,sceneWidth),
                     height:bind R.height*getScale(sceneHeight,sceneWidth),
                     gallery:bind pointerGallery
-                    gallerys:englishGallerys
+                    gallerys:serbianGallerys
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind language==new java.util.Locale("sr")
+                    visible: bind (language==new java.util.Locale("sr"))
                 }
 
             ]
@@ -221,7 +219,7 @@ public class TabField {
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
                     gallerys:germanGallerys,
                     gallery:bind pointerGallery
-                    visible: bind language==java.util.Locale.GERMAN
+                    visible: bind (language==java.util.Locale.GERMAN)
                 }
                 FXGalleryText
                 {
@@ -229,7 +227,7 @@ public class TabField {
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
                     gallerys:englishGallerys,
                     gallery:bind pointerGallery
-                    visible: bind language==java.util.Locale.ENGLISH
+                    visible: bind (language==java.util.Locale.ENGLISH)
                 }
                 FXGalleryText
                 {
@@ -237,7 +235,7 @@ public class TabField {
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
                     gallerys:russianGallerys,
                     gallery:bind pointerGallery
-                    visible: bind language==new java.util.Locale("ru")
+                    visible: bind (language==new java.util.Locale("ru"))
                 }
                 FXGalleryText
                 {
@@ -245,15 +243,15 @@ public class TabField {
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
                     gallerys:portugueseGallerys,
                     gallery:bind pointerGallery
-                    visible: bind language==new java.util.Locale("pt")
+                    visible: bind (language==new java.util.Locale("pt"))
                 }
                 FXGalleryText
                 {
                     width:bind G.width*getScale(sceneHeight,sceneWidth),
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:englishGallerys,
+                    gallerys:serbianGallerys,
                     gallery:bind pointerGallery
-                    visible: bind language==java.util.Locale.ENGLISH
+                    visible: bind (language==new java.util.Locale("sr"));
                 }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
@@ -321,7 +319,7 @@ public class TabField {
                         setInfoState();
                         loadSurface(germanGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
                     }
-                    visible:bind java.util.Locale.GERMAN==language
+                    visible:bind (java.util.Locale.GERMAN==language)
                 }
                 FXGalleryMini
                 {
@@ -337,7 +335,7 @@ public class TabField {
                         setInfoState();
                         loadSurface(englishGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
                     }
-                    visible:bind java.util.Locale.ENGLISH==language
+                    visible:bind (java.util.Locale.ENGLISH==language)
                 }
                 FXGalleryMini
                 {
@@ -353,7 +351,7 @@ public class TabField {
                         setInfoState();
                         loadSurface(russianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
                     }
-                    visible:bind new java.util.Locale("ru")==language
+                    visible:bind (new java.util.Locale("ru")==language)
                 }
                 FXGalleryMini
                 {
@@ -369,23 +367,23 @@ public class TabField {
                         setInfoState();
                         loadSurface(portugueseGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
                     }
-                    visible:bind new java.util.Locale("pt")==language
+                    visible:bind (new java.util.Locale("pt")==language)
                 }
                 FXGalleryMini
                 {
-                   language:java.util.Locale.ENGLISH
+                   language:new java.util.Locale("sr")
                     width:bind G.width*getScale(sceneHeight,sceneWidth),
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:englishGallerys,
+                    gallerys:serbianGallerys,
                     gallery:bind pointerGallery
                     surface:bind pointerSurface
                     press:function(s:Integer):Void
                     {
                         pointerSurface=s;
                         setInfoState();
-                        loadSurface(englishGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
                     }
-                    visible:bind new java.util.Locale("sr")==language
+                    visible:bind (new java.util.Locale("sr")==language)
                 }
 
 
@@ -466,7 +464,7 @@ public class TabField {
                     gallerys:germanGallerys,
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
-                    visible: bind java.util.Locale.GERMAN==language
+                    visible: bind (java.util.Locale.GERMAN==language)
                 }
                 FXSurfaceInfo
                 {
@@ -475,7 +473,7 @@ public class TabField {
                     gallerys:englishGallerys,
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
-                    visible: bind java.util.Locale.ENGLISH==language
+                    visible: bind (java.util.Locale.ENGLISH==language)
                 }
                 FXSurfaceInfo
                 {
@@ -484,7 +482,7 @@ public class TabField {
                     gallerys:russianGallerys,
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
-                    visible: bind new java.util.Locale("ru")==language
+                    visible: bind (new java.util.Locale("ru")==language)
                 }
                 FXSurfaceInfo
                 {
@@ -493,16 +491,16 @@ public class TabField {
                     gallerys:portugueseGallerys,
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
-                    visible: bind new java.util.Locale("pt")==language
+                    visible: bind (new java.util.Locale("pt")==language)
                 }
                 FXSurfaceInfo
                 {
                     width:bind R.width*getScale(sceneHeight,sceneWidth),
                     height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:englishGallerys,
+                    gallerys:serbianGallerys,
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
-                    visible: bind new java.util.Locale("sr")==language
+                    visible: bind (new java.util.Locale("sr")==language)
                 }
 
 
@@ -718,35 +716,35 @@ public class TabField {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
                     content: "Start"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==java.util.Locale.GERMAN)
+                    visible: bind (java.util.Locale.GERMAN == language)
                 }
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
                     content: "Start"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==java.util.Locale.ENGLISH)
+                    visible: bind (java.util.Locale.ENGLISH == language)
                 }
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
                     content: "Старт"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("ru"))
+                    visible: bind (new java.util.Locale("ru") == language)
                 }
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
                     content: "Início"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("pt"))
+                    visible: bind (new java.util.Locale("pt") == language)
                 }
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
                     content: "StartSR"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("sr"))
+                    visible: bind (new java.util.Locale("sr") == language)
                 }
 
 
@@ -761,7 +759,7 @@ public class TabField {
     public function set()
     {
         setTextField();
-        setColoChooser();
+        setColorChooser();
         setGalleryChooser();
         setButtons();
         setGalleryText();

@@ -82,7 +82,7 @@ public class FXGUI extends javafx.scene.CustomNode
     }
     var tabField:TabField = TabField
     {
-        language:bind language//java.util.Locale.GERMAN,
+        language:bind this.language//java.util.Locale.GERMAN,
         sliders: sliders,
         getScale: getScale,
         sceneWidth: bind width;
