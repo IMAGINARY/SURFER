@@ -106,15 +106,14 @@ def stage: Stage =Stage{
                         onMousePressed:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
                         onMouseReleased:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
                         onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-
                     },
                     javafx.scene.Group
                     {
                         transforms: bind (
                             if( scene.width / scene.height <= 1920.0 / 1080.0 )
                             [
-                                javafx.scene.transform.Scale.scale( scene.width / 1920.0, scene.width / 1920.0 ),
-                                javafx.scene.transform.Translate.translate( 0, scene.height - 1080 * scene.width / 1920.0 )
+                                javafx.scene.transform.Translate.translate( 0, scene.height - 1080 * ( scene.width / 1920.0 ) ),
+                                javafx.scene.transform.Scale.scale( scene.width / 1920.0, scene.width / 1920.0 )
                             ]
                             else
                             [
