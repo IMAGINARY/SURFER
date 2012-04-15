@@ -67,7 +67,7 @@ public class FXLabel extends javafx.scene.CustomNode
         //Nimbus Sans L Regular Surfer.ttf
         //var f:Font=java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT , new File("{__DIR__}Nimbus Sans L Regular Surfer.ttf"));
         //System.out.println("__DIR__:{__DIR__}");
-        var f=Globals.font.deriveFont(T2.minY*getScale(sceneHeight,sceneWidth)*0.08);
+        var f=Globals.getJavaFont(T2.minY*getScale(sceneHeight,sceneWidth)*0.08);
         //test.setFont(f);
         //test.setBorder( BorderFactory.createEmptyBorder() );
         //textField0.setFont(f);

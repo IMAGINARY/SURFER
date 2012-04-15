@@ -70,7 +70,7 @@ public class FXGUI extends javafx.scene.CustomNode
             def BackColor :javax.vecmath.Color3f=surferPanel.renderer.getAlgebraicSurfaceRenderer().getBackMaterial() .getColor();
             tabField.frontColor.setColor(FrontColor);
             tabField.backColor.setColor(BackColor);
-            AlgebraicExpressionButtonPanel.ExpressionField.setText(surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString());
+            AlgebraicExpressionButtonPanel.ExpressionField.text = surferPanel.renderer.getAlgebraicSurfaceRenderer().getSurfaceFamilyString();
         }
         catch(e: java.lang.Exception  )
         {
@@ -181,7 +181,7 @@ public class FXGUI extends javafx.scene.CustomNode
                         backColor: bind tabField.backColor.color
                         //scale: bind zoomScale
                     };
-        surferPanel.surfaceExpressionChanged(AlgebraicExpressionButtonPanel.ExpressionField.getText());
+        surferPanel.surfaceExpressionChanged(AlgebraicExpressionButtonPanel.ExpressionField.rawText);
 
         fxdLayoutFile.getNode("Surfer_Rendering").visible=false;
         //surferPanel.visible=false;

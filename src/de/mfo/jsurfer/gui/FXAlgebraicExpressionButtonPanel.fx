@@ -46,59 +46,50 @@ public class FXAlgebraicExpressionButtonPanel
     public var surferPanel:FXSurferPanel;
     public var popUp:javafx.scene.Group;
     public var languageText:javafx.scene.Group;
+
+    public var ExpressionField: AlwaysFocusedTextBox = AlwaysFocusedTextBox{ text:"x^2+y^2+z^2+2*x*y*z-1"};
+
     public function set()
     {
         setButtons();
         setPopUp();
         setTextField();
         setTextField2();
-        ExpressionField.getDocument().addDocumentListener
-        (
-            javax.swing.event.DocumentListener
-            {
-                override function changedUpdate( e ){surferPanel.surfaceExpressionChanged(ExpressionField.getText());}
-                override function insertUpdate( e ){surferPanel.surfaceExpressionChanged(ExpressionField.getText());}
-                override function removeUpdate( e ){surferPanel.surfaceExpressionChanged(ExpressionField.getText());}
-            }
-        );
-        ExpressionField.addKeyListener( java.awt.event.KeyListener
-        {
-          override function keyPressed( keyEvent:KeyEvent ) { rewrite( keyEvent/*,KEY_PRESSED*/  ); }
-          override function keyReleased( keyEvent:KeyEvent ) { rewrite( keyEvent/*, KEY_RELEASED*/); }
-          override function keyTyped( keyEvent:KeyEvent ) { rewrite( keyEvent, ); }
-          function rewrite( keyEvent:KeyEvent/*, type:Integer*/ )
-          {
-              System.out.println(keyEvent);
-              if( keyEvent.getKeyCode() == KeyEvent.VK_COMMA )
-                keyEvent.setKeyCode( KeyEvent.VK_COLON );
-              if( keyEvent.getKeyChar() == ",".charAt( 0 ) )
-                keyEvent.setKeyChar( ".".charAt( 0 ) );
-              /*if( keyEvent.getKeyChar() == "p".charAt( 0 ) ){
-                  print();keyEvent.consume()
-                  }*/
-              if(   (keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_MASK
-                    or keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_DOWN_MASK) and
-                    keyEvent.getKeyCode()==java.awt.event.KeyEvent.VK_P and
-                    keyEvent.getID()==java.awt.event.KeyEvent.KEY_RELEASED)
-              {print();}
-              /*if(keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_DOWN_MASK)System.out.println("CRT");
-              if(keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_MASK)System.out.println("CRT2");
-              if(keyEvent.getKeyCode()==java.awt.event.KeyEvent.VK_P)System.out.println("P");*/
-          }
 
-        } );
+// ExpressionFieldToDo
+//        ExpressionField.addKeyListener( java.awt.event.KeyListener
+//        {
+//          override function keyPressed( keyEvent:KeyEvent ) { rewrite( keyEvent/*,KEY_PRESSED*/  ); }
+//          override function keyReleased( keyEvent:KeyEvent ) { rewrite( keyEvent/*, KEY_RELEASED*/); }
+//          override function keyTyped( keyEvent:KeyEvent ) { rewrite( keyEvent, ); }
+//          function rewrite( keyEvent:KeyEvent )
+//          {
+//              System.out.println(keyEvent);
+//              if( keyEvent.getKeyCode() == KeyEvent.VK_COMMA )
+//                keyEvent.setKeyCode( KeyEvent.VK_COLON );
+//              if( keyEvent.getKeyChar() == ",".charAt( 0 ) )
+//                keyEvent.setKeyChar( ".".charAt( 0 ) );
+//              if(   (keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_MASK
+//                    or keyEvent.getModifiers()==java.awt.event.InputEvent.CTRL_DOWN_MASK) and
+//                    keyEvent.getKeyCode()==java.awt.event.KeyEvent.VK_P and
+//                    keyEvent.getID()==java.awt.event.KeyEvent.KEY_RELEASED)
+//              {print();}
+//          }
+//
+//        } );
     }
 
-    public var SurfaceExpression:javafx.scene.layout.HBox= new javafx.scene.layout.HBox();
+
+    public var SurfaceExpression:javafx.scene.layout.VBox= new javafx.scene.layout.VBox;
     public var EqualNull:javafx.scene.layout.HBox= javafx.scene.layout.HBox
     {
         //content: [FXLabel{  string:"=0" Bound:fxdLayoutFile.getNode("Equals_Zero"), getScale: getScale,sceneWidth: bind sceneWidth; sceneHeight:bind sceneHeight; faktor:0.08} ]
     };
     public var expression:String;
-    public var ExpressionField: javax.swing.JTextField=new javax.swing.JTextField("x^2+y^2+z^2+2*x*y*z-1");
     public var NullField: javax.swing.JLabel=new javax.swing.JLabel("=0");
     public var pos:Number;
-    var caret:javax.swing.text.Caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
+    //var caret:javax.swing.text.Caret=javax.swing.text.DefaultCaret{ override function setVisible(b:Boolean){super.setVisible(true);}} ;
+    var surfaceExpression:String = bind ExpressionField.rawText on replace { surferPanel.surfaceExpressionChanged(ExpressionField.rawText) };
     var correctExpression:Boolean= bind surferPanel.correctExpression on replace
     {
         fxdLayoutFile.getNode("Button_Correct").visible=surferPanel.correctExpression;
@@ -125,8 +116,19 @@ public class FXAlgebraicExpressionButtonPanel
             height: T2.height*getScale(sceneHeight,sceneWidth)
             maxHeight: T2.height*getScale(sceneHeight,sceneWidth)
          };
-        def sw:javafx.ext.swing.SwingComponent=javafx.ext.swing.SwingComponent.wrap(ExpressionField);
-        sw.layoutInfo=javafx.scene.layout.LayoutInfo
+        
+        ExpressionField.layoutInfo=javafx.scene.layout.LayoutInfo
+        {
+            minWidth: T.width*getScale(sceneHeight,sceneWidth)
+            width: T.width*getScale(sceneHeight,sceneWidth)
+            maxWidth: T.width*getScale(sceneHeight,sceneWidth)
+//            minHeight: T.height*getScale(sceneHeight,sceneWidth)
+//            height: T.height*getScale(sceneHeight,sceneWidth)
+            maxHeight: T.height*getScale(sceneHeight,sceneWidth)
+         };
+        ExpressionField.style="-fx-background-color: white;";
+        SurfaceExpression.vpos=javafx.geometry.VPos.CENTER;
+        SurfaceExpression.layoutInfo=javafx.scene.layout.LayoutInfo
         {
             minWidth: T.width*getScale(sceneHeight,sceneWidth)
             width: T.width*getScale(sceneHeight,sceneWidth)
@@ -135,11 +137,15 @@ public class FXAlgebraicExpressionButtonPanel
             height: T.height*getScale(sceneHeight,sceneWidth)
             maxHeight: T.height*getScale(sceneHeight,sceneWidth)
          };
-        SurfaceExpression.content=[sw];
+        SurfaceExpression.content=[ExpressionField];
         EqualNull.content=[sw2];
-        var f=Globals.font.deriveFont(T.minY*getScale(sceneHeight,sceneWidth)*size);
-        ExpressionField.setFont(f);
-        ExpressionField.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
+
+        var f=Globals.getJavaFont( T.minY*getScale(sceneHeight,sceneWidth)*size);
+
+        ExpressionField.font = Globals.getJavaFXFont( T.minY*getScale(sceneHeight,sceneWidth)*size);
+        // ExpressionFieldToDo
+        //ExpressionField.setBorder( javax.swing.BorderFactory.createEmptyBorder() );
+/*
         ExpressionField.setDisabledTextColor( java.awt.Color.BLACK );
 		ExpressionField.addFocusListener
 		(
@@ -157,10 +163,10 @@ public class FXAlgebraicExpressionButtonPanel
             }
 		);
 		ExpressionField.requestFocus();
-        caret.setBlinkRate(500);
-        ExpressionField.setCaret(caret);
-        //ExpressionField.setCaretPosition(1);
-        caret.setVisible(true);
+*/
+        //caret.setBlinkRate(500);
+        //ExpressionField.setCaret(caret);
+        //caret.setVisible(true);
         NullField.setFont(f);
         NullField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         SurfaceExpression.layoutX=T.minX*getScale(sceneHeight,sceneWidth);
@@ -612,48 +618,27 @@ public class FXAlgebraicExpressionButtonPanel
     }
     public function forward()
     {
-        pos=ExpressionField.getCaretPosition();
-        expression=ExpressionField.getText();
-        if (pos<expression.length())pos++;
-        ExpressionField.setCaretPosition(pos);
+        ExpressionField.forward();
     }
 
     public function back()
     {
-            pos=ExpressionField.getCaretPosition();
-            if (pos>0)pos--;
-            ExpressionField.setCaretPosition(pos);
+        ExpressionField.backward();
     }
 
     public function backspace()
     {
-//        def keyCode:Integer = KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ).getKeyCode();
-//        def keyChar:Character = KeyStroke.getKeyStroke( KeyEvent.VK_BACK_SPACE, 0 ).getKeyChar();
-        var c:Character = "\b".charAt( 0 );
-        var ke:KeyEvent;
-        ke = new KeyEvent( ExpressionField, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0, KeyEvent.VK_BACK_SPACE, c ) ;
-        ExpressionField.dispatchEvent( ke );
-        ke = new KeyEvent( ExpressionField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, 0, c ) ;
-        ExpressionField.dispatchEvent( ke );
-        ke = new KeyEvent( ExpressionField, KeyEvent.KEY_RELEASED, System.currentTimeMillis(), 0, KeyEvent.VK_BACK_SPACE, c ) ;
-        ExpressionField.dispatchEvent( ke );
+        ExpressionField.deletePreviousChar();
     }
 
     public function CompleteDelete()
     {
-        pos=0;
-        ExpressionField.setText("");
-        ExpressionField.setCaretPosition(pos);
+        ExpressionField.clear();
     }
 
     public function insertStringInTextfield(s:String)
     {
-        for( i in [ 0 .. s.length() - 1 ]  )
-        {
-            var c:Character = s.charAt( i );
-            var ke:KeyEvent = new KeyEvent( ExpressionField, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, KeyStroke.getKeyStroke( c ).getKeyCode(), c ) ;
-            ExpressionField.dispatchEvent( ke );
-        }
+        ExpressionField.replaceSelection( s );
     }
 
     public function setChar(c:String )
@@ -721,7 +706,7 @@ public class FXAlgebraicExpressionButtonPanel
         }
         var f2:java.io.File=new java.io.File("{print_dir}print_tmp.tex") ;
         System.out.println( "writing TeX to {f2.getAbsolutePath()}" );
-        try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( ExpressionField.getText() ) )}
+        try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( ExpressionField.rawText ) )}
         catch(e:java.io.IOException)
         {
             System.out.println(e);
@@ -758,7 +743,7 @@ public class FXAlgebraicExpressionButtonPanel
     var enabled:Boolean=true;
     public function setIdle()
     {
-        ExpressionField.setEnabled(false);
+        ExpressionField.disable=true;
         //NullField.setEnabled(false);
         EqualNull.effect=javafx.scene.effect.GaussianBlur{};
         SurfaceExpression.effect=javafx.scene.effect.GaussianBlur{};
@@ -787,7 +772,7 @@ public class FXAlgebraicExpressionButtonPanel
     }
     public function setBusy()
     {
-        ExpressionField.setEnabled(true);
+        ExpressionField.disable=false;
         //NullField.setEnabled(true);
         EqualNull.effect=null;
         SurfaceExpression.effect=null;
