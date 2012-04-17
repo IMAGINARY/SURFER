@@ -54,14 +54,20 @@ public class FXGalleryMini extends CustomNode
                     for (i in [0..(gallerys[g].getEntries().length-1)])
                     {
                         Label {
+                            layoutInfo: javafx.scene.layout.LayoutInfo
+                            {
+                                width: bind (( width - 2*20-10 - 1 )/3.0)
+                            }
+                            style: "-fx-background-color:red;"
                             id: "FXGalleryChooser{language}{gallery} {i}"
                             onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {press(i);}
                             text: "{gallerys[g].getEntries()[ i ].getName()}"
                             font: javafx.scene.text.Font.font( "Arial", javafx.scene.text.FontWeight.REGULAR, 19 )
                             hpos: javafx.geometry.HPos.CENTER
-                            vpos: javafx.geometry.VPos.BOTTOM
-                            textOverrun: javafx.scene.control.OverrunStyle.ELLIPSES
+                            vpos: javafx.geometry.VPos.TOP
+                            textOverrun: javafx.scene.control.OverrunStyle.CLIP
                             textWrap: false
+                            textAlignment: javafx.scene.text.TextAlignment.CENTER
                             graphic: javafx.scene.image.ImageView
                             {
                                 image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )

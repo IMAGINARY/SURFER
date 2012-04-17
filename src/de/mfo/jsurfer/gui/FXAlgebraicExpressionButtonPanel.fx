@@ -507,7 +507,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "ParameterSR"
+                    content: "Параметри"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
@@ -557,7 +557,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "RechenoperationenSR" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: "Аритметичке операције" textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
                     visible: bind (language==new java.util.Locale("sr"))
@@ -606,7 +606,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "VariablenSR" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: "Променљиве" textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
                     visible: bind (language==new java.util.Locale("sr"))

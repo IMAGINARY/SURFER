@@ -646,7 +646,7 @@ public class TabField {
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "ColoursSR" 
+                    content: "Боје"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     visible: bind (language==new java.util.Locale("sr"))
                 }
@@ -695,7 +695,7 @@ public class TabField {
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "InfoSR"
+                    content: "Информације"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     visible: bind (language==new java.util.Locale("sr"))
                 }
@@ -742,7 +742,7 @@ public class TabField {
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "StartSR"
+                    content: "Старт"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     visible: bind (new java.util.Locale("sr") == language)
                 }
