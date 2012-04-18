@@ -37,7 +37,19 @@ public class FXAlgebraicExpressionButtonPanel
     //public-init var keyboardTextParametersGer:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsGer:javafx.scene.text.Text;
     //public-init var keyboardTextXYZGer:javafx.scene.text.Text;
-    public var language:java.util.Locale=new java.util.Locale("sr");
+
+    public function getDefaultLocale():java.util.Locale
+    {
+        var defaultLang_ISO2:String = java.util.Locale.getDefault().getLanguage();
+        var knownLangs_ISO2 = [ "de", "en", "pt", "ru", "sr" ];
+        println( defaultLang_ISO2 );
+        for( l in knownLangs_ISO2 )
+            if( l == defaultLang_ISO2 )
+                return new java.util.Locale( l );
+        return new java.util.Locale( "en" );
+    }
+
+    public var language:java.util.Locale=getDefaultLocale();
     public-init var getScale:function (n:Number, w:Number):Number;
     public-init var showImpressum:function ():Void;
     public var sceneWidth:Number;

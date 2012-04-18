@@ -58,7 +58,6 @@ public class FXGalleryMini extends CustomNode
                             {
                                 width: bind (( width - 2*20-10 - 1 )/3.0)
                             }
-                            style: "-fx-background-color:red;"
                             id: "FXGalleryChooser{language}{gallery} {i}"
                             onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {press(i);}
                             text: "{gallerys[g].getEntries()[ i ].getName()}"
