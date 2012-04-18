@@ -138,7 +138,7 @@ public class FXAlgebraicExpressionButtonPanel
 //            height: T.height*getScale(sceneHeight,sceneWidth)
             maxHeight: T.height*getScale(sceneHeight,sceneWidth)
          };
-        ExpressionField.style="-fx-background-color: white;";
+        ExpressionField.styleClass=".TextBoxWOBorder";
         SurfaceExpression.vpos=javafx.geometry.VPos.CENTER;
         SurfaceExpression.layoutInfo=javafx.scene.layout.LayoutInfo
         {

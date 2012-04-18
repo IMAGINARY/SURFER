@@ -90,6 +90,7 @@ def stage: Stage =Stage{
     scene: scene = Scene {
         width: 192*6
         height: 108*6
+        stylesheets: "{__DIR__}jfxsurfer.css";
         content: [
                     javafx.scene.shape.Rectangle
                     {
