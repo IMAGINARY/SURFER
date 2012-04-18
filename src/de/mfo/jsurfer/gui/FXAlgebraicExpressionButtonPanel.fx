@@ -356,6 +356,7 @@ public class FXAlgebraicExpressionButtonPanel
         
         popUp=javafx.scene.Group
         {
+            blocksMouse: true
             content: 
             [
                 lang1,lang2,lang3,lang4,lang5,
