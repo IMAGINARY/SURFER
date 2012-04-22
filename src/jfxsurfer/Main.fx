@@ -44,7 +44,7 @@ def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
                 x: 0, y:bind GUI.realHeight(1080,1920), width:1920, height:1080
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
-                showPrint:true
+                showPrint: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.showPrintButton" )  )
             }
 /*var timeline = javafx.animation.Timeline
 {
@@ -86,7 +86,7 @@ function somethingHappend():Void
 var scene: Scene;
 def stage: Stage =Stage{
     title: "Surfer"
-    fullScreen: false
+    fullScreen: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.fullscreen" )  )
     scene: scene = Scene {
         width: 192*6
         height: 108*6
