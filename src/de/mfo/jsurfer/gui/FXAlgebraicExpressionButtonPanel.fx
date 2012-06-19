@@ -59,7 +59,7 @@ public class FXAlgebraicExpressionButtonPanel
     public var popUp:javafx.scene.Group;
     public var languageText:javafx.scene.Group;
 
-    public var ExpressionField: AlwaysFocusedTextBox = AlwaysFocusedTextBox{ text:"x^2+y^2+z^2+2*x*y*z-1"};
+    public var ExpressionField: AlwaysFocusedTextBox = AlwaysFocusedTextBox{ text:"x^2+y^2+z^2+2*x*y*z-1", selectOnFocus:false };
 
     public function set()
     {
