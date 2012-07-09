@@ -202,6 +202,8 @@ public class FXGUI extends javafx.scene.CustomNode
 
 	public override function create(): javafx.scene.Node
 	{
+            System.out.println( "{__DIR__}" );
+
             AlgebraicExpressionButtonPanel.set();
             tabField.set();
 
