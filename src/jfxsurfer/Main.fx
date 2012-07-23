@@ -76,14 +76,35 @@ var timeline = javafx.animation.Timeline
         }
     }
 }
+
+def hideCursor = "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.hideCursor" );
 function somethingHappend():Void
 {
     //System.out.println("somethingHappend");
     timeline.playFromStart();
-    
+    if( hideCursor )
+        dummyRect.cursor = javafx.scene.Cursor.NONE;
+    //cursorDeactivator.playFromStart();
 }
 
 var scene: Scene;
+def dummyRect : javafx.scene.shape.Rectangle = javafx.scene.shape.Rectangle
+{
+    width: bind scene.width, height: bind scene.height
+    fill: javafx.scene.paint.Color.rgb(255, 255, 255)
+    onKeyPressed:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
+    onKeyReleased:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
+    onKeyTyped:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
+    onMouseClicked:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMouseDragged:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMouseEntered:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMouseExited:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMouseMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMousePressed:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMouseReleased:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+    onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
+};
+
 def stage: Stage =Stage{
     title: "Surfer"
     fullScreen: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.fullscreen" )  )
@@ -92,22 +113,7 @@ def stage: Stage =Stage{
         height: 108*6
         stylesheets: "{__DIR__}jfxsurfer.css";
         content: [
-                    javafx.scene.shape.Rectangle
-                    {
-                        width: bind scene.width, height: bind scene.height
-                        fill: javafx.scene.paint.Color.rgb(255, 255, 255)
-                        onKeyPressed:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
-                        onKeyReleased:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
-                        onKeyTyped:function(ke:javafx.scene.input.KeyEvent):Void{somethingHappend();}
-                        onMouseClicked:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMouseDragged:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMouseEntered:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMouseExited:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMouseMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMousePressed:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMouseReleased:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                        onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
-                    },
+                    dummyRect,
                     javafx.scene.Group
                     {
                         transforms: bind (
