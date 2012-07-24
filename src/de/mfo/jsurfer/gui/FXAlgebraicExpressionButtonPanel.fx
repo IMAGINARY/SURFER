@@ -702,41 +702,56 @@ public class FXAlgebraicExpressionButtonPanel
 
     function print()
     {
-        System.out.println("Print called!!!!!");
-        var print_dir:String = "printing{java.io.File.separator}";
-        var f:java.io.File=new java.io.File( "{print_dir}print_tmp.png" );
-        System.out.println( "writing image to {f.getAbsolutePath()}" );
-        try{surferPanel.renderer.saveToPNG(f,1280,1280)}
-        catch(e:java.io.IOException)
-        {
-            System.out.println(e);
-        }
-        var f2:java.io.File=new java.io.File("{print_dir}print_tmp.tex") ;
-        System.out.println( "writing TeX to {f2.getAbsolutePath()}" );
-        try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( ExpressionField.rawText ) )}
-        catch(e:java.io.IOException)
-        {
-            System.out.println(e);
-        }
+        var mb : MessageBox = MessageBox { message: java.lang.System.getProperty( "de.mfo.jsurfer.gui.printMessage", "Your image has been sent to the printer. Please wait." ) };
+        mb.show( this.popUp.scene /* we need some node to get pointer to scene */, false );
 
-        var f3:java.io.File=new java.io.File("{print_dir}print_tmp.jsurf") ;
-        try{surferPanel.renderer.saveToFile(f3.toURL());}
-        catch (e:java.lang.Exception)
+        var timeline = javafx.animation.Timeline
         {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+            keyFrames: javafx.animation.KeyFrame
+            {
+                time: 1s
+                action: function()
+                {
+                    System.out.println("Print called!!!!!");
+                    var print_dir:String = "printing{java.io.File.separator}";
+                    var f:java.io.File=new java.io.File( "{print_dir}print_tmp.png" );
+                    System.out.println( "writing image to {f.getAbsolutePath()}" );
+                    try{surferPanel.renderer.saveToPNG(f,1280,1280)}
+                    catch(e:java.io.IOException)
+                    {
+                        System.out.println(e);
+                    }
+                    var f2:java.io.File=new java.io.File("{print_dir}print_tmp.tex") ;
+                    System.out.println( "writing TeX to {f2.getAbsolutePath()}" );
+                    try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( ExpressionField.rawText ) )}
+                    catch(e:java.io.IOException)
+                    {
+                        System.out.println(e);
+                    }
 
-        try
-        {
-            var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("bash {print_dir}print.sh");
-            System.out.println("Print Test Line.");
+                    var f3:java.io.File=new java.io.File("{print_dir}print_tmp.jsurf") ;
+                    try{surferPanel.renderer.saveToFile(f3.toURL());}
+                    catch (e:java.lang.Exception)
+                    {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+
+                    try
+                    {
+                        var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("bash {print_dir}print.sh");
+                        System.out.println("Print Test Line.");
+                    }
+                    catch (e:java.lang.Exception)
+                    {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                    mb.enableOk();
+                }
+            }
         }
-        catch (e:java.lang.Exception)
-        {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+        timeline.playFromStart();
     }
 
     function Standard(s: String)

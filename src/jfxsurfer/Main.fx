@@ -119,22 +119,37 @@ def stage: Stage =Stage{
                         transforms: bind (
                             if( scene.width / scene.height <= 1920.0 / 1080.0 )
                             [
-                                javafx.scene.transform.Translate.translate( 0, scene.height - 1080 * ( scene.width / 1920.0 ) ),
-                                javafx.scene.transform.Scale.scale( scene.width / 1920.0, scene.width / 1920.0 )
+                                javafx.scene.transform.Scale.scale( scene.width / 1920.0, scene.width / 1920.0 ),
                             ]
                             else
                             [
                                 javafx.scene.transform.Scale.scale( scene.height / 1080.0, scene.height / 1080.0 )
                             ])
-                        content:
-                        [
-                            GUI,
-                            impressum,
+                        content: [
+                            javafx.scene.Group
+                            {
+                                id: "surferSceneGroup"
+                                content:
+                                [
+                                    javafx.scene.Group {
+                                        id: "surferGUIGroup"
+                                        content: [GUI,impressum]
+                                        transforms: bind (
+                                            if( scene.width / scene.height <= 1920.0 / 1080.0 )
+                                            [
+                                                javafx.scene.transform.Translate.translate( 0, ( 1920.0 / scene.width ) * scene.height - 1080 )
+                                            ]
+                                            else
+                                            [
+                                                javafx.scene.transform.Translate.translate( 0, 0 )
+                                            ])
+                                    }
+                                ]
+                            }
                         ]
                     }
                  ]
     }
-
 };
 GUI.requestFocus();
 
