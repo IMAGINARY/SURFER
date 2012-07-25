@@ -44,7 +44,9 @@ def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
                 x: 0, y:bind GUI.realHeight(1080,1920), width:1920, height:1080
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
-                showPrint: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.showPrintButton" )  )
+                showPrint: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.showPrintButton", "true" )  )
+                showLoadSave: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.showLoadSaveButton", "true" )  )
+                showExport: ( "true" == java.lang.System.getProperty( "de.mfo.jsurfer.gui.showExportButton", "true" )  )
             }
 /*var timeline = javafx.animation.Timeline
 {

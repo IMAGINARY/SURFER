@@ -26,6 +26,9 @@ public class FXAlgebraicExpressionButtonPanel
         }
     }*/
     public-init var showPrint:Boolean;
+    public-init var showLoadSave:Boolean;
+    public-init var showExport:Boolean;
+    public-init var gui:FXGUI;
     //public-init var keyboardTextParametersEng:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
     //public-init var keyboardTextXYZEng:javafx.scene.text.Text;
@@ -186,12 +189,13 @@ public class FXAlgebraicExpressionButtonPanel
         EqualNull.layoutX=T2.minX*getScale(sceneHeight,sceneWidth);
         EqualNull.layoutY=T2.minY*getScale(sceneHeight,sceneWidth);
     }
+    def ButtonList = ["Cursor_Left","Cursor_Right","Delete", "Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print", "Open_File", "Save_File", "Preferences", "Export"/*,"Help"/*,"Imprint"*/];
     function setButtons()
     {
         fxdLayoutFile.getNode("Buttons Over").visible=true;
         fxdLayoutFile.getNode("Buttons Pressed").visible=true;
         fxdLayoutFile.getNode("Buttons normal state").visible=true;
-	for (s in["Cursor_Left","Cursor_Right","Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
+	for (s in ButtonList)
 	{
            fxdLayoutFile.getNode("Button_{s}").visible=true;
            fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
@@ -201,7 +205,7 @@ public class FXAlgebraicExpressionButtonPanel
                if(not enabled)return;
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
+               for (t in ButtonList)
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_{s}").onMouseExited  =function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -215,7 +219,7 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
+               for (t in ButtonList)
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_Over_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -228,7 +232,7 @@ public class FXAlgebraicExpressionButtonPanel
            {
                if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
                inside=true;
-               for (t in["Cursor_Left","Cursor_Right","Delete",/*"Complete_Delete",*/"a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"/*,"Help"/*,"Imprint"*/])
+               for (t in ButtonList)
                   if (t!=s)Standard(t);
            };
            fxdLayoutFile.getNode("Button_Pressed_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
@@ -240,6 +244,7 @@ public class FXAlgebraicExpressionButtonPanel
 
 
 	}
+        /*
         //"Button_Complete_Delete"
         fxdLayoutFile.getNode("Button_Complete_Delete").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
         {
@@ -247,6 +252,7 @@ public class FXAlgebraicExpressionButtonPanel
         }
         fxdLayoutFile.getNode("Button_Over_Complete_Delete").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_Complete_Delete").visible=false;
+*/
 
         //"Button_Over_draw"
         fxdLayoutFile.getNode("Button_Over_Wrong").visible=false;
@@ -286,6 +292,13 @@ public class FXAlgebraicExpressionButtonPanel
         }
 
         
+        if (true) //disable prefs button
+        {
+           fxdLayoutFile.getNode("Button_Preferences").visible=false;
+           fxdLayoutFile.getNode("Button_Pressed_Preferences").visible=false;
+           fxdLayoutFile.getNode("Button_Over_Preferences").visible=false;
+        }
+
         if (not showPrint)
         {
            fxdLayoutFile.getNode("Button_Print").visible=false;
@@ -293,6 +306,22 @@ public class FXAlgebraicExpressionButtonPanel
            fxdLayoutFile.getNode("Button_Over_Print").visible=false;
         }
 
+        if (not showLoadSave )
+        {
+           fxdLayoutFile.getNode("Button_Open_File").visible=false;
+           fxdLayoutFile.getNode("Button_Pressed_Open_File").visible=false;
+           fxdLayoutFile.getNode("Button_Over_Open_File").visible=false;
+           fxdLayoutFile.getNode("Button_Save_File").visible=false;
+           fxdLayoutFile.getNode("Button_Pressed_Save_File").visible=false;
+           fxdLayoutFile.getNode("Button_Over_Save_File").visible=false;
+        }
+
+        if (not showExport)
+        {
+           fxdLayoutFile.getNode("Button_Export").visible=false;
+           fxdLayoutFile.getNode("Button_Pressed_Export").visible=false;
+           fxdLayoutFile.getNode("Button_Over_Export").visible=false;
+        }
 
     }
     function setPopUp()
@@ -659,7 +688,7 @@ public class FXAlgebraicExpressionButtonPanel
         else if (c=="Cursor_Left"){back();}
         else if (c=="Cursor_Right"){forward();}
         else if (c=="Delete"){backspace();}
-        //else if (c=="Complete_Delete"){CompleteDelete();}
+        else if (c=="Complete_Delete"){CompleteDelete();}
         else if (c=="Plus"){insertStringInTextfield("+");}
         else if (c=="Minus"){insertStringInTextfield("-");}
         else if (c=="Times"){insertStringInTextfield("*");}
@@ -672,7 +701,10 @@ public class FXAlgebraicExpressionButtonPanel
         else if (c=="Correct"){/*Nothing Happens*/}
         //else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
         else if (c=="Help"){/*ToDo Help*/}
-        else if (c=="Print"){if(showPrint)print();}
+        else if (c=="Print"){if(showPrint) gui.print();}
+        else if (c=="Open_File"){if(showLoadSave) gui.load();}
+        else if (c=="Save_File"){if(showLoadSave) gui.save();}
+        else if (c=="Export"){if(showExport) gui.export();}
         //else if (c=="Imprint"){timeline.playFromStart();}
     }
 
@@ -700,68 +732,19 @@ public class FXAlgebraicExpressionButtonPanel
         }
     }
 
-    function print()
-    {
-        var mb : MessageBox = MessageBox { message: java.lang.System.getProperty( "de.mfo.jsurfer.gui.printMessage", "Your image has been sent to the printer. Please wait." ) };
-        mb.show( this.popUp.scene /* we need some node to get pointer to scene */, false );
-
-        var timeline = javafx.animation.Timeline
-        {
-            keyFrames: javafx.animation.KeyFrame
-            {
-                time: 1s
-                action: function()
-                {
-                    System.out.println("Print called!!!!!");
-                    var print_dir:String = "printing{java.io.File.separator}";
-                    var f:java.io.File=new java.io.File( "{print_dir}print_tmp.png" );
-                    System.out.println( "writing image to {f.getAbsolutePath()}" );
-                    try{surferPanel.renderer.saveToPNG(f,1280,1280)}
-                    catch(e:java.io.IOException)
-                    {
-                        System.out.println(e);
-                    }
-                    var f2:java.io.File=new java.io.File("{print_dir}print_tmp.tex") ;
-                    System.out.println( "writing TeX to {f2.getAbsolutePath()}" );
-                    try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( ExpressionField.rawText ) )}
-                    catch(e:java.io.IOException)
-                    {
-                        System.out.println(e);
-                    }
-
-                    var f3:java.io.File=new java.io.File("{print_dir}print_tmp.jsurf") ;
-                    try{surferPanel.renderer.saveToFile(f3.toURL());}
-                    catch (e:java.lang.Exception)
-                    {
-                        System.out.println(e.getMessage());
-                        e.printStackTrace();
-                    }
-
-                    try
-                    {
-                        var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("bash {print_dir}print.sh");
-                        System.out.println("Print Test Line.");
-                    }
-                    catch (e:java.lang.Exception)
-                    {
-                        System.out.println(e.getMessage());
-                        e.printStackTrace();
-                    }
-                    mb.enableOk();
-                }
-            }
-        }
-        timeline.playFromStart();
-    }
-
     function Standard(s: String)
     {
         if (s=="Print" and not showPrint) return;
+        if (s=="Open_File" and not showLoadSave) return;
+        if (s=="Save_File" and not showLoadSave) return;
+        if (s=="Preferences" ) return;
+        if (s=="Export" and not showExport) return;
         fxdLayoutFile.getNode("Button_{s}").visible=true;
         fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;
         if (pressedButton==s){pressedButton="";}
     }
+
     var enabled:Boolean=true;
     public function setIdle()
     {
@@ -781,7 +764,7 @@ public class FXAlgebraicExpressionButtonPanel
         //keyboardTextOperationsGer.effect=javafx.scene.effect.GaussianBlur{};
         //keyboardTextXYZGer.effect=javafx.scene.effect.GaussianBlur{};
 
-        for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
+        for (s in ButtonList)
         {
             fxdLayoutFile.getNode("Button_{s}").effect=javafx.scene.effect.GaussianBlur{};
             fxdLayoutFile.getNode("Button_Over_{s}").effect=javafx.scene.effect.GaussianBlur{};
@@ -810,7 +793,7 @@ public class FXAlgebraicExpressionButtonPanel
         //keyboardTextOperationsGer.effect=null;
         //keyboardTextXYZGer.effect=null;
 
-        for (s in["Cursor_Left","Cursor_Right","Delete","Complete_Delete","a","b","c","d","x","y","z","Plus","Minus","Times","Exp_n","Exp_2","Exp_3","Bracket_open","Bracket_close","0","1","2","3","4","5","6","7","8","9","Comma","Print"])
+        for (s in ButtonList)
         {
             fxdLayoutFile.getNode("Button_{s}").effect=null;
             fxdLayoutFile.getNode("Button_Over_{s}").effect=null;

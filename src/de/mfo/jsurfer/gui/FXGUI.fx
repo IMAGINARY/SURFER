@@ -14,6 +14,9 @@ import java.lang.System;
 public class FXGUI extends javafx.scene.CustomNode
 {
     public var showImpressum:Boolean=false;
+    public var showLoadSave:Boolean;
+    public var showExport:Boolean;
+
     public-init var showPrint:Boolean;
     //public var realHeight:Number=bind fxdLayoutFile.layoutBounds.maxY*getScale(height,width);
     //public var
@@ -40,7 +43,10 @@ public class FXGUI extends javafx.scene.CustomNode
         fxdLayoutFile:fxdLayoutFile,
         surferPanel: bind surferPanel,
         showImpressum:function(){showImpressum=true;},
-        showPrint:showPrint
+        showPrint:showPrint,
+        showLoadSave:showLoadSave,
+        showExport:showExport,
+        gui: this
     }
     public var language:java.util.Locale=bind AlgebraicExpressionButtonPanel.language;
     
@@ -314,7 +320,7 @@ public class FXGUI extends javafx.scene.CustomNode
 	
 
 
-    function load():Void
+    public function load():Void
     {
        var fc:javax.swing.JFileChooser  = new javax.swing.JFileChooser();
        fc.setFileSelectionMode( javax.swing.JFileChooser.FILES_ONLY );
@@ -349,7 +355,7 @@ public class FXGUI extends javafx.scene.CustomNode
         }
       }
 
-      function save():Void
+      public function save():Void
       {
         var fc:javax.swing.JFileChooser  = new javax.swing.JFileChooser();
         fc.setFileSelectionMode( javax.swing.JFileChooser.FILES_ONLY );
@@ -378,4 +384,123 @@ public class FXGUI extends javafx.scene.CustomNode
             }
         }
       }
+
+      public function export():Void
+      {
+          var size : Integer = -1;
+          var maxSize : Integer = 32768;
+          var errorMsg : java.lang.String;
+
+          while( size <= 0 )
+          {
+             def ssize : java.lang.String = javax.swing.JOptionPane.showInputDialog("{errorMsg}Input width of the image (0<width<={maxSize}):", "1024");
+             if( ssize == null )
+                break;
+             try
+             {
+                 size = java.lang.Integer.parseInt( ssize );
+             }
+             catch( e : java.lang.NumberFormatException )
+             {
+             }
+             if( size <= 0 )
+             {
+                errorMsg = "Width must be positive!\n\n";
+                continue;
+             }
+             else if( size > maxSize)
+             {
+                size = -1;
+                errorMsg = "Width must be smaller than {maxSize}!\n\n";
+                continue;
+             }
+             errorMsg = "";
+
+            var fc:javax.swing.JFileChooser  = new javax.swing.JFileChooser();
+            fc.setFileSelectionMode( javax.swing.JFileChooser.FILES_ONLY );
+            fc.setAcceptAllFileFilterUsed( false );
+            var pngFilter:PNGFilter  = new PNGFilter();
+            fc.addChoosableFileFilter( pngFilter );
+
+            var returnVal:Integer = fc.showSaveDialog( surferPanel.renderer );
+            if( returnVal == javax.swing.JFileChooser.APPROVE_OPTION )
+            {
+                var f:java.io.File  = fc.getSelectedFile();
+                f = pngFilter.ensureExtension( f );
+                try
+                {
+                    surferPanel.renderer.saveToPNG( f, size, size );
+                    surferPanel.renderer.repaintImage();
+                    //renderer.saveToPNG( f, 1024, 1024 );
+                }
+                catch(e: java.lang.Exception  )
+                {
+                    var  message:String= "Could not export to file \" {f.getName()  } \".";
+                    if( e.getMessage() != null )
+                        message = "{message}\n\nMessage: {e.getMessage()}";
+                    javax.swing.JOptionPane.showMessageDialog( null, message, "Error", javax.swing.JOptionPane.OK_OPTION );
+                }
+                catch(e: java.lang.OutOfMemoryError )
+                {
+                    errorMsg = "Not enough memory to create an image of size {size}x{size}!\n\n";
+                    maxSize = size - 1;
+                    continue;
+                }
+            }
+         }
+      }
+
+    public function print()
+    {
+        var mb : MessageBox = MessageBox { message: java.lang.System.getProperty( "de.mfo.jsurfer.gui.printMessage", "Your image has been sent to the printer. Please wait." ) };
+        mb.show( this.scene, false );
+
+        var timeline = javafx.animation.Timeline
+        {
+            keyFrames: javafx.animation.KeyFrame
+            {
+                time: 1s
+                action: function()
+                {
+                    System.out.println("Print called!!!!!");
+                    var print_dir:String = "printing{java.io.File.separator}";
+                    var f:java.io.File=new java.io.File( "{print_dir}print_tmp.png" );
+                    System.out.println( "writing image to {f.getAbsolutePath()}" );
+                    try{surferPanel.renderer.saveToPNG(f,1280,1280)}
+                    catch(e:java.io.IOException)
+                    {
+                        System.out.println(e);
+                    }
+                    var f2:java.io.File=new java.io.File("{print_dir}print_tmp.tex") ;
+                    System.out.println( "writing TeX to {f2.getAbsolutePath()}" );
+                    try{surferPanel.renderer.saveString(f2, de.mfo.jsurfer.util.Texify.texify( AlgebraicExpressionButtonPanel.ExpressionField.rawText ) )}
+                    catch(e:java.io.IOException)
+                    {
+                        System.out.println(e);
+                    }
+
+                    var f3:java.io.File=new java.io.File("{print_dir}print_tmp.jsurf") ;
+                    try{surferPanel.renderer.saveToFile(f3.toURL());}
+                    catch (e:java.lang.Exception)
+                    {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+
+                    try
+                    {
+                        var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("bash {print_dir}print.sh");
+                        System.out.println("Print Test Line.");
+                    }
+                    catch (e:java.lang.Exception)
+                    {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                    mb.enableOk();
+                }
+            }
+        }
+        timeline.playFromStart();
+    }
 }
