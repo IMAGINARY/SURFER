@@ -1,8 +1,7 @@
 #jSurfer surface description
-#Fri May 20 08:33:51 CEST 2011
-front_material_specular_iIntensity=0.5
+#Wed Jul 25 19:44:34 CEST 2012
+back_material_specular_intensity=0.5
 camera_type=ORTHOGRAPHIC_CAMERA
-back_material_specular_iIntensity=0.5
 light_position_7=0.0 0.0 0.0
 light_position_6=0.0 0.0 0.0
 light_position_5=0.0 0.0 0.0
@@ -21,10 +20,11 @@ scale_factor=0.5
 light_intensity_5=1.0
 light_intensity_4=1.0
 light_intensity_3=1.0
+front_material_specular_intensity=0.5
 light_intensity_2=0.3
 light_intensity_1=0.7
 light_intensity_0=0.5
-rotation_matrix=-0.924036 0.33012742 -0.19280562 0.0 0.37895477 0.8575589 -0.3478328 0.0 0.050513312 -0.39447442 -0.91751814 0.0 0.0 0.0 0.0 1.0
+rotation_matrix=0.8776129008664156 -0.3004127220911171 0.37356183219659705 0.0 -0.021452319297130592 0.7538831644837973 0.6566594351225551 0.0 -0.4788908179988047 -0.5843060679174239 0.6551726515842347 0.0 0.0 0.0 0.0 1.0
 light_color_7=1.0 1.0 1.0
 light_color_6=1.0 1.0 1.0
 front_material_diffuse_intensity=0.8

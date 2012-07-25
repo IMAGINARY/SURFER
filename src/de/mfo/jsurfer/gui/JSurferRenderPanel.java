@@ -395,9 +395,9 @@ public class JSurferRenderPanel extends JComponent
                                r.m02, r.m12, r.m22, r.m32,
                                r.m03, r.m13, r.m23, r.m33 };
 
-                gl.glScaled( 1, -1, -1 );
+//                gl.glScaled( 1, -1, -1 );
                 gl.glMultMatrixd( rf, 0 );
-                gl.glScaled( 1, -1, -1 );
+//                gl.glScaled( 1, -1, -1 );
 
                 double radiusCyl = 0.04;
                 double tipLength = 0.33;
@@ -507,13 +507,13 @@ public class JSurferRenderPanel extends JComponent
 
                 gl.glBegin( GL2.GL_QUADS );
                     gl.glColor3d( 1, 1, 1 );
-                    gl.glTexCoord2d( 0.0, 0.0 );
-                    gl.glVertex3d( w, 0, -1.5 );
-                    gl.glTexCoord2d( 0.0, 1.0 );
-                    gl.glVertex3d( w, h, -1.5 );
-                    gl.glTexCoord2d( 1.0, 1.0 );
-                    gl.glVertex3d( 0, h, -1.5 );
                     gl.glTexCoord2d( 1.0, 0.0 );
+                    gl.glVertex3d( w, 0, -1.5 );
+                    gl.glTexCoord2d( 1.0, 1.0 );
+                    gl.glVertex3d( w, h, -1.5 );
+                    gl.glTexCoord2d( 0.0, 1.0 );
+                    gl.glVertex3d( 0, h, -1.5 );
+                    gl.glTexCoord2d( 0.0, 0.0 );
                     gl.glVertex3d( 0, 0, -1.5 );
                 gl.glEnd();
                 gl.glPopMatrix();
@@ -602,7 +602,7 @@ public class JSurferRenderPanel extends JComponent
         scheduleSurfaceRepaint();
         try
         {
-            javax.imageio.ImageIO.write( createBufferedImageFromRGB( (ImgBuffer) rw.draw( width, height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4 ) ), "png", f );
+            saveToPNG( f, (ImgBuffer) rw.draw( width, height, CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4 ) );
         }
         catch( java.util.concurrent.CancellationException ce ) {}
         setMinLowResRenderSize( oldMinDim );
@@ -632,7 +632,18 @@ public class JSurferRenderPanel extends JComponent
     public void saveToPNG( java.io.File f )
             throws java.io.IOException
     {
-        javax.imageio.ImageIO.write( createBufferedImageFromRGB( currentSurfaceImage ), "png", f );
+        saveToPNG( f, currentSurfaceImage );
+    }
+
+    public static void saveToPNG( java.io.File f, ImgBuffer imgbuf )
+            throws java.io.IOException
+    {
+        BufferedImage bufferedImage = createBufferedImageFromRGB( imgbuf );
+        AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+        tx.translate(0, -bufferedImage.getHeight(null));
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        bufferedImage = op.filter(bufferedImage, null);
+        javax.imageio.ImageIO.write( bufferedImage, "png", f );
     }
 
     protected void paintComponent( Graphics g )
@@ -857,16 +868,14 @@ public class JSurferRenderPanel extends JComponent
                         p.loadFromFile( jsurf_file.getAbsoluteFile().toURL() );
 
                         // do rendering
-                        Matrix4d rotation = new Matrix4d();
-                        rotation.invert( p.rsd.getRotation() );
-                        p.asr.setTransform( rotation );
+                        p.asr.setTransform( p.rsd.getRotation() );
                         p.asr.setSurfaceTransform( p.scale );
                         p.asr.setAntiAliasingMode( CPUAlgebraicSurfaceRenderer.AntiAliasingMode.ADAPTIVE_SUPERSAMPLING );
                         p.asr.setAntiAliasingPattern( AntiAliasingPattern.RG_2x2 );
 
                         p.asr.draw( ib.rgbBuffer, ib.width, ib.height );
 
-                        javax.imageio.ImageIO.write( createBufferedImageFromRGB( ib ), "png", png_file );
+                        saveToPNG( png_file, ib );
                         System.out.println( " ... done" );
                     }
                 }
@@ -882,7 +891,8 @@ public class JSurferRenderPanel extends JComponent
 
     public static void main( String[]args )
     {
-        //generateGalleryThumbnails( "./src/de/mfo/jsurfer/gui/gallery", "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
+        generateGalleryThumbnails( "./src/de/mfo/jsurfer/gui/gallery", "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
+        if( true ) return;
         JSurferRenderPanel p = new JSurferRenderPanel();
         //p.setResizeImageWithComponent( true );
 

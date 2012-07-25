@@ -40,7 +40,7 @@ public class RotateSphericalDragger
     
     public void dragTo( Point p )
     {
-        double xAngle = -( lastLocation.x - p.x ) * xSpeed;
+        double xAngle = ( lastLocation.x - p.x ) * xSpeed;
         double yAngle = ( lastLocation.y - p.y ) * ySpeed;
         
         Matrix4d rotX = new Matrix4d();
