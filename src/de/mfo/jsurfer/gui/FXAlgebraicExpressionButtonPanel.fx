@@ -11,6 +11,11 @@ import javax.swing.KeyStroke;
 import java.lang.System;
 import java.lang.String;
 import java.util.Locale;
+import javafx.scene.*;
+import javafx.scene.text.*;
+import javafx.geometry.*;
+import javafx.scene.layout.*;
+import javafx.fxd.Duplicator;
 
 /**
  * @author Panda
@@ -29,7 +34,9 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var showLoadSave:Boolean;
     public-init var showExport:Boolean;
     public-init var gui:FXGUI;
-    //public-init var keyboardTextParametersEng:javafx.scene.text.Text;
+    var knownLangs_ISO2 = [ "es", "de", "en", "pt", "ru", "sr" ];
+
+//public-init var keyboardTextParametersEng:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
     //public-init var keyboardTextXYZEng:javafx.scene.text.Text;
 
@@ -44,7 +51,6 @@ public class FXAlgebraicExpressionButtonPanel
     public function getDefaultLocale():java.util.Locale
     {
         var defaultLang_ISO2:String = java.util.Locale.getDefault().getLanguage();
-        var knownLangs_ISO2 = [ "es", "de", "en", "pt", "ru", "sr" ];
         println( defaultLang_ISO2 );
         for( l in knownLangs_ISO2 )
             if( l == defaultLang_ISO2 )
@@ -59,7 +65,7 @@ public class FXAlgebraicExpressionButtonPanel
     public var sceneHeight:Number;
     public-init var fxdLayoutFile:javafx.fxd.FXDNode;
     public var surferPanel:FXSurferPanel;
-    public var popUp:javafx.scene.Group;
+    public var popUp:javafx.scene.Node;
     public var languageText:javafx.scene.Group;
 
     public var ExpressionField: AlwaysFocusedTextBox = AlwaysFocusedTextBox{ text:"x^2+y^2+z^2+2*x*y*z-1", selectOnFocus:false };
@@ -324,20 +330,61 @@ public class FXAlgebraicExpressionButtonPanel
         }
 
     }
+
+
     function setPopUp()
     {
+        var langButtonList : Node[] = [
+            FXButton {
+                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))
+                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Upper"))
+                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper"))
+            }
+            FXButton {
+                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))
+                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Lower"))
+                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower"))
+            }
+        ];
 
-        def deltaX:Number=fxdLayoutFile.getNode("Button_Language").boundsInLocal.maxX-fxdLayoutFile.getNode("Button_Foldout_Lower").boundsInLocal.maxX;
-        def deltaY:Number=fxdLayoutFile.getNode("Button_Language").boundsInLocal.minY-fxdLayoutFile.getNode("Button_Foldout_Lower").boundsInLocal.maxY;
-        //def offset1:Number=fxdLayoutFile.getNode("Button_Foldout_Lower").boundsInLocal.height;
-        def offset:Number=fxdLayoutFile.getNode("Button_Foldout_Middle").boundsInLocal.height;
-        //def lb=fxdLayoutFile.getNode("Button_Language");
-        def lang1 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))as javafx.scene.Node;
-        def lang2 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
-        def lang3 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
-        def lang4 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
-        def lang5 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))as javafx.scene.Node;
-        def lang6 = javafx.fxd.Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))as javafx.scene.Node;
+        var languagesString : java.lang.String = java.lang.System.getProperty( "de.mfo.jsurfer.gui.languages" );
+        if( languagesString != null )
+        {
+            var languages : String[] = languagesString.replaceAll( " ", "" ).split( "," );
+            languages = languages[ l | javafx.util.Sequences.indexOf( knownLangs_ISO2, l ) != -1 ];
+            if( languages.size() > 0 )
+            {
+                knownLangs_ISO2 = languages;
+                language = new java.util.Locale( knownLangs_ISO2[ 0 ] ); // use first language in list
+            }
+        };
+
+        while( langButtonList.size() < knownLangs_ISO2.size() )
+        {
+            insert
+            FXButton {
+                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))
+                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Middle"))
+                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Middle"))
+            }
+            after langButtonList[ 0 ];
+        }
+                
+        var font : Font = Globals.getJavaFXFont( 30 );
+
+        popUp = VBox { blocksMouse: true; }
+        var langButtonListWithText : Node[] = [];
+        for( i in [0..langButtonList.size()-1] )
+        {
+            // add language code
+            var code = knownLangs_ISO2[ i ];
+            var t = Text { content: code font: font };
+            var b : FXButton = langButtonList[ i ] as FXButton;
+            b.action = function() { language=new java.util.Locale( code );popUp.visible=false; }
+            insert Stack { content: [ b, t ] } into langButtonListWithText;
+        };
+        ( popUp as VBox ).content = langButtonListWithText;
+
         fxdLayoutFile.getNode("Button_Foldout_Lower").visible=false;
         fxdLayoutFile.getNode("Button_Foldout_Middle").visible=false;
         fxdLayoutFile.getNode("Button_Foldout_Upper").visible=false;
@@ -350,110 +397,36 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Pressed_Foldout_Middle").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper").visible=false;
 
-        lang3.translateY+=-offset-offset;
-        lang4.translateY+=-offset;
-        lang5.translateY+=-offset-offset-offset;
-        lang6.translateY+=-offset-offset-offset;
-        lang1.visible=true;lang2.visible=true;lang3.visible=true;lang4.visible=true;lang5.visible=true;lang6.visible=true;
-        lang1.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=java.util.Locale.ENGLISH;popUp.visible=false;}
-        lang2.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=java.util.Locale.GERMAN;popUp.visible=false;}
-        lang3.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("ru");popUp.visible=false;}
-        lang4.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("sr");popUp.visible=false;}
-        lang5.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("pt");popUp.visible=false;}
-        lang6.onMousePressed=function(e:javafx.scene.input.MouseEvent):Void{language=new java.util.Locale("es");popUp.visible=false;}
-        var inside:Boolean=false;
         def timeline = javafx.animation.Timeline
         {
             keyFrames: javafx.animation.KeyFrame
             {
                 time: 2.0s
-                action: function()
-                {
-                    //System.out.println("Time is up");
-                    //timeline.autoReverse=inside;
-                    if(not inside) popUp.visible=false;
-                }
+                action: function() { if( not popUp.hover ) popUp.visible = false; }
             }
         }
-        
+        popUp.onMouseMoved = function( me: javafx.scene.input.MouseEvent ) { timeline.playFromStart(); };
+        popUp.visible=false;
+        popUp.translateX = fxdLayoutFile.getNode("Button_Language").boundsInLocal.maxX-fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower").boundsInLocal.width;
+        popUp.translateY = fxdLayoutFile.getNode("Button_Language").boundsInLocal.minY-fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower").boundsInLocal.height*langButtonListWithText.size();
+
         fxdLayoutFile.getNode("Button_Language").onMouseEntered=function(e:javafx.scene.input.MouseEvent):Void
         {
             popUp.visible=true;
-            inside=true;
-            //timeline.playFromStart();
-            timeline.autoReverse=true;
+            timeline.playFromStart();
         }
         fxdLayoutFile.getNode("Button_Language").onMouseMoved=function(e:javafx.scene.input.MouseEvent):Void
         {
             popUp.visible=true;
-            inside=true;
-            //timeline.playFromStart();
-            timeline.autoReverse=true;
+            timeline.playFromStart();
         }
         fxdLayoutFile.getNode("Button_Language").onMouseExited=function(e:javafx.scene.input.MouseEvent):Void
         {
             //popUp.visible=true;
             timeline.playFromStart();
             timeline.autoReverse=false;
-            inside=false;
         }
-        
-        popUp=javafx.scene.Group
-        {
-            blocksMouse: true
-            content: 
-            [
-                lang1,lang2,lang3,lang4,lang5,lang6,
-                javafx.scene.text.Text
-                {
-                    x:lang1.boundsInLocal.minX+0.1*lang1.boundsInLocal.width
-                    y:lang1.boundsInLocal.minY+0.7*lang1.boundsInLocal.height
-                    font: javafx.scene.text.Font { size: lang1.boundsInLocal.height * 0.8 }
-                    content: "en"
-                }
-                javafx.scene.text.Text
-                {
-                    x:lang2.boundsInLocal.minX+0.1*lang2.boundsInLocal.width
-                    y:lang2.boundsInLocal.minY+0.7*lang2.boundsInLocal.height
-                    font: javafx.scene.text.Font { size: lang2.boundsInLocal.height * 0.8 }
-                    content: "de"
-                }
-                javafx.scene.text.Text
-                {
-                    x:lang3.boundsInLocal.minX+0.1*lang3.boundsInLocal.width
-                    y:lang3.boundsInLocal.minY+0.7*lang3.boundsInLocal.height-2*offset
-                    font: javafx.scene.text.Font { size: lang3.boundsInLocal.height * 0.8 }
-                    content: "ru"
-                }
-                javafx.scene.text.Text
-                {
-                    x:lang4.boundsInLocal.minX+0.1*lang4.boundsInLocal.width
-                    y:lang4.boundsInLocal.minY+0.7*lang4.boundsInLocal.height-offset
-                    font: javafx.scene.text.Font { size: lang4.boundsInLocal.height * 0.8 }
-                    content: "sr"
-                }
-                javafx.scene.text.Text
-                {
-                    x:lang5.boundsInLocal.minX+0.1*lang5.boundsInLocal.width
-                    y:lang5.boundsInLocal.minY+0.8*lang5.boundsInLocal.height-3*offset
-                    font: javafx.scene.text.Font { size: lang5.boundsInLocal.height * 0.8 }
-                    content: "pt"
-                }
-                javafx.scene.text.Text
-                {
-                    x:lang6.boundsInLocal.minX+0.1*lang6.boundsInLocal.width
-                    y:lang6.boundsInLocal.minY+0.8*lang6.boundsInLocal.height-3*offset
-                    font: javafx.scene.text.Font { size: lang6.boundsInLocal.height * 0.8 }
-                    content: "es"
-                }
-            ]
-            translateX: deltaX;
-            translateY: deltaY;
-            onMouseMoved:function(e:javafx.scene.input.MouseEvent):Void{inside=true;timeline.autoReverse=true;}
-            onMouseEntered:function(e:javafx.scene.input.MouseEvent):Void{inside=true;timeline.autoReverse=true;}
-            onMouseExited:function(e:javafx.scene.input.MouseEvent):Void{inside=false;timeline.autoReverse=false;timeline.playFromStart();}
-        }
-        popUp.visible=false;
+
         languageText=javafx.scene.Group
         {
             content:
