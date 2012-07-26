@@ -218,7 +218,7 @@ public class JSurferRenderPanel extends JComponent
             }
             catch( Throwable t )
             {
-                System.out.println( t );
+                t.printStackTrace();
                 return null;
             }
         }
@@ -284,6 +284,7 @@ public class JSurferRenderPanel extends JComponent
     protected GLJPanel createGLCanvas()
     {
         GLCapabilities caps = new GLCapabilities( GLProfile.get( GLProfile.GL2 ) );
+        //GLCapabilities caps = new GLCapabilities( GLProfile.getDefault() );
         caps.setSampleBuffers( true );
         caps.setNumSamples( 4 );
         glcanvas = new GLJPanel( caps );

@@ -452,7 +452,7 @@ public class FXGUI extends javafx.scene.CustomNode
 
     public function print()
     {
-        var mb : MessageBox = MessageBox { message: java.lang.System.getProperty( "de.mfo.jsurfer.gui.printMessage", "Your image has been sent to the printer. Please wait." ) };
+        var mb : MessageBox = MessageBox { message: FXOptions.getOption( "de.mfo.jsurfer.gui.printMessage", "Your image has been sent to the printer. Please wait." ) };
         mb.show( this.scene, false );
 
         var timeline = javafx.animation.Timeline

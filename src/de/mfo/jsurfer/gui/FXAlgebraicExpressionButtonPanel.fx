@@ -347,7 +347,7 @@ public class FXAlgebraicExpressionButtonPanel
             }
         ];
 
-        var languagesString : java.lang.String = java.lang.System.getProperty( "de.mfo.jsurfer.gui.languages" );
+        var languagesString : java.lang.String = FXOptions.getOption( "de.mfo.jsurfer.gui.languages" );
         if( languagesString != null )
         {
             var languages : String[] = languagesString.replaceAll( " ", "" ).split( "," );
