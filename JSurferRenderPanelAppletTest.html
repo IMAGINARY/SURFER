@@ -1,28 +1,134 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <title></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script language="JavaScript">
-		var dullo_jsurf = "#jSurfer surface description\n#Fri Jul 08 16:58:33 CEST 2011\nfront_material_specular_iIntensity=0.5\ncamera_type=ORTHOGRAPHIC_CAMERA\nback_material_specular_iIntensity=0.5\nsurface_parameter_b=0.5\n#0.41559362411499023\nsurface_parameter_a=0.5\n#0.41736117005348206\nlight_position_7=0.0 0.0 0.0\nlight_position_6=0.0 0.0 0.0\nlight_position_5=0.0 0.0 0.0\nlight_position_4=0.0 0.0 0.0\nlight_position_3=0.0 0.0 0.0\nlight_position_2=0.0 -100.0 100.0\ncamera_fov_y=60.0\nlight_position_1=100.0 100.0 100.0\nlight_position_0=-100.0 100.0 100.0\nfront_material_color=0.9411765 0.25882354 0.05882353\nbackground_color=1.0 1.0 1.0\nlight_intensity_7=1.0\nfront_material_ambient_intensity=0.4\nlight_intensity_6=1.0\nscale_factor=0.11388256\nlight_intensity_5=1.0\nlight_intensity_4=1.0\nlight_intensity_3=1.0\nlight_intensity_2=0.3\nlight_intensity_1=0.7\nlight_intensity_0=0.5\nrotation_matrix=-0.9975637 0.06831278 -0.014604302 0.0 -0.050649248 -0.56332713 0.82468677 0.0 0.048110377 0.82340914 0.5654113 0.0 0.0 0.0 0.0 1.0\nlight_color_7=1.0 1.0 1.0\nlight_color_6=1.0 1.0 1.0\nfront_material_diffuse_intensity=0.8\nlight_color_5=1.0 1.0 1.0\nlight_color_4=1.0 1.0 1.0\nlight_color_3=1.0 1.0 1.0\nlight_color_2=1.0 1.0 1.0\nlight_color_1=1.0 1.0 1.0\nlight_color_0=1.0 1.0 1.0\nlight_status_7=OFF\nlight_status_6=OFF\nlight_status_5=OFF\nlight_status_4=OFF\nfront_material_shininess=30.0\nlight_status_3=OFF\nlight_status_2=ON\nlight_status_1=ON\nlight_status_0=ON\ncamera_height=2.0\nsurface_equation=(x^2+y^2+z^2+a^2-b^2)^2-4*b^2*(x^2+y^2)\ncamera_transform=1.0 0.0 0.0 -0.0 0.0 1.0 0.0 -0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0\nback_material_ambient_intensity=0.4\nback_material_color=0.87058824 0.41960785 0.101960786\nback_material_shininess=30.0\nback_material_diffuse_intensity=0.8";
-	</script>
-  </head>
-  <body>
-	<center>
-		<applet name="JSurferRenderPanelApplet" width="256" height="256">
-		   <param name="jnlp_href" value="offline_libs/JSurferRenderPanelApplet.jnlp">
-		</applet>
-		<br/>
-		<br/>
-		<a href="javascript:document.applets.JSurferRenderPanelApplet.setFrontColor( '#FF0000' );">red front color</a><br/>
-		<a href="javascript:document.applets.JSurferRenderPanelApplet.setBackColor( '#00FF00' );">green back color</a><br/>
-		<a href="javascript:alert( document.applets.JSurferRenderPanelApplet.setEquation( prompt( 'Input surface equation' ) ) );">input equation</a><br/>
-		<a href="javascript:alert( document.applets.JSurferRenderPanelApplet.setParameter( 'a', Math.random() ) );">set param 'a' to random number from [0,1]</a><br/>
-		<a href="javascript:window.alert( document.applets.JSurferRenderPanelApplet.getParameterNamesCSV() );">get names of current parameters - comma separated values (CSV)</a><br/>
-		<a href="javascript:window.alert( document.applets.JSurferRenderPanelApplet.loadJSurfFromString( dullo_jsurf ) );">load JSURF file for torus</a><br/>
-		<a href="javascript:document.applets.JSurferRenderPanelApplet.drawCoordinateSystem( false );">disable coordinate system</a><br/>
-		<a href="javascript:document.applets.JSurferRenderPanelApplet.setBackgroundColor( '#000000' );">black background color</a><br/>
-	</center>
-	if a method returns "-1" something went wrong
-  </body>
+    
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            body {
+                font-family:"Verdana";
+                font-size: 7pt;
+                padding:0px;
+                margin:0px;
+            }
+            a:link {
+                color:lightgray;
+                text-decoration:none;
+            }
+            a:visited {
+                color:lightgray;
+                text-decoration:none;
+            }
+            a:focus {
+                color:black;
+                text-decoration:none;
+            }
+            a:hover {
+                color:black;
+                text-decoration:none;
+            }
+            a:active {
+                color:black;
+                text-decoration:none;
+            }
+            .overlay {
+                background-color:gray;
+                position: absolute;
+                padding:10px;
+                top: 30px;
+                left: 30px;
+                z-index:10;
+                border-radius:5px;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <script src="http://www.java.com/js/deployJava.js"></script>
+	<div style="text-align:center;z-index:1;">
+		<div style="text-align:center; padding:10px;z-index:1;">
+		    <script>
+			var attributes = {
+			    code: 'de.mfo.jsurfer.gui.JSurferRenderPanelApplet',
+			    width: Math.min(window.innerWidth, window.innerHeight) - 82,
+			    height: Math.min(window.innerWidth, window.innerHeight) - 82,
+			    id: 'app'
+			};
+			var parameters = {
+			    jnlp_href: './offline_libs/JSurferRenderPanelApplet.jnlp'
+			};
+			deployJava.runApplet(attributes, parameters, '1.6');
+			var setResult = function (s) {
+			    document.getElementById('result').innerHTML = s;
+			}
+			var oldFormula;
+			var paramValues = new Object();
+			var setFormula = function( f ) {
+				// set formula
+				f=f.replace(/ /g,"");
+				if( f == oldFormula )
+					return;
+				oldFormula=f;
+				var result = document.applets[0].setEquation(f);
+				setResult(result);
+				if(result==-1)
+					document.getElementById('formulafield').style.backgroundColor='#FFDDDD';
+				else
+					document.getElementById('formulafield').style.backgroundColor='#FFFFFF';
+				
+				// check for parameters
+				params=document.applets[0].getParameterNamesCSV().split(",");
+				for( var i = 0; i < params.length; i++ )
+				{
+					var p = params[ i ];
+					if( typeof paramValues[ p ] === "undefined" )
+						paramValues[ p ] = Math.random();
+					document.applets[0].setParameter( p, paramValues[ p ] );
+					console.log("set " + p + " to " + paramValues[ p ] );
+				}
+			}
+		    </script>
+		</div>
+		<form action="" style="padding:10px; padding-top:0px;" onsubmit="return false;">
+			<span id="formulafield" style="font-size:20pt;border:1px solid gray; padding-left:10px; padding-right:10px;">
+				<input
+					id="formula"
+					value="(b-0.5)*(x+y+z-1)^2+(a-0.5)*(x+y+z+3)^2+x^3+y^3+z^3+1-0.25*(x+y+z+1)^3"
+					size="50"
+					type="text"
+					style="font-size:20pt; border:none;background-color: transparent;"
+					autocomplete="off"
+					onKeyUp="setFormula(this.value);"
+				/>
+				=0
+			</span>
+		</form>
+	</div>
+        <div class="overlay">
+            <h3>Some experimental functions:</h3>
+            <a href="javascript:setResult(document.applets[0].setFrontColor( '#FF0000' ));">red front color</a>
+            <br/>
+            <a href="javascript:setResult(document.applets[0].setBackColor( '#00FF00' ));">green back color</a>
+            <br/>
+            <a href="javascript:setResult(document.applets[0].setEquation( prompt( 'Input surface equation' )) );">input equation</a>
+            <br/>
+            <a href="javascript:setResult(document.applets[0].setParameter( 'a', Math.random() ));">set param 'a' to random number from [0,1]</a>
+            <br/>
+            <a href="javascript:setResult(document.applets[0].getParameterNamesCSV());">get names of current parameters (CSV format)</a>
+            <br/>
+            <a href="javascript:setResult( document.applets[0].loadJSurfFromString( dullo_jsurf ) );">load JSURF file for torus</a>
+            <br/>
+            <a href="javascript:setResult(document.applets[0].drawCoordinateSystem( false ));">disable coordinate system</a>
+            <br/>
+            <a href="javascript:setResult(document.applets[0].setBackgroundColor( '#000000' ));">black background color</a>
+            <br/>
+            <br>
+            <div>Result:
+                <span id="result" style="font-weight:bold; background-color:red;"></span>
+            </div>(if a method returns "-1" something went wrong)</div>
+        <script language="JavaScript">
+            var dullo_jsurf = "#jSurfer surface description\n#Fri Jul 08 16:58:33 CEST 2011\nfront_material_specular_iIntensity=0.5\ncamera_type=ORTHOGRAPHIC_CAMERA\nback_material_specular_iIntensity=0.5\nsurface_parameter_b=0.5\n#0.41559362411499023\nsurface_parameter_a=0.5\n#0.41736117005348206\nlight_position_7=0.0 0.0 0.0\nlight_position_6=0.0 0.0 0.0\nlight_position_5=0.0 0.0 0.0\nlight_position_4=0.0 0.0 0.0\nlight_position_3=0.0 0.0 0.0\nlight_position_2=0.0 -100.0 100.0\ncamera_fov_y=60.0\nlight_position_1=100.0 100.0 100.0\nlight_position_0=-100.0 100.0 100.0\nfront_material_color=0.9411765 0.25882354 0.05882353\nbackground_color=1.0 1.0 1.0\nlight_intensity_7=1.0\nfront_material_ambient_intensity=0.4\nlight_intensity_6=1.0\nscale_factor=0.11388256\nlight_intensity_5=1.0\nlight_intensity_4=1.0\nlight_intensity_3=1.0\nlight_intensity_2=0.3\nlight_intensity_1=0.7\nlight_intensity_0=0.5\nrotation_matrix=-0.9975637 0.06831278 -0.014604302 0.0 -0.050649248 -0.56332713 0.82468677 0.0 0.048110377 0.82340914 0.5654113 0.0 0.0 0.0 0.0 1.0\nlight_color_7=1.0 1.0 1.0\nlight_color_6=1.0 1.0 1.0\nfront_material_diffuse_intensity=0.8\nlight_color_5=1.0 1.0 1.0\nlight_color_4=1.0 1.0 1.0\nlight_color_3=1.0 1.0 1.0\nlight_color_2=1.0 1.0 1.0\nlight_color_1=1.0 1.0 1.0\nlight_color_0=1.0 1.0 1.0\nlight_status_7=OFF\nlight_status_6=OFF\nlight_status_5=OFF\nlight_status_4=OFF\nfront_material_shininess=30.0\nlight_status_3=OFF\nlight_status_2=ON\nlight_status_1=ON\nlight_status_0=ON\ncamera_height=2.0\nsurface_equation=(x^2+y^2+z^2+a^2-b^2)^2-4*b^2*(x^2+y^2)\ncamera_transform=1.0 0.0 0.0 -0.0 0.0 1.0 0.0 -0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0\nback_material_ambient_intensity=0.4\nback_material_color=0.87058824 0.41960785 0.101960786\nback_material_shininess=30.0\nback_material_diffuse_intensity=0.8";
+        </script>
+    </body>
+
 </html>
