@@ -39,6 +39,7 @@ public class CPUAlgebraicSurfaceRenderer extends AlgebraicSurfaceRenderer
 //        dcsd.realRootFinder = new DChainRootFinder();
 //        dcsd.realRootFinder = new SturmChainRootFinder();
         dcsd.realRootFinder = new DescartesRootFinder( false );
+        //dcsd.realRootFinder = new EVALRootFinder( false );
         //dcsd.realRootFinder = new ClosedFormRootFinder();
 //        dcsd.realRootFinder = new GPUSuitableDescartesRootFinder2( false );
         //dcsd.realRootFinder = new BernsteinDescartesRootFinder( false );

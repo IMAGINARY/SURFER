@@ -892,8 +892,8 @@ public class JSurferRenderPanel extends JComponent
 
     public static void main( String[]args )
     {
-        generateGalleryThumbnails( "./src/de/mfo/jsurfer/gui/gallery", "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
-        if( true ) return;
+        //generateGalleryThumbnails( "./src/de/mfo/jsurfer/gui/gallery", "/home/stussak/Desktop/JFXSurferGalleryThumbnails" );
+        //if( true ) return;
         JSurferRenderPanel p = new JSurferRenderPanel();
         //p.setResizeImageWithComponent( true );
 
