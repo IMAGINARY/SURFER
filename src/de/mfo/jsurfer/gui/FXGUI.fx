@@ -31,6 +31,7 @@ public class FXGUI extends javafx.scene.CustomNode
         }
     def fxdLayoutFile:javafx.fxd.FXDNode = javafx.fxd.FXDNode
 	{
+//                url:    "{__DIR__}surfer_touchscreen_1024_x_768.fxz"
                 url:    "{__DIR__}surfer_touchscreen_1920_x_1080.fxz"
 		backgroundLoading: false;
 	}
@@ -291,6 +292,7 @@ public class FXGUI extends javafx.scene.CustomNode
                                     AlgebraicExpressionButtonPanel.keyboardTextParameters,
                                     AlgebraicExpressionButtonPanel.keyboardTextOperations,
                                     AlgebraicExpressionButtonPanel.keyboardTextXYZ,
+                                    AlgebraicExpressionButtonPanel.buttons,
                                     tabField.tabTextColor,
                                     tabField.tabTextInfo,
                                     tabField.tabTextGallery,

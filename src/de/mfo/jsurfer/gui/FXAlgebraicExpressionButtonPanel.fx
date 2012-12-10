@@ -43,6 +43,7 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var keyboardTextParameters:javafx.scene.Group;
     public-init var keyboardTextOperations:javafx.scene.Group;
     public-init var keyboardTextXYZ:javafx.scene.Group;
+    public-init var buttons:javafx.scene.Group;
 
     //public-init var keyboardTextParametersGer:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsGer:javafx.scene.text.Text;
@@ -201,95 +202,57 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Buttons Over").visible=true;
         fxdLayoutFile.getNode("Buttons Pressed").visible=true;
         fxdLayoutFile.getNode("Buttons normal state").visible=true;
+        var default = function( s : String )
+        {
+            fxdLayoutFile.getNode("Button_{s}").opacity = 1;
+            fxdLayoutFile.getNode("Button_Over_{s}").opacity=0;
+            fxdLayoutFile.getNode("Button_Pressed_{s}").opacity=0;
+        }
+        var hover = function( s : String )
+        {
+            fxdLayoutFile.getNode("Button_{s}").opacity = 0;
+            fxdLayoutFile.getNode("Button_Over_{s}").opacity=1;
+            fxdLayoutFile.getNode("Button_Pressed_{s}").opacity=0;
+        }
+        var armed = function( s : String )
+        {
+            fxdLayoutFile.getNode("Button_{s}").opacity = 0;
+            fxdLayoutFile.getNode("Button_Over_{s}").opacity=0;
+            fxdLayoutFile.getNode("Button_Pressed_{s}").opacity=1;
+        }
 	for (s in ButtonList)
 	{
            fxdLayoutFile.getNode("Button_{s}").visible=true;
-           fxdLayoutFile.getNode("Button_Over_{s}").visible=false;
-           fxdLayoutFile.getNode("Button_Pressed_{s}").visible=false;
-           fxdLayoutFile.getNode("Button_{s}").onMouseEntered =function(e: javafx.scene.input.MouseEvent): Void
+           fxdLayoutFile.getNode("Button_Over_{s}").visible=true;
+           fxdLayoutFile.getNode("Button_Over_{s}").opacity=0;
+           fxdLayoutFile.getNode("Button_Pressed_{s}").visible=true;
+           fxdLayoutFile.getNode("Button_Pressed_{s}").opacity = 0;
+           fxdLayoutFile.getNode("Button_{s}").onMouseEntered = function(e: javafx.scene.input.MouseEvent): Void
            {
-               if(not enabled)return;
-               if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
-               inside=true;
-               for (t in ButtonList)
-                  if (t!=s)Standard(t);
+               System.out.println("{s} entered");
+                if(not enabled)return;
+                hover( s );
            };
-           fxdLayoutFile.getNode("Button_{s}").onMouseExited  =function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
-           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {if(not enabled)return;Press(s); setChar(s);};
-           fxdLayoutFile.getNode("Button_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void
+           fxdLayoutFile.getNode("Button_{s}").onMouseExited = function(e: javafx.scene.input.MouseEvent): Void { System.out.println("{s} exited");default( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void { System.out.println("{s} pressed"); armed( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMouseReleased=function(e: javafx.scene.input.MouseEvent): Void
            {
-               if(not enabled)return;
-               if (e.button == javafx.scene.input.MouseButton.PRIMARY){if(e.primaryButtonDown){Press(s);}else {Release(s);}}
-           };
-           fxdLayoutFile.getNode("Button_Over_{s}").onMouseEntered=function(e: javafx.scene.input.MouseEvent): Void
-           {
-               if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
-               inside=true;
-               for (t in ButtonList)
-                  if (t!=s)Standard(t);
-           };
-           fxdLayoutFile.getNode("Button_Over_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
-           fxdLayoutFile.getNode("Button_Over_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {Press(s);setChar(s); };
-           fxdLayoutFile.getNode("Button_Over_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void
-           {
-               if (e.button== javafx.scene.input.MouseButton.PRIMARY){ if(e.primaryButtonDown){Press(s);}else {Release(s);}}
-           };
-           fxdLayoutFile.getNode("Button_Pressed_{s}").onMouseEntered=function(e: javafx.scene.input.MouseEvent): Void
-           {
-               if (e.primaryButtonDown) {Press(s);}else {MouseOver(s);}
-               inside=true;
-               for (t in ButtonList)
-                  if (t!=s)Standard(t);
-           };
-           fxdLayoutFile.getNode("Button_Pressed_{s}").onMouseExited=function(e: javafx.scene.input.MouseEvent): Void {Standard(s); inside=false;};
-           fxdLayoutFile.getNode("Button_Pressed_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {Press(s); setChar(s);};
-           fxdLayoutFile.getNode("Button_Pressed_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void
-           {
-               if (e.button== javafx.scene.input.MouseButton.PRIMARY){if(e.primaryButtonDown){Press(s);}else {Release(s);}}
-           };
+               System.out.println("{s} released");
+               if( fxdLayoutFile.getNode("Button_{s}").hover )
+                    hover( s )
+               else
+                    default( s );
 
-
+           };
+           fxdLayoutFile.getNode("Button_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void { System.out.println("{s} clicked");setChar( s ); };
 	}
-        /*
-        //"Button_Complete_Delete"
-        fxdLayoutFile.getNode("Button_Complete_Delete").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
-        {
-            CompleteDelete();
-        }
-        fxdLayoutFile.getNode("Button_Over_Complete_Delete").visible=false;
-        fxdLayoutFile.getNode("Button_Pressed_Complete_Delete").visible=false;
-*/
 
         //"Button_Over_draw"
         fxdLayoutFile.getNode("Button_Over_Wrong").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_Wrong").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_draw").visible=false;
         fxdLayoutFile.getNode("Button_Over_draw").visible=false;
-        //language
-        fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
-        fxdLayoutFile.getNode("Button_Over_German").visible=false;
-        fxdLayoutFile.getNode("Button_German").visible=false;
-        fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
-        fxdLayoutFile.getNode("Button_Over_English").visible=false;
-        fxdLayoutFile.getNode("Button_English").visible=true;
-        fxdLayoutFile.getNode("Button_German").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
-        {
-            //fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
-            fxdLayoutFile.getNode("Button_German").visible=false;
-            //fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
-            fxdLayoutFile.getNode("Button_English").visible=true;
-            language=java.util.Locale.GERMAN;
-            System.out.println("German pressed");
-        }
-        fxdLayoutFile.getNode("Button_English").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
-        {
-            //fxdLayoutFile.getNode("Button_Pressed_German").visible=false;
-            fxdLayoutFile.getNode("Button_German").visible=true;
-            //fxdLayoutFile.getNode("Button_Pressed_English").visible=false;
-            fxdLayoutFile.getNode("Button_English").visible=false;
-            language=java.util.Locale.ENGLISH;
-            System.out.println("English pressed");
-        }
+   
         //"Imprint"
         fxdLayoutFile.getNode("Button_Imprint").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
         {
@@ -297,7 +260,6 @@ public class FXAlgebraicExpressionButtonPanel
             showImpressum();
         }
 
-        
         if (true) //disable prefs button
         {
            fxdLayoutFile.getNode("Button_Preferences").visible=false;
@@ -330,7 +292,6 @@ public class FXAlgebraicExpressionButtonPanel
         }
 
     }
-
 
     function setPopUp()
     {
