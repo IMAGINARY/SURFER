@@ -229,22 +229,20 @@ public class FXAlgebraicExpressionButtonPanel
            fxdLayoutFile.getNode("Button_Pressed_{s}").opacity = 0;
            fxdLayoutFile.getNode("Button_{s}").onMouseEntered = function(e: javafx.scene.input.MouseEvent): Void
            {
-               System.out.println("{s} entered");
                 if(not enabled)return;
                 hover( s );
            };
-           fxdLayoutFile.getNode("Button_{s}").onMouseExited = function(e: javafx.scene.input.MouseEvent): Void { System.out.println("{s} exited");default( s ); };
-           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void { System.out.println("{s} pressed"); armed( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMouseExited = function(e: javafx.scene.input.MouseEvent): Void { default( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void { armed( s ); };
            fxdLayoutFile.getNode("Button_{s}").onMouseReleased=function(e: javafx.scene.input.MouseEvent): Void
            {
-               System.out.println("{s} released");
                if( fxdLayoutFile.getNode("Button_{s}").hover )
                     hover( s )
                else
                     default( s );
 
            };
-           fxdLayoutFile.getNode("Button_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void { System.out.println("{s} clicked");setChar( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void { setChar( s ); };
 	}
 
         //"Button_Over_draw"
