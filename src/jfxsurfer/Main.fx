@@ -47,6 +47,7 @@ def GUI: de.mfo.jsurfer.gui.FXGUI = de.mfo.jsurfer.gui.FXGUI{
                 showPrint: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.showPrintButton", "true" )  )
                 showLoadSave: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.showLoadSaveButton", "true" )  )
                 showExport: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.showExportButton", "true" )  )
+                clickMode:  ( FXOptions.getIntegerOption( "de.mfo.jsurfer.gui.clickMode", 0 ) )
             }
 /*var timeline = javafx.animation.Timeline
 {

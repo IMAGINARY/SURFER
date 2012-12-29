@@ -30,5 +30,16 @@ public function getOption( name:String ): String
     return null;
 }
 
+public function getIntegerOption( name : String, default : Integer ): Integer
+{
+    try
+    {
+        return java.lang.Integer.getInteger( name, default );
+    }
+    catch( e: java.security.AccessControlException )
+    {
+    }
+    return default;
+}
 
 public class FXOptions {}

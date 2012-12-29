@@ -18,6 +18,8 @@ public class FXGUI extends javafx.scene.CustomNode
     public var showExport:Boolean;
 
     public-init var showPrint:Boolean;
+    public-init var clickMode: Integer;
+
     //public var realHeight:Number=bind fxdLayoutFile.layoutBounds.maxY*getScale(height,width);
     //public var
     public function realHeight(n:Number, w:Number):Number
@@ -47,6 +49,7 @@ public class FXGUI extends javafx.scene.CustomNode
         showPrint:showPrint,
         showLoadSave:showLoadSave,
         showExport:showExport,
+        clickMode:clickMode,
         gui: this
     }
     public var language:java.util.Locale=bind AlgebraicExpressionButtonPanel.language;

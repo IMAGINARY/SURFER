@@ -33,6 +33,7 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var showPrint:Boolean;
     public-init var showLoadSave:Boolean;
     public-init var showExport:Boolean;
+    public-init var clickMode:Integer;
     public-init var gui:FXGUI;
     var knownLangs_ISO2 = [ "es", "de", "en", "pt", "ru", "sr" ];
 
@@ -233,16 +234,26 @@ public class FXAlgebraicExpressionButtonPanel
                 hover( s );
            };
            fxdLayoutFile.getNode("Button_{s}").onMouseExited = function(e: javafx.scene.input.MouseEvent): Void { default( s ); };
-           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void { armed( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void 
+           {
+               armed( s );
+               if( clickMode == 1 )
+                    setChar( s );
+           };
            fxdLayoutFile.getNode("Button_{s}").onMouseReleased=function(e: javafx.scene.input.MouseEvent): Void
            {
                if( fxdLayoutFile.getNode("Button_{s}").hover )
                     hover( s )
                else
                     default( s );
-
+               if( clickMode == 2 )
+                    setChar( s );
            };
-           fxdLayoutFile.getNode("Button_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void { setChar( s ); };
+           fxdLayoutFile.getNode("Button_{s}").onMouseClicked=function(e: javafx.scene.input.MouseEvent): Void
+           {
+               if( clickMode == 0 )
+                    setChar( s );
+           };
 	}
 
         //"Button_Over_draw"
