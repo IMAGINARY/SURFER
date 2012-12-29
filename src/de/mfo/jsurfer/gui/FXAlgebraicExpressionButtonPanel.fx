@@ -309,11 +309,13 @@ public class FXAlgebraicExpressionButtonPanel
                 normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))
                 hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Upper"))
                 armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper"))
+                clickMode: clickMode
             }
             FXButton {
                 normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))
                 hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Lower"))
                 armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower"))
+                clickMode: clickMode
             }
         ];
 
@@ -336,6 +338,7 @@ public class FXAlgebraicExpressionButtonPanel
                 normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Middle"))
                 hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Middle"))
                 armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Middle"))
+                clickMode: clickMode;
             }
             after langButtonList[ 0 ];
         }

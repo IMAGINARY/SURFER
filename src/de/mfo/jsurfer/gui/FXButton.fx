@@ -17,17 +17,18 @@ public class FXButton extends CustomNode{
     public var hovered:Node on replace oldValue { setState() };
     public var armed:Node on replace oldValue { setState() };
     public var action:function():Void;
+    public-init var clickMode:Integer=0;
     var s : Stack;
 
     public override function create(): javafx.scene.Node
     {
         s = Stack {
             content: bind [ normal, hovered, armed ]
-            onMouseClicked : bind function( me : MouseEvent ) { action() }
+            onMouseClicked : bind function( me : MouseEvent ) { if( clickMode == 0 ) action(); }
             onMouseEntered : function( me : MouseEvent ) { setState() }
             onMouseExited : function( me : MouseEvent ) { setState() }
-            onMousePressed : function( me : MouseEvent ) { setState() }
-            onMouseReleased : function( me : MouseEvent ) { setState() }
+            onMousePressed : function( me : MouseEvent ) { setState(); if( clickMode == 1 ) action(); }
+            onMouseReleased : function( me : MouseEvent ) { setState(); if( clickMode == 2 ) action(); }
         };
         setState();
         return s;
