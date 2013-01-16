@@ -15,7 +15,7 @@
 		<extension name="JOGL" href="jogl-all-awt.jnlp"/>
         <extension name="JavaFX Runtime" href="javafx-rt.jnlp"/>
 		<extension name="JSurferLib" href="JSurferLib.jnlp"/>
-        <jar href="JFXSurfer.jar" main="true"/>
+        <jar href="../bin/JFXSurfer.jar" main="true"/>
 	<property name="de.mfo.jsurfer.gui.showPrintButton" value="false"/>
 	<property name="de.mfo.jsurfer.gui.showLoadSaveButton" value="true"/>
 	<property name="de.mfo.jsurfer.gui.showExportButton" value="true"/>

@@ -10,10 +10,10 @@
       <all-permissions/>
   </security>
     <resources>
-        <jar href="lib/antlr-runtime-3.4.jar"/>
-        <jar href="lib/colorpicker.jar"/>
-        <jar href="lib/PDFRenderer.jar"/>
-        <jar href="lib/vecmath.jar"/>
+        <jar href="../lib/antlr-runtime-3.4.jar"/>
+        <jar href="../lib/colorpicker.jar"/>
+        <jar href="../lib/PDFRenderer.jar"/>
+        <jar href="../lib/vecmath.jar"/>
     </resources>
 	<component-desc />
 </jnlp>
