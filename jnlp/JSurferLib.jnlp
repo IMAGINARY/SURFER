@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp codebase="" href="JSurferLib.jnlp">
+  <information>
+    <title>JSurferLib</title>
+    <vendor>Mathematischen Forschungsinstitut Oberwolfach</vendor>
+    <description>Third party libs for JSurfer</description>
+    <offline-allowed/>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+    <resources>
+        <jar href="lib/antlr-runtime-3.4.jar"/>
+        <jar href="lib/colorpicker.jar"/>
+        <jar href="lib/PDFRenderer.jar"/>
+        <jar href="lib/vecmath.jar"/>
+    </resources>
+	<component-desc />
+</jnlp>

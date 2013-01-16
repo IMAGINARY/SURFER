@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
 *** GENERATED FROM project.xml - DO NOT EDIT  ***
 ***         EDIT ../build.xml INSTEAD         ***
 
@@ -18,8 +17,7 @@ is divided into following sections:
   - applet
   - cleanup
 
-        -->
-<project xmlns:javafxproject1="http://www.netbeans.org/ns/javafx-project/1" xmlns:javafxproject2="http://www.netbeans.org/ns/javafx-project/2" xmlns:javafxproject3="http://www.netbeans.org/ns/javafx-project/3" basedir=".." default="default" name="JFXSurfer-impl">
+        --><project xmlns:javafxproject1="http://www.netbeans.org/ns/javafx-project/1" xmlns:javafxproject2="http://www.netbeans.org/ns/javafx-project/2" xmlns:javafxproject3="http://www.netbeans.org/ns/javafx-project/3" basedir=".." default="default" name="JFXSurfer-impl">
     <target depends="jar" description="Build whole project." name="default"/>
     <!--
                     ======================

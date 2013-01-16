@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="JFXSurfer.jnlp">
+    <information>
+        <title>JFXSurfer</title>
+        <vendor>Mathematisches Forschungsinstitut Oberwolfach</vendor>
+        <homepage href="http://www.imaginary-exhibition.com"/>
+        <description>JFXSurfer</description>
+        <offline-allowed/>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Xmx512m"/>
+		<extension name="JOGL" href="jogl-all-awt.jnlp"/>
+        <extension name="JavaFX Runtime" href="javafx-rt.jnlp"/>
+		<extension name="JSurferLib" href="JSurferLib.jnlp"/>
+        <jar href="JFXSurfer.jar" main="true"/>
+	<property name="de.mfo.jsurfer.gui.showPrintButton" value="false"/>
+	<property name="de.mfo.jsurfer.gui.showLoadSaveButton" value="true"/>
+	<property name="de.mfo.jsurfer.gui.showExportButton" value="true"/>
+	<property name="de.mfo.jsurfer.gui.hideCursor" value="false"/>
+	<property name="de.mfo.jsurfer.gui.fullscreen" value="false"/>
+
+<!--	the click mode is useful for fine tuning button events for touchscreens:
+		0: use "mouse click" event (default)
+		1: use "mouse pressed" event
+		2: use "mouse released" event
+--> 
+	<property name="de.mfo.jsurfer.gui.clickMode" value="1"/>
+
+<!--	disable or reorder languages by uncommenting and editing the following property -->
+<!--	<property name="de.mfo.jsurfer.gui.languages" value="es,de,en,pt,ru,sr"/>-->    </resources>
+    <application-desc main-class="com.sun.javafx.runtime.main.Main" progress-class="com.javafx.progressbar.ProgressManager">
+        <argument>MainJavaFXScript=jfxsurfer.Main</argument>
+    </application-desc>
+    <update check="background"/>
+</jnlp>

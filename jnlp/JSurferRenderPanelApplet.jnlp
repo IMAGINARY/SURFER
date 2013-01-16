@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="JSurferRenderPanelApplet.jnlp">
+    <information>
+        <title>JFXSurfer</title>
+        <vendor>Mathematisches Forschungsinstitut Oberwolfach</vendor>
+        <description>Basic JSurfer Applet</description>
+        <offline-allowed/>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.5+" href="http://java.sun.com/products/autodl/j2se"/>
+		<extension name="JOGL" href="jogl-all-awt.jnlp"/>
+		<extension name="JSurferLib" href="JSurferLib.jnlp"/>
+        <jar href="JFXSurfer.jar" main="true"/>
+    </resources>
+	<applet-desc name="JSurfer Applet" main-class="de.mfo.jsurfer.gui.JSurferRenderPanelApplet" width="200" height="200">
+	</applet-desc>
+</jnlp>
