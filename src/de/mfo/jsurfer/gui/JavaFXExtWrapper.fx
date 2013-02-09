@@ -13,10 +13,10 @@ import javafx.ext.swing.*;
 */
 public function toFXImage( image: java.awt.image.BufferedImage ): javafx.scene.image.Image
 {
-    return JavaFXExtWrapper.toFXImage( image );
+    return SwingUtils.toFXImage( image );
 }
 
 public function wrap( jComponent: javax.swing.JComponent ) : SwingComponent
 {
-    return JavaFXExtWrapper.wrap( jComponent );
+    return SwingComponent.wrap( jComponent );
 }
