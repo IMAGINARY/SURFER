@@ -15,7 +15,6 @@ import javafx.scene.CustomNode;
 
 import javax.vecmath.*;
 import javafx.scene.Group;
-import javafx.ext.swing.*;
 import java.awt.*;
 import java.lang.System;
 import javax.swing.event.*;
@@ -73,7 +72,7 @@ public class ColorChooser extends CustomNode
                 }
             }
         );
-        def sw:SwingComponent=SwingComponent.wrap(colorPicker);
+        def sw=JavaFXExtWrapper.wrap(colorPicker);
         sw.layoutInfo=LayoutInfo{
             minWidth: bind height,
             width: bind width

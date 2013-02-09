@@ -10,7 +10,6 @@ import de.mfo.jsurfer.rendering.*;
 import javax.vecmath.*;
 //import java.awt.*;
 import javafx.scene.Group;
-import javafx.ext.swing.*;
 import javafx.scene.Node;
 import de.mfo.jsurfer.parser.*;
 import de.mfo.jsurfer.algebra.*;
@@ -215,7 +214,7 @@ public class FXSurferPanel extends CustomNode {
     public override function create(): Node {
         /*initMaterials();
         initLights();*/
-        def sw:SwingComponent=SwingComponent.wrap(getRenderer());
+        def sw=JavaFXExtWrapper.wrap(getRenderer());
         sw.layoutInfo=LayoutInfo{
             minWidth: bind height,
             width: bind width
@@ -241,7 +240,7 @@ public class FXSurferPanel extends CustomNode {
                     translateX: bind x translateY: bind y;
                     content: [
 
-                        SwingComponent.wrap(getRenderer())
+                        JavaFXExtWrapper.wrap(getRenderer())
                     ]
                 }
     }

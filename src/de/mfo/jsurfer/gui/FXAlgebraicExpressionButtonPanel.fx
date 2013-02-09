@@ -131,7 +131,7 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Equals_Zero").visible=false;
         //def textField0:javax.swing.JLabel=new javax.swing.JLabel("=0");
         //textField0.setEnabled(arg0);
-        def sw2:javafx.ext.swing.SwingComponent=javafx.ext.swing.SwingComponent.wrap(NullField);
+        def sw2=JavaFXExtWrapper.wrap(NullField);
         sw2.layoutInfo=javafx.scene.layout.LayoutInfo
         {
             minWidth: T2.width*getScale(sceneHeight,sceneWidth)

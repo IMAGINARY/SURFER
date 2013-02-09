@@ -8,7 +8,6 @@ package jfxsurfer;
 import javafx.scene.*;
 import javafx.scene.text.*;
 import javafx.scene.layout.*;
-import javafx.ext.swing.SwingUtils;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ScrollView;
 
@@ -81,11 +80,11 @@ public function testGallery() : Group
                         Text { content: "gallery_num={g.getNumber()}" },
                         Text { content: "gallery_key={g.getKey()}" },
                         Text { content: "gallery_name={g.getName()}" },
-                        ImageView { image: SwingUtils.toFXImage( g.getIcon() ) },
-                        ImageView { image: SwingUtils.toFXImage( g.getDescription( 100, 100 ) ) },
+                        ImageView { image: JavaFXExtWrapper.toFXImage( g.getIcon() ) },
+                        ImageView { image: JavaFXExtWrapper.toFXImage( g.getDescription( 100, 100 ) ) },
                         Text { content: "{g.getEntries()[ 0 ].getName()}" }
-                        ImageView { image: SwingUtils.toFXImage( g.getEntries()[ 0 ].getIcon() ) }
-                        ImageView { image: SwingUtils.toFXImage( g.getEntries()[ 0 ].getDescription( 100, 100 ) ) }
+                        ImageView { image: JavaFXExtWrapper.toFXImage( g.getEntries()[ 0 ].getIcon() ) }
+                        ImageView { image: JavaFXExtWrapper.toFXImage( g.getEntries()[ 0 ].getDescription( 100, 100 ) ) }
                     ]
                 }
             }

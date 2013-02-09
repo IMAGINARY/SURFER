@@ -38,7 +38,7 @@ public class FXGalleryText extends CustomNode
                         }*/
                         javafx.scene.image.ImageView
                         {
-                            image: bind javafx.ext.swing.SwingUtils.toFXImage( gallerys[gallery].getDescription(width,height) )
+                            image: bind JavaFXExtWrapper.toFXImage( gallerys[gallery].getDescription(width,height) )
                             fitHeight:bind height
                             fitWidth: bind width
                             preserveRatio: true

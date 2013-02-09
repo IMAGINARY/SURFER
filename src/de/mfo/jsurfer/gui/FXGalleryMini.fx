@@ -69,7 +69,7 @@ public class FXGalleryMini extends CustomNode
                             textAlignment: javafx.scene.text.TextAlignment.CENTER
                             graphic: javafx.scene.image.ImageView
                             {
-                                image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
+                                image: JavaFXExtWrapper.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
                                 fitWidth: 150
                                 preserveRatio: true
                             }

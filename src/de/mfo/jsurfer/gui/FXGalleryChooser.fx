@@ -85,7 +85,7 @@ public class FXGalleryChooser extends CustomNode
                             [
                                 javafx.scene.image.ImageView
                                 {
-                                    image: javafx.ext.swing.SwingUtils.toFXImage( gallerys[g].getIcon() )
+                                    image: JavaFXExtWrapper.toFXImage( gallerys[g].getIcon() )
                                     fitHeight:bind (height-4*5)/5
                                     preserveRatio: true
                                     layoutInfo:javafx.scene.layout.LayoutInfo{hpos:javafx.geometry.HPos.LEFT}

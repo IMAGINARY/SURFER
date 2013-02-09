@@ -35,7 +35,7 @@ public class FXLabel extends javafx.scene.CustomNode
         def textField0:JLabel=new JLabel("=0");
         //textField0.setEditable(false);
 
-        def sw2:javafx.ext.swing.SwingComponent=javafx.ext.swing.SwingComponent.wrap(textField0);
+        def sw2=JavaFXExtWrapper.wrap(textField0);
         sw2.layoutInfo=javafx.scene.layout.LayoutInfo
         {
             minWidth: T2.width*getScale(sceneHeight,sceneWidth)
@@ -45,7 +45,7 @@ public class FXLabel extends javafx.scene.CustomNode
             height: T2.height*getScale(sceneHeight,sceneWidth)
             maxHeight: T2.height*getScale(sceneHeight,sceneWidth)
          };
-        /*def sw:SwingComponent=SwingComponent.wrap(test);
+        /*def sw:JavaFXExtWrapper=JavaFXExtWrapper.wrap(test);
         sw.layoutInfo=LayoutInfo
         {
             minWidth: T.width*getScale(height,width)
@@ -77,7 +77,7 @@ public class FXLabel extends javafx.scene.CustomNode
         hBox.layoutX=T2.minX*getScale(sceneHeight,sceneWidth);
         hBox.layoutY=T2.minY*getScale(sceneHeight,sceneWidth);
         /*var T:javafx.geometry.Bounds=Bound.boundsInParent;
-        Bound.visible=false;def sw2:javafx.ext.swing.SwingComponent=javafx.ext.swing.SwingComponent.wrap(jLable);
+        Bound.visible=false;def sw2:javafx.ext.swing.JavaFXExtWrapper=javafx.ext.swing.JavaFXExtWrapper.wrap(jLable);
         sw2.layoutInfo=javafx.scene.layout.LayoutInfo
         {
             minWidth: T.width*getScale(sceneHeight,sceneWidth)
