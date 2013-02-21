@@ -23,7 +23,7 @@ public class FontProvider {
     {
         try
         {
-            InputStream is = FontProvider.class.getResourceAsStream( "/de/mfo/jsurfer/gui/Nimbus Sans L Regular Surfer.ttf");
+            InputStream is = FontProvider.class.getResourceAsStream( "/de/mfo/jsurfer/fxgui/Nimbus Sans L Regular Surfer.ttf");
             font = Font.createFont( Font.TRUETYPE_FONT, is );
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             // Java5 is bundled with JavaFX 1.3, but is does not include the registerFont method.

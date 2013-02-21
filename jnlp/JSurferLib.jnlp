@@ -6,14 +6,13 @@
     <description>Third party libs for JSurfer</description>
     <offline-allowed/>
   </information>
-  <security>
-      <all-permissions/>
-  </security>
+
     <resources>
         <jar href="../lib/antlr-runtime-3.4.jar"/>
         <jar href="../lib/colorpicker.jar"/>
         <jar href="../lib/PDFRenderer.jar"/>
-        <jar href="../lib/vecmath.jar"/>
+        <jar href="../lib/vecmath-1.5.2.jar"/>
+        <jar href="../lib/jsurf-0.0.737.jar"/>
     </resources>
-	<component-desc />
+<component-desc />
 </jnlp>

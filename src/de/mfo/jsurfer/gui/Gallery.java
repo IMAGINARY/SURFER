@@ -38,7 +38,7 @@ public class Gallery {
     public static int getNumberOfGalleries(Locale locale)
             throws IOException
     {
-        ResourceBundle rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gui/gallery/Gallery", locale );
+        ResourceBundle rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gallery/Gallery", locale );
         return Integer.parseInt( rb.getString( "number_of_galleries" ) );
     }
     public Gallery(int number) throws IOException
@@ -49,7 +49,7 @@ public class Gallery {
             throws IOException
     {
         this.locale = locale;
-        rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gui/gallery/Gallery", locale );
+        rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gallery/Gallery", locale );
 
         Enumeration< String > keys = rb.getKeys();
         for(; keys.hasMoreElements(); ) keys.nextElement();
@@ -58,8 +58,8 @@ public class Gallery {
         this.number = number;
         this.key = rb.getString( "gallery_" + number + "_key" ).trim();
         this.name = rb.getString( key ).trim();
-        this.iconURL = getResource( "gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" );
-        this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
+        this.iconURL = getResource( "/de/mfo/jsurfer/gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" );
+        this.descriptionURL = getResourceFromLocalizedName( "/de/mfo/jsurfer/gallery/" + key + "_description", ".pdf" );
 
         String[] content_keys = getContentKeys();
         LinkedList< GalleryItem > l = new LinkedList< GalleryItem >();
@@ -106,7 +106,7 @@ public class Gallery {
 
     URL getResource( String res )
     {
-        URL url = getClass().getResource( res );
+        URL url = this.getClass().getResource( res );
         if( url == null )
             System.err.println( "resource \"" + res + "\" not found" );
         return url;
@@ -203,9 +203,9 @@ public class Gallery {
         {
             this.key = key;
             this.name = rb.getString( key ).trim();
-            this.iconURL = getResource( "gallery/" + key + "_icon.png" );
-            this.descriptionURL = getResourceFromLocalizedName( "gallery/" + key + "_description", ".pdf" );
-            this.jsurf_file_url = getResource( "gallery/" + key + ".jsurf" );
+            this.iconURL = getResource( "/de/mfo/jsurfer/gallery/" + key + "_icon.png" );
+            this.descriptionURL = getResourceFromLocalizedName( "/de/mfo/jsurfer/gallery/" + key + "_description", ".pdf" );
+            this.jsurf_file_url = getResource( "/de/mfo/jsurfer/gallery/" + key + ".jsurf" );
         }
 
         public String getKey() { return key; }

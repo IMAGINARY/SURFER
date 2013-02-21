@@ -19,7 +19,6 @@
     </security>
     <resources>
         <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Xmx512m"/>
-		<extension name="JOGL" href="jogl-all-awt.jnlp"/>
         <extension name="JavaFX Runtime" href="javafx-rt.jnlp"/>
 		<extension name="JSurferLib" href="JSurferLib.jnlp"/>
         <jar href="../bin/JFXSurfer.jar" main="true"/>
@@ -39,7 +38,7 @@
 <!--	disable or reorder languages by uncommenting and editing the following property -->
 <!--	<property name="de.mfo.jsurfer.gui.languages" value="es,de,en,pt,ru,sr"/>-->    </resources>
     <application-desc main-class="com.sun.javafx.runtime.main.Main" progress-class="com.javafx.progressbar.ProgressManager">
-        <argument>MainJavaFXScript=jfxsurfer.Main</argument>
+        <argument>MainJavaFXScript=de.mfo.jsurfer.gui.Main</argument>
     </application-desc>
     <update check="background"/>
 </jnlp>
