@@ -1,12 +1,26 @@
 group = 'de.mfo.jsurfer'
-version = '0.0.741'
+version = '0.0.747'
 
 apply plugin: 'java'
 
 dependencies {
-    runtime files('../bin/JFXSurfer.jar')
-    runtime fileTree(dir: '../libs', include: '*.jar')
-    runtime fileTree(dir: '../javafx-runtime', include: '*.jar')
+    runtime files('../bin/JFXSurfer.jar',
+    	'../lib/PDFRenderer.jar',
+    	'../lib/antlr-runtime-3.4.jar',
+    	'../lib/colorpicker.jar',
+    	'../lib/commons-cli-1.2.jar',
+    	'../lib/jsurf-0.0.737.jar',
+    	'../lib/vecmath-1.5.2.jar',
+		'../javafx-runtime/javafx-rt-fonts-macosx-universal__V1.3.1_b101.jar',
+		'../javafx-runtime/javafx-rt-lazy-macosx-universal__V1.3.1_b101.jar',
+		'../javafx-runtime/javafx-rt-macosx-universal__V1.3.1_b101.jar',
+		'../javafx-runtime/javafx-rt-natives-macosx-i386__V1.3.1_b101.jar',
+		'../javafx-runtime/javafx-rt-natives-macosx-universal__V1.3.1_b101.jar',
+		'../javafx-runtime/javafx-rt-natives-macosx-x86_64__V1.3.1_b101.jar',
+		'../javafx-runtime/jmc-natives-windows-i586__V1.3.1_b101.jar',
+		'../javafx-runtime/progressbar__V1.3.1_b101.jar',    	
+    	 )
+//    runtime fileTree(dir: '../javafx-runtime', include: '*.jar')
 }
 
 task wrapper(type: Wrapper) {
@@ -19,6 +33,10 @@ apply plugin: 'macAppBundle'
 
 macAppBundle {
     mainClassName = "de.mfo.jsurfer.Main"
+    jvmVersion = '1.6+'
+    icon = '../icons/surfer.icns'
+    javaProperties.put("de.mfo.jsurfer.gui.showPrintButton", "false")
+    javaExtras.put("VMOptions", [ "-Xmx512m", "-server" ] )
 }
 
 buildscript {
