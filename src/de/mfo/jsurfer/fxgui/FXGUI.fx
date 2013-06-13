@@ -37,7 +37,9 @@ public class FXGUI extends javafx.scene.CustomNode
 	{
 //                url:    "{__DIR__}surfer_touchscreen_1024_x_768.fxz"
                 url:    "{__DIR__}surfer_touchscreen_1920_x_1080.fxz"
-		backgroundLoading: false;
+		backgroundLoading: false
+                cache: true
+                cacheHint:  javafx.scene.CacheHint.QUALITY
 	}
         
     var AlgebraicExpressionButtonPanel:FXAlgebraicExpressionButtonPanel = FXAlgebraicExpressionButtonPanel
