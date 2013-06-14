@@ -109,7 +109,7 @@ def dummyRect : javafx.scene.shape.Rectangle = javafx.scene.shape.Rectangle
 };
 
 def stage: Stage =Stage{
-    title: "Surfer"
+    title: "SURFER"
     fullScreen: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.fullscreen" )  )
     scene: scene = Scene {
         width: 192*6
