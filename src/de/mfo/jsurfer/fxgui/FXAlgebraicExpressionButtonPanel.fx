@@ -437,7 +437,7 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Parameter"
+                    content: "Parameters"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
