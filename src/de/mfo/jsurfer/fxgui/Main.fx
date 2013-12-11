@@ -6,11 +6,9 @@
 package de.mfo.jsurfer.fxgui;
 
 import de.mfo.jsurfer.gui.*;
-//import de.mfo.jsurfer.gui.FXImpressum;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
-//import java.lang.System;
 
 var oldStageX = 0.0;
 var oldStageY = 0.0;
@@ -50,13 +48,6 @@ def GUI: de.mfo.jsurfer.fxgui.FXGUI = de.mfo.jsurfer.fxgui.FXGUI{
                 showExport: ( Options.showExportButton  )
                 clickMode:  ( Options.clickMode )
             }
-/*var timeline = javafx.animation.Timeline
-{
-    keyFrames: javafx.animation.KeyFrame {
-    time: 100ms
-    action: function() {GUI.showImpressum=false}
-    }
-}*/
 
 var impressum:de.mfo.jsurfer.fxgui.FXImpressum=de.mfo.jsurfer.fxgui.FXImpressum
 {
@@ -81,12 +72,12 @@ var timeline = javafx.animation.Timeline
     }
 }
 
-def hideCursor = Options.hideCursor;
+
 function somethingHappend():Void
 {
     //System.out.println("somethingHappend");
     timeline.playFromStart();
-    if( hideCursor )
+    if( Options.hideCursor )
         dummyRect.cursor = javafx.scene.Cursor.NONE;
     //cursorDeactivator.playFromStart();
 }
@@ -109,14 +100,15 @@ def dummyRect : javafx.scene.shape.Rectangle = javafx.scene.shape.Rectangle
     onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
 };
 
-def stage: Stage =Stage{
+def stage=Stage{
     title: "SURFER"
-    fullScreen: Options.fullscreen
+    fullScreen: Options.fullScreen
     scene: scene = Scene {
         width: 192*6
         height: 108*6
-        stylesheets: "{__DIR__}jfxsurfer.css";
-        content: [
+        stylesheets: "{__DIR__}jfxsurfer.css"
+        content:
+        [
                     dummyRect,
                     javafx.scene.Group
                     {
@@ -156,7 +148,3 @@ def stage: Stage =Stage{
     }
 };
 GUI.requestFocus();
-
-
-
-

@@ -325,9 +325,7 @@ public class FXAlgebraicExpressionButtonPanel
         ];
 
         var languagesTmp : String[] = de.mfo.jsurfer.gui.Options.languages.toArray() as String[];
-        println(languagesTmp);
         var starLanguages : String[] = knownLangs_ISO2[ l | javafx.util.Sequences.indexOf( languagesTmp, l ) == -1 ];
-        println(starLanguages);
         var languageList : java.util.LinkedList = new java.util.LinkedList();
         for( l in languagesTmp )
         {
@@ -342,7 +340,6 @@ public class FXAlgebraicExpressionButtonPanel
             }
         }
         var languages : String[] = languageList.toArray() as String[];
-                println(languages);
         languages = languages[ l | javafx.util.Sequences.indexOf( knownLangs_ISO2, l ) != -1 ];
         if( languages.size() > 0 )
         {

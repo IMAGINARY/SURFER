@@ -463,7 +463,7 @@ public class FXGUI extends javafx.scene.CustomNode
 
     public function print()
     {
-        var mb : MessageBox = MessageBox { message: de.mfo.jsurfer.gui.Options.printMessage };
+        var mb : MessageBox = MessageBox { message: de.mfo.jsurfer.gui.Options.printMsg };
         mb.show( this.scene, false );
 
         var timeline = javafx.animation.Timeline
@@ -473,8 +473,8 @@ public class FXGUI extends javafx.scene.CustomNode
                 time: 1s
                 action: function()
                 {
-                    System.out.println("Print called!!!!!");
-                    var print_dir:String = "printing{java.io.File.separator}";
+                    System.out.println("Printing ...");
+                    var print_dir:String = "{de.mfo.jsurfer.gui.Options.printExportDir}{java.io.File.separator}";
                     var f:java.io.File=new java.io.File( "{print_dir}print_tmp.png" );
                     System.out.println( "writing image to {f.getAbsolutePath()}" );
                     try{surferPanel.renderer.saveToPNG(f,1280,1280)}
@@ -491,6 +491,7 @@ public class FXGUI extends javafx.scene.CustomNode
                     }
 
                     var f3:java.io.File=new java.io.File("{print_dir}print_tmp.jsurf") ;
+                    System.out.println( "writing jsurf to {f3.getAbsolutePath()}" );
                     try{surferPanel.renderer.saveToFile(f3.toURL());}
                     catch (e:java.lang.Exception)
                     {
@@ -500,8 +501,7 @@ public class FXGUI extends javafx.scene.CustomNode
 
                     try
                     {
-                        var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("bash {print_dir}print.sh");
-                        System.out.println("Print Test Line.");
+                        var proc:java.lang.Process  = java.lang.Runtime.getRuntime().exec("{de.mfo.jsurfer.gui.Options.printCmd} {de.mfo.jsurfer.gui.Options.printExportDir}");
                     }
                     catch (e:java.lang.Exception)
                     {
