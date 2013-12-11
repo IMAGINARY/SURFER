@@ -16,7 +16,8 @@ import de.mfo.jsurfer.gui.PNGFilter;
 public class FXGUI extends javafx.scene.CustomNode
 {
     public var showImpressum:Boolean=false;
-    public var showLoadSave:Boolean;
+    public var showLoad:Boolean;
+    public var showSave:Boolean;
     public var showExport:Boolean;
 
     public-init var showPrint:Boolean;
@@ -51,7 +52,8 @@ public class FXGUI extends javafx.scene.CustomNode
         surferPanel: bind surferPanel,
         showImpressum:function(){showImpressum=true;},
         showPrint:showPrint,
-        showLoadSave:showLoadSave,
+        showLoad:showLoad,
+        showSave:showSave,
         showExport:showExport,
         clickMode:clickMode,
         gui: this
@@ -461,7 +463,7 @@ public class FXGUI extends javafx.scene.CustomNode
 
     public function print()
     {
-        var mb : MessageBox = MessageBox { message: FXOptions.getOption( "de.mfo.jsurfer.gui.printMessage", "Your image has been sent to the printer. Please wait." ) };
+        var mb : MessageBox = MessageBox { message: de.mfo.jsurfer.gui.Options.printMessage };
         mb.show( this.scene, false );
 
         var timeline = javafx.animation.Timeline

@@ -31,7 +31,8 @@ public class FXAlgebraicExpressionButtonPanel
         }
     }*/
     public-init var showPrint:Boolean;
-    public-init var showLoadSave:Boolean;
+    public-init var showLoad:Boolean;
+    public-init var showSave:Boolean;
     public-init var showExport:Boolean;
     public-init var clickMode:Integer;
     public-init var gui:FXGUI;
@@ -283,11 +284,15 @@ public class FXAlgebraicExpressionButtonPanel
            fxdLayoutFile.getNode("Button_Over_Print").visible=false;
         }
 
-        if (not showLoadSave )
+        if (not showLoad )
         {
            fxdLayoutFile.getNode("Button_Open_File").visible=false;
            fxdLayoutFile.getNode("Button_Pressed_Open_File").visible=false;
            fxdLayoutFile.getNode("Button_Over_Open_File").visible=false;
+        }
+
+        if (not showSave )
+        {
            fxdLayoutFile.getNode("Button_Save_File").visible=false;
            fxdLayoutFile.getNode("Button_Pressed_Save_File").visible=false;
            fxdLayoutFile.getNode("Button_Over_Save_File").visible=false;
@@ -319,17 +324,31 @@ public class FXAlgebraicExpressionButtonPanel
             }
         ];
 
-        var languagesString : java.lang.String = FXOptions.getOption( "de.mfo.jsurfer.gui.languages" );
-        if( languagesString != null )
+        var languagesTmp : String[] = de.mfo.jsurfer.gui.Options.languages.toArray() as String[];
+        println(languagesTmp);
+        var starLanguages : String[] = knownLangs_ISO2[ l | javafx.util.Sequences.indexOf( languagesTmp, l ) == -1 ];
+        println(starLanguages);
+        var languageList : java.util.LinkedList = new java.util.LinkedList();
+        for( l in languagesTmp )
         {
-            var languages : String[] = languagesString.replaceAll( " ", "" ).split( "," );
-            languages = languages[ l | javafx.util.Sequences.indexOf( knownLangs_ISO2, l ) != -1 ];
-            if( languages.size() > 0 )
+            if( l == "*")
             {
-                knownLangs_ISO2 = languages;
-                language = new java.util.Locale( knownLangs_ISO2[ 0 ] ); // use first language in list
+                for( sl in starLanguages )
+                    languageList.add( sl );
             }
-        };
+            else
+            {
+                languageList.add( l );
+            }
+        }
+        var languages : String[] = languageList.toArray() as String[];
+                println(languages);
+        languages = languages[ l | javafx.util.Sequences.indexOf( knownLangs_ISO2, l ) != -1 ];
+        if( languages.size() > 0 )
+        {
+            knownLangs_ISO2 = languages;
+            language = new java.util.Locale( knownLangs_ISO2[ 0 ] ); // use first language in list
+        }
 
         while( langButtonList.size() < knownLangs_ISO2.size() )
         {
@@ -673,8 +692,8 @@ public class FXAlgebraicExpressionButtonPanel
         //else if (c=="Wrong"){/*ToDo NahrichtenFensten ausgeben*/}
         else if (c=="Help"){/*ToDo Help*/}
         else if (c=="Print"){if(showPrint) gui.print();}
-        else if (c=="Open_File"){if(showLoadSave) gui.load();}
-        else if (c=="Save_File"){if(showLoadSave) gui.save();}
+        else if (c=="Open_File"){if(showLoad) gui.load();}
+        else if (c=="Save_File"){if(showSave) gui.save();}
         else if (c=="Export"){if(showExport) gui.export();}
         //else if (c=="Imprint"){timeline.playFromStart();}
     }
@@ -706,8 +725,8 @@ public class FXAlgebraicExpressionButtonPanel
     function Standard(s: String)
     {
         if (s=="Print" and not showPrint) return;
-        if (s=="Open_File" and not showLoadSave) return;
-        if (s=="Save_File" and not showLoadSave) return;
+        if (s=="Open_File" and not showLoad) return;
+        if (s=="Save_File" and not showSave) return;
         if (s=="Preferences" ) return;
         if (s=="Export" and not showExport) return;
         fxdLayoutFile.getNode("Button_{s}").visible=true;

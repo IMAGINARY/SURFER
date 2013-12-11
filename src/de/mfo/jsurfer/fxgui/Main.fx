@@ -44,10 +44,11 @@ def GUI: de.mfo.jsurfer.fxgui.FXGUI = de.mfo.jsurfer.fxgui.FXGUI{
                 x: 0, y:bind GUI.realHeight(1080,1920), width:1920, height:1080
                 onKeyReleased:toggleFullscreenKey
                 visible:bind not GUI.showImpressum
-                showPrint: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.showPrintButton", "true" )  )
-                showLoadSave: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.showLoadSaveButton", "true" )  )
-                showExport: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.showExportButton", "true" )  )
-                clickMode:  ( FXOptions.getIntegerOption( "de.mfo.jsurfer.gui.clickMode", 0 ) )
+                showPrint: ( Options.showPrintButton  )
+                showLoad: ( Options.showLoadButton  )
+                showSave: ( Options.showSaveButton  )
+                showExport: ( Options.showExportButton  )
+                clickMode:  ( Options.clickMode )
             }
 /*var timeline = javafx.animation.Timeline
 {
@@ -80,7 +81,7 @@ var timeline = javafx.animation.Timeline
     }
 }
 
-def hideCursor = "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.hideCursor" );
+def hideCursor = Options.hideCursor;
 function somethingHappend():Void
 {
     //System.out.println("somethingHappend");
@@ -110,7 +111,7 @@ def dummyRect : javafx.scene.shape.Rectangle = javafx.scene.shape.Rectangle
 
 def stage: Stage =Stage{
     title: "SURFER"
-    fullScreen: ( "true" == FXOptions.getOption( "de.mfo.jsurfer.gui.fullscreen" )  )
+    fullScreen: Options.fullscreen
     scene: scene = Scene {
         width: 192*6
         height: 108*6
