@@ -11,6 +11,7 @@ package de.mfo.jsurfer.fxgui;
 
 public class AlwaysFocusedTextBox extends javafx.scene.control.TextBox
 {
-    var my_focused:Boolean = bind focused on replace { if( focused == false ) focused = true; }
+    init { FX.deferAction( function() { requestFocus(); } ); }
+    var my_focused:Boolean = bind focused on replace { requestFocus(); }
     var my_pressed:Boolean = bind pressed on replace { requestFocus(); }
 }
