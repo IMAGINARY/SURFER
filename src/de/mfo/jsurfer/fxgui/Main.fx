@@ -100,12 +100,34 @@ def dummyRect : javafx.scene.shape.Rectangle = javafx.scene.shape.Rectangle
     onMouseWheelMoved:function(me:javafx.scene.input.MouseEvent):Void{somethingHappend();}
 };
 
+function calcInitialStageBounds() :  javafx.geometry.Rectangle2D
+{
+	var screenBounds = javafx.stage.Screen.primary.visualBounds;
+	def prefWidth = 192*6;
+	def prefHeight = 108*6;
+	if( screenBounds.width < prefWidth or screenBounds.height < prefHeight )
+	{
+		return screenBounds;
+	}
+	else
+	{
+		return javafx.geometry.Rectangle2D{
+			minX : (screenBounds.minX+screenBounds.maxX)/2 - prefWidth / 2;
+			minY : (screenBounds.minY+screenBounds.maxY)/2 - prefHeight / 2;
+			width : prefWidth;
+			height : prefHeight;
+		};
+	}
+}
+
+def initialStageBounds = calcInitialStageBounds();
+
 def stage=Stage{
     title: "SURFER"
     fullScreen: Options.fullScreen
     scene: scene = Scene {
-        width: 192*6
-        height: 108*6
+        width: initialStageBounds.width;
+        height: initialStageBounds.height;
         stylesheets: "{__DIR__}jfxsurfer.css"
         content:
         [
