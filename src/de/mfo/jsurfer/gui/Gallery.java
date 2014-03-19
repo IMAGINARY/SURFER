@@ -6,13 +6,17 @@
 package de.mfo.jsurfer.gui;
 
 import java.util.*;
-import java.awt.*;
+//import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.net.*;
 import java.io.*;
 import java.nio.*;
-import com.sun.pdfview.*;
+
+import org.jpedal.PdfDecoder;
+import org.jpedal.exception.PdfException;
+import org.w3c.dom.*;
+
 
 /**
  *
@@ -28,9 +32,10 @@ public class Gallery {
     String name;
     URL iconURL;
     BufferedImage icon;
-    URL descriptionURL;
+    PdfDecoder pdfDecoder;
     BufferedImage description;
     GalleryItem[] gallery_items;
+
     public static int getNumberOfGalleries() throws IOException
     {
         return getNumberOfGalleries(Locale.getDefault());
@@ -51,21 +56,66 @@ public class Gallery {
         this.locale = locale;
         rb = ResourceBundle.getBundle( "de/mfo/jsurfer/gallery/Gallery", locale );
 
-        Enumeration< String > keys = rb.getKeys();
-        for(; keys.hasMoreElements(); ) keys.nextElement();
-            //System.out.println( keys.nextElement() );
-
         this.number = number;
         this.key = rb.getString( "gallery_" + number + "_key" ).trim();
-        this.name = rb.getString( key ).trim();
-        this.iconURL = getResource( "/de/mfo/jsurfer/gallery/" + rb.getString( "gallery_" + number + "_icon" ) + "_icon.png" );
-        this.descriptionURL = getResourceFromLocalizedName( "/de/mfo/jsurfer/gallery/" + key + "_description", ".pdf" );
 
-        String[] content_keys = getContentKeys();
+        pdfDecoder = new PdfDecoder();
+        String pdfURL = getResourceFromLocalizedName( "/de/mfo/jsurfer/gallery/" + key, ".pdf" ).toString();
+        try
+        {
+            System.err.print( "loading " + pdfURL);
+            pdfDecoder.openPdfFileFromURL( pdfURL, true );            
+        }
+        catch( PdfException pdfe )
+        {
+            System.err.print( " ... failed!" );
+            pdfe.printStackTrace();
+        }
+        finally { System.err.println(); }
+
+        List< OutlineEntry > outlineEntries = readGalleryOutline();
+
+        OutlineEntry introEntry = outlineEntries.remove(0);
+        this.name = introEntry.name.trim();
+        this.iconURL = getResource( "/de/mfo/jsurfer/gallery/" + introEntry.filename_prefix + "_icon.png" );
+
         LinkedList< GalleryItem > l = new LinkedList< GalleryItem >();
-        for( int i = 0; i < content_keys.length; i++ )
-            l.add( new GalleryItem( content_keys[ i ] ) );
+        for( OutlineEntry entry : outlineEntries )
+            l.add( new GalleryItem( entry.filename_prefix, entry.name, entry.pageNum ) );
         this.gallery_items = l.toArray( new GalleryItem[ 0 ] );
+    }
+
+    private class OutlineEntry
+    {
+        public String name;
+        public String filename_prefix;
+        public int pageNum;
+
+        public OutlineEntry( String name, String filename_prefix, int pageNum )
+        {
+            this.name = name;
+            this.filename_prefix = filename_prefix;
+            this.pageNum = pageNum;
+        }
+    }
+
+    private List< OutlineEntry > readGalleryOutline()
+    {
+        LinkedList< OutlineEntry > entries = new LinkedList< OutlineEntry >();  
+        Node rootNode = pdfDecoder.getOutlineAsXML().getFirstChild();
+
+        NodeList children = rootNode.getChildNodes();
+        for( int i = 0; i < children.getLength(); i++ )
+        {
+            Element currentElement = (Element) children.item(i);
+
+            entries.add( new OutlineEntry(
+                currentElement.getAttribute("title"),
+                ( (Element) currentElement.getFirstChild() ).getAttribute( "title" ),
+                Integer.parseInt( currentElement.getAttribute("page") )
+                ) );
+        }
+        return entries;
     }
 
     public int getNumber() { return number; }
@@ -85,23 +135,13 @@ public class Gallery {
         if( height == 0 )
             height = 1;
         if( description == null || description.getWidth() != width || description.getHeight() != height )
-            description = renderPDF( descriptionURL, width, height );
+            description = renderPDFPage( 1, width, height );
         return description;
     }
-    public URL getDescriptionURL() { return descriptionURL; }
 
     public GalleryItem[] getEntries()
     {
         return this.gallery_items;
-    }
-
-    String[] getContentKeys()
-    {
-        String content_string = rb.getString( "gallery_" + number + "_content" );
-        String[] content_keys = content_string.split( "," );
-        for( int i = 0; i < content_keys.length; i++ )
-            content_keys[ i ] = content_keys[ i ].trim();
-        return content_keys;
     }
 
     URL getResource( String res )
@@ -132,46 +172,18 @@ public class Gallery {
         return url;
     }
 
-    BufferedImage renderPDF( URL url, int width, int height )
+    BufferedImage renderPDFPage( int pageNum, int width, int height )
     {
-        BufferedImage bImg = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
         try
         {
-            URLConnection connection = url.openConnection();
-            // Since you get a URLConnection, use it to get the InputStream
-            InputStream is = connection.getInputStream();
-            // Now that the InputStream is open, get the content length
-            int contentLength = connection.getContentLength();
-
-            // create temporary buffer
-            ByteArrayOutputStream tmpOut = new ByteArrayOutputStream( contentLength == -1 ? 16384 : contentLength );
-
-            // fill temporary buffer
-            byte[] buf = new byte[512];
-            int len;
-            while( ( len = is.read(buf) ) != -1 )
-                tmpOut.write(buf, 0, len);
-
-            // close buffers
-            is.close();
-            tmpOut.close();
-
-            // create ByteBuffer, which we need for the PDFRenderer
-            ByteBuffer byte_buf = ByteBuffer.wrap( tmpOut.toByteArray() );
-
-            // render PDF into image
-            PDFFile pdfFile = new PDFFile( byte_buf );
-            System.err.println( pdfFile.getVersionString() );
-            PDFPage pdfPage = pdfFile.getPage( 0 );
-            java.awt.geom.Rectangle2D r2d = pdfPage.getBBox();
-            Image img = pdfPage.getImage( width, height, r2d, null, true, true );
-            bImg.getGraphics().drawImage( img, 0, 0, null );
+            // ToDo: scale appropriately 
+            return pdfDecoder.getPageAsImage( pageNum );
         }
         catch( Exception e )
         {
             System.err.println( e );
         }
-        return bImg;
+        return new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
     }
 
     BufferedImage loadImage( URL img_url )
@@ -194,17 +206,17 @@ public class Gallery {
         private String name;
         private URL iconURL;
         private BufferedImage icon;
-        private URL descriptionURL;
+        private int descriptionPageNumber;
         private BufferedImage description;
         private URL jsurf_file_url;
 
-        GalleryItem( String key )
+        GalleryItem( String key, String label, int pageNum )
                 throws IOException
         {
             this.key = key;
-            this.name = rb.getString( key ).trim();
+            this.name = label.trim();
             this.iconURL = getResource( "/de/mfo/jsurfer/gallery/" + key + "_icon.png" );
-            this.descriptionURL = getResourceFromLocalizedName( "/de/mfo/jsurfer/gallery/" + key + "_description", ".pdf" );
+            this.descriptionPageNumber = pageNum;
             this.jsurf_file_url = getResource( "/de/mfo/jsurfer/gallery/" + key + ".jsurf" );
         }
 
@@ -225,10 +237,9 @@ public class Gallery {
             if( height == 0 )
                 height = 1;
             if( description == null || description.getWidth() != width || description.getHeight() != height )
-                    description = renderPDF( descriptionURL, width, height );
+                    description = Gallery.this.renderPDFPage( descriptionPageNumber, width, height );
                 return description;
         }
-        public URL getDescriptionURL() { return descriptionURL; }
         public URL getJSurfURL() { return jsurf_file_url; }
     }
 }
