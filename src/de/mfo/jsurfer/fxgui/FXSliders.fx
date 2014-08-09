@@ -68,28 +68,20 @@ public class FXSliders {
         sliderWidth=fxdButtons.getNode("Slider_Zoom_Knob").layoutBounds.minX-fxdButtons.getNode("Slider_A_Knob").layoutBounds.minX;
         fxdButtons.getNode("Slider_Zoom_Shaft").onMousePressed = function (ev:javafx.scene.input.MouseEvent)
         {
-            java.lang.System.out.println("Zoom_Shaft pressed");
             surferPanel.renderer.drawCoordinatenSystem(true);
             def n:Number=(ev.y-min("Zoom"))/(max("Zoom")-min("Zoom"));
             surferPanel.setScale(n);
         };
         fxdButtons.getNode("Slider_Zoom_Shaft").onMouseDragged = function (ev:javafx.scene.input.MouseEvent)
         {
-            java.lang.System.out.println("Zoom_Shaft dragged");
             def n:Number=(ev.y-min("Zoom"))/(max("Zoom")-min("Zoom"));
             surferPanel.setScale(n);
         };
         //surferPanel.renderer.drawCoordinatenSystem(true);
         fxdButtons.getNode("Slider_Zoom_Shaft").onMouseReleased = function (ev:javafx.scene.input.MouseEvent)
         {
-            java.lang.System.out.println("Zoom_Shaft released");
             surferPanel.renderer.drawCoordinatenSystem(false);
         }
-        fxdButtons.getNode("Slider_Zoom_Shaft").onMouseMoved = function (ev:javafx.scene.input.MouseEvent)
-        {
-            java.lang.System.out.println("Zoom_Shaft moved");
-        }
-
 
         fxdButtons.getNode("Slider_Zoom_Button_Minus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.setScale(surferPanel.scale+0.025); };
         fxdButtons.getNode("Slider_Zoom_Button_Plus").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void {surferPanel.setScale(surferPanel.scale-0.025); };
