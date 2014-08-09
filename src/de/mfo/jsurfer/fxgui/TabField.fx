@@ -42,6 +42,7 @@ public class TabField {
     public var spanishGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("es"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("es") );
     public var norskGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("no"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("no") );
     public var koreanGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("ko") );
+    public var chineseGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("zh") );
     
     //public var germanSurfaceInfo:FXSurfaceInfo;
     //public var germanGalleryChooser:FXGalleryChooser;
@@ -197,6 +198,16 @@ public class TabField {
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
                     visible: bind (language==new java.util.Locale("ko"))
                 }
+                FXGalleryChooser
+                {
+                    language:new java.util.Locale("zh")
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:chineseGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind (language==new java.util.Locale("zh"))
+                }
             ]
             translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
             translateY:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
@@ -308,6 +319,14 @@ public class TabField {
                     gallerys:koreanGallerys,
                     gallery:bind pointerGallery
                     visible: bind (language==new java.util.Locale("ko"));
+                }
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:chineseGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind (language==new java.util.Locale("zh"));
                 }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
@@ -489,7 +508,22 @@ public class TabField {
                     }
                     visible:bind (new java.util.Locale("ko")==language)
                 }
-
+                FXGalleryMini
+                {
+                   language:new java.util.Locale("zh")
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:chineseGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind (new java.util.Locale("zh")==language)
+                }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
             translateY:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
@@ -630,6 +664,15 @@ public class TabField {
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
                     visible: bind (new java.util.Locale("ko")==language)
+                }
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:chineseGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind (new java.util.Locale("zh")==language)
                 }
             ]
             translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
@@ -797,6 +840,13 @@ public class TabField {
                     content: "색깔"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     visible: bind (language==new java.util.Locale("ko"))
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
+                    content: "颜色"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("zh"))
                 }           
             ]
             translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Color").translateX+fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.width/2-tabTextColor.boundsInLocal.width/2
@@ -865,6 +915,13 @@ public class TabField {
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     visible: bind (language==new java.util.Locale("ko"))
                 }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
+                    content: "信息"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (language==new java.util.Locale("zh"))
+                }
             ]
             translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Info").translateX+fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.width/2-tabTextInfo.boundsInLocal.width/2
             translateY: fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.maxY
@@ -930,6 +987,13 @@ public class TabField {
                     content: "시작"
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     visible: bind (new java.util.Locale("ko") == language)
+                }
+                javafx.scene.text.Text
+                {
+                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
+                    content: "开始"
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    visible: bind (new java.util.Locale("zh") == language)
                 }
             ]
             translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.width/2-tabTextGallery.boundsInLocal.width/2
