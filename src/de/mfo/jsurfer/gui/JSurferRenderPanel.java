@@ -230,6 +230,7 @@ public class JSurferRenderPanel extends JComponent
         scale.setIdentity();
         MouseAdapter ma = new MouseAdapter(){
             public void mousePressed( MouseEvent me ) { JSurferRenderPanel.this.mousePressed( me ); }
+            public void mouseReleased( MouseEvent me ) { JSurferRenderPanel.this.mouseReleased( me ); }
             public void mouseDragged( MouseEvent me ) { JSurferRenderPanel.this.mouseDragged( me ); }
             public void mouseWheelMoved( MouseWheelEvent mwe ) { JSurferRenderPanel.this.scaleSurface ( mwe.getWheelRotation() ); }
         };
@@ -447,17 +448,29 @@ public class JSurferRenderPanel extends JComponent
         repaint();
     }
 
+    // used for dirty hack that still makes dragging working on some touchscreens which send mouse events in wrong order
+    private boolean dragging = false;
     protected void mousePressed( MouseEvent me )
     {
         grabFocus();
+        dragging = true;
         rsd.startDrag( me.getPoint() );
     }
 
     protected void mouseDragged( MouseEvent me )
     {
-        rsd.dragTo( me.getPoint() );
-        //drawCoordinatenSystem(true);
-        scheduleSurfaceRepaint();
+        if( dragging )
+        {
+            rsd.dragTo( me.getPoint() );
+            //drawCoordinatenSystem(true);
+            scheduleSurfaceRepaint();
+        }
+    }
+
+    protected void mouseReleased( MouseEvent me )
+    {
+        dragging = false;
+        rsd.startDrag( me.getPoint() );
     }
 
     protected void scaleSurface( int units )
