@@ -61,6 +61,7 @@ public class FXGUI extends javafx.scene.CustomNode
     public var language:java.util.Locale=bind AlgebraicExpressionButtonPanel.language;
     
     var sliders:FXSliders= FXSliders {
+        language:bind this.language,
         surferPanel: bind surferPanel,
         fxdButtons: fxdLayoutFile,
         getScale: getScale,

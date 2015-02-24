@@ -10,6 +10,8 @@ package de.mfo.jsurfer.fxgui;
  */
 //import java.lang.System;
 public class FXSliders {
+    public var language: java.util.Locale;
+    var messages:java.util.ResourceBundle=bind java.util.ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", language );
     public var surferPanel:FXSurferPanel;
     public var fxdButtons:javafx.fxd.FXDNode;
     public var getScale:function (n:Number, w:Number):Number;
@@ -233,7 +235,8 @@ public class FXSliders {
             {
                 //id:"TextSliderNameZoom"
                 font: bind javafx.scene.text.Font.font ("Arial", fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.height*getScale(sceneHeight,sceneWidth)*1)
-                content: "Zoom" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                content: bind messages.getString( "zoom" )
+                textAlignment:javafx.scene.text.TextAlignment.CENTER
                 translateX: bind fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.minX*getScale(sceneHeight,sceneWidth)+fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.width*getScale(sceneHeight,sceneWidth)/2-textNameZoom.boundsInLocal.width/2
                 translateY: bind fxdButtons.getNode("Slider_Zoom_Name").boundsInParent.maxY*getScale(sceneHeight,sceneWidth)
                 visible: bind fxdButtons.getNode("Slider_Zoom").visible

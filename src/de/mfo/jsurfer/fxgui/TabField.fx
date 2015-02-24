@@ -11,6 +11,7 @@ package de.mfo.jsurfer.fxgui;
 
 public class TabField {
     public var language: java.util.Locale on replace { setTextField(); };
+    var messages:java.util.ResourceBundle=bind java.util.ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", language );
     public var sliders:FXSliders;
     public var frontColor: ColorChooser;
     public var backColor: ColorChooser;
@@ -788,66 +789,9 @@ public class TabField {
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Farben" 
+                    content: bind messages.getString( "colors" )
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==java.util.Locale.GERMAN)
                 }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Colours" 
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Цвет"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Cores"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Боје"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("sr"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Colores"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("es"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "Farger"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("no"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "색깔"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("ko"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.height)
-                    content: "颜色"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("zh"))
-                }           
             ]
             translateX: bind fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Color").translateX+fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.width/2-tabTextColor.boundsInLocal.width/2
             translateY: fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.maxY
@@ -862,65 +806,8 @@ public class TabField {
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Info"
+                    content: bind messages.getString( "info" )
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==java.util.Locale.GERMAN)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Info"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Инфо"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Info"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Информације"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("sr"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Info"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("es"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "Info"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("no"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "정보"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("ko"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.height)
-                    content: "信息"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (language==new java.util.Locale("zh"))
                 }
             ]
             translateX: bind fxdLayoutFile.getNode("Tab_Text_Info").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Info").translateX+fxdLayoutFile.getNode("Tab_Text_Color").boundsInLocal.width/2-tabTextInfo.boundsInLocal.width/2
@@ -935,65 +822,8 @@ public class TabField {
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Start"
+                    content: bind messages.getString( "start" )
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (java.util.Locale.GERMAN == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Start"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (java.util.Locale.ENGLISH == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Старт"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("ru") == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Início"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("pt") == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Старт"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("sr") == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Inicio"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("es") == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "Start"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("no") == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "시작"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("ko") == language)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.height)
-                    content: "开始"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    visible: bind (new java.util.Locale("zh") == language)
                 }
             ]
             translateX: bind fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.minX+fxdLayoutFile.getNode("Tab_Text_Gallery").translateX+fxdLayoutFile.getNode("Tab_Text_Gallery").boundsInLocal.width/2-tabTextGallery.boundsInLocal.width/2

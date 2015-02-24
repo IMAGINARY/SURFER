@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 import java.lang.System;
 import java.lang.String;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.scene.*;
 import javafx.scene.text.*;
 import javafx.geometry.*;
@@ -38,6 +39,7 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var gui:FXGUI;
     var knownLangs_ISO2 = [ "de", "en", "es", "ko", "no", "pt", "ru", "sr", "zh" ];
 
+
 //public-init var keyboardTextParametersEng:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
     //public-init var keyboardTextXYZEng:javafx.scene.text.Text;
@@ -62,6 +64,7 @@ public class FXAlgebraicExpressionButtonPanel
     }
 
     public var language:java.util.Locale=getDefaultLocale();
+    var messages:java.util.ResourceBundle=bind ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", language );
     public-init var getScale:function (n:Number, w:Number):Number;
     public-init var showImpressum:function ():Void;
     public var sceneWidth:Number;
@@ -444,84 +447,11 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Parameter"
+                    content: bind messages.getString( "parameters" )
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==java.util.Locale.GERMAN)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Parameters"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Параметр"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Parâmetro"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Параметри"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("sr"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Parámetros"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("es"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "Parametre"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("no"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "매개 변수"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("ko"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.height)
-                    content: "参数"
-                    textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("zh"))
-                }
+                }  
             ]
         }
 
@@ -534,74 +464,10 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Rechenoperationen" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: bind messages.getString( "arithmeticOperations" )
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==java.util.Locale.GERMAN)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Arithmetic operations" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Арифметические операции" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Operações aritméticas" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Аритметичке операције" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("sr"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Operadores Aritméticos" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("es"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "Aritmetiske operasjoner" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("no"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "연산자" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("ko"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.height)
-                    content: "算数运算" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_Operations").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("zh"))
                 }
             ]
         }
@@ -615,74 +481,10 @@ public class FXAlgebraicExpressionButtonPanel
                 javafx.scene.text.Text
                 {
                     font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Variablen" textAlignment:javafx.scene.text.TextAlignment.CENTER
+                    content: bind messages.getString( "variables" )
+                    textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==java.util.Locale.GERMAN)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Variables" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Переменные" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Variáveis" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Променљиве" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("sr"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Variables" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("es"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "Variabler" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("no"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "변수" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("ko"))
-                }
-                javafx.scene.text.Text
-                {
-                    font: javafx.scene.text.Font.font ("Arial", fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.height)
-                    content: "变量" textAlignment:javafx.scene.text.TextAlignment.CENTER
-                    translateX: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.minX
-                    translateY: fxdLayoutFile.getNode("Text_Keyboard_XYZ").boundsInLocal.maxY
-                    visible: bind (language==new java.util.Locale("zh"))
                 }
             ]
         }
@@ -843,4 +645,5 @@ public class FXAlgebraicExpressionButtonPanel
     }
 
 
-}
+};
+
