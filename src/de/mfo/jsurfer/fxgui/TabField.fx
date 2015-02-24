@@ -44,6 +44,7 @@ public class TabField {
     public var norskGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("no"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("no") );
     public var koreanGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("ko") );
     public var chineseGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("zh") );
+    public var turkishGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("tr") );
     
     //public var germanSurfaceInfo:FXSurfaceInfo;
     //public var germanGalleryChooser:FXGalleryChooser;
@@ -209,42 +210,20 @@ public class TabField {
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
                     visible: bind (language==new java.util.Locale("zh"))
                 }
+                FXGalleryChooser
+                {
+                    language:new java.util.Locale("tr")
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallery:bind pointerGallery
+                    gallerys:turkishGallerys
+                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
+                    visible: bind (language==new java.util.Locale("tr"))
+                }
             ]
             translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
             translateY:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
         }
-
-       /*germanGalleryChooser=FXGalleryChooser
-        {
-            language:java.util.Locale.GERMAN
-            width:bind R.width*getScale(sceneHeight,sceneWidth),
-            height:bind R.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-            gallery:bind pointerGallery
-            gallerys:germanGallerys
-            setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-        };
-       englishGalleryChooser=FXGalleryChooser
-        {
-            language:java.util.Locale.ENGLISH
-            width:bind R.width*getScale(sceneHeight,sceneWidth),
-            height:bind R.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-            gallery:bind pointerGallery
-            gallerys:englishGallerys
-            setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-        };
-        multiGalleryChooser=LanguageSwitchNode
-        {
-            language:bind language
-            germanNode:germanGalleryChooser
-            englishNode:englishGalleryChooser
-            x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-        };*/
-
 
         tabBoxNode.visible=false;
     }
@@ -328,6 +307,14 @@ public class TabField {
                     gallerys:chineseGallerys,
                     gallery:bind pointerGallery
                     visible: bind (language==new java.util.Locale("zh"));
+                }
+                FXGalleryText
+                {
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:turkishGallerys,
+                    gallery:bind pointerGallery
+                    visible: bind (language==new java.util.Locale("tr"));
                 }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
@@ -525,64 +512,27 @@ public class TabField {
                     }
                     visible:bind (new java.util.Locale("zh")==language)
                 }
+                FXGalleryMini
+                {
+                   language:new java.util.Locale("tr")
+                    width:bind G.width*getScale(sceneHeight,sceneWidth),
+                    height:bind G.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:turkishGallerys,
+                    gallery:bind pointerGallery
+                    surface:bind pointerSurface
+                    press:function(s:Integer):Void
+                    {
+                        pointerSurface=s;
+                        setInfoState();
+                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                    }
+                    visible:bind (new java.util.Locale("tr")==language)
+                }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
             translateY:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
 
         }
-
-       /*germanGalleryMini=FXGalleryMini
-       {
-           language:java.util.Locale.GERMAN
-            width:bind G.width*getScale(sceneHeight,sceneWidth),
-            height:bind G.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:germanGallerys,
-            gallery:bind pointerGallery
-            surface:bind pointerSurface
-            press:function(s:Integer):Void
-            {
-
-                germanSurfaceInfo.gallery=pointerGallery;
-                germanSurfaceInfo.surface=s;
-                englishSurfaceInfo.gallery=pointerGallery;
-                englishSurfaceInfo.surface=s;
-                pointerSurface=s;
-                setInfoState();
-                loadSurface(germanGallerys[germanGalleryMini.gallery].getEntries()[ germanGalleryMini.surface ].getJSurfURL());
-
-            }
-        };
-       englishGalleryMini=FXGalleryMini
-       {
-           language:java.util.Locale.ENGLISH
-            width:bind G.width*getScale(sceneHeight,sceneWidth),
-            height:bind G.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:englishGallerys,
-            gallery:bind pointerGallery
-            surface:bind pointerSurface
-            press:function(s:Integer):Void
-            {
-                germanSurfaceInfo.gallery=pointerGallery;
-                germanSurfaceInfo.surface=s;
-                englishSurfaceInfo.gallery=pointerGallery;
-                englishSurfaceInfo.surface=s;
-                pointerSurface=s;
-                setInfoState();
-                loadSurface(englishGallerys[englishGalleryMini.gallery].getEntries()[ englishGalleryMini.surface ].getJSurfURL());
-            }
-        };
-        multiGalleryMini=LanguageSwitchNode
-        {
-            language:bind language
-            germanNode:germanGalleryMini
-            englishNode:englishGalleryMini
-            x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-        };*/
         galleryMiniNode.visible=false;
     }
     function setSurfaceInfo()
@@ -675,39 +625,19 @@ public class TabField {
                     surface: bind pointerSurface
                     visible: bind (new java.util.Locale("zh")==language)
                 }
+                FXSurfaceInfo
+                {
+                    width:bind R.width*getScale(sceneHeight,sceneWidth),
+                    height:bind R.height*getScale(sceneHeight,sceneWidth),
+                    gallerys:turkishGallerys,
+                    gallery:bind pointerGallery,
+                    surface: bind pointerSurface
+                    visible: bind (new java.util.Locale("tr")==language)
+                }
             ]
             translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
             translateY:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth)
         }
-
-       /*germanSurfaceInfo=FXSurfaceInfo
-       {
-            width:bind R.width*getScale(sceneHeight,sceneWidth),
-            height:bind R.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:germanGallerys,
-            gallery:bind pointerGallery,
-            surface: bind pointerSurface
-        };
-        englishSurfaceInfo=FXSurfaceInfo
-       {
-            width:bind R.width*getScale(sceneHeight,sceneWidth),
-            height:bind R.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:englishGallerys,
-            gallery:bind pointerGallery,
-            surface: bind pointerSurface
-        };
-        multiSurfaceInfo=LanguageSwitchNode
-        {
-            language:bind language
-            germanNode:germanSurfaceInfo
-            englishNode:englishSurfaceInfo
-            x:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+R.minY)*getScale(sceneHeight,sceneWidth),
-        };*/
         tabBoxNode.visible=false;
     }
     function setButtons()

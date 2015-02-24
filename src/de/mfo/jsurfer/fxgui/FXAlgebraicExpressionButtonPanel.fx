@@ -37,7 +37,7 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var showExport:Boolean;
     public-init var clickMode:Integer;
     public-init var gui:FXGUI;
-    var knownLangs_ISO2 = [ "de", "en", "es", "ko", "no", "pt", "ru", "sr", "zh" ];
+    var knownLangs_ISO2 = [ "de", "en", "es", "ko", "no", "pt", "ru", "sr", "tr", "zh" ];
 
 
 //public-init var keyboardTextParametersEng:javafx.scene.text.Text;
