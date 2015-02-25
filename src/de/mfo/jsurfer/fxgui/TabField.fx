@@ -35,6 +35,10 @@ public class TabField {
     public var disableButtons:function():Void;
     public var enableButtons:function():Void;
     public-init var fxdLayoutFile:javafx.fxd.FXDNode;
+
+    public var galleries:de.mfo.jsurfer.gui.Gallery[] = bind for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries( language )-1])new de.mfo.jsurfer.gui.Gallery(i, language );
+
+/*
     public var germanGallerys    :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.GERMAN   )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.GERMAN    );
     public var englishGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(java.util.Locale.ENGLISH  )-1])new de.mfo.jsurfer.gui.Gallery(i,java.util.Locale.ENGLISH   );
     public var russianGallerys   :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ru"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("ru") );
@@ -45,21 +49,7 @@ public class TabField {
     public var koreanGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("ko") );
     public var chineseGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("zh") );
     public var turkishGallerys     :de.mfo.jsurfer.gui.Gallery[]=for (i in [0..de.mfo.jsurfer.gui.Gallery.getNumberOfGalleries(new java.util.Locale("ko"))-1])new de.mfo.jsurfer.gui.Gallery(i,new java.util.Locale("tr") );
-    
-    //public var germanSurfaceInfo:FXSurfaceInfo;
-    //public var germanGalleryChooser:FXGalleryChooser;
-    //public var germanGalleryText:FXGalleryText;
-    //public var germanGalleryMini:FXGalleryMini;
-
-    //public var englishSurfaceInfo:FXSurfaceInfo;
-    //public var englishGalleryChooser:FXGalleryChooser;
-    //public var englishGalleryText:FXGalleryText;
-    //public var englishGalleryMini:FXGalleryMini;
-
-    //public var multiSurfaceInfo:LanguageSwitchNode;
-    //public var multiGalleryChooser:LanguageSwitchNode;
-    //public var multiGalleryText:LanguageSwitchNode;
-    //public var multiGalleryMini:LanguageSwitchNode;
+    */
 
     public var SurfaceInfo:javafx.scene.Group;
     public var GalleryChooser:javafx.scene.Group;
@@ -79,13 +69,6 @@ public class TabField {
     
     var pointerGallery:Integer=0;
     var pointerSurface:Integer=0;
-    /*[
-        new de.mfo.jsurfer.gui.Gallery(0 ),
-        new de.mfo.jsurfer.gui.Gallery(1 ),
-        new de.mfo.jsurfer.gui.Gallery(2 ),
-        new de.mfo.jsurfer.gui.Gallery(3 ),
-        new de.mfo.jsurfer.gui.Gallery(4 )
-    ];*/
 
     function setColorChooser()
     {
@@ -126,99 +109,8 @@ public class TabField {
                     width:bind R.width*getScale(sceneHeight,sceneWidth),
                     height:bind R.height*getScale(sceneHeight,sceneWidth),
                     gallery:bind pointerGallery
-                    gallerys:germanGallerys
+                    gallerys:bind galleries
                     setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==java.util.Locale.GERMAN)
-                }
-                FXGalleryChooser
-                {
-                    language:java.util.Locale.ENGLISH
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:englishGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("ru")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:russianGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("pt")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:portugueseGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("sr")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:serbianGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("sr"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("es")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:spanishGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("es"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("no")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:norskGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("no"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("ko")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:koreanGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("ko"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("zh")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:chineseGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("zh"))
-                }
-                FXGalleryChooser
-                {
-                    language:new java.util.Locale("tr")
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallery:bind pointerGallery
-                    gallerys:turkishGallerys
-                    setGallery:function(g:Integer):Void{pointerGallery=g;pointerSurface=0;}
-                    visible: bind (language==new java.util.Locale("tr"))
                 }
             ]
             translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)
@@ -240,124 +132,15 @@ public class TabField {
                 {
                     width:bind G.width*getScale(sceneHeight,sceneWidth),
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:germanGallerys,
+                    gallerys:bind galleries,
                     gallery:bind pointerGallery
-                    visible: bind (language==java.util.Locale.GERMAN)
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:englishGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==java.util.Locale.ENGLISH)
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:russianGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("ru"))
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:portugueseGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("pt"))
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:serbianGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("sr"));
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:spanishGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("es"));
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:norskGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("no"));
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:koreanGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("ko"));
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:chineseGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("zh"));
-                }
-                FXGalleryText
-                {
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:turkishGallerys,
-                    gallery:bind pointerGallery
-                    visible: bind (language==new java.util.Locale("tr"));
                 }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
             translateY:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth)
         }
-/*        
-       germanGalleryText=FXGalleryText
-       {
-            width:bind G.width*getScale(sceneHeight,sceneWidth),
-            height:bind G.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:germanGallerys,
-            gallery:bind pointerGallery
-        };
-
-       englishGalleryText=FXGalleryText
-       {
-            width:bind G.width*getScale(sceneHeight,sceneWidth),
-            height:bind G.height*getScale(sceneHeight,sceneWidth),
-            //x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            //y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-            gallerys:englishGallerys,
-            gallery:bind pointerGallery
-        };
-        multiGalleryText=LanguageSwitchNode
-        {
-            language:bind language
-            germanNode:germanGalleryText
-            englishNode:englishGalleryText
-            x:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth),
-            y:bind (tabBoxNode.translateY+G.minY)*getScale(sceneHeight,sceneWidth),
-        };*/
         galleryTextNode.visible=false;
     }
-    /*function setNewPointer()
-    {
-        germanSurfaceInfo.gallery=pointerGallery;
-        germanSurfaceInfo.surface=s;
-        englishSurfaceInfo.gallery=pointerGallery;
-                englishSurfaceInfo.surface=s;
-                pointerSurface=s;
-    }*/
 
     function setGalleryMini()
     {
@@ -373,160 +156,15 @@ public class TabField {
                     language:java.util.Locale.GERMAN
                     width:bind G.width*getScale(sceneHeight,sceneWidth),
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:germanGallerys,
+                    gallerys: bind galleries,
                     gallery:bind pointerGallery
                     surface:bind pointerSurface
                     press:function(s:Integer):Void
                     {
                         pointerSurface=s;
                         setInfoState();
-                        loadSurface(germanGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
+                        loadSurface(galleries[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
                     }
-                    visible:bind (java.util.Locale.GERMAN==language)
-                }
-                FXGalleryMini
-                {
-                    language:java.util.Locale.ENGLISH
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:englishGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(englishGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (java.util.Locale.ENGLISH==language)
-                }
-                FXGalleryMini
-                {
-                    language:new java.util.Locale("ru")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:russianGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(russianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("ru")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("pt")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:portugueseGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(portugueseGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("pt")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("sr")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:serbianGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("sr")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("es")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:spanishGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("es")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("no")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:norskGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("no")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("ko")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:koreanGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("ko")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("zh")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:chineseGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("zh")==language)
-                }
-                FXGalleryMini
-                {
-                   language:new java.util.Locale("tr")
-                    width:bind G.width*getScale(sceneHeight,sceneWidth),
-                    height:bind G.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:turkishGallerys,
-                    gallery:bind pointerGallery
-                    surface:bind pointerSurface
-                    press:function(s:Integer):Void
-                    {
-                        pointerSurface=s;
-                        setInfoState();
-                        loadSurface(serbianGallerys[pointerGallery].getEntries()[pointerSurface].getJSurfURL());
-                    }
-                    visible:bind (new java.util.Locale("tr")==language)
                 }
             ]
             translateX:bind (tabBoxNode.translateX+G.minX)*getScale(sceneHeight,sceneWidth)
@@ -548,91 +186,9 @@ public class TabField {
                 {
                     width:bind R.width*getScale(sceneHeight,sceneWidth),
                     height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:germanGallerys,
+                    gallerys: bind galleries,
                     gallery:bind pointerGallery,
                     surface: bind pointerSurface
-                    visible: bind (java.util.Locale.GERMAN==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:englishGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (java.util.Locale.ENGLISH==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:russianGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("ru")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:portugueseGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("pt")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:serbianGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("sr")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:spanishGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("es")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:norskGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("no")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:koreanGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("ko")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:chineseGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("zh")==language)
-                }
-                FXSurfaceInfo
-                {
-                    width:bind R.width*getScale(sceneHeight,sceneWidth),
-                    height:bind R.height*getScale(sceneHeight,sceneWidth),
-                    gallerys:turkishGallerys,
-                    gallery:bind pointerGallery,
-                    surface: bind pointerSurface
-                    visible: bind (new java.util.Locale("tr")==language)
                 }
             ]
             translateX:bind (tabBoxNode.translateX+R.minX)*getScale(sceneHeight,sceneWidth)

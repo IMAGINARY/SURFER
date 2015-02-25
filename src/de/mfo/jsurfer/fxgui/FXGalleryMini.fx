@@ -60,7 +60,7 @@ public class FXGalleryMini extends CustomNode
                             }
                             id: "FXGalleryChooser{language}{gallery} {i}"
                             onMousePressed : function(e: javafx.scene.input.MouseEvent): Void {press(i);}
-                            text: "{gallerys[g].getEntries()[ i ].getName()}"
+                            text: bind "{gallerys[g].getEntries()[ i ].getName()}"
                             font: javafx.scene.text.Font.font( "Arial", javafx.scene.text.FontWeight.REGULAR, 19 )
                             hpos: javafx.geometry.HPos.CENTER
                             vpos: javafx.geometry.VPos.TOP
@@ -69,7 +69,7 @@ public class FXGalleryMini extends CustomNode
                             textAlignment: javafx.scene.text.TextAlignment.CENTER
                             graphic: javafx.scene.image.ImageView
                             {
-                                image: JavaFXExtWrapper.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
+                                image: bind JavaFXExtWrapper.toFXImage( gallerys[g].getEntries()[ i ].getIcon() )
                                 fitWidth: 150
                                 preserveRatio: true
                             }

@@ -33,12 +33,6 @@ public class FXGalleryChooser extends CustomNode
                 {
                     content:
                     [
-                        /*javafx.scene.shape.Rectangle
-                        {
-                            x: 0  y: 0
-                            width: bind width  height: bind height
-                            fill: javafx.scene.paint.Color.rgb(200, 0, 0)
-                        }*/
                         javafx.scene.layout.VBox
                         {
                             padding: javafx.geometry.Insets { top: 4 right: 4 bottom: 4 left: 4}
@@ -52,11 +46,6 @@ public class FXGalleryChooser extends CustomNode
             ]
         }
     }
-   /* private function getFontWeight(g:Integer):javafx.scene.text.FontWeight
-    {
-        if (g==gallery)return javafx.scene.text.FontWeight.REGULAR;
-
-    }*/
 
     function createButton(g:Integer):javafx.scene.Group
     {
@@ -85,7 +74,7 @@ public class FXGalleryChooser extends CustomNode
                             [
                                 javafx.scene.image.ImageView
                                 {
-                                    image: JavaFXExtWrapper.toFXImage( gallerys[g].getIcon() )
+                                    image: bind JavaFXExtWrapper.toFXImage( gallerys[g].getIcon() )
                                     fitHeight:bind (height-4*5)/5
                                     preserveRatio: true
                                     layoutInfo:javafx.scene.layout.LayoutInfo{hpos:javafx.geometry.HPos.LEFT}
@@ -100,7 +89,7 @@ public class FXGalleryChooser extends CustomNode
                                          if (g==gallery){javafx.scene.text.FontWeight.BOLD}else{ javafx.scene.text.FontWeight.REGULAR},
                                          ((height-4*5)/5)*0.4*0.4
                                     )
-                                    content: "{gallerys[g].getName()}"
+                                    content: bind "{gallerys[g].getName()}"
                                     //textAlignment:javafx.scene.text.TextAlignment.CENTER
                                     translateX: bind width*0.05
                                     translateY: bind (height-4*5)/5*0.2
