@@ -219,7 +219,6 @@ public class JSurferRenderPanel extends JComponent
         renderCoordinatenSystem = false;
         minLowResRenderSize = new Dimension( 150, 150 );
         maxLowResRenderSize = new Dimension( 512, 512 );
-        //renderSize = minLowResRenderSize;
 
         resizeImageWithComponent = false;
 
@@ -391,29 +390,51 @@ public class JSurferRenderPanel extends JComponent
 
     protected void paintComponent( Graphics g )
     {
-        super.paintComponent( g );
         if( g instanceof Graphics2D )
         {
+         //   System.out.println( globalPanelSize );
             final Graphics2D g2 = ( Graphics2D ) g;
-            g2.setColor( this.asr.getBackgroundColor().get() );
-
-            ImgBuffer tmpImg = currentSurfaceImage;
+            ImgBuffer tmpImg = JSurferRenderPanel.this.currentSurfaceImage;
             if( tmpImg == null || tmpImg.width == 0 || tmpImg.height == 0 )
             {
+                g2.setColor( this.asr.getBackgroundColor().get() );
                 g2.fillRect( 0, 0, this.getWidth(), this.getHeight() );
             }
             else
             {
-                BufferedImage bi = this.createBufferedImageFromRGB( tmpImg );
-                final AffineTransform t = new AffineTransform();
-                t.scale( this.getWidth() / (double) bi.getWidth(), -this.getHeight() / (double) bi.getHeight() );
-                t.translate( 0, -bi.getHeight() );
-                g2.drawImage( bi, new AffineTransformOp( t, AffineTransformOp.TYPE_BILINEAR ), 0, 0 );
+                long time = System.currentTimeMillis();
+
+                // scale and translate to fit the component
+                final AffineTransform g2t = g2.getTransform();
+                final AffineTransform g2scale = AffineTransform.getScaleInstance( g2t.getScaleX(), g2t.getScaleY() );
+
+                // compute size of on screen buffer
+                Rectangle rect = g2scale.createTransformedShape( new Rectangle( 0, 0, this.getWidth(), this.getHeight()) ).getBounds();
+
+                // wrap color array into Image
+                Image img = createImage(new MemoryImageSource( tmpImg.width, tmpImg.height, tmpImg.rgbBuffer, 0, tmpImg.width));
+
+                // first draw to a BufferedImage and apply the transformation using bilenar interpolation
+                // (drawing directly to the components graphics is incredibly slow on some systems (100x slower))
+                BufferedImage bi = g2.getDeviceConfiguration().createCompatibleImage( rect.width, rect.height );
+                Graphics2D big2 = bi.createGraphics();
+                big2.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR );
+                big2.drawImage( img, 0, 0, rect.width, rect.height, null );
+
+                // now just blit flipped image to the components graphics (no interpolation needed)
+                g2.setTransform( AffineTransform.getTranslateInstance( g2t.getTranslateX(), g2t.getTranslateY() ) );
+                g2.scale( 1.0, -1.0 );
+                g2.translate( 0.0, -rect.height );
+                g2.drawImage( bi, 0, 0, this );
+                g2.setTransform( g2t );
+                
+                time = System.currentTimeMillis() - time;
+                System.out.println( "Time for painting to panel: " + time + "ms" );
             }
         }
         else
         {
-            super.paintComponents( g );
+            super.paintComponent( g );
             g.drawString( "this component needs a Graphics2D for painting", 2, this.getHeight() - 2 );
         }
     }
