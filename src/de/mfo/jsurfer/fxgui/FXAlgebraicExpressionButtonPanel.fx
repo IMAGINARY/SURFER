@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 import java.lang.System;
 import java.lang.String;
 import java.util.Locale;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.scene.*;
 import javafx.scene.text.*;
@@ -37,8 +38,33 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var showExport:Boolean;
     public-init var clickMode:Integer;
     public-init var gui:FXGUI;
-    var knownLangs_ISO2 = [ "de", "en", "es", "ko", "no", "pt", "ru", "sr", "tr", "zh" ];
+    var knownLangs_ISO2 = getAvailableLocaleNames();
 
+    function getAvailableLocaleNames() : String[]
+    {        
+        var t = System.currentTimeMillis();
+        var locales = Locale.getAvailableLocales()[ l | localeAvailable( l ) ];
+        var localeNames : String[];
+        for( l in locales )
+            insert l.toString() into localeNames;
+        localeNames = javafx.util.Sequences.sort( localeNames ) as String[];
+        System.out.println( "{ System.currentTimeMillis() - t }ms for detecting the following locales:" );
+        System.out.println( localeNames );
+
+        return localeNames;
+    }
+
+    function localeAvailable( l : Locale ) : Boolean
+    {
+        try
+        {
+            return ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", l ).getLocale().equals( l );
+        }
+        catch( mre : java.util.MissingResourceException )
+        {
+            return false;
+        }
+    }
 
 //public-init var keyboardTextParametersEng:javafx.scene.text.Text;
     //public-init var keyboardTextOperationsEng:javafx.scene.text.Text;
