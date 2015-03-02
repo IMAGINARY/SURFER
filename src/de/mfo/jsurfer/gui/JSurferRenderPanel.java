@@ -402,8 +402,6 @@ public class JSurferRenderPanel extends JComponent
             }
             else
             {
-                long time = System.currentTimeMillis();
-
                 // scale and translate to fit the component
                 final AffineTransform g2t = g2.getTransform();
                 final AffineTransform g2scale = AffineTransform.getScaleInstance( g2t.getScaleX(), g2t.getScaleY() );
@@ -427,9 +425,6 @@ public class JSurferRenderPanel extends JComponent
                 g2.translate( 0.0, -rect.height );
                 g2.drawImage( bi, 0, 0, this );
                 g2.setTransform( g2t );
-                
-                time = System.currentTimeMillis() - time;
-                System.out.println( "Time for painting to panel: " + time + "ms" );
             }
         }
         else
