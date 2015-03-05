@@ -14,10 +14,12 @@ public class FXImpressum  extends javafx.scene.CustomNode
 
     public override function create(): javafx.scene.Node
     {
+        var path : String = bind "/de/mfo/jsurfer/fxgui/{messages.getString( "imprintFile" )}";
         return javafx.scene.image.ImageView
         {
-           image : bind javafx.scene.image.Image {
-            url: "{__DIR__}{messages.getString( "imprintFile" )}"}
+            image : bind javafx.scene.image.Image {
+                url: de.mfo.jsurfer.gui.Gallery.class.getResource( path ).toString();
+            }
             fitWidth:bind width
             fitHeight:bind height
             preserveRatio: true
