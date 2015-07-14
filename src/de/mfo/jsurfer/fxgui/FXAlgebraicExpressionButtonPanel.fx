@@ -89,7 +89,7 @@ public class FXAlgebraicExpressionButtonPanel
         return new java.util.Locale( "en" );
     }
 
-    public var language:java.util.Locale=getDefaultLocale();
+    public var language:java.util.Locale;
     var messages:java.util.ResourceBundle=bind ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", language );
     public-init var getScale:function (n:Number, w:Number):Number;
     public-init var showImpressum:function ():Void;
@@ -104,8 +104,8 @@ public class FXAlgebraicExpressionButtonPanel
 
     public function set()
     {
-        setButtons();
         setPopUp();
+        setButtons();
         setTextField();
         setTextField2();
 
@@ -353,7 +353,7 @@ public class FXAlgebraicExpressionButtonPanel
             }
         ];
 
-        var languagesTmp : String[] = de.mfo.jsurfer.gui.Options.languages.toArray() as String[];
+        var languagesTmp : String[] = de.mfo.jsurfer.gui.Options.languages.toArray() as String[]; // languages IDs are already trimmed
         var starLanguages : String[] = knownLangs_ISO2[ l | javafx.util.Sequences.indexOf( languagesTmp, l ) == -1 ];
         var languageList : java.util.LinkedList = new java.util.LinkedList();
         for( l in languagesTmp )
@@ -370,9 +370,16 @@ public class FXAlgebraicExpressionButtonPanel
         }
         var languages : String[] = languageList.toArray() as String[];
         languages = languages[ l | javafx.util.Sequences.indexOf( knownLangs_ISO2, l ) != -1 ];
+
         if( languages.size() > 0 )
-        {
             knownLangs_ISO2 = languages;
+
+        if( languagesTmp.size() == 1 and languagesTmp[ 0 ].trim() == "*" )
+        {
+            language = getDefaultLocale();
+        }
+        else
+        {
             language = new java.util.Locale( knownLangs_ISO2[ 0 ] ); // use first language in list
         }
 

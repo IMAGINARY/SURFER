@@ -105,7 +105,7 @@ public class TabField {
             [
                 FXGalleryChooser
                 {
-                    language:java.util.Locale.GERMAN
+                    language: this.language,
                     width:bind R.width*getScale(sceneHeight,sceneWidth),
                     height:bind R.height*getScale(sceneHeight,sceneWidth),
                     gallery:bind pointerGallery
@@ -153,7 +153,7 @@ public class TabField {
             [
                 FXGalleryMini
                 {
-                    language:java.util.Locale.GERMAN
+                    language: this.language,
                     width:bind G.width*getScale(sceneHeight,sceneWidth),
                     height:bind G.height*getScale(sceneHeight,sceneWidth),
                     gallerys: bind galleries,
