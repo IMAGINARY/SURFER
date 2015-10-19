@@ -1,0 +1,6 @@
+# build results
+build/
+dist/
+
+# host specific project configuration
+nbproject/private/
