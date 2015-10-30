@@ -41,7 +41,7 @@ public class FXAlgebraicExpressionButtonPanel
     var knownLangs_ISO2 = getAvailableLocaleNames();
 
     function getAvailableLocaleNames() : String[]
-    {        
+    {
         var t = System.currentTimeMillis();
         var locales = Locale.getAvailableLocales()[ l | localeAvailable( l ) ];
         var localeNames : String[];
@@ -169,7 +169,7 @@ public class FXAlgebraicExpressionButtonPanel
             height: T2.height*getScale(sceneHeight,sceneWidth)
             maxHeight: T2.height*getScale(sceneHeight,sceneWidth)
          };
-        
+
         ExpressionField.layoutInfo=javafx.scene.layout.LayoutInfo
         {
             minWidth: T.width*getScale(sceneHeight,sceneWidth)
@@ -264,7 +264,7 @@ public class FXAlgebraicExpressionButtonPanel
                 hover( s );
            };
            fxdLayoutFile.getNode("Button_{s}").onMouseExited = function(e: javafx.scene.input.MouseEvent): Void { default( s ); };
-           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void 
+           fxdLayoutFile.getNode("Button_{s}").onMousePressed=function(e: javafx.scene.input.MouseEvent): Void
            {
                armed( s );
                if( clickMode == 1 )
@@ -291,7 +291,7 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Pressed_Wrong").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_draw").visible=false;
         fxdLayoutFile.getNode("Button_Over_draw").visible=false;
-   
+
         //"Imprint"
         fxdLayoutFile.getNode("Button_Imprint").onMousePressed=function(e:javafx.scene.input.MouseEvent):Void
         {
@@ -338,21 +338,6 @@ public class FXAlgebraicExpressionButtonPanel
 
     function setPopUp()
     {
-        var langButtonList : Node[] = [
-            FXButton {
-                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))
-                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Upper"))
-                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper"))
-                clickMode: clickMode
-            }
-            FXButton {
-                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))
-                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Lower"))
-                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower"))
-                clickMode: clickMode
-            }
-        ];
-
         var languagesTmp : String[] = de.mfo.jsurfer.gui.Options.languages.toArray() as String[]; // languages IDs are already trimmed
         var starLanguages : String[] = knownLangs_ISO2[ l | javafx.util.Sequences.indexOf( languagesTmp, l ) == -1 ];
         var languageList : java.util.LinkedList = new java.util.LinkedList();
@@ -383,6 +368,26 @@ public class FXAlgebraicExpressionButtonPanel
             language = new java.util.Locale( knownLangs_ISO2[ 0 ] ); // use first language in list
         }
 
+        var langButtonList : Node[];
+        if( knownLangs_ISO2.size() > 0 )
+        {
+            insert FXButton {
+                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Upper"))
+                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Upper"))
+                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper"))
+                clickMode: clickMode
+            } into langButtonList;
+        }
+        if( knownLangs_ISO2.size() > 1 )
+        {
+            insert FXButton {
+                normal: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Foldout_Lower"))
+                hovered: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Over_Foldout_Lower"))
+                armed: Duplicator.duplicate(fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower"))
+                clickMode: clickMode
+            } into langButtonList;
+        };
+
         while( langButtonList.size() < knownLangs_ISO2.size() )
         {
             insert
@@ -412,11 +417,11 @@ public class FXAlgebraicExpressionButtonPanel
         fxdLayoutFile.getNode("Button_Foldout_Lower").visible=false;
         fxdLayoutFile.getNode("Button_Foldout_Middle").visible=false;
         fxdLayoutFile.getNode("Button_Foldout_Upper").visible=false;
-        
+
         fxdLayoutFile.getNode("Button_Over_Foldout_Lower").visible=false;
         fxdLayoutFile.getNode("Button_Over_Foldout_Middle").visible=false;
         fxdLayoutFile.getNode("Button_Over_Foldout_Upper").visible=false;
-        
+
         fxdLayoutFile.getNode("Button_Pressed_Foldout_Lower").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_Foldout_Middle").visible=false;
         fxdLayoutFile.getNode("Button_Pressed_Foldout_Upper").visible=false;
@@ -481,7 +486,7 @@ public class FXAlgebraicExpressionButtonPanel
                     textAlignment:javafx.scene.text.TextAlignment.CENTER
                     translateX: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.minX
                     translateY: fxdLayoutFile.getNode("Text_Keyboard_Parameters").boundsInLocal.maxY
-                }  
+                }
             ]
         }
 
@@ -501,7 +506,7 @@ public class FXAlgebraicExpressionButtonPanel
                 }
             ]
         }
-        
+
         fxdLayoutFile.getNode("Text_Keyboard_Operations").visible=false;
 
         keyboardTextXYZ=javafx.scene.Group
@@ -676,4 +681,3 @@ public class FXAlgebraicExpressionButtonPanel
 
 
 };
-
