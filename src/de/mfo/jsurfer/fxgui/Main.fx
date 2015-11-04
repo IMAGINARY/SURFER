@@ -169,4 +169,21 @@ def stage=Stage{
                  ]
     }
 };
+
+// process command line arguments
+if( FX.getArguments().size() > 0 )
+{
+    var f = new java.io.File( FX.getArguments()[ 0 ] );
+    java.lang.System.out.println( "loading {f}" );
+    try
+    {
+        GUI.loadURL( f.toURI().toURL() );
+    }
+    catch( e : java.lang.Exception )
+    {
+        java.lang.System.err.println( "Unable to load {f}" );
+        java.lang.System.exit( -1 );
+    }
+}
+
 GUI.requestFocus();

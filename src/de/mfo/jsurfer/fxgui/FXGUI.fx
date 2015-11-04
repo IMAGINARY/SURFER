@@ -71,7 +71,7 @@ public class FXGUI extends javafx.scene.CustomNode
     }
     
     
-    def loadURL:function(url:java.net.URL):Void=function(url:java.net.URL)
+    public function loadURL(url:java.net.URL):Void
     {
 
         try
