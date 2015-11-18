@@ -123,7 +123,7 @@ function calcInitialStageBounds() :  javafx.geometry.Rectangle2D
 def initialStageBounds = calcInitialStageBounds();
 
 def stage=Stage{
-    title: "SURFER"
+    title: bind ( "{Main.class.getPackage().getImplementationTitle()}{if( GUI.showImpressum ) ' {Main.class.getPackage().getImplementationVersion()}' else ''}" )
     fullScreen: Options.fullScreen
     scene: scene = Scene {
         width: initialStageBounds.width;

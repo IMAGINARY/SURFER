@@ -45,4 +45,23 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+    <target depends="init,compile" description="Build." name="jar">
+        <property file="settings.properties"/>
+        <tstamp>
+            <format property="NOW" pattern="yyyy-MM-dd HH:mm:ss" />
+        </tstamp>
+
+        <jar destfile="${dist.jar}" update="true">
+            <manifest>
+                <attribute name="Bundle-Name" value="${project.name}" />
+                <attribute name="Bundle-Version" value="${project.version}" />
+                <attribute name="Bundle-Date" value="${NOW}" />
+                <attribute name="Implementation-Title" value="${project.name}" />
+                <attribute name="Implementation-Version" value="${project.version}" />
+                <attribute name="Implementation-URL" value="${project.url}" />
+            </manifest>
+        </jar>
+    </target>
+
 </project>

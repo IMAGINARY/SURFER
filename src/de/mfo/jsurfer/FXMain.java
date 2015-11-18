@@ -6,6 +6,7 @@ public class FXMain
 {
 	public static void main( String[] args )
 	{
+		String surfer_progname = "surfer";
 		String jsurf_filename = "";
     	String output_filename = null;
 
@@ -16,10 +17,8 @@ public class FXMain
 
     	CommandLineParser parser = new PosixParser();
 		HelpFormatter formatter = new HelpFormatter();
-    	String cmd_line_syntax = "surfer [options] jsurf_file\n\n";
-    	String help_header = "SURFER is an interactive renderer for real algebraic surfaces.\n\n" +
-				"If - is specified as a filename the jsurf file is read from standard input. " +
-    			"Use ./- to denote a file literally named -.\n\n";
+    	String cmd_line_syntax = surfer_progname + " [options] [jsurf_file]\n\n";
+    	String help_header = FXMain.class.getPackage().getImplementationTitle() + " is an interactive renderer for real algebraic surfaces.";
     	String help_footer = "";
 		try
     	{
@@ -33,7 +32,7 @@ public class FXMain
 
 			if( cmd.hasOption( "version" ) )
 			{
-    			System.out.println( "This is jsurf version " + System.getProperty( "de.mfo.surfer.version", "unknown" ) + "." );
+    			System.out.println( FXMain.class.getPackage().getImplementationVersion() );
     			return;
     		}
 
