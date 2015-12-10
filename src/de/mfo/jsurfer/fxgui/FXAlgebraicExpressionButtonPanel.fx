@@ -38,20 +38,20 @@ public class FXAlgebraicExpressionButtonPanel
     public-init var showExport:Boolean;
     public-init var clickMode:Integer;
     public-init var gui:FXGUI;
-    var knownLangs_ISO2 = getAvailableLocaleNames();
+    var knownLangs_ISO2 = getAvailableLocales();
 
-    function getAvailableLocaleNames() : String[]
+    function getAvailableLocales() : Locale[]
     {
         var t = System.currentTimeMillis();
         var locales = Locale.getAvailableLocales()[ l | localeAvailable( l ) ];
-        var localeNames : String[];
-        for( l in locales )
-            insert l.toString() into localeNames;
-        localeNames = javafx.util.Sequences.sort( localeNames ) as String[];
-        System.out.println( "{ System.currentTimeMillis() - t }ms for detecting the following locales:" );
-        System.out.println( localeNames );
+        locales = javafx.util.Sequences.sort( locales, new de.mfo.jsurfer.util.ToStringComparator() ) as Locale[];
 
-        return localeNames;
+        System.out.println( "{ System.currentTimeMillis() - t }ms for detecting the following locales:" );
+        for( l in locales )
+            System.out.print( "{l}, " );
+        System.out.println();
+
+        return locales;
     }
 
     function localeAvailable( l : Locale ) : Boolean
@@ -81,12 +81,12 @@ public class FXAlgebraicExpressionButtonPanel
 
     public function getDefaultLocale():java.util.Locale
     {
-        var defaultLang_ISO2:String = java.util.Locale.getDefault().getLanguage();
+        var defaultLang_ISO2:String = java.util.Locale.getDefault().toString();
         println( defaultLang_ISO2 );
         for( l in knownLangs_ISO2 )
-            if( l == defaultLang_ISO2 )
-                return new java.util.Locale( l );
-        return new java.util.Locale( "en" );
+            if( l.equals( defaultLang_ISO2 ) )
+                return l;
+        return Locale.ENGLISH;
     }
 
     public var language:java.util.Locale;
@@ -339,8 +339,9 @@ public class FXAlgebraicExpressionButtonPanel
     function setPopUp()
     {
         var languagesTmp : String[] = de.mfo.jsurfer.gui.Options.languages.toArray() as String[]; // languages IDs are already trimmed
-        var starLanguages : String[] = knownLangs_ISO2[ l | javafx.util.Sequences.indexOf( languagesTmp, l ) == -1 ];
+        var starLanguages : Locale[] = knownLangs_ISO2[ l | javafx.util.Sequences.indexOf( languagesTmp, l.toString() ) == -1 ];
         var languageList : java.util.LinkedList = new java.util.LinkedList();
+
         for( l in languagesTmp )
         {
             if( l == "*")
@@ -350,10 +351,10 @@ public class FXAlgebraicExpressionButtonPanel
             }
             else
             {
-                languageList.add( l );
+                languageList.add( new Locale( l ) );
             }
         }
-        var languages : String[] = languageList.toArray() as String[];
+        var languages : Locale[] = languageList.toArray() as Locale[];
         languages = languages[ l | javafx.util.Sequences.indexOf( knownLangs_ISO2, l ) != -1 ];
 
         if( languages.size() > 0 )
@@ -365,7 +366,7 @@ public class FXAlgebraicExpressionButtonPanel
         }
         else
         {
-            language = new java.util.Locale( knownLangs_ISO2[ 0 ] ); // use first language in list
+            language = knownLangs_ISO2[ 0 ]; // use first language in list
         }
 
         var langButtonList : Node[];
@@ -405,11 +406,10 @@ public class FXAlgebraicExpressionButtonPanel
         for( i in [0..langButtonList.size()-1] )
         {
             // add language code
-            var code = knownLangs_ISO2[ i ];
-            var messageBundleForCode = java.util.ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", new Locale( code ) );
+            var messageBundleForCode = java.util.ResourceBundle.getBundle( "de.mfo.jsurfer.fxgui.MessagesBundle", knownLangs_ISO2[ i ] );
             var t = Text { content: messageBundleForCode.getString( "language" ) font: javafx.scene.text.Font.font( "Arial", 24 ) };
             var b : FXButton = langButtonList[ i ] as FXButton;
-            b.action = function() { language=new java.util.Locale( code );popUp.visible=false; }
+            b.action = function() { language=knownLangs_ISO2[ i ];popUp.visible=false; }
             insert Stack { content: [ b, t ] } into langButtonListWithText;
         };
         ( popUp as VBox ).content = langButtonListWithText;
