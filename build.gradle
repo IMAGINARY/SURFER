@@ -1,0 +1,17 @@
+group = 'de.mfo.surfer'
+version = '2.0.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+apply from: 'gradle/plugins/javafx.plugin'
+
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}
