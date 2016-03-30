@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?import javafx.scene.effect.InnerShadow?><?import javafx.scene.shape.Rectangle?><?import javafx.scene.effect.DropShadow?><?import javafx.scene.text.Font?><?import javafx.scene.paint.Color?><?import javafx.scene.image.Image?><?import javafx.scene.text.Text?><?import javafx.scene.shape.Polygon?><?import javafx.scene.shape.Polyline?><?import javafx.scene.Group?><?import javafx.scene.image.ImageView?><?import javafx.scene.transform.Affine?><?import javafx.scene.paint.LinearGradient?><?import javafx.scene.transform.Rotate?><?import javafx.scene.shape.SVGPath?><?import javafx.scene.shape.Line?><?import javafx.scene.paint.Stop?><Group xmlns:fx="http://javafx.com/fxml" xmlns:str="http://exslt.org/strings" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <children>
-        <Group fx:id="Slider_split">
+        <Group id="Slider_split">
             <children>
-                <Group fx:id="Slider_D">
+                <Group id="Slider_D">
                     <children>
-                        <Group fx:id="Slider_D_Shaft">
+                        <Group id="Slider_D_Shaft">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -22,7 +22,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_D_Knob">
+                        <Group id="Slider_D_Knob">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -63,7 +63,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_D_Button_Plus">
+                        <Group id="Slider_D_Button_Plus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -119,7 +119,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_D_Button_Minus">
+                        <Group id="Slider_D_Button_Minus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -138,12 +138,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle fx:id="Slider_D_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_D_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon fx:id="Slider_D_Name">
+                        <Polygon id="Slider_D_Name">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
@@ -160,9 +160,9 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Slider_C">
+                <Group id="Slider_C">
                     <children>
-                        <Group fx:id="Slider_C_Shaft">
+                        <Group id="Slider_C_Shaft">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -179,7 +179,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_C_Knob">
+                        <Group id="Slider_C_Knob">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -220,7 +220,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_C_Button_Plus">
+                        <Group id="Slider_C_Button_Plus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -276,7 +276,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_C_Button_Minus">
+                        <Group id="Slider_C_Button_Minus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -295,12 +295,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle fx:id="Slider_C_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_C_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon fx:id="Slider_C_Name">
+                        <Polygon id="Slider_C_Name">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
@@ -317,9 +317,9 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Slider_B">
+                <Group id="Slider_B">
                     <children>
-                        <Group fx:id="Slider_B_Shaft">
+                        <Group id="Slider_B_Shaft">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -336,7 +336,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_B_Knob">
+                        <Group id="Slider_B_Knob">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -377,7 +377,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_B_Button_Plus">
+                        <Group id="Slider_B_Button_Plus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -433,7 +433,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_B_Button_Minus">
+                        <Group id="Slider_B_Button_Minus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -452,12 +452,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle fx:id="Slider_B_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_B_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon fx:id="Slider_B_Name">
+                        <Polygon id="Slider_B_Name">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
@@ -474,9 +474,9 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Slider_A">
+                <Group id="Slider_A">
                     <children>
-                        <Group fx:id="Slider_A_Shaft">
+                        <Group id="Slider_A_Shaft">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -493,7 +493,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_A_Knob">
+                        <Group id="Slider_A_Knob">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -534,7 +534,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_A_Button_Plus">
+                        <Group id="Slider_A_Button_Plus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -590,7 +590,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_A_Button_Minus">
+                        <Group id="Slider_A_Button_Minus">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -609,12 +609,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle fx:id="Slider_A_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_A_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon fx:id="Slider_A_Name">
+                        <Polygon id="Slider_A_Name">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
@@ -631,9 +631,9 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Slider_Zoom">
+                <Group id="Slider_Zoom">
                     <children>
-                        <Group fx:id="Slider_Zoom_Shaft">
+                        <Group id="Slider_Zoom_Shaft">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1836.0" y="44.0">
                                     <fill>
@@ -650,7 +650,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_Zoom_Knob">
+                        <Group id="Slider_Zoom_Knob">
                             <children>
                                 <ImageView opacity="0.75" x="1853.0" y="27.0">
                                     <image>
@@ -691,7 +691,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_Zoom_Button_Plus">
+                        <Group id="Slider_Zoom_Button_Plus">
                             <children>
                                 <ImageView opacity="0.75" x="1853.0" y="714.0">
                                     <image>
@@ -747,7 +747,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group fx:id="Slider_Zoom_Button_Minus">
+                        <Group id="Slider_Zoom_Button_Minus">
                             <children>
                                 <ImageView opacity="0.75" x="1853.0" y="747.0">
                                     <image>
@@ -766,12 +766,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle fx:id="Slider_Zoom_Value" height="20.0" width="70.0" x="1836.0" y="799.0">
+                        <Rectangle id="Slider_Zoom_Value" height="20.0" width="70.0" x="1836.0" y="799.0">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Rectangle fx:id="Slider_Zoom_Name" height="20.0" width="70.0" x="1836.0" y="828.0">
+                        <Rectangle id="Slider_Zoom_Name" height="20.0" width="70.0" x="1836.0" y="828.0">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
@@ -780,7 +780,7 @@
                 </Group>
             </children>
         </Group>
-        <Group fx:id="Background">
+        <Group id="Background">
             <children>
                 <Rectangle height="10.0" width="1920.0" y="851.0">
                     <fill>
@@ -875,7 +875,7 @@
                         </LinearGradient>
                     </fill>
                 </Rectangle>
-                <Rectangle fx:id="Formula_background" height="222.0" width="1920.0" y="858.0">
+                <Rectangle id="Formula_background" height="222.0" width="1920.0" y="858.0">
                     <fill>
                         <LinearGradient endX="960.0" endY="1188.53" proportional="false" startX="960.0" startY="828.12">
                             <stops>
@@ -975,7 +975,7 @@
                 </Line>
             </children>
         </Group>
-        <Group fx:id="Formula_Box">
+        <Group id="Formula_Box">
             <children>
                 <SVGPath content="M1808.50,1053.50 L842.98,1053.50 C838.99,1053.50 836.50,1050.98 836.50,1046.15 L836.50,946.28 C836.50,941.02 839.99,939.50 843.98,939.50 L1808.50,939.50 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                     <fill>
@@ -1001,32 +1001,32 @@
                 </SVGPath>
             </children>
         </Group>
-        <Group fx:id="Keyboard_Text">
+        <Group id="Keyboard_Text">
             <children>
-                <Rectangle fx:id="Text_Keyboard_Parameters" height="20.0" width="227.0" x="584.0" y="907.0">
+                <Rectangle id="Text_Keyboard_Parameters" height="20.0" width="227.0" x="584.0" y="907.0">
                     <fill>
                         <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
                     </fill>
                 </Rectangle>
-                <Rectangle fx:id="Text_Keyboard_Operations" height="20.0" width="346.0" x="216.0" y="907.0">
+                <Rectangle id="Text_Keyboard_Operations" height="20.0" width="346.0" x="216.0" y="907.0">
                     <fill>
                         <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
                     </fill>
                 </Rectangle>
-                <Rectangle fx:id="Text_Keyboard_XYZ" height="20.0" width="170.0" x="28.0" y="907.0">
+                <Rectangle id="Text_Keyboard_XYZ" height="20.0" width="170.0" x="28.0" y="907.0">
                     <fill>
                         <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Tabs">
+        <Group id="Tabs">
             <children>
                 <Group blendMode="MULTIPLY">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Pressed_Info">
+                                <Group id="Button_Pressed_Info">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -1267,12 +1267,12 @@
                                         </Group>
                                     </children>
                                 </Group>
-                                <Rectangle fx:id="Button_Info" height="96.0" width="147.0" x="174.0" y="757.0">
+                                <Rectangle id="Button_Info" height="96.0" width="147.0" x="174.0" y="757.0">
                                     <fill>
                                         <Color blue="1.0" green="1.0" red="1.0"/>
                                     </fill>
                                 </Rectangle>
-                                <Group fx:id="Button_Pressed_Color">
+                                <Group id="Button_Pressed_Color">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -1513,14 +1513,14 @@
                                         </Group>
                                     </children>
                                 </Group>
-                                <Group fx:id="Button_Color">
+                                <Group id="Button_Color">
                                     <children>
                                         <Rectangle height="96.0" width="146.0" x="321.0" y="757.0">
                                             <fill>
                                                 <Color blue="1.0" green="1.0" red="1.0"/>
                                             </fill>
                                         </Rectangle>
-                                        <Group fx:id="Shadow">
+                                        <Group id="Shadow">
                                             <children>
                                                 <SVGPath content="M467.00,850.90 Q467.00,828.11 467.00,805.00 C467.00,803.97 467.00,802.93 467.00,801.90 Q467.00,779.13 467.00,757.00 C469.66,765.14 470.00,783.28 470.00,801.10 Q470.00,801.43 470.00,801.90 C470.00,802.81 470.00,804.26 470.00,805.00 Q470.00,805.28 470.00,805.45 C470.00,824.21 469.80,843.32 467.00,850.90 Z " opacity="0.3">
                                                     <fill>
@@ -1544,7 +1544,7 @@
                                         </Group>
                                     </children>
                                 </Group>
-                                <Group fx:id="Button_Pressed_Gallery">
+                                <Group id="Button_Pressed_Gallery">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -1785,14 +1785,14 @@
                                         </Group>
                                     </children>
                                 </Group>
-                                <Group fx:id="Button_Gallery">
+                                <Group id="Button_Gallery">
                                     <children>
                                         <Rectangle height="96.0" width="147.0" x="27.0" y="757.0">
                                             <fill>
                                                 <Color blue="1.0" green="1.0" red="1.0"/>
                                             </fill>
                                         </Rectangle>
-                                        <Group fx:id="Shadow">
+                                        <Group id="Shadow">
                                             <children>
                                                 <SVGPath content="M28.00,850.90 Q28.00,828.11 28.00,805.00 C28.00,803.97 28.00,802.93 28.00,801.90 Q28.00,779.13 28.00,757.00 C25.00,765.14 25.00,783.28 25.00,801.10 Q25.00,801.43 25.00,801.90 C25.00,802.81 25.00,804.26 25.00,805.00 Q25.00,805.28 25.00,805.45 C25.00,824.21 25.00,843.32 28.00,850.90 Z " opacity="0.3">
                                                     <fill>
@@ -1814,7 +1814,7 @@
                                                 </SVGPath>
                                             </children>
                                         </Group>
-                                        <Group fx:id="Shadow">
+                                        <Group id="Shadow">
                                             <children>
                                                 <SVGPath content="M28.00,850.90 Q28.00,828.11 28.00,805.00 C28.00,803.97 28.00,802.93 28.00,801.90 Q28.00,779.13 28.00,757.00 C25.00,765.14 25.00,783.28 25.00,801.10 Q25.00,801.43 25.00,801.90 C25.00,802.81 25.00,804.26 25.00,805.00 Q25.00,805.28 25.00,805.45 C25.00,824.21 25.00,843.32 28.00,850.90 Z " opacity="0.3">
                                                     <fill>
@@ -2042,7 +2042,7 @@
                                         <Rotate angle="-8.43" pivotX="88.57" pivotY="794.94"/>
                                     </transforms>
                                 </Rectangle>
-                                <Group fx:id="2mY6UF">
+                                <Group id="2mY6UF">
                                     <children>
                                         <SVGPath content="M86.31,786.81 C86.41,786.90 86.43,787.10 86.46,787.28 C86.38,787.16 86.34,786.99 86.31,786.81 Z ">
                                             <fill>
@@ -2731,63 +2731,63 @@
                 </SVGPath>
             </children>
         </Group>
-        <Group fx:id="Tab_Box" visible="false">
+        <Group id="Tab_Box" visible="false">
             <children>
-                <Rectangle fx:id="Tab_Box" height="680.0" width="441.0" x="27.0" y="77.0">
+                <Rectangle id="Tab_Box" height="680.0" width="441.0" x="27.0" y="77.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Colorpicker_1" visible="false">
+        <Group id="Colorpicker_1" visible="false">
             <children>
-                <Rectangle fx:id="Colorpicker_1" height="247.0" width="274.0" x="111.0" y="442.0">
+                <Rectangle id="Colorpicker_1" height="247.0" width="274.0" x="111.0" y="442.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Colorpicker_2" visible="false">
+        <Group id="Colorpicker_2" visible="false">
             <children>
-                <Rectangle fx:id="Colorpicker_2" height="247.0" width="274.0" x="111.0" y="127.0">
+                <Rectangle id="Colorpicker_2" height="247.0" width="274.0" x="111.0" y="127.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Surfer_Rendering" visible="false">
+        <Group id="Surfer_Rendering" visible="false">
             <children>
-                <Rectangle fx:id="Surfer_Rendering" height="796.0" width="796.0" x="668.0" y="31.0">
+                <Rectangle id="Surfer_Rendering" height="796.0" width="796.0" x="668.0" y="31.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Equation" visible="false">
+        <Group id="Equation" visible="false">
             <children>
-                <Rectangle fx:id="Equation" height="96.0" width="791.0" x="849.0" y="951.0">
+                <Rectangle id="Equation" height="96.0" width="791.0" x="849.0" y="951.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Equals_Zero" visible="false">
+        <Group id="Equals_Zero" visible="false">
             <children>
-                <Rectangle fx:id="Equals_Zero" height="96.0" width="82.0" x="1648.0" y="951.0">
+                <Rectangle id="Equals_Zero" height="96.0" width="82.0" x="1648.0" y="951.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Buttons_Over">
+        <Group id="Buttons_Over">
             <children>
-                <Group fx:id="Button_Over_Cursor_Right">
+                <Group id="Button_Over_Cursor_Right">
                     <children>
                         <SVGPath content="M879.00,926.00 L911.26,926.00 C915.90,926.00 920.00,921.84 920.00,917.20 L920.00,885.01 C920.00,880.37 915.90,877.00 911.26,877.00 L879.00,877.00 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2819,7 +2819,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Cursor_Left">
+                <Group id="Button_Over_Cursor_Left">
                     <children>
                         <SVGPath content="M878.00,926.00 L845.06,926.00 C840.42,926.00 837.00,921.84 837.00,917.20 L837.00,885.01 C837.00,880.37 840.42,877.00 845.06,877.00 L878.00,877.00 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2851,7 +2851,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_draw">
+                <Group id="Button_Over_draw">
                     <children>
                         <SVGPath content="M1894.50,1045.10 C1894.50,1049.74 1890.74,1053.50 1886.10,1053.50 L1808.90,1053.50 L1808.90,939.50 L1886.10,939.50 C1890.74,939.50 1894.50,943.26 1894.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2891,7 +2891,7 @@
                         </Text>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Bracket_open">
+                <Group id="Button_Over_Bracket_open">
                     <children>
                         <SVGPath content="M753.47,1045.02 C753.47,1049.66 749.71,1053.42 745.07,1053.42 L712.87,1053.42 C708.23,1053.42 704.47,1049.66 704.47,1045.02 L704.47,1012.82 C704.47,1008.18 708.23,1004.42 712.87,1004.42 L745.07,1004.42 C749.71,1004.42 753.47,1008.18 753.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2915,7 +2915,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Bracket_close">
+                <Group id="Button_Over_Bracket_close">
                     <children>
                         <SVGPath content="M813.53,1045.02 C813.53,1049.66 809.77,1053.42 805.13,1053.42 L772.93,1053.42 C768.30,1053.42 764.53,1049.66 764.53,1045.02 L764.53,1012.82 C764.53,1008.18 768.30,1004.42 772.93,1004.42 L805.13,1004.42 C809.77,1004.42 813.53,1008.18 813.53,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2939,7 +2939,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_d">
+                <Group id="Button_Over_d">
                     <children>
                         <SVGPath content="M812.47,980.02 C812.47,984.66 808.71,988.42 804.07,988.42 L771.87,988.42 C767.23,988.42 763.47,984.66 763.47,980.02 L763.47,947.82 C763.47,943.18 767.23,939.42 771.87,939.42 L804.07,939.42 C808.71,939.42 812.47,943.18 812.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2963,7 +2963,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_c">
+                <Group id="Button_Over_c">
                     <children>
                         <SVGPath content="M752.47,980.02 C752.47,984.66 748.71,988.42 744.07,988.42 L711.87,988.42 C707.23,988.42 703.47,984.66 703.47,980.02 L703.47,947.82 C703.47,943.18 707.23,939.42 711.87,939.42 L744.07,939.42 C748.71,939.42 752.47,943.18 752.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -2987,7 +2987,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_b">
+                <Group id="Button_Over_b">
                     <children>
                         <SVGPath content="M692.47,980.02 C692.47,984.66 688.71,988.42 684.07,988.42 L651.87,988.42 C647.23,988.42 643.47,984.66 643.47,980.02 L643.47,947.82 C643.47,943.18 647.23,939.42 651.87,939.42 L684.07,939.42 C688.71,939.42 692.47,943.18 692.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3011,7 +3011,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_a">
+                <Group id="Button_Over_a">
                     <children>
                         <SVGPath content="M633.62,980.10 C633.62,984.74 629.86,988.50 625.22,988.50 L593.02,988.50 C588.38,988.50 584.62,984.74 584.62,980.10 L584.62,947.90 C584.62,943.26 588.38,939.50 593.02,939.50 L625.22,939.50 C629.86,939.50 633.62,943.26 633.62,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3035,7 +3035,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_z">
+                <Group id="Button_Over_z">
                     <children>
                         <SVGPath content="M195.62,980.10 C195.62,984.74 191.86,988.50 187.22,988.50 L155.02,988.50 C150.38,988.50 146.62,984.74 146.62,980.10 L146.62,947.90 C146.62,943.26 150.38,939.50 155.02,939.50 L187.22,939.50 C191.86,939.50 195.62,943.26 195.62,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3059,7 +3059,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_y">
+                <Group id="Button_Over_y">
                     <children>
                         <SVGPath content="M135.58,980.10 C135.58,984.74 131.82,988.50 127.18,988.50 L94.98,988.50 C90.34,988.50 86.58,984.74 86.58,980.10 L86.58,947.90 C86.58,943.26 90.34,939.50 94.98,939.50 L127.18,939.50 C131.82,939.50 135.58,943.26 135.58,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3083,7 +3083,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_x">
+                <Group id="Button_Over_x">
                     <children>
                         <SVGPath content="M76.50,980.10 C76.50,984.74 72.74,988.50 68.10,988.50 L35.90,988.50 C31.26,988.50 27.50,984.74 27.50,980.10 L27.50,947.90 C27.50,943.26 31.26,939.50 35.90,939.50 L68.10,939.50 C72.74,939.50 76.50,943.26 76.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3107,7 +3107,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Exp_n">
+                <Group id="Button_Over_Exp_n">
                     <children>
                         <SVGPath content="M561.47,980.02 C561.47,984.66 557.71,988.42 553.07,988.42 L520.87,988.42 C516.23,988.42 512.47,984.66 512.47,980.02 L512.47,947.82 C512.47,943.18 516.23,939.42 520.87,939.42 L553.07,939.42 C557.71,939.42 561.47,943.18 561.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3131,7 +3131,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Exp_3">
+                <Group id="Button_Over_Exp_3">
                     <children>
                         <SVGPath content="M501.47,980.02 C501.47,984.66 497.71,988.42 493.07,988.42 L460.87,988.42 C456.23,988.42 452.47,984.66 452.47,980.02 L452.47,947.82 C452.47,943.18 456.23,939.42 460.87,939.42 L493.07,939.42 C497.71,939.42 501.47,943.18 501.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3155,7 +3155,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Exp_2">
+                <Group id="Button_Over_Exp_2">
                     <children>
                         <SVGPath content="M441.47,980.02 C441.47,984.66 437.71,988.42 433.07,988.42 L400.87,988.42 C396.23,988.42 392.47,984.66 392.47,980.02 L392.47,947.82 C392.47,943.18 396.23,939.42 400.87,939.42 L433.07,939.42 C437.71,939.42 441.47,943.18 441.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3179,7 +3179,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Times">
+                <Group id="Button_Over_Times">
                     <children>
                         <SVGPath content="M384.47,980.02 C384.47,984.66 380.71,988.42 376.07,988.42 L343.87,988.42 C339.23,988.42 335.47,984.66 335.47,980.02 L335.47,947.82 C335.47,943.18 339.23,939.42 343.87,939.42 L376.07,939.42 C380.71,939.42 384.47,943.18 384.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3203,7 +3203,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Minus">
+                <Group id="Button_Over_Minus">
                     <children>
                         <SVGPath content="M324.47,980.02 C324.47,984.66 320.71,988.42 316.07,988.42 L283.87,988.42 C279.23,988.42 275.47,984.66 275.47,980.02 L275.47,947.82 C275.47,943.18 279.23,939.42 283.87,939.42 L316.07,939.42 C320.71,939.42 324.47,943.18 324.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3227,7 +3227,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Plus">
+                <Group id="Button_Over_Plus">
                     <children>
                         <SVGPath content="M265.47,980.02 C265.47,984.66 261.71,988.42 257.07,988.42 L224.87,988.42 C220.23,988.42 216.47,984.66 216.47,980.02 L216.47,947.82 C216.47,943.18 220.23,939.42 224.87,939.42 L257.07,939.42 C261.71,939.42 265.47,943.18 265.47,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3251,7 +3251,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_9">
+                <Group id="Button_Over_9">
                     <children>
                         <SVGPath content="M552.47,1045.02 C552.47,1049.66 548.71,1053.42 544.07,1053.42 L511.87,1053.42 C507.23,1053.42 503.47,1049.66 503.47,1045.02 L503.47,1012.82 C503.47,1008.18 507.23,1004.42 511.87,1004.42 L544.07,1004.42 C548.71,1004.42 552.47,1008.18 552.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3275,7 +3275,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_8">
+                <Group id="Button_Over_8">
                     <children>
                         <SVGPath content="M492.47,1045.02 C492.47,1049.66 488.71,1053.42 484.07,1053.42 L451.87,1053.42 C447.23,1053.42 443.47,1049.66 443.47,1045.02 L443.47,1012.82 C443.47,1008.18 447.23,1004.42 451.87,1004.42 L484.07,1004.42 C488.71,1004.42 492.47,1008.18 492.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3299,7 +3299,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_7">
+                <Group id="Button_Over_7">
                     <children>
                         <SVGPath content="M433.50,1045.02 C433.50,1049.66 429.74,1053.42 425.10,1053.42 L392.90,1053.42 C388.26,1053.42 384.50,1049.66 384.50,1045.02 L384.50,1012.82 C384.50,1008.18 388.26,1004.42 392.90,1004.42 L425.10,1004.42 C429.74,1004.42 433.50,1008.18 433.50,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3323,7 +3323,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_6">
+                <Group id="Button_Over_6">
                     <children>
                         <SVGPath content="M373.47,1045.02 C373.47,1049.66 369.71,1053.42 365.07,1053.42 L332.87,1053.42 C328.23,1053.42 324.47,1049.66 324.47,1045.02 L324.47,1012.82 C324.47,1008.18 328.23,1004.42 332.87,1004.42 L365.07,1004.42 C369.71,1004.42 373.47,1008.18 373.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3347,7 +3347,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_5">
+                <Group id="Button_Over_5">
                     <children>
                         <SVGPath content="M314.47,1045.02 C314.47,1049.66 310.71,1053.42 306.07,1053.42 L273.87,1053.42 C269.23,1053.42 265.47,1049.66 265.47,1045.02 L265.47,1012.82 C265.47,1008.18 269.23,1004.42 273.87,1004.42 L306.07,1004.42 C310.71,1004.42 314.47,1008.18 314.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3371,7 +3371,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_4">
+                <Group id="Button_Over_4">
                     <children>
                         <SVGPath content="M254.47,1045.02 C254.47,1049.66 250.71,1053.42 246.07,1053.42 L213.87,1053.42 C209.23,1053.42 205.47,1049.66 205.47,1045.02 L205.47,1012.82 C205.47,1008.18 209.23,1004.42 213.87,1004.42 L246.07,1004.42 C250.71,1004.42 254.47,1008.18 254.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3395,7 +3395,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_3">
+                <Group id="Button_Over_3">
                     <children>
                         <SVGPath content="M195.47,1045.02 C195.47,1049.66 191.71,1053.42 187.07,1053.42 L154.87,1053.42 C150.23,1053.42 146.47,1049.66 146.47,1045.02 L146.47,1012.82 C146.47,1008.18 150.23,1004.42 154.87,1004.42 L187.07,1004.42 C191.71,1004.42 195.47,1008.18 195.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3419,7 +3419,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_2">
+                <Group id="Button_Over_2">
                     <children>
                         <SVGPath content="M135.47,1045.02 C135.47,1049.66 131.71,1053.42 127.07,1053.42 L94.87,1053.42 C90.23,1053.42 86.47,1049.66 86.47,1045.02 L86.47,1012.82 C86.47,1008.18 90.23,1004.42 94.87,1004.42 L127.07,1004.42 C131.71,1004.42 135.47,1008.18 135.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3443,7 +3443,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_1">
+                <Group id="Button_Over_1">
                     <children>
                         <SVGPath content="M76.47,1045.02 C76.47,1049.66 72.71,1053.42 68.07,1053.42 L35.87,1053.42 C31.23,1053.42 27.47,1049.66 27.47,1045.02 L27.47,1012.82 C27.47,1008.18 31.23,1004.42 35.87,1004.42 L68.07,1004.42 C72.71,1004.42 76.47,1008.18 76.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3467,7 +3467,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_0">
+                <Group id="Button_Over_0">
                     <children>
                         <SVGPath content="M611.47,1045.02 C611.47,1049.66 607.71,1053.42 603.07,1053.42 L570.87,1053.42 C566.23,1053.42 562.47,1049.66 562.47,1045.02 L562.47,1012.82 C562.47,1008.18 566.23,1004.42 570.87,1004.42 L603.07,1004.42 C607.71,1004.42 611.47,1008.18 611.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3491,7 +3491,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Comma">
+                <Group id="Button_Over_Comma">
                     <children>
                         <SVGPath content="M681.47,1045.02 C681.47,1049.66 677.71,1053.42 673.07,1053.42 L640.87,1053.42 C636.23,1053.42 632.47,1049.66 632.47,1045.02 L632.47,1012.82 C632.47,1008.18 636.23,1004.42 640.87,1004.42 L673.07,1004.42 C677.71,1004.42 681.47,1008.18 681.47,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -3515,7 +3515,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Delete">
+                <Group id="Button_Over_Delete">
                     <children>
                         <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
                             <fill>
@@ -3534,12 +3534,12 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_MFO_Surfer_Info" opacity="0.4">
+                <Group id="Button_Over_MFO_Surfer_Info" opacity="0.4">
                     <children>
                         <Rectangle fill="${null}" height="47.0" width="231.0" x="34.0" y="16.0"/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Imprint">
+                <Group id="Button_Over_Imprint">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -3568,7 +3568,7 @@
                         <SVGPath content="M1776.33,891.85 C1783.01,891.85 1787.08,896.52 1787.08,902.63 C1787.08,908.81 1782.37,914.15 1776.30,914.15 C1770.19,914.15 1765.38,908.81 1765.38,902.63 C1765.38,896.52 1769.66,891.85 1776.33,891.85 Z M1776.26,893.94 C1771.02,893.94 1767.57,897.28 1767.57,902.74 C1767.57,908.09 1771.13,912.02 1776.30,912.06 C1781.36,912.09 1784.99,908.09 1784.99,902.63 C1784.99,897.28 1781.50,893.94 1776.26,893.94 Z M1780.68,898.82 C1780.21,898.57 1778.89,898.12 1777.20,898.12 C1773.82,898.12 1772.45,899.86 1772.45,902.74 C1772.45,905.54 1773.93,907.18 1777.23,907.18 C1778.67,907.18 1780.03,906.33 1780.86,905.79 L1781.29,908.23 C1780.03,909.06 1778.38,909.35 1776.87,909.35 C1772.71,909.35 1770.30,906.47 1770.30,902.85 C1770.30,898.75 1773.53,896.16 1777.16,896.16 C1779.03,896.16 1780.64,896.70 1781.11,897.13 Z "/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Print">
+                <Group id="Button_Over_Print">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -3640,7 +3640,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Save_File">
+                <Group id="Button_Over_Save_File">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -3727,7 +3727,7 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Open_File">
+                <Group id="Button_Over_Open_File">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -3771,7 +3771,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Preferences">
+                <Group id="Button_Over_Preferences">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -4049,7 +4049,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Export">
+                <Group id="Button_Over_Export">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -4079,7 +4079,7 @@
                         <SVGPath content="M1656.42,886.80 L1657.61,892.89 C1644.12,895.70 1644.77,904.95 1645.42,908.13 C1645.63,908.15 1645.85,908.19 1646.07,908.24 Q1649.48,900.23 1659.14,900.63 L1660.28,906.44 L1670.14,894.73 Z "/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Language">
+                <Group id="Button_Over_Language">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -4107,7 +4107,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Wrong">
+                <Group id="Button_Over_Wrong">
                     <children>
                         <SVGPath content="M1894.50,1045.10 C1894.50,1049.74 1890.74,1053.50 1886.10,1053.50 L1808.90,1053.50 L1808.90,939.50 L1886.10,939.50 C1890.74,939.50 1894.50,943.26 1894.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4136,7 +4136,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_MFO_Surfer_Info" opacity="0.2">
+                <Group id="Button_Over_MFO_Surfer_Info" opacity="0.2">
                     <children>
                         <Text text="SURFER" x="81.85" y="54.4">
                             <font>
@@ -4146,7 +4146,7 @@
                         <Rectangle fill="${null}" height="47.0" width="231.0" x="34.0" y="16.0"/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Complete_Delete">
+                <Group id="Button_Over_Complete_Delete">
                     <children>
                         <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
                             <fill>
@@ -4165,7 +4165,7 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Delete">
+                <Group id="Button_Over_Delete">
                     <children>
                         <SVGPath content="M979.50,918.10 C979.50,922.74 975.74,926.50 971.10,926.50 L938.90,926.50 C934.26,926.50 930.50,922.74 930.50,918.10 L930.50,885.90 C930.50,881.26 934.26,877.50 938.90,877.50 L971.10,877.50 C975.74,877.50 979.50,881.26 979.50,885.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4213,9 +4213,9 @@
                 </Group>
             </children>
         </Group>
-        <Group fx:id="Buttons_Pressed">
+        <Group id="Buttons_Pressed">
             <children>
-                <Group fx:id="Button_Pressed_Cursor_Right">
+                <Group id="Button_Pressed_Cursor_Right">
                     <children>
                         <SVGPath content="M879.00,926.00 L911.26,926.00 C915.90,926.00 920.00,921.84 920.00,917.20 L920.00,885.01 C920.00,880.37 915.90,877.00 911.26,877.00 L879.00,877.00 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4267,7 +4267,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Cursor_Left">
+                <Group id="Button_Pressed_Cursor_Left">
                     <children>
                         <SVGPath content="M878.00,926.00 L845.06,926.00 C840.42,926.00 837.00,921.84 837.00,917.20 L837.00,885.01 C837.00,880.37 840.42,877.00 845.06,877.00 L878.00,877.00 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4319,7 +4319,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_draw">
+                <Group id="Button_Pressed_draw">
                     <children>
                         <SVGPath content="M1894.50,1045.10 C1894.50,1049.74 1890.74,1053.50 1886.10,1053.50 L1808.90,1053.50 L1808.90,939.50 L1886.10,939.50 C1890.74,939.50 1894.50,943.26 1894.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4359,7 +4359,7 @@
                         </Text>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Bracket_open">
+                <Group id="Button_Pressed_Bracket_open">
                     <children>
                         <SVGPath content="M753.37,1044.82 C753.37,1049.46 749.61,1053.22 744.97,1053.22 L712.97,1053.22 C708.33,1053.22 704.57,1049.46 704.57,1044.82 L704.57,1012.82 C704.57,1008.18 708.33,1004.42 712.97,1004.42 L744.97,1004.42 C749.61,1004.42 753.37,1008.18 753.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4396,7 +4396,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Bracket_close">
+                <Group id="Button_Pressed_Bracket_close">
                     <children>
                         <SVGPath content="M813.43,1044.82 C813.43,1049.46 809.67,1053.22 805.03,1053.22 L773.03,1053.22 C768.39,1053.22 764.63,1049.46 764.63,1044.82 L764.63,1012.82 C764.63,1008.18 768.39,1004.42 773.03,1004.42 L805.03,1004.42 C809.67,1004.42 813.43,1008.18 813.43,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4433,7 +4433,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_d">
+                <Group id="Button_Pressed_d">
                     <children>
                         <SVGPath content="M812.37,979.82 C812.37,984.46 808.61,988.22 803.97,988.22 L771.97,988.22 C767.33,988.22 763.57,984.46 763.57,979.82 L763.57,947.82 C763.57,943.18 767.33,939.42 771.97,939.42 L803.97,939.42 C808.61,939.42 812.37,943.18 812.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4470,7 +4470,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_c">
+                <Group id="Button_Pressed_c">
                     <children>
                         <SVGPath content="M752.37,979.82 C752.37,984.46 748.61,988.22 743.97,988.22 L711.97,988.22 C707.33,988.22 703.57,984.46 703.57,979.82 L703.57,947.82 C703.57,943.18 707.33,939.42 711.97,939.42 L743.97,939.42 C748.61,939.42 752.37,943.18 752.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4507,7 +4507,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_b">
+                <Group id="Button_Pressed_b">
                     <children>
                         <SVGPath content="M692.37,979.82 C692.37,984.46 688.61,988.22 683.97,988.22 L651.97,988.22 C647.33,988.22 643.57,984.46 643.57,979.82 L643.57,947.82 C643.57,943.18 647.33,939.42 651.97,939.42 L683.97,939.42 C688.61,939.42 692.37,943.18 692.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4544,7 +4544,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_a">
+                <Group id="Button_Pressed_a">
                     <children>
                         <SVGPath content="M633.52,979.90 C633.52,984.54 629.76,988.30 625.12,988.30 L593.12,988.30 C588.48,988.30 584.72,984.54 584.72,979.90 L584.72,947.90 C584.72,943.26 588.48,939.50 593.12,939.50 L625.12,939.50 C629.76,939.50 633.52,943.26 633.52,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4581,7 +4581,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_z">
+                <Group id="Button_Pressed_z">
                     <children>
                         <SVGPath content="M195.52,979.90 C195.52,984.54 191.76,988.30 187.12,988.30 L155.12,988.30 C150.48,988.30 146.72,984.54 146.72,979.90 L146.72,947.90 C146.72,943.26 150.48,939.50 155.12,939.50 L187.12,939.50 C191.76,939.50 195.52,943.26 195.52,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4618,7 +4618,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_y">
+                <Group id="Button_Pressed_y">
                     <children>
                         <SVGPath content="M135.48,979.90 C135.48,984.54 131.72,988.30 127.08,988.30 L95.08,988.30 C90.44,988.30 86.68,984.54 86.68,979.90 L86.68,947.90 C86.68,943.26 90.44,939.50 95.08,939.50 L127.08,939.50 C131.72,939.50 135.48,943.26 135.48,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4655,7 +4655,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_x">
+                <Group id="Button_Pressed_x">
                     <children>
                         <SVGPath content="M76.30,979.90 C76.30,984.54 72.54,988.30 67.90,988.30 L35.90,988.30 C31.26,988.30 27.50,984.54 27.50,979.90 L27.50,947.90 C27.50,943.26 31.26,939.50 35.90,939.50 L67.90,939.50 C72.54,939.50 76.30,943.26 76.30,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4692,7 +4692,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Exp_n">
+                <Group id="Button_Pressed_Exp_n">
                     <children>
                         <SVGPath content="M561.37,979.82 C561.37,984.46 557.61,988.22 552.97,988.22 L520.97,988.22 C516.33,988.22 512.57,984.46 512.57,979.82 L512.57,947.82 C512.57,943.18 516.33,939.42 520.97,939.42 L552.97,939.42 C557.61,939.42 561.37,943.18 561.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4729,7 +4729,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Exp_3">
+                <Group id="Button_Pressed_Exp_3">
                     <children>
                         <SVGPath content="M501.37,979.82 C501.37,984.46 497.61,988.22 492.97,988.22 L460.97,988.22 C456.33,988.22 452.57,984.46 452.57,979.82 L452.57,947.82 C452.57,943.18 456.33,939.42 460.97,939.42 L492.97,939.42 C497.61,939.42 501.37,943.18 501.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4766,7 +4766,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Exp_2">
+                <Group id="Button_Pressed_Exp_2">
                     <children>
                         <SVGPath content="M441.37,979.82 C441.37,984.46 437.61,988.22 432.97,988.22 L400.97,988.22 C396.33,988.22 392.57,984.46 392.57,979.82 L392.57,947.82 C392.57,943.18 396.33,939.42 400.97,939.42 L432.97,939.42 C437.61,939.42 441.37,943.18 441.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4803,7 +4803,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Times">
+                <Group id="Button_Pressed_Times">
                     <children>
                         <SVGPath content="M384.37,979.82 C384.37,984.46 380.61,988.22 375.97,988.22 L343.97,988.22 C339.33,988.22 335.57,984.46 335.57,979.82 L335.57,947.82 C335.57,943.18 339.33,939.42 343.97,939.42 L375.97,939.42 C380.61,939.42 384.37,943.18 384.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4840,7 +4840,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Minus">
+                <Group id="Button_Pressed_Minus">
                     <children>
                         <SVGPath content="M324.37,979.82 C324.37,984.46 320.61,988.22 315.97,988.22 L283.97,988.22 C279.33,988.22 275.57,984.46 275.57,979.82 L275.57,947.82 C275.57,943.18 279.33,939.42 283.97,939.42 L315.97,939.42 C320.61,939.42 324.37,943.18 324.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4877,7 +4877,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Plus">
+                <Group id="Button_Pressed_Plus">
                     <children>
                         <SVGPath content="M265.37,979.82 C265.37,984.46 261.61,988.22 256.97,988.22 L224.97,988.22 C220.33,988.22 216.57,984.46 216.57,979.82 L216.57,947.82 C216.57,943.18 220.33,939.42 224.97,939.42 L256.97,939.42 C261.61,939.42 265.37,943.18 265.37,947.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4914,7 +4914,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_9">
+                <Group id="Button_Pressed_9">
                     <children>
                         <SVGPath content="M552.37,1044.82 C552.37,1049.46 548.61,1053.22 543.97,1053.22 L511.97,1053.22 C507.33,1053.22 503.57,1049.46 503.57,1044.82 L503.57,1012.82 C503.57,1008.18 507.33,1004.42 511.97,1004.42 L543.97,1004.42 C548.61,1004.42 552.37,1008.18 552.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4951,7 +4951,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_8">
+                <Group id="Button_Pressed_8">
                     <children>
                         <SVGPath content="M492.37,1044.82 C492.37,1049.46 488.61,1053.22 483.97,1053.22 L451.97,1053.22 C447.33,1053.22 443.57,1049.46 443.57,1044.82 L443.57,1012.82 C443.57,1008.18 447.33,1004.42 451.97,1004.42 L483.97,1004.42 C488.61,1004.42 492.37,1008.18 492.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -4988,7 +4988,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_7">
+                <Group id="Button_Pressed_7">
                     <children>
                         <SVGPath content="M433.30,1044.82 C433.30,1049.46 429.54,1053.22 424.90,1053.22 L392.90,1053.22 C388.26,1053.22 384.50,1049.46 384.50,1044.82 L384.50,1012.82 C384.50,1008.18 388.26,1004.42 392.90,1004.42 L424.90,1004.42 C429.54,1004.42 433.30,1008.18 433.30,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5025,7 +5025,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_6">
+                <Group id="Button_Pressed_6">
                     <children>
                         <SVGPath content="M373.37,1044.82 C373.37,1049.46 369.61,1053.22 364.97,1053.22 L332.97,1053.22 C328.33,1053.22 324.57,1049.46 324.57,1044.82 L324.57,1012.82 C324.57,1008.18 328.33,1004.42 332.97,1004.42 L364.97,1004.42 C369.61,1004.42 373.37,1008.18 373.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5062,7 +5062,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_5">
+                <Group id="Button_Pressed_5">
                     <children>
                         <SVGPath content="M314.37,1044.82 C314.37,1049.46 310.61,1053.22 305.97,1053.22 L273.97,1053.22 C269.33,1053.22 265.57,1049.46 265.57,1044.82 L265.57,1012.82 C265.57,1008.18 269.33,1004.42 273.97,1004.42 L305.97,1004.42 C310.61,1004.42 314.37,1008.18 314.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5099,7 +5099,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_4">
+                <Group id="Button_Pressed_4">
                     <children>
                         <SVGPath content="M254.37,1044.82 C254.37,1049.46 250.61,1053.22 245.97,1053.22 L213.97,1053.22 C209.33,1053.22 205.57,1049.46 205.57,1044.82 L205.57,1012.82 C205.57,1008.18 209.33,1004.42 213.97,1004.42 L245.97,1004.42 C250.61,1004.42 254.37,1008.18 254.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5136,7 +5136,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_3">
+                <Group id="Button_Pressed_3">
                     <children>
                         <SVGPath content="M195.37,1044.82 C195.37,1049.46 191.61,1053.22 186.97,1053.22 L154.97,1053.22 C150.33,1053.22 146.57,1049.46 146.57,1044.82 L146.57,1012.82 C146.57,1008.18 150.33,1004.42 154.97,1004.42 L186.97,1004.42 C191.61,1004.42 195.37,1008.18 195.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5173,7 +5173,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_2">
+                <Group id="Button_Pressed_2">
                     <children>
                         <SVGPath content="M135.37,1044.82 C135.37,1049.46 131.61,1053.22 126.97,1053.22 L94.97,1053.22 C90.33,1053.22 86.57,1049.46 86.57,1044.82 L86.57,1012.82 C86.57,1008.18 90.33,1004.42 94.97,1004.42 L126.97,1004.42 C131.61,1004.42 135.37,1008.18 135.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5210,7 +5210,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_1">
+                <Group id="Button_Pressed_1">
                     <children>
                         <SVGPath content="M76.37,1044.82 C76.37,1049.46 72.61,1053.22 67.97,1053.22 L35.97,1053.22 C31.33,1053.22 27.57,1049.46 27.57,1044.82 L27.57,1012.82 C27.57,1008.18 31.33,1004.42 35.97,1004.42 L67.97,1004.42 C72.61,1004.42 76.37,1008.18 76.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5247,7 +5247,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_0">
+                <Group id="Button_Pressed_0">
                     <children>
                         <SVGPath content="M611.37,1044.82 C611.37,1049.46 607.61,1053.22 602.97,1053.22 L570.97,1053.22 C566.33,1053.22 562.57,1049.46 562.57,1044.82 L562.57,1012.82 C562.57,1008.18 566.33,1004.42 570.97,1004.42 L602.97,1004.42 C607.61,1004.42 611.37,1008.18 611.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5284,7 +5284,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Comma">
+                <Group id="Button_Pressed_Comma">
                     <children>
                         <SVGPath content="M681.37,1044.82 C681.37,1049.46 677.61,1053.22 672.97,1053.22 L640.97,1053.22 C636.33,1053.22 632.57,1049.46 632.57,1044.82 L632.57,1012.82 C632.57,1008.18 636.33,1004.42 640.97,1004.42 L672.97,1004.42 C677.61,1004.42 681.37,1008.18 681.37,1012.82 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -5321,7 +5321,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Delete">
+                <Group id="Button_Pressed_Delete">
                     <children>
                         <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
                             <fill>
@@ -5340,12 +5340,12 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_MFO_Surfer_Info" opacity="0.4">
+                <Group id="Button_Pressed_MFO_Surfer_Info" opacity="0.4">
                     <children>
                         <Rectangle fill="${null}" height="47.0" width="231.0" x="34.0" y="16.0"/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Imprint">
+                <Group id="Button_Pressed_Imprint">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -5391,7 +5391,7 @@
                         <SVGPath content="M1776.33,891.85 C1783.01,891.85 1787.08,896.52 1787.08,902.63 C1787.08,908.81 1782.37,914.15 1776.30,914.15 C1770.19,914.15 1765.38,908.81 1765.38,902.63 C1765.38,896.52 1769.66,891.85 1776.33,891.85 Z M1776.26,893.94 C1771.02,893.94 1767.57,897.28 1767.57,902.74 C1767.57,908.09 1771.13,912.02 1776.30,912.06 C1781.36,912.09 1784.99,908.09 1784.99,902.63 C1784.99,897.28 1781.50,893.94 1776.26,893.94 Z M1780.68,898.82 C1780.21,898.57 1778.89,898.12 1777.20,898.12 C1773.82,898.12 1772.45,899.86 1772.45,902.74 C1772.45,905.54 1773.93,907.18 1777.23,907.18 C1778.67,907.18 1780.03,906.33 1780.86,905.79 L1781.29,908.23 C1780.03,909.06 1778.38,909.35 1776.87,909.35 C1772.71,909.35 1770.30,906.47 1770.30,902.85 C1770.30,898.75 1773.53,896.16 1777.16,896.16 C1779.03,896.16 1780.64,896.70 1781.11,897.13 Z "/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Print">
+                <Group id="Button_Pressed_Print">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -5480,7 +5480,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Preferences">
+                <Group id="Button_Pressed_Preferences">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -5775,7 +5775,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Export">
+                <Group id="Button_Pressed_Export">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -5822,7 +5822,7 @@
                         <SVGPath content="M1656.91,887.40 L1658.11,893.48 C1644.62,896.30 1645.27,905.55 1645.92,908.73 C1646.13,908.75 1646.35,908.79 1646.57,908.84 Q1649.98,900.83 1659.64,901.23 L1660.78,907.04 L1670.64,895.33 Z "/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Save_File">
+                <Group id="Button_Pressed_Save_File">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -5954,7 +5954,7 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Open_File">
+                <Group id="Button_Pressed_Open_File">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -6015,7 +6015,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Language">
+                <Group id="Button_Pressed_Language">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -6060,7 +6060,7 @@
                         </Group>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Wrong">
+                <Group id="Button_Pressed_Wrong">
                     <children>
                         <SVGPath content="M1894.50,1045.10 C1894.50,1049.74 1890.74,1053.50 1886.10,1053.50 L1808.90,1053.50 L1808.90,939.50 L1886.10,939.50 C1890.74,939.50 1894.50,943.26 1894.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6109,7 +6109,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Delete">
+                <Group id="Button_Pressed_Delete">
                     <children>
                         <SVGPath content="M979.48,917.90 C979.48,922.54 975.72,926.30 971.08,926.30 L939.08,926.30 C934.44,926.30 930.68,922.54 930.68,917.90 L930.68,885.90 C930.68,881.26 934.44,877.50 939.08,877.50 L971.08,877.50 C975.72,877.50 979.48,881.26 979.48,885.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6168,7 +6168,7 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_MFO_Surfer_Info" opacity="0.8">
+                <Group id="Button_Pressed_MFO_Surfer_Info" opacity="0.8">
                     <children>
                         <Text text="SURFER" x="81.85" y="54.4">
                             <font>
@@ -6178,7 +6178,7 @@
                         <Rectangle fill="${null}" height="47.0" width="231.0" x="34.0" y="16.0"/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Complete_Delete">
+                <Group id="Button_Pressed_Complete_Delete">
                     <children>
                         <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
                             <fill>
@@ -6199,9 +6199,9 @@
                 </Group>
             </children>
         </Group>
-        <Group fx:id="Buttons_normal_state">
+        <Group id="Buttons_normal_state">
             <children>
-                <Group fx:id="Button_Language">
+                <Group id="Button_Language">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -6242,7 +6242,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_MFO_Surfer_Info" opacity="0.4">
+                <Group id="Button_MFO_Surfer_Info" opacity="0.4">
                     <children>
                         <Text text="SURFER" x="81.85" y="54.4">
                             <font>
@@ -6252,7 +6252,7 @@
                         <Rectangle fill="${null}" height="47.0" width="231.0" x="34.0" y="16.0"/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Delete">
+                <Group id="Button_Delete">
                     <children>
                         <SVGPath content="M979.50,917.60 C979.50,922.24 975.74,926.00 971.10,926.00 L938.90,926.00 C934.26,926.00 930.50,922.24 930.50,917.60 L930.50,885.40 C930.50,880.76 934.26,877.00 938.90,877.00 L971.10,877.00 C975.74,877.00 979.50,880.76 979.50,885.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6311,7 +6311,7 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Preferences">
+                <Group id="Button_Preferences">
                     <children>
                         <SVGPath content="M1493.50,917.60 C1493.50,922.24 1489.74,926.00 1485.10,926.00 L1452.90,926.00 C1448.26,926.00 1444.50,922.24 1444.50,917.60 L1444.50,885.40 C1444.50,880.76 1448.26,877.00 1452.90,877.00 L1485.10,877.00 C1489.74,877.00 1493.50,880.76 1493.50,885.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6593,7 +6593,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Export">
+                <Group id="Button_Export">
                     <children>
                         <SVGPath content="M1677.50,917.60 C1677.50,922.24 1673.74,926.00 1669.10,926.00 L1636.90,926.00 C1632.26,926.00 1628.50,922.24 1628.50,917.60 L1628.50,885.40 C1628.50,880.76 1632.26,877.00 1636.90,877.00 L1669.10,877.00 C1673.74,877.00 1677.50,880.76 1677.50,885.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6627,7 +6627,7 @@
                         <SVGPath content="M1656.14,886.80 L1657.34,892.89 C1643.84,895.70 1644.49,904.95 1645.14,908.13 C1645.36,908.15 1645.57,908.19 1645.79,908.24 Q1649.20,900.23 1658.86,900.63 L1660.00,906.44 L1669.86,894.73 Z "/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Open_File">
+                <Group id="Button_Open_File">
                     <children>
                         <SVGPath content="M1554.50,917.60 C1554.50,922.24 1550.74,926.00 1546.10,926.00 L1513.90,926.00 C1509.26,926.00 1505.50,922.24 1505.50,917.60 L1505.50,885.40 C1505.50,880.76 1509.26,877.00 1513.90,877.00 L1546.10,877.00 C1550.74,877.00 1554.50,880.76 1554.50,885.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6675,7 +6675,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Save_File">
+                <Group id="Button_Save_File">
                     <children>
                         <SVGPath content="M1615.50,917.60 C1615.50,922.24 1611.74,926.00 1607.10,926.00 L1574.90,926.00 C1570.26,926.00 1566.50,922.24 1566.50,917.60 L1566.50,885.40 C1566.50,880.76 1570.26,877.00 1574.90,877.00 L1607.10,877.00 C1611.74,877.00 1615.50,880.76 1615.50,885.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6766,21 +6766,21 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Axis" visible="false">
+                <Group id="Button_Axis" visible="false">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Normal_State">
+                                <Group id="Button_Normal_State">
                                     <children>
-                                        <Group fx:id="Slice_9"/>
-                                        <Group fx:id="Slice_8"/>
-                                        <Group fx:id="Slice_7"/>
-                                        <Group fx:id="Slice_6"/>
-                                        <Group fx:id="Slice_5"/>
-                                        <Group fx:id="Slice_4"/>
-                                        <Group fx:id="Slice_3"/>
-                                        <Group fx:id="Slice_2"/>
-                                        <Group fx:id="Slice_1"/>
+                                        <Group id="Slice_9"/>
+                                        <Group id="Slice_8"/>
+                                        <Group id="Slice_7"/>
+                                        <Group id="Slice_6"/>
+                                        <Group id="Slice_5"/>
+                                        <Group id="Slice_4"/>
+                                        <Group id="Slice_3"/>
+                                        <Group id="Slice_2"/>
+                                        <Group id="Slice_1"/>
                                     </children>
                                 </Group>
                             </children>
@@ -6790,16 +6790,16 @@
                         </Group>
                         <Group>
                             <children>
-                                <Group fx:id="Pfeil">
+                                <Group id="Pfeil">
                                     <children>
-                                        <Group fx:id="Slice_9"/>
-                                        <Group fx:id="Slice_8"/>
-                                        <Group fx:id="Slice_7"/>
-                                        <Group fx:id="Slice_6"/>
-                                        <Group fx:id="Slice_5"/>
-                                        <Group fx:id="Slice_4"/>
-                                        <Group fx:id="Slice_3"/>
-                                        <Group fx:id="Slice_2">
+                                        <Group id="Slice_9"/>
+                                        <Group id="Slice_8"/>
+                                        <Group id="Slice_7"/>
+                                        <Group id="Slice_6"/>
+                                        <Group id="Slice_5"/>
+                                        <Group id="Slice_4"/>
+                                        <Group id="Slice_3"/>
+                                        <Group id="Slice_2">
                                             <children>
                                                 <Polygon>
                                                     <points>
@@ -6816,7 +6816,7 @@
                                                 </Polygon>
                                             </children>
                                         </Group>
-                                        <Group fx:id="Slice_1"/>
+                                        <Group id="Slice_1"/>
                                     </children>
                                 </Group>
                             </children>
@@ -6826,16 +6826,16 @@
                         </Group>
                         <Group>
                             <children>
-                                <Group fx:id="Pfeil">
+                                <Group id="Pfeil">
                                     <children>
-                                        <Group fx:id="Slice_9"/>
-                                        <Group fx:id="Slice_8"/>
-                                        <Group fx:id="Slice_7"/>
-                                        <Group fx:id="Slice_6"/>
-                                        <Group fx:id="Slice_5"/>
-                                        <Group fx:id="Slice_4"/>
-                                        <Group fx:id="Slice_3"/>
-                                        <Group fx:id="Slice_2">
+                                        <Group id="Slice_9"/>
+                                        <Group id="Slice_8"/>
+                                        <Group id="Slice_7"/>
+                                        <Group id="Slice_6"/>
+                                        <Group id="Slice_5"/>
+                                        <Group id="Slice_4"/>
+                                        <Group id="Slice_3"/>
+                                        <Group id="Slice_2">
                                             <children>
                                                 <Polygon>
                                                     <points>
@@ -6852,7 +6852,7 @@
                                                 </Polygon>
                                             </children>
                                         </Group>
-                                        <Group fx:id="Slice_1"/>
+                                        <Group id="Slice_1"/>
                                     </children>
                                 </Group>
                             </children>
@@ -6862,16 +6862,16 @@
                         </Group>
                         <Group>
                             <children>
-                                <Group fx:id="Pfeil">
+                                <Group id="Pfeil">
                                     <children>
-                                        <Group fx:id="Slice_9"/>
-                                        <Group fx:id="Slice_8"/>
-                                        <Group fx:id="Slice_7"/>
-                                        <Group fx:id="Slice_6"/>
-                                        <Group fx:id="Slice_5"/>
-                                        <Group fx:id="Slice_4"/>
-                                        <Group fx:id="Slice_3"/>
-                                        <Group fx:id="Slice_2">
+                                        <Group id="Slice_9"/>
+                                        <Group id="Slice_8"/>
+                                        <Group id="Slice_7"/>
+                                        <Group id="Slice_6"/>
+                                        <Group id="Slice_5"/>
+                                        <Group id="Slice_4"/>
+                                        <Group id="Slice_3"/>
+                                        <Group id="Slice_2">
                                             <children>
                                                 <Polygon>
                                                     <points>
@@ -6888,7 +6888,7 @@
                                                 </Polygon>
                                             </children>
                                         </Group>
-                                        <Group fx:id="Slice_1"/>
+                                        <Group id="Slice_1"/>
                                     </children>
                                 </Group>
                             </children>
@@ -6898,7 +6898,7 @@
                         </Group>
                     </children>
                 </Group>
-                <Group fx:id="Button_Cursor_Right">
+                <Group id="Button_Cursor_Right">
                     <children>
                         <SVGPath content="M879.00,926.00 L911.26,926.00 C915.90,926.00 920.00,921.84 920.00,917.20 L920.00,885.01 C920.00,880.37 915.90,877.00 911.26,877.00 L879.00,877.00 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6943,7 +6943,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Cursor_Left">
+                <Group id="Button_Cursor_Left">
                     <children>
                         <SVGPath content="M878.00,926.00 L845.06,926.00 C840.42,926.00 837.00,921.84 837.00,917.20 L837.00,885.01 C837.00,880.37 840.42,877.00 845.06,877.00 L878.00,877.00 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -6988,7 +6988,7 @@
                         </Polygon>
                     </children>
                 </Group>
-                <Group fx:id="Button_Correct">
+                <Group id="Button_Correct">
                     <children>
                         <SVGPath content="M1894.50,1045.10 C1894.50,1049.74 1890.74,1053.50 1886.10,1053.50 L1808.90,1053.50 L1808.90,939.50 L1886.10,939.50 C1890.74,939.50 1894.50,943.26 1894.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7029,7 +7029,7 @@
                         </Group>
                     </children>
                 </Group>
-                <Group fx:id="Button_Wrong" visible="false">
+                <Group id="Button_Wrong" visible="false">
                     <children>
                         <SVGPath content="M1894.50,1045.10 C1894.50,1049.74 1890.74,1053.50 1886.10,1053.50 L1808.90,1053.50 L1808.90,939.50 L1886.10,939.50 C1890.74,939.50 1894.50,943.26 1894.50,947.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7061,7 +7061,7 @@
                         </SVGPath>
                         <Group>
                             <children>
-                                <Group fx:id="Ausrufezeichen">
+                                <Group id="Ausrufezeichen">
                                     <children>
                                         <SVGPath content="M1.80,12.53 L-1.56,12.53 C-3.56,-7.65 -5.17,-18.81 -3.17,-27.11 C-1.74,-27.65 1.24,-27.86 2.86,-27.18 C5.27,-18.81 3.67,-8.58 1.80,12.53 Z ">
                                             <fill>
@@ -7082,7 +7082,7 @@
                         </Group>
                     </children>
                 </Group>
-                <Group fx:id="Button_Imprint">
+                <Group id="Button_Imprint">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -7124,7 +7124,7 @@
                         <SVGPath content="M1776.33,891.85 C1783.01,891.85 1787.08,896.52 1787.08,902.63 C1787.08,908.81 1782.37,914.15 1776.30,914.15 C1770.19,914.15 1765.38,908.81 1765.38,902.63 C1765.38,896.52 1769.66,891.85 1776.33,891.85 Z M1776.26,893.94 C1771.02,893.94 1767.57,897.28 1767.57,902.74 C1767.57,908.09 1771.13,912.02 1776.30,912.06 C1781.36,912.09 1784.99,908.09 1784.99,902.63 C1784.99,897.28 1781.50,893.94 1776.26,893.94 Z M1780.68,898.82 C1780.21,898.57 1778.89,898.12 1777.20,898.12 C1773.82,898.12 1772.45,899.86 1772.45,902.74 C1772.45,905.54 1773.93,907.18 1777.23,907.18 C1778.67,907.18 1780.03,906.33 1780.86,905.79 L1781.29,908.23 C1780.03,909.06 1778.38,909.35 1776.87,909.35 C1772.71,909.35 1770.30,906.47 1770.30,902.85 C1770.30,898.75 1773.53,896.16 1777.16,896.16 C1779.03,896.16 1780.64,896.70 1781.11,897.13 Z "/>
                     </children>
                 </Group>
-                <Group fx:id="Button_Print">
+                <Group id="Button_Print">
                     <children>
                         <Group blendMode="MULTIPLY">
                             <children>
@@ -7209,7 +7209,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Bracket_open">
+                <Group id="Button_Bracket_open">
                     <children>
                         <SVGPath content="M753.50,1044.60 C753.50,1049.24 749.74,1053.00 745.10,1053.00 L712.90,1053.00 C708.26,1053.00 704.50,1049.24 704.50,1044.60 L704.50,1012.40 C704.50,1007.76 708.26,1004.00 712.90,1004.00 L745.10,1004.00 C749.74,1004.00 753.50,1007.76 753.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7246,7 +7246,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Bracket_close">
+                <Group id="Button_Bracket_close">
                     <children>
                         <SVGPath content="M813.50,1044.60 C813.50,1049.24 809.74,1053.00 805.10,1053.00 L772.90,1053.00 C768.26,1053.00 764.50,1049.24 764.50,1044.60 L764.50,1012.40 C764.50,1007.76 768.26,1004.00 772.90,1004.00 L805.10,1004.00 C809.74,1004.00 813.50,1007.76 813.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7283,7 +7283,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_d">
+                <Group id="Button_d">
                     <children>
                         <SVGPath content="M812.50,979.60 C812.50,984.24 808.74,988.00 804.10,988.00 L771.90,988.00 C767.26,988.00 763.50,984.24 763.50,979.60 L763.50,947.40 C763.50,942.76 767.26,939.00 771.90,939.00 L804.10,939.00 C808.74,939.00 812.50,942.76 812.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7320,7 +7320,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_c">
+                <Group id="Button_c">
                     <children>
                         <SVGPath content="M752.50,979.60 C752.50,984.24 748.74,988.00 744.10,988.00 L711.90,988.00 C707.26,988.00 703.50,984.24 703.50,979.60 L703.50,947.40 C703.50,942.76 707.26,939.00 711.90,939.00 L744.10,939.00 C748.74,939.00 752.50,942.76 752.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7357,7 +7357,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_b">
+                <Group id="Button_b">
                     <children>
                         <SVGPath content="M692.50,979.60 C692.50,984.24 688.74,988.00 684.10,988.00 L651.90,988.00 C647.26,988.00 643.50,984.24 643.50,979.60 L643.50,947.40 C643.50,942.76 647.26,939.00 651.90,939.00 L684.10,939.00 C688.74,939.00 692.50,942.76 692.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7394,7 +7394,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_a">
+                <Group id="Button_a">
                     <children>
                         <SVGPath content="M633.50,979.60 C633.50,984.24 629.74,988.00 625.10,988.00 L592.90,988.00 C588.26,988.00 584.50,984.24 584.50,979.60 L584.50,947.40 C584.50,942.76 588.26,939.00 592.90,939.00 L625.10,939.00 C629.74,939.00 633.50,942.76 633.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7431,7 +7431,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_z">
+                <Group id="Button_z">
                     <children>
                         <SVGPath content="M195.50,979.60 C195.50,984.24 191.74,988.00 187.10,988.00 L154.90,988.00 C150.26,988.00 146.50,984.24 146.50,979.60 L146.50,947.40 C146.50,942.76 150.26,939.00 154.90,939.00 L187.10,939.00 C191.74,939.00 195.50,942.76 195.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7468,7 +7468,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_y">
+                <Group id="Button_y">
                     <children>
                         <SVGPath content="M135.50,979.60 C135.50,984.24 131.74,988.00 127.10,988.00 L94.90,988.00 C90.26,988.00 86.50,984.24 86.50,979.60 L86.50,947.40 C86.50,942.76 90.26,939.00 94.90,939.00 L127.10,939.00 C131.74,939.00 135.50,942.76 135.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7505,7 +7505,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_x">
+                <Group id="Button_x">
                     <children>
                         <SVGPath content="M76.50,979.60 C76.50,984.24 72.74,988.00 68.10,988.00 L35.90,988.00 C31.26,988.00 27.50,984.24 27.50,979.60 L27.50,947.40 C27.50,942.76 31.26,939.00 35.90,939.00 L68.10,939.00 C72.74,939.00 76.50,942.76 76.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7542,7 +7542,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Exp_n">
+                <Group id="Button_Exp_n">
                     <children>
                         <SVGPath content="M561.50,979.60 C561.50,984.24 557.74,988.00 553.10,988.00 L520.90,988.00 C516.26,988.00 512.50,984.24 512.50,979.60 L512.50,947.40 C512.50,942.76 516.26,939.00 520.90,939.00 L553.10,939.00 C557.74,939.00 561.50,942.76 561.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7579,7 +7579,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Exp_3">
+                <Group id="Button_Exp_3">
                     <children>
                         <SVGPath content="M501.50,979.60 C501.50,984.24 497.74,988.00 493.10,988.00 L460.90,988.00 C456.26,988.00 452.50,984.24 452.50,979.60 L452.50,947.40 C452.50,942.76 456.26,939.00 460.90,939.00 L493.10,939.00 C497.74,939.00 501.50,942.76 501.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7616,7 +7616,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Exp_2">
+                <Group id="Button_Exp_2">
                     <children>
                         <SVGPath content="M441.50,979.60 C441.50,984.24 437.74,988.00 433.10,988.00 L400.90,988.00 C396.26,988.00 392.50,984.24 392.50,979.60 L392.50,947.40 C392.50,942.76 396.26,939.00 400.90,939.00 L433.10,939.00 C437.74,939.00 441.50,942.76 441.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7653,7 +7653,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Times">
+                <Group id="Button_Times">
                     <children>
                         <SVGPath content="M384.50,979.60 C384.50,984.24 380.74,988.00 376.10,988.00 L343.90,988.00 C339.26,988.00 335.50,984.24 335.50,979.60 L335.50,947.40 C335.50,942.76 339.26,939.00 343.90,939.00 L376.10,939.00 C380.74,939.00 384.50,942.76 384.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7690,7 +7690,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Minus">
+                <Group id="Button_Minus">
                     <children>
                         <SVGPath content="M324.50,979.60 C324.50,984.24 320.74,988.00 316.10,988.00 L283.90,988.00 C279.26,988.00 275.50,984.24 275.50,979.60 L275.50,947.40 C275.50,942.76 279.26,939.00 283.90,939.00 L316.10,939.00 C320.74,939.00 324.50,942.76 324.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7727,7 +7727,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Plus">
+                <Group id="Button_Plus">
                     <children>
                         <SVGPath content="M265.50,979.60 C265.50,984.24 261.74,988.00 257.10,988.00 L224.90,988.00 C220.26,988.00 216.50,984.24 216.50,979.60 L216.50,947.40 C216.50,942.76 220.26,939.00 224.90,939.00 L257.10,939.00 C261.74,939.00 265.50,942.76 265.50,947.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7764,7 +7764,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_9">
+                <Group id="Button_9">
                     <children>
                         <SVGPath content="M552.50,1044.60 C552.50,1049.24 548.74,1053.00 544.10,1053.00 L511.90,1053.00 C507.26,1053.00 503.50,1049.24 503.50,1044.60 L503.50,1012.40 C503.50,1007.76 507.26,1004.00 511.90,1004.00 L544.10,1004.00 C548.74,1004.00 552.50,1007.76 552.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7801,7 +7801,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_8">
+                <Group id="Button_8">
                     <children>
                         <SVGPath content="M492.50,1044.60 C492.50,1049.24 488.74,1053.00 484.10,1053.00 L451.90,1053.00 C447.26,1053.00 443.50,1049.24 443.50,1044.60 L443.50,1012.40 C443.50,1007.76 447.26,1004.00 451.90,1004.00 L484.10,1004.00 C488.74,1004.00 492.50,1007.76 492.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7838,7 +7838,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_7">
+                <Group id="Button_7">
                     <children>
                         <SVGPath content="M433.50,1044.60 C433.50,1049.24 429.74,1053.00 425.10,1053.00 L392.90,1053.00 C388.26,1053.00 384.50,1049.24 384.50,1044.60 L384.50,1012.40 C384.50,1007.76 388.26,1004.00 392.90,1004.00 L425.10,1004.00 C429.74,1004.00 433.50,1007.76 433.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7875,7 +7875,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_6">
+                <Group id="Button_6">
                     <children>
                         <SVGPath content="M373.50,1044.60 C373.50,1049.24 369.74,1053.00 365.10,1053.00 L332.90,1053.00 C328.26,1053.00 324.50,1049.24 324.50,1044.60 L324.50,1012.40 C324.50,1007.76 328.26,1004.00 332.90,1004.00 L365.10,1004.00 C369.74,1004.00 373.50,1007.76 373.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7912,7 +7912,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_5">
+                <Group id="Button_5">
                     <children>
                         <SVGPath content="M314.50,1044.60 C314.50,1049.24 310.74,1053.00 306.10,1053.00 L273.90,1053.00 C269.26,1053.00 265.50,1049.24 265.50,1044.60 L265.50,1012.40 C265.50,1007.76 269.26,1004.00 273.90,1004.00 L306.10,1004.00 C310.74,1004.00 314.50,1007.76 314.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7949,7 +7949,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_4">
+                <Group id="Button_4">
                     <children>
                         <SVGPath content="M254.50,1044.60 C254.50,1049.24 250.74,1053.00 246.10,1053.00 L213.90,1053.00 C209.26,1053.00 205.50,1049.24 205.50,1044.60 L205.50,1012.40 C205.50,1007.76 209.26,1004.00 213.90,1004.00 L246.10,1004.00 C250.74,1004.00 254.50,1007.76 254.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -7986,7 +7986,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_3">
+                <Group id="Button_3">
                     <children>
                         <SVGPath content="M195.50,1044.60 C195.50,1049.24 191.74,1053.00 187.10,1053.00 L154.90,1053.00 C150.26,1053.00 146.50,1049.24 146.50,1044.60 L146.50,1012.40 C146.50,1007.76 150.26,1004.00 154.90,1004.00 L187.10,1004.00 C191.74,1004.00 195.50,1007.76 195.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -8023,7 +8023,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_2">
+                <Group id="Button_2">
                     <children>
                         <SVGPath content="M135.50,1044.60 C135.50,1049.24 131.74,1053.00 127.10,1053.00 L94.90,1053.00 C90.26,1053.00 86.50,1049.24 86.50,1044.60 L86.50,1012.40 C86.50,1007.76 90.26,1004.00 94.90,1004.00 L127.10,1004.00 C131.74,1004.00 135.50,1007.76 135.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -8060,7 +8060,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_1">
+                <Group id="Button_1">
                     <children>
                         <SVGPath content="M76.50,1044.60 C76.50,1049.24 72.74,1053.00 68.10,1053.00 L35.90,1053.00 C31.26,1053.00 27.50,1049.24 27.50,1044.60 L27.50,1012.40 C27.50,1007.76 31.26,1004.00 35.90,1004.00 L68.10,1004.00 C72.74,1004.00 76.50,1007.76 76.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -8097,7 +8097,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_0">
+                <Group id="Button_0">
                     <children>
                         <SVGPath content="M611.50,1044.60 C611.50,1049.24 607.74,1053.00 603.10,1053.00 L570.90,1053.00 C566.26,1053.00 562.50,1049.24 562.50,1044.60 L562.50,1012.40 C562.50,1007.76 566.26,1004.00 570.90,1004.00 L603.10,1004.00 C607.74,1004.00 611.50,1007.76 611.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -8134,7 +8134,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Comma">
+                <Group id="Button_Comma">
                     <children>
                         <SVGPath content="M681.50,1044.60 C681.50,1049.24 677.74,1053.00 673.10,1053.00 L640.90,1053.00 C636.26,1053.00 632.50,1049.24 632.50,1044.60 L632.50,1012.40 C632.50,1007.76 636.26,1004.00 640.90,1004.00 L673.10,1004.00 C677.74,1004.00 681.50,1007.76 681.50,1012.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                             <fill>
@@ -8171,7 +8171,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group fx:id="Button_Complete_Delete">
+                <Group id="Button_Complete_Delete">
                     <children>
                         <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
                             <fill>
@@ -8197,13 +8197,13 @@
                 </Line>
             </children>
         </Group>
-        <Group fx:id="Layer_31">
+        <Group id="Layer_31">
             <children>
-                <Group fx:id="Button_Foldout_Lower">
+                <Group id="Button_Foldout_Lower">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -8260,11 +8260,11 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Foldout_Upper">
+                <Group id="Button_Foldout_Upper">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -8321,11 +8321,11 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Foldout_Middle">
+                <Group id="Button_Foldout_Middle">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -8387,11 +8387,11 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Foldout_Lower">
+                <Group id="Button_Over_Foldout_Lower">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -8435,11 +8435,11 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Foldout_Upper">
+                <Group id="Button_Over_Foldout_Upper">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -8483,11 +8483,11 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Over_Foldout_Middle">
+                <Group id="Button_Over_Foldout_Middle">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <Group blendMode="MULTIPLY">
                                             <children>
@@ -8536,11 +8536,11 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Foldout_Lower">
+                <Group id="Button_Pressed_Foldout_Lower">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
                                         <SVGPath content="M2570.00,857.80 C2570.00,862.44 2566.24,866.20 2561.60,866.20 L2413.00,866.20 C2408.36,866.20 2404.60,862.44 2404.60,857.80 L2404.60,808.40 C2404.60,803.76 2408.36,800.00 2413.00,800.00 L2561.60,800.00 C2566.24,800.00 2570.00,803.76 2570.00,808.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                                             <fill>
@@ -8588,13 +8588,13 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Foldout_Upper">
+                <Group id="Button_Pressed_Foldout_Upper">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
-                                        <Group fx:id="Button_Other_Language">
+                                        <Group id="Button_Other_Language">
                                             <children>
                                                 <SVGPath content="M2570.00,810.80 C2570.00,815.44 2566.24,819.20 2561.60,819.20 L2413.00,819.20 C2408.36,819.20 2404.60,815.44 2404.60,810.80 L2404.60,761.40 C2404.60,756.76 2408.36,753.00 2413.00,753.00 L2561.60,753.00 C2566.24,753.00 2570.00,756.76 2570.00,761.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                                                     <fill>
@@ -8644,13 +8644,13 @@
                         </Line>
                     </children>
                 </Group>
-                <Group fx:id="Button_Pressed_Foldout_Middle">
+                <Group id="Button_Pressed_Foldout_Middle">
                     <children>
                         <Group>
                             <children>
-                                <Group fx:id="Button_Other_Language">
+                                <Group id="Button_Other_Language">
                                     <children>
-                                        <Group fx:id="Button_Other_Language">
+                                        <Group id="Button_Other_Language">
                                             <children>
                                                 <SVGPath content="M2570.40,841.60 C2570.40,846.24 2566.64,850.00 2562.00,850.00 L2413.40,850.00 C2408.76,850.00 2405.00,846.24 2405.00,841.60 L2405.00,771.40 C2405.00,766.76 2408.76,763.00 2413.40,763.00 L2562.00,763.00 C2566.64,763.00 2570.40,766.76 2570.40,771.40 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
                                                     <fill>
@@ -8707,7 +8707,7 @@
                 </Group>
             </children>
         </Group>
-        <Group fx:id="Citrus">
+        <Group id="Citrus">
             <children>
                 <ImageView x="23.01" y="24.0">
                     <image>
@@ -8716,33 +8716,33 @@
                 </ImageView>
             </children>
         </Group>
-        <Group fx:id="Schatten_Trenner"/>
-        <Group fx:id="Gallery_Text" visible="false">
+        <Group id="Schatten_Trenner"/>
+        <Group id="Gallery_Text" visible="false">
             <children>
-                <Rectangle fx:id="Surfer" height="816.0" width="703.0" x="501.0" y="25.0">
+                <Rectangle id="Surfer" height="816.0" width="703.0" x="501.0" y="25.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Gallery_Select" visible="false">
+        <Group id="Gallery_Select" visible="false">
             <children>
-                <Rectangle fx:id="Surfer" height="816.0" width="677.0" x="1225.0" y="25.0">
+                <Rectangle id="Surfer" height="816.0" width="677.0" x="1225.0" y="25.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Tabs_Text_Boxes">
+        <Group id="Tabs_Text_Boxes">
             <children>
-                <Rectangle fx:id="Tab_Text_Color" height="19.0" width="127.0" x="331.0" y="825.0"/>
-                <Rectangle fx:id="Tab_Text_Info" height="19.0" width="128.0" x="184.0" y="825.0"/>
-                <Rectangle fx:id="Tab_Text_Gallery" height="19.0" width="127.0" x="37.0" y="825.0"/>
+                <Rectangle id="Tab_Text_Color" height="19.0" width="127.0" x="331.0" y="825.0"/>
+                <Rectangle id="Tab_Text_Info" height="19.0" width="128.0" x="184.0" y="825.0"/>
+                <Rectangle id="Tab_Text_Gallery" height="19.0" width="127.0" x="37.0" y="825.0"/>
             </children>
         </Group>
-        <Group fx:id="Imprint_PopUp" visible="false">
+        <Group id="Imprint_PopUp" visible="false">
             <children>
                 <Group blendMode="MULTIPLY">
                     <children>
@@ -8776,9 +8776,9 @@
                 </SVGPath>
                 <Group>
                     <children>
-                        <Group fx:id="Button">
+                        <Group id="Button">
                             <children>
-                                <Group fx:id="Slice_9">
+                                <Group id="Slice_9">
                                     <children>
                                         <SVGPath content="M6.50,-6.00 L6.50,-3.90 C6.50,0.74 2.74,4.50 -1.90,4.50 L-6.50,4.50 L-6.50,6.50 L7.00,6.50 L7.00,-6.00 Z " fill="${null}"/>
                                         <SVGPath content="M6.50,-3.90 L6.50,-6.00 L-6.50,-6.00 L-6.50,4.50 L-1.90,4.50 C2.74,4.50 6.50,0.74 6.50,-3.90 Z " strokeLineCap="BUTT" strokeMiterLimit="4.0">
@@ -8811,14 +8811,14 @@
                                         </SVGPath>
                                     </children>
                                 </Group>
-                                <Group fx:id="Slice_8"/>
-                                <Group fx:id="Slice_7"/>
-                                <Group fx:id="Slice_6"/>
-                                <Group fx:id="Slice_5"/>
-                                <Group fx:id="Slice_4"/>
-                                <Group fx:id="Slice_3"/>
-                                <Group fx:id="Slice_2"/>
-                                <Group fx:id="Slice_1"/>
+                                <Group id="Slice_8"/>
+                                <Group id="Slice_7"/>
+                                <Group id="Slice_6"/>
+                                <Group id="Slice_5"/>
+                                <Group id="Slice_4"/>
+                                <Group id="Slice_3"/>
+                                <Group id="Slice_2"/>
+                                <Group id="Slice_1"/>
                             </children>
                         </Group>
                     </children>
@@ -8826,7 +8826,7 @@
                         <Affine mxx="3.62" mxy="-0.0" myx="-0.0" tx="965.5" ty="844.667"/>
                     </transforms>
                 </Group>
-                <Group fx:id="Imprint_Text">
+                <Group id="Imprint_Text">
                     <children>
                         <Rectangle height="663.0" width="670.0" x="630.0" y="124.0">
                             <fill>
@@ -8835,13 +8835,13 @@
                         </Rectangle>
                     </children>
                 </Group>
-                <Rectangle fx:id="Imprint_Close" height="29.0" width="153.0" x="889.0" y="829.0">
+                <Rectangle id="Imprint_Close" height="29.0" width="153.0" x="889.0" y="829.0">
                     <fill>
                         <Color blue="0.2" green="0.39607844"/>
                     </fill>
                 </Rectangle>
             </children>
         </Group>
-        <Group fx:id="Flags" visible="false"/>
+        <Group id="Flags" visible="false"/>
     </children>
 </Group>
