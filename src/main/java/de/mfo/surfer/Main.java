@@ -64,6 +64,10 @@ public class Main extends Application
         root.getTransforms().add( scale );
         root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
+        FormulaInputForm fif = new FormulaInputForm();
+
+        overlay.getChildren().add( fif );
+
         stage.setScene( scene );
         stage.show();
     }

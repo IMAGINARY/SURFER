@@ -59,3 +59,29 @@ SceneNodeButton {
     -fx-font: ;
 */
 }
+
+FormulaInputForm .noDecoration {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 0 0 0 0;
+    -fx-background-image: null;
+    -fx-background-position: 0% 0%;
+    -fx-background-repeat: repeat repeat;
+    -fx-background-image-slice: 100%;
+    -fx-background-size: auto auto;
+    -fx-border-color: null;
+    -fx-border-insets: null;
+    -fx-border-radius: null;
+    -fx-border-style: null;
+    -fx-border-width: 0;
+    -fx-border-image-source: null;
+    -fx-border-image-insets: 0 0 0 0;
+    -fx-border-image-repeat: repeat;
+    -fx-border-image-slice: 100%;
+    -fx-border-image-width: 1 1 1 1;
+    -fx-effect: none;
+}
+
+FormulaInputForm .formulaFont {
+    -fx-font: 60px sans-serif;
+}
