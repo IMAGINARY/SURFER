@@ -1,16 +1,41 @@
 package de.mfo.surfer;
 
+import de.mfo.surfer.control.*;
+
+import java.io.IOException;
+
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.transform.Scale;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.transform.Scale;
+import javafx.stage.Stage;
 
 public class Main extends Application
 {
+    private static Group fxmlRoot;
+
+    {
+        try
+        {
+            fxmlRoot = ( Group ) new FXMLLoader().load(
+                getClass().getResource( "fxml/surfer_touchscreen_1920_x_1080.fxml" )
+            );
+        }
+        catch( IOException ioe )
+        {
+            throw new RuntimeException( ioe );
+        }
+    }
+
+    public static < N extends Node > N fxmlLookup( String id )
+    {
+        return ( N ) fxmlRoot.lookup( id );
+    }
+
     public static void main( String[] args )
     {
         Application.launch( Main.class, args );
@@ -20,9 +45,6 @@ public class Main extends Application
     public void start( Stage stage ) throws Exception
     {
         stage.setTitle( "SURFER" );
-        Parent fxmlRoot = ( Parent ) new FXMLLoader().load(
-            getClass().getResource( "fxml/surfer_touchscreen_1920_x_1080.fxml" )
-        );
 
         Scene scene = new Scene( fxmlRoot, 192.0 * 6.0, 108.0 * 6.0 );
 
