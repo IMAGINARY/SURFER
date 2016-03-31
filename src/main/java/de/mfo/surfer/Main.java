@@ -46,7 +46,11 @@ public class Main extends Application
     {
         stage.setTitle( "SURFER" );
 
-        Scene scene = new Scene( fxmlRoot, 192.0 * 6.0, 108.0 * 6.0 );
+        Group root = new Group();
+        Group overlay = new Group();
+        root.getChildren().setAll( fxmlRoot, overlay );
+
+        Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
 
         Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
         NumberBinding scaleValue = new When(
@@ -57,8 +61,8 @@ public class Main extends Application
         scale.xProperty().bind( scaleValue );
         scale.yProperty().bind( scaleValue );
 
-        fxmlRoot.getTransforms().add( scale );
-        fxmlRoot.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
+        root.getTransforms().add( scale );
+        root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
         stage.setScene( scene );
         stage.show();
