@@ -162,7 +162,7 @@
                 </Group>
                 <Group id="Slider_C">
                     <children>
-                        <Group id="Slider_C_Shaft">
+                        <Group id="Slider_C_Shaft" translateX="-80">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -179,7 +179,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group id="Slider_C_Knob">
+                        <Group id="Slider_C_Knob" translateX="-80">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -220,7 +220,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group id="Slider_C_Button_Plus">
+                        <Group id="Slider_C_Button_Plus" translateX="-80">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -276,7 +276,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group id="Slider_C_Button_Minus">
+                        <Group id="Slider_C_Button_Minus" translateX="-80">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -295,12 +295,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle id="Slider_C_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_C_Value" height="20.0" width="70.0" x="1756.0" y="799.0" translateX="-80">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon id="Slider_C_Name">
+                        <Polygon id="Slider_C_Name" translateX="-80">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
@@ -319,7 +319,7 @@
                 </Group>
                 <Group id="Slider_B">
                     <children>
-                        <Group id="Slider_B_Shaft">
+                        <Group id="Slider_B_Shaft" translateX="-160">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -336,7 +336,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group id="Slider_B_Knob">
+                        <Group id="Slider_B_Knob" translateX="-160">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -377,7 +377,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group id="Slider_B_Button_Plus">
+                        <Group id="Slider_B_Button_Plus" translateX="-160">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -433,7 +433,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group id="Slider_B_Button_Minus">
+                        <Group id="Slider_B_Button_Minus" translateX="-160">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -452,12 +452,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle id="Slider_B_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_B_Value" height="20.0" width="70.0" x="1756.0" y="799.0" translateX="-160">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon id="Slider_B_Name">
+                        <Polygon id="Slider_B_Name" translateX="-160">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
@@ -476,7 +476,7 @@
                 </Group>
                 <Group id="Slider_A">
                     <children>
-                        <Group id="Slider_A_Shaft">
+                        <Group id="Slider_A_Shaft" translateX="-240">
                             <children>
                                 <Rectangle height="658.0" width="69.0" x="1756.0" y="44.0">
                                     <fill>
@@ -493,7 +493,7 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Group id="Slider_A_Knob">
+                        <Group id="Slider_A_Knob" translateX="-240">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="27.0">
                                     <image>
@@ -534,7 +534,7 @@
                                 </Group>
                             </children>
                         </Group>
-                        <Group id="Slider_A_Button_Plus">
+                        <Group id="Slider_A_Button_Plus" translateX="-240">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="714.0">
                                     <image>
@@ -590,7 +590,7 @@
                                 </Line>
                             </children>
                         </Group>
-                        <Group id="Slider_A_Button_Minus">
+                        <Group id="Slider_A_Button_Minus" translateX="-240">
                             <children>
                                 <ImageView opacity="0.75" x="1773.0" y="747.0">
                                     <image>
@@ -609,12 +609,12 @@
                                 </SVGPath>
                             </children>
                         </Group>
-                        <Rectangle id="Slider_A_Value" height="20.0" width="70.0" x="1756.0" y="799.0">
+                        <Rectangle id="Slider_A_Value" height="20.0" width="70.0" x="1756.0" y="799.0" translateX="-240">
                             <fill>
                                 <Color blue="0.2" green="0.39607844"/>
                             </fill>
                         </Rectangle>
-                        <Polygon id="Slider_A_Name">
+                        <Polygon id="Slider_A_Name" translateX="-240">
                             <points>
                                 <java.lang.Float fx:value="1827.0"/>
                                 <java.lang.Float fx:value="848.0"/>
