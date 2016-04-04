@@ -16,6 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
+import javafx.beans.value.ChangeListener;
+
 
 public class FormulaInputForm extends Region
 {
@@ -38,6 +40,10 @@ public class FormulaInputForm extends Region
 
         textField = new TextField();
         textField.getStyleClass().setAll( "formulaFont", "noDecoration" );
+        textField.focusedProperty().addListener(
+            // always grab input focus
+            ( observable, newValue, oldValue ) -> textField.requestFocus()
+        );
         textField.paddingProperty().bind(
             Bindings.createObjectBinding(
                 () -> { return new Insets( 0, equalsZero.getWidth(), 0, 10 ); },
