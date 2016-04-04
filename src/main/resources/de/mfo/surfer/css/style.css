@@ -85,3 +85,28 @@ FormulaInputForm .noDecoration {
 FormulaInputForm .formulaFont {
     -fx-font: 60px sans-serif;
 }
+
+SceneNodeSlider.slider {
+    -fx-background-color: blue;
+    -fx-padding: 14px;
+}
+
+SceneNodeSlider.slider:vertical .track {
+    -fx-background-color: red;
+    -fx-background-insets: 0 0 0 0;
+    -fx-padding: 0px 20px 0px 0px;
+}
+
+SceneNodeSlider.slider .thumb, SceneNodeSlider.slider:focused .thumb {
+    -fx-background-color: green;
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 14px;
+    -fx-padding: 14px;
+    -fx-effect: none;
+}
+
+SceneNodeSliderWithNameAndValue > Label {
+    -fx-font-size: 125%;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}

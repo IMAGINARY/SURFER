@@ -65,8 +65,9 @@ public class Main extends Application
         root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
         FormulaInputForm fif = new FormulaInputForm();
+        SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
 
-        overlay.getChildren().add( fif );
+        overlay.getChildren().addAll( fif, snsp );
 
         stage.setScene( scene );
         stage.show();
