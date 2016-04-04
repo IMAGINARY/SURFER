@@ -24,7 +24,7 @@ public class SceneNodeSliderPanel extends Region
         SceneNodeSliderWithNameAndValue slider1 = new SceneNodeSliderWithNameAndValue( "Slider_B", "b", 1.0 );
         SceneNodeSliderWithNameAndValue slider2 = new SceneNodeSliderWithNameAndValue( "Slider_C", "c", 1.0 );
         SceneNodeSliderWithNameAndValue slider3 = new SceneNodeSliderWithNameAndValue( "Slider_D", "d", 1.0 );
-        SceneNodeSliderWithNameAndValue sliderZoom = new SceneNodeSliderWithNameAndValue( "Slider_Zoom", "Zoom", 1.0 );
+        SceneNodeSliderWithNameAndValue sliderZoom = new SceneNodeSliderWithNameAndValue( "Slider_Zoom", "zoom", 1.0 );
 
         a = new SimpleDoubleProperty();
         b = new SimpleDoubleProperty();

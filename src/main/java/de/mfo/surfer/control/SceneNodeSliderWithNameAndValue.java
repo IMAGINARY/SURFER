@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.L;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -26,8 +27,8 @@ public class SceneNodeSliderWithNameAndValue extends Region
         nameLabel = new Label( name );
         valueLabel = new Label( Double.toString( value ) );
         valueLabel.textProperty().bind( Bindings.createStringBinding(
-            () -> String.format( "%.3f" , slider.getValue() ),
-            slider.valueProperty()
+            () -> String.format( L.getLocale(), "%.3f" , slider.getValue() ),
+            slider.valueProperty(), L.localeProperty()
         ) );
 
         setPickOnBounds( false );
@@ -47,6 +48,9 @@ public class SceneNodeSliderWithNameAndValue extends Region
         valueLabel.setMinWidth( valueBB.getWidth() );
         valueLabel.setMinHeight( valueBB.getHeight() );
         valueLabel.relocate( valueBB.getMinX(), valueBB.getMinY() );
+
+        nameLabel.textProperty().bind( L.localize( name ) );
+
 
         this.getChildren().addAll( slider, nameLabel, valueLabel );
     }
