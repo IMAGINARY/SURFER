@@ -86,6 +86,10 @@ FormulaInputForm .formulaFont {
     -fx-font: 60px sans-serif;
 }
 
+FormulaInputForm > Label {
+    -fx-font-size: 125%;
+}
+
 SceneNodeSlider.slider {
     -fx-background-color: blue;
     -fx-padding: 14px;

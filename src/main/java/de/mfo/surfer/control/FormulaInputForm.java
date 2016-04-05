@@ -1,9 +1,11 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.L;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
@@ -16,8 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
-import javafx.beans.value.ChangeListener;
-
 
 public class FormulaInputForm extends Region
 {
@@ -30,6 +30,7 @@ public class FormulaInputForm extends Region
         initTextField();
         initButtons();
         initFeedbackNodes();
+        initLabels();
     }
 
     void initTextField()
@@ -124,6 +125,38 @@ public class FormulaInputForm extends Region
     {
         Main.< Node >fxmlLookup( "#Button_Correct" ).visibleProperty().bind( isValidProperty() );
         Main.< Node >fxmlLookup( "#Button_Wrong" ).visibleProperty().bind( isValidProperty().not() );
+    }
+
+    void initLabels()
+    {
+        Node variablesPlaceholder = Main.< Node >fxmlLookup( "#Text_Keyboard_XYZ" );
+        variablesPlaceholder.setVisible( false );
+        Bounds variablesBB = variablesPlaceholder.getBoundsInParent();
+        Label variables = new Label();
+        variables.textProperty().bind( L.localize( "variables" ) );
+        variables.relocate( variablesBB.getMinX(), variablesBB.getMinY() );
+        variables.setMinWidth( variablesBB.getWidth() );
+        variables.setMinHeight( variablesBB.getHeight() );
+
+        Node arithmeticOperationsPlaceholder = Main.< Node >fxmlLookup( "#Text_Keyboard_Operations" );
+        arithmeticOperationsPlaceholder.setVisible( false );
+        Bounds arithmeticOperationsBB = arithmeticOperationsPlaceholder.getBoundsInParent();
+        Label arithmeticOperations = new Label();
+        arithmeticOperations.textProperty().bind( L.localize( "arithmeticOperations" ) );
+        arithmeticOperations.relocate( arithmeticOperationsBB.getMinX(), arithmeticOperationsBB.getMinY() );
+        arithmeticOperations.setMinWidth( arithmeticOperationsBB.getWidth() );
+        arithmeticOperations.setMinHeight( arithmeticOperationsBB.getHeight() );
+
+        Node parametersPlaceholder = Main.< Node >fxmlLookup( "#Text_Keyboard_Parameters" );
+        parametersPlaceholder.setVisible( false );
+        Bounds parametersBB = parametersPlaceholder.getBoundsInParent();
+        Label parameters = new Label();
+        parameters.textProperty().bind( L.localize( "parameters" ) );
+        parameters.relocate( parametersBB.getMinX(), parametersBB.getMinY() );
+        parameters.setMinWidth( parametersBB.getWidth() );
+        parameters.setMinHeight( parametersBB.getHeight() );
+
+        this.getChildren().addAll( variables, arithmeticOperations, parameters );
     }
 
     void insertText( String text )
