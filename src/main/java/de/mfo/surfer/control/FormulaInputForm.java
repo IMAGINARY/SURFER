@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
+import javafx.application.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,10 @@ public class FormulaInputForm extends Region
         textField.focusedProperty().addListener(
             // always grab input focus
             ( observable, newValue, oldValue ) -> textField.requestFocus()
+        );
+        textField.textProperty().addListener(
+            // don't automatically select text that has been changed through external binding
+            ( observable, newValue, oldValue ) -> Platform.runLater( () -> textField.deselect() )
         );
         textField.paddingProperty().bind(
             Bindings.createObjectBinding(
