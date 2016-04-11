@@ -10,6 +10,7 @@ import javafx.collections.ObservableMap;
 import javafx.scene.layout.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import de.mfo.surfer.util.L;
 
 public class SceneNodeSliderPanel extends Region
 {
@@ -33,7 +34,12 @@ public class SceneNodeSliderPanel extends Region
         slider1 = new SceneNodeSliderWithNameAndValue( "Slider_B", "b", 1.0 );
         slider2 = new SceneNodeSliderWithNameAndValue( "Slider_C", "c", 1.0 );
         slider3 = new SceneNodeSliderWithNameAndValue( "Slider_D", "d", 1.0 );
-        sliderZoom = new SceneNodeSliderWithNameAndValue( "Slider_Zoom", "zoom", 1.0 );
+        sliderZoom = new SceneNodeSliderWithNameAndValue(
+            "Slider_Zoom",
+            "zoom",
+            1.0,
+            v -> String.format( L.getLocale(), "%.3gx", Math.pow( 10.0, v ) )
+        );
         sliderZoom.getSlider().setMin( -2.0 );
         sliderZoom.getSlider().setMax( 2.0 );
 
