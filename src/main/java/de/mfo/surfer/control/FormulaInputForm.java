@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
@@ -30,6 +31,7 @@ public class FormulaInputForm extends Region
 
     TextField textField;
     BooleanProperty isValid;
+    Tooltip errorMessage;
 
     public FormulaInputForm()
     {
@@ -137,6 +139,10 @@ public class FormulaInputForm extends Region
     {
         Main.< Node >fxmlLookup( "#Button_Correct" ).visibleProperty().bind( isValidProperty() );
         Main.< Node >fxmlLookup( "#Button_Wrong" ).visibleProperty().bind( isValidProperty().not() );
+
+        errorMessage = new Tooltip();
+        Tooltip.install( Main.< Node >fxmlLookup( "#Button_Wrong" ), errorMessage );
+        errorMessage.setAutoHide( false );
     }
 
     void initLabels()
@@ -212,5 +218,20 @@ public class FormulaInputForm extends Region
         if( isValid == null )
             isValid = new SimpleBooleanProperty( true );
         return isValid;
+    }
+
+    public String getErrorMessage()
+    {
+        return errorMessage.getText();
+    }
+
+    public void setErrorMessage( String value )
+    {
+        errorMessage.setText( value );
+    }
+
+    public StringProperty errorMessageProperty()
+    {
+        return errorMessage.textProperty();
     }
 }
