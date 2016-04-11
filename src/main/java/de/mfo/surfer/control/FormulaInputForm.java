@@ -6,6 +6,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
@@ -174,15 +176,25 @@ public class FormulaInputForm extends Region
         textField.insertText( textField.getCaretPosition(), text );
     }
 
-    TextField getTextField()
-    {
-        return textField;
-    }
-
     @Override
     public String getUserAgentStylesheet()
     {
         return FormulaInputForm.class.getResource( "../css/style.css" ).toExternalForm();
+    }
+
+    public String getFormula()
+    {
+        return textField.getText();
+    }
+
+    public void setFormula( String value )
+    {
+        textField.setText( value );
+    }
+
+    public StringProperty formulaProperty()
+    {
+        return textField.textProperty();
     }
 
     public boolean getIsValid()
