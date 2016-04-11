@@ -71,7 +71,8 @@ public class Main extends Application
         FormulaInputForm fif = new FormulaInputForm();
         SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
 
-        overlay.getChildren().addAll( fif, snsp );
+        overlay.getChildren().add( fif );
+        overlay.getChildren().add( snsp );
 
         stage.setScene( scene );
         stage.show();
