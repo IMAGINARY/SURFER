@@ -1,127 +1,78 @@
 package de.mfo.surfer.control;
 
+import java.util.Map;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.scene.layout.Region;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SceneNodeSliderPanel extends Region
 {
-    SimpleDoubleProperty a;
-    SimpleDoubleProperty b;
-    SimpleDoubleProperty c;
-    SimpleDoubleProperty d;
-    SimpleDoubleProperty zoom;
     private static final Logger logger = LoggerFactory.getLogger( SceneNodeSliderPanel.class );
 
+    SimpleMapProperty< String, Double > parameters;
+
+    SceneNodeSliderWithNameAndValue slider0;
     SceneNodeSliderWithNameAndValue slider1;
     SceneNodeSliderWithNameAndValue slider2;
     SceneNodeSliderWithNameAndValue slider3;
-    SceneNodeSliderWithNameAndValue slider4;
     SceneNodeSliderWithNameAndValue sliderZoom;
 
     public SceneNodeSliderPanel()
     {
-        SceneNodeSliderWithNameAndValue slider0 = new SceneNodeSliderWithNameAndValue( "Slider_A", "a", 1.0 );
-        SceneNodeSliderWithNameAndValue slider1 = new SceneNodeSliderWithNameAndValue( "Slider_B", "b", 1.0 );
-        SceneNodeSliderWithNameAndValue slider2 = new SceneNodeSliderWithNameAndValue( "Slider_C", "c", 1.0 );
-        SceneNodeSliderWithNameAndValue slider3 = new SceneNodeSliderWithNameAndValue( "Slider_D", "d", 1.0 );
-        SceneNodeSliderWithNameAndValue sliderZoom = new SceneNodeSliderWithNameAndValue( "Slider_Zoom", "zoom", 1.0 );
         setPickOnBounds( false );
 
-        a = new SimpleDoubleProperty();
-        b = new SimpleDoubleProperty();
-        c = new SimpleDoubleProperty();
-        d = new SimpleDoubleProperty();
-        zoom = new SimpleDoubleProperty();
+        parameters = new SimpleMapProperty< String, Double >( FXCollections.< String, Double >observableHashMap() );
 
-        a.bindBidirectional( slider0.getSlider().valueProperty() );
-        b.bindBidirectional( slider1.getSlider().valueProperty() );
-        c.bindBidirectional( slider2.getSlider().valueProperty() );
-        d.bindBidirectional( slider3.getSlider().valueProperty() );
-        zoom.bindBidirectional( sliderZoom.getSlider().valueProperty() );
+        slider0 = new SceneNodeSliderWithNameAndValue( "Slider_A", "a", 1.0 );
+        slider1 = new SceneNodeSliderWithNameAndValue( "Slider_B", "b", 1.0 );
+        slider2 = new SceneNodeSliderWithNameAndValue( "Slider_C", "c", 1.0 );
+        slider3 = new SceneNodeSliderWithNameAndValue( "Slider_D", "d", 1.0 );
+        sliderZoom = new SceneNodeSliderWithNameAndValue( "Slider_Zoom", "zoom", 1.0 );
+        sliderZoom.getSlider().setMin( -2.0 );
+        sliderZoom.getSlider().setMax( 2.0 );
+
+        bindSliderToParameterBidirectional( slider0, "a" );
+        bindSliderToParameterBidirectional( slider1, "b" );
+        bindSliderToParameterBidirectional( slider2, "c" );
+        bindSliderToParameterBidirectional( slider3, "d" );
+        bindSliderToParameterBidirectional( sliderZoom, "scale_factor" );
 
         getChildren().addAll( slider0, slider1, slider2, slider3, sliderZoom );
     }
 
-    // a
-    public double getA()
+    private void bindSliderToParameterBidirectional( SceneNodeSliderWithNameAndValue s, String p )
     {
-        return a.getValue();
+        parameters.addListener( new MapChangeListener< String, Double >()
+            {
+                @Override
+                public void onChanged( Change<? extends String,? extends Double> change )
+                {
+                    if( change.wasAdded() && change.getKey().equals( p ) )
+                        s.getSlider().setValue( change.getValueAdded() );
+                }
+            }
+        );
+        s.getSlider().valueProperty().addListener( ( p0, p1, newValue ) -> parameters.put( p, newValue.doubleValue() ) );
     }
 
-    public void setA( double value )
+    public ObservableMap< String, Double > getParameters()
     {
-        a.setValue( value );
+        return parameters.getValue();
     }
 
-    public DoubleProperty aProperty()
+    public void setParameters( ObservableMap< String, Double > value )
     {
-        return a;
+        parameters.setValue( value );
     }
 
-    // b
-    public double getB()
+    public MapProperty< String, Double > parametersProperty()
     {
-        return b.getValue();
-    }
-
-    public void setB( double value )
-    {
-        b.setValue( value );
-    }
-
-    public DoubleProperty bProperty()
-    {
-        return b;
-    }
-
-    // c
-    public double getC()
-    {
-        return c.getValue();
-    }
-
-    public void setC( double value )
-    {
-        c.setValue( value );
-    }
-
-    public DoubleProperty cProperty()
-    {
-        return c;
-    }
-
-    // d
-    public double getD()
-    {
-        return d.getValue();
-    }
-
-    public void setD( double value )
-    {
-        d.setValue( value );
-    }
-
-    public DoubleProperty dProperty()
-    {
-        return d;
-    }
-
-    // zoom
-    public double getZoom()
-    {
-        return zoom.getValue();
-    }
-
-    public void setZoom( double value )
-    {
-        zoom.setValue( value );
-    }
-
-    public DoubleProperty zoomProperty()
-    {
-        return zoom;
+        return parameters;
     }
 }
