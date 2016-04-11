@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
@@ -14,6 +15,8 @@ import javafx.util.Duration;
 
 public class SceneNodeSlider extends Slider
 {
+    protected DoubleBinding lerpValue;
+
     public SceneNodeSlider( Node trackNode, Node thumbNode, Node plusNode, Node minusNode )
     {
         this( trackNode, thumbNode, plusNode, minusNode, true );
@@ -27,6 +30,12 @@ public class SceneNodeSlider extends Slider
         setMin( 0.0 );
         setMax( 1.0 );
         setBlockIncrement( 0.005 );
+        lerpValue = Bindings.createDoubleBinding(
+            () -> ( getValue() - getMin() ) / ( getMax() - getMin() ),
+            minProperty(),
+            maxProperty(),
+            valueProperty()
+        );
 
         if( disableNodes )
         {
@@ -45,8 +54,8 @@ public class SceneNodeSlider extends Slider
 
         thumbNode.translateYProperty().bind(
             Bindings.createDoubleBinding(
-                () -> -( -trackBB.getHeight() + 14 + getValue() * ( trackBB.getHeight() - 28 ) ),
-                valueProperty()
+                () -> -( -trackBB.getHeight() + 14 + lerpValue.getValue() * ( trackBB.getHeight() - 28 ) ),
+                lerpValue
             )
         );
 
