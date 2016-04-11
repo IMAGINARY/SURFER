@@ -70,9 +70,16 @@ public class Main extends Application
 
         FormulaInputForm fif = new FormulaInputForm();
         SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
+        RenderArea ra = new RenderArea();
+
+        fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
+        fif.isValidProperty().bind( ra.isValidProperty() );
+        fif.errorMessageProperty().bind( ra.errorMessageProperty() );
+        snsp.parametersProperty().bindBidirectional( ra.parametersProperty() );
 
         overlay.getChildren().add( fif );
         overlay.getChildren().add( snsp );
+        overlay.getChildren().add( ra );
 
         stage.setScene( scene );
         stage.show();
