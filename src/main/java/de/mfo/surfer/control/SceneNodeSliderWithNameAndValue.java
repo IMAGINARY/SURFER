@@ -8,9 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SceneNodeSliderWithNameAndValue extends Region
 {
+    private static final Logger logger = LoggerFactory.getLogger( SceneNodeSliderWithNameAndValue.class );
+
     SceneNodeSlider slider;
     Label nameLabel;
     Label valueLabel;

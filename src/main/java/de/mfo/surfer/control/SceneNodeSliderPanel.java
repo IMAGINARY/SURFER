@@ -3,6 +3,8 @@ package de.mfo.surfer.control;
 import javafx.scene.layout.Region;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SceneNodeSliderPanel extends Region
 {
@@ -11,6 +13,7 @@ public class SceneNodeSliderPanel extends Region
     SimpleDoubleProperty c;
     SimpleDoubleProperty d;
     SimpleDoubleProperty zoom;
+    private static final Logger logger = LoggerFactory.getLogger( SceneNodeSliderPanel.class );
 
     SceneNodeSliderWithNameAndValue slider1;
     SceneNodeSliderWithNameAndValue slider2;

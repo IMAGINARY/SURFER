@@ -11,9 +11,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class L
 {
+    private static final Logger logger = LoggerFactory.getLogger( L.class );
+
     private static ObjectProperty< Locale > locale;
 
     private static ObservableMap< String, String > localizedNames;

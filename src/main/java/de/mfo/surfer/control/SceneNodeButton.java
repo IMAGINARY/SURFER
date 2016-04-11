@@ -5,9 +5,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SceneNodeButton extends Button
 {
+    private static final Logger logger = LoggerFactory.getLogger( SceneNodeButton.class );
+
     public SceneNodeButton( Node defaultState, Node hoverState, Node armedState )
     {
         this( defaultState, hoverState, armedState, true );

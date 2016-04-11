@@ -18,9 +18,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FormulaInputForm extends Region
 {
+    private static final Logger logger = LoggerFactory.getLogger( FormulaInputForm.class );
+
     TextField textField;
     BooleanProperty isValid;
 

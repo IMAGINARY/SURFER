@@ -12,9 +12,13 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Node;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SceneNodeSlider extends Slider
 {
+    private static final Logger logger = LoggerFactory.getLogger( SceneNodeSlider.class );
+
     protected DoubleBinding lerpValue;
 
     public SceneNodeSlider( Node trackNode, Node thumbNode, Node plusNode, Node minusNode )
