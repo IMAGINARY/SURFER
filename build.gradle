@@ -19,8 +19,12 @@ repositories {
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.10'
     runtime 'ch.qos.logback:logback-classic:1.0.13'
+    testCompile 'junit:junit:4.12'
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
+
+jar.dependsOn test
+run.dependsOn test
