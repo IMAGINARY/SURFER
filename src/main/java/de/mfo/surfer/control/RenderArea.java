@@ -19,6 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Consumer;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -182,6 +183,10 @@ public class RenderArea extends Region
         rsd = new RotateSphericalDragger();
         setOnMousePressed( e -> rsd.startDrag( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ) );
         setOnMouseDragged( e -> { rsd.dragTo( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ); triggerRepaint(); } );
+
+        Consumer< Function< Double, Double > > changeScale = f -> parameters.put( "scale_factor", Math.pow( 10.0, f.apply( Math.log10( parameters.get( "scale_factor" ) ) ) ) );
+        setOnScroll( e -> changeScale.accept( v -> v - ( ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) ) );
+        setOnZoom( e -> changeScale.accept( v -> v / e.getZoomFactor() ) );
 
         try
         {
