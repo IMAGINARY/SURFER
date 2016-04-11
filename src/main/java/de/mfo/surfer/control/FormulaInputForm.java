@@ -5,7 +5,6 @@ import de.mfo.surfer.util.L;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -35,7 +34,6 @@ public class FormulaInputForm extends Region
 
     public FormulaInputForm()
     {
-        applyCss();
         setPickOnBounds( false );
         initTextField();
         initButtons();
