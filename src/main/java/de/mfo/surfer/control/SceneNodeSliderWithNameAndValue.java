@@ -10,6 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.function.Function;
 
 public class SceneNodeSliderWithNameAndValue extends Region
 {
@@ -18,8 +19,14 @@ public class SceneNodeSliderWithNameAndValue extends Region
     SceneNodeSlider slider;
     Label nameLabel;
     Label valueLabel;
+    Function< Double, String > valueFormatter;
 
     public SceneNodeSliderWithNameAndValue( String groupName, String name, double value )
+    {
+        this( groupName, name, value, s -> String.format( L.getLocale(), "%.3f" , s ) );
+    }
+
+    public SceneNodeSliderWithNameAndValue( String groupName, String name, double value, Function< Double, String > valueFormatter )
     {
         slider = new SceneNodeSlider(
             Main.< Node >fxmlLookup( "#" + groupName + "_Shaft" ),
@@ -31,7 +38,7 @@ public class SceneNodeSliderWithNameAndValue extends Region
         nameLabel = new Label( name );
         valueLabel = new Label( Double.toString( value ) );
         valueLabel.textProperty().bind( Bindings.createStringBinding(
-            () -> String.format( L.getLocale(), "%.3f" , slider.getValue() ),
+            () -> valueFormatter.apply( slider.getValue() ),
             slider.valueProperty(), L.localeProperty()
         ) );
 
