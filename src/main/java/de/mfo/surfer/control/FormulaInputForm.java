@@ -27,6 +27,7 @@ public class FormulaInputForm extends Region
     public FormulaInputForm()
     {
         applyCss();
+        setPickOnBounds( false );
         initTextField();
         initButtons();
         initFeedbackNodes();

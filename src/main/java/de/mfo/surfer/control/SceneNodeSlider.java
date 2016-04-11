@@ -22,6 +22,7 @@ public class SceneNodeSlider extends Slider
     public SceneNodeSlider( Node trackNode, Node thumbNode, Node plusNode, Node minusNode, boolean disableNodes )
     {
         super();
+        setPickOnBounds( false );
         setOrientation( Orientation.VERTICAL );
         setMin( 0.0 );
         setMax( 1.0 );
