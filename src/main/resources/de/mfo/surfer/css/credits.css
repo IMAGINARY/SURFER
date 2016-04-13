@@ -1,0 +1,5 @@
+// hide scrollbars
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
