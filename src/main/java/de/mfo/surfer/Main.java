@@ -5,9 +5,11 @@ import de.mfo.surfer.control.*;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -45,43 +47,73 @@ public class Main extends Application
         Application.launch( Main.class, args );
     }
 
+    public static void handleUncaughtException( Thread thread, Throwable throwable )
+    {
+        if( Platform.isFxApplicationThread() )
+        {
+            logger.error( "Uncaught exception in JavaFX application thread", throwable );
+            Platform.runLater(
+                () ->
+                new ExceptionDialog(
+                    Alert.AlertType.ERROR,
+                    "Uncaught exception in JavaFX application thread",
+                    "Please report the details of the error to the developers this software.",
+                    throwable
+                ).showAndWait()
+            );
+        }
+        else
+        {
+            throw new RuntimeException( throwable );
+        }
+    }
+
     @Override
     public void start( Stage stage ) throws Exception
     {
+        Thread.currentThread().setUncaughtExceptionHandler( Main::handleUncaughtException );
+
         stage.setTitle( "SURFER" );
 
-        Group root = new Group();
-        Group overlay = new Group();
-        root.getChildren().setAll( fxmlRoot, overlay );
+        try
+        {
+            Group root = new Group();
+            Group overlay = new Group();
+            root.getChildren().setAll( fxmlRoot, overlay );
 
-        Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
+            Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
 
-        Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
-        NumberBinding scaleValue = new When(
-                scene.widthProperty().multiply( 1080.0 ).greaterThan( scene.heightProperty().multiply( 1920.0 ) )
-            )
-            .then( scene.heightProperty().divide( 1080.0 ) )
-            .otherwise( scene.widthProperty().divide( 1920.0 ) );
-        scale.xProperty().bind( scaleValue );
-        scale.yProperty().bind( scaleValue );
+            Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
+            NumberBinding scaleValue = new When(
+                    scene.widthProperty().multiply( 1080.0 ).greaterThan( scene.heightProperty().multiply( 1920.0 ) )
+                )
+                .then( scene.heightProperty().divide( 1080.0 ) )
+                .otherwise( scene.widthProperty().divide( 1920.0 ) );
+            scale.xProperty().bind( scaleValue );
+            scale.yProperty().bind( scaleValue );
 
-        root.getTransforms().add( scale );
-        root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
+            root.getTransforms().add( scale );
+            root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
-        FormulaInputForm fif = new FormulaInputForm();
-        SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
-        RenderArea ra = new RenderArea();
+            FormulaInputForm fif = new FormulaInputForm();
+            SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
+            RenderArea ra = new RenderArea();
 
-        fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
-        fif.isValidProperty().bind( ra.isValidProperty() );
-        fif.errorMessageProperty().bind( ra.errorMessageProperty() );
-        snsp.parametersProperty().bindBidirectional( ra.parametersProperty() );
+            fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
+            fif.isValidProperty().bind( ra.isValidProperty() );
+            fif.errorMessageProperty().bind( ra.errorMessageProperty() );
+            snsp.parametersProperty().bindBidirectional( ra.parametersProperty() );
 
-        overlay.getChildren().add( fif );
-        overlay.getChildren().add( snsp );
-        overlay.getChildren().add( ra );
+            overlay.getChildren().add( fif );
+            overlay.getChildren().add( snsp );
+            overlay.getChildren().add( ra );
 
-        stage.setScene( scene );
-        stage.show();
+            stage.setScene( scene );
+            stage.show();
+        }
+        catch( Throwable t )
+        {
+            handleUncaughtException( Thread.currentThread(), t );
+        }
     }
 }
