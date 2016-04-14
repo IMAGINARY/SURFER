@@ -50,6 +50,14 @@ public class L
                 localizedNames.put( "variables", "Variables" );
                 localizedNames.put( "zoom", "Zoom" );
 
+                localizedNames.put( "loadScene", "Load scene" );
+                localizedNames.put( "saveScene", "Save scene" );
+                localizedNames.put( "exportImage", "Export image" );
+                localizedNames.put( "fileExtensionFilterSURFER", "SURFER files" );
+                localizedNames.put( "fileExtensionFilterPNG", "PNG files" );
+                localizedNames.put( "fileExtensionFilterJPG", "JPEG files" );
+                localizedNames.put( "fileExtensionFilterAll", "All files" );
+
                 localizedNames.put( "preferences", "Preferences" );
 
                 // not to be localized

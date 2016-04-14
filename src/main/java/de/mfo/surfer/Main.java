@@ -98,6 +98,23 @@ public class Main extends Application
             FormulaInputForm fif = new FormulaInputForm();
             SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
             RenderArea ra = new RenderArea();
+            MiscSceneNodeButtonPanel msnbp = new MiscSceneNodeButtonPanel(
+                f ->
+                {
+                    logger.debug( "Open {}", f );
+                    try
+                    {
+                        ra.load( f );
+                    }
+                    catch( Exception e )
+                    {
+                        new ExceptionDialog( Alert.AlertType.ERROR, "Error loading " + f.toString(), e ).showAndWait();
+                    }
+                },
+                f -> logger.debug( "Save to {}", f ),
+                f -> logger.debug( "Export to {}", f ),
+                p -> logger.debug( "Printing ..." )
+            );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );
@@ -105,6 +122,7 @@ public class Main extends Application
             snsp.parametersProperty().bindBidirectional( ra.parametersProperty() );
 
             overlay.getChildren().add( fif );
+            overlay.getChildren().add( msnbp );
             overlay.getChildren().add( snsp );
             overlay.getChildren().add( ra );
 
