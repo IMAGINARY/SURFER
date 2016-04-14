@@ -13,6 +13,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Comparator;
 
 public class L
 {
@@ -69,6 +72,28 @@ public class L
         if( instance == null )
             instance = new L();
         return instance;
+    }
+
+    public static Set< Locale > getAvailableLocales()
+    {
+        Set< Locale > l = new TreeSet<>(
+            new Comparator< Locale >()
+            {
+                @Override
+                public int compare( Locale l1, Locale l2 )
+                {
+                    int lComp = l( l1, "language" ).compareTo( l( l2, "language" ) );
+                    if( lComp == 0 )
+                        return l1.toString().compareTo( l2.toString() );
+                    else
+                        return lComp;
+                }
+            }
+        );
+        l.add( Locale.US );
+        l.add( Locale.FRENCH );
+        l.add( Locale.GERMAN );
+        return l;
     }
 
     public static Locale getLocale()
