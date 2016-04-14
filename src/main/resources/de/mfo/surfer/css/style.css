@@ -114,3 +114,8 @@ SceneNodeSliderWithNameAndValue > Label {
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
+
+LanguageSelector.choice-box {
+    -fx-opacity: 0%;
+    -fx-font-size: 150%;
+}

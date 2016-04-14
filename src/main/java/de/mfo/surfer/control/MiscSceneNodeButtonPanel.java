@@ -20,6 +20,7 @@ public class MiscSceneNodeButtonPanel extends Region
 
     PreferenceDialog prefsDialog;
     Credits credits;
+    LanguageSelector languageSelector;
 
     public MiscSceneNodeButtonPanel(
         Consumer< File > fileOpenAction,
@@ -33,6 +34,7 @@ public class MiscSceneNodeButtonPanel extends Region
         prefsDialog = new PreferenceDialog();
         credits = new Credits();
         credits.setOnMouseClicked( e -> ( ( Group ) credits.getParent() ).getChildren().removeAll( credits ) );
+        languageSelector = new LanguageSelector();
 
         getChildren().add( createButton( "Preferences", e -> handlePreferences() ) );
         getChildren().add( createButton( "Open_File", e -> handleFileOpen( fileOpenAction ) ) );
@@ -40,7 +42,9 @@ public class MiscSceneNodeButtonPanel extends Region
         getChildren().add( createButton( "Export", e -> handleFileExport( fileExportAction ) ) );
         getChildren().add( createButton( "Print", e -> handlePrint( printAction ) ) );
         getChildren().add( createButton( "Imprint", e -> handleCredits() ) );
-        getChildren().add( createButton( "Language", e -> handleChangeLanguage() ) );
+        // not needed; does not work anyway
+        //getChildren().add( createButton( "Language", e -> handleChangeLanguage() ) );
+        getChildren().add( languageSelector );
     }
 
     static SceneNodeButton createButton( String suffix, EventHandler< ActionEvent > handler )
@@ -123,6 +127,6 @@ public class MiscSceneNodeButtonPanel extends Region
 
     protected void handleChangeLanguage()
     {
-        logger.warn( "TODO: handleChangeLanguage" );
+        // NOOP: all the work is done by languageSelector
     }
 }
