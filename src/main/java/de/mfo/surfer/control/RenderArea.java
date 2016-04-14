@@ -190,7 +190,7 @@ public class RenderArea extends Region
 
         try
         {
-            loadFromFile( Main.class.getResource( "gallery/default.jsurf" ) );
+            load( Main.class.getResource( "gallery/default.jsurf" ) );
         }
         catch( Exception e )
         {
@@ -363,13 +363,13 @@ public class RenderArea extends Region
         triggerRepaint();
     }
 
-    public void loadFromString( String s )
+    public void load( String s )
     {
         try
         {
             Properties props = new Properties();
             props.load( new ByteArrayInputStream( s.getBytes() ) );
-            loadFromProperties( props );
+            load( props );
         }
         catch( IOException ioe )
         {
@@ -377,15 +377,21 @@ public class RenderArea extends Region
         }
     }
 
-    public void loadFromFile( URL url )
+    public void load( File file )
+        throws IOException
+    {
+        load( file.toURI().toURL() );
+    }
+
+    public void load( URL url )
         throws IOException
     {
         Properties props = new Properties();
         props.load( url.openStream() );
-        loadFromProperties( props );
+        load( props );
     }
 
-    public void loadFromProperties( Properties props )
+    public void load( Properties props )
     {
         isFormulaValid.setValue( true );
         triggerRepaintOnChange.setValue( false );
