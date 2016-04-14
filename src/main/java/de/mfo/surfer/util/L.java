@@ -119,6 +119,11 @@ public class L
         return localizedNames.get( key );
     }
 
+    public static String l( Locale locale, String key )
+    {
+        return localizedNames.get( key );
+    }
+
     public static StringBinding lb( String key )
     {
         return Bindings.stringValueAt( localizedNames, key );
