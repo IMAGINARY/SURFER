@@ -50,6 +50,8 @@ public class L
                 localizedNames.put( "variables", "Variables" );
                 localizedNames.put( "zoom", "Zoom" );
 
+                localizedNames.put( "preferences", "Preferences" );
+
                 // not to be localized
                 localizedNames.put( "a", "a" );
                 localizedNames.put( "b", "b" );
