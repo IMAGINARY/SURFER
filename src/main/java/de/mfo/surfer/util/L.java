@@ -22,6 +22,8 @@ public class L
 
     private static ObservableMap< String, String > localizedNames;
 
+    private static L instance;
+
     static {
         // initialize the localization map
         localizedNames = FXCollections.observableMap( new HashMap< String, String >() );
@@ -58,6 +60,17 @@ public class L
         locale.setValue( Locale.US );
     }
 
+    private L() {}
+
+    // just in case you need to pass around an object reference
+    // intead of directly using the static member functions
+    public L getInstance()
+    {
+        if( instance == null )
+            instance = new L();
+        return instance;
+    }
+
     public static Locale getLocale()
     {
         return locale.get();
@@ -76,12 +89,17 @@ public class L
         return locale;
     }
 
-    public static StringBinding localize( String key )
+    public static String l( String key )
+    {
+        return localizedNames.get( key );
+    }
+
+    public static StringBinding lb( String key )
     {
         return Bindings.stringValueAt( localizedNames, key );
     }
 
-    public static StringBinding localize( ObservableStringValue key )
+    public static StringBinding lb( ObservableStringValue key )
     {
         return Bindings.stringValueAt( localizedNames, key );
     }

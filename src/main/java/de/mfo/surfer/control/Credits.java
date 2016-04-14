@@ -16,7 +16,7 @@ public class Credits extends Region
 
     public class Localizer
     {
-        public String localize( String key ) { return L.localize( key ).getValue(); }
+        public String localize( String key ) { return L.l( key ); }
     }
 
     public Credits()

@@ -1,7 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
-import de.mfo.surfer.util.L;
+import static de.mfo.surfer.util.L.lb;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -149,7 +149,7 @@ public class FormulaInputForm extends Region
         variablesPlaceholder.setVisible( false );
         Bounds variablesBB = variablesPlaceholder.getBoundsInParent();
         Label variables = new Label();
-        variables.textProperty().bind( L.localize( "variables" ) );
+        variables.textProperty().bind( lb( "variables" ) );
         variables.relocate( variablesBB.getMinX(), variablesBB.getMinY() );
         variables.setMinWidth( variablesBB.getWidth() );
         variables.setMinHeight( variablesBB.getHeight() );
@@ -158,7 +158,7 @@ public class FormulaInputForm extends Region
         arithmeticOperationsPlaceholder.setVisible( false );
         Bounds arithmeticOperationsBB = arithmeticOperationsPlaceholder.getBoundsInParent();
         Label arithmeticOperations = new Label();
-        arithmeticOperations.textProperty().bind( L.localize( "arithmeticOperations" ) );
+        arithmeticOperations.textProperty().bind( lb( "arithmeticOperations" ) );
         arithmeticOperations.relocate( arithmeticOperationsBB.getMinX(), arithmeticOperationsBB.getMinY() );
         arithmeticOperations.setMinWidth( arithmeticOperationsBB.getWidth() );
         arithmeticOperations.setMinHeight( arithmeticOperationsBB.getHeight() );
@@ -167,7 +167,7 @@ public class FormulaInputForm extends Region
         parametersPlaceholder.setVisible( false );
         Bounds parametersBB = parametersPlaceholder.getBoundsInParent();
         Label parameters = new Label();
-        parameters.textProperty().bind( L.localize( "parameters" ) );
+        parameters.textProperty().bind( lb( "parameters" ) );
         parameters.relocate( parametersBB.getMinX(), parametersBB.getMinY() );
         parameters.setMinWidth( parametersBB.getWidth() );
         parameters.setMinHeight( parametersBB.getHeight() );
