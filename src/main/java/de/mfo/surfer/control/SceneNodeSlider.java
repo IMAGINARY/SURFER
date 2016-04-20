@@ -105,6 +105,11 @@ public class SceneNodeSlider extends Slider
         minusNode.setOnMousePressed( e -> minusInitTimer.play() );
         minusNode.setOnMouseReleased( e -> { minusInitTimer.stop(); minusTimer.stop(); } );
         minusNode.setOnMouseExited( e -> { minusInitTimer.stop(); minusTimer.stop(); } );
+
+        trackNode.visibleProperty().bind( visibleProperty() );
+        thumbNode.visibleProperty().bind( visibleProperty() );
+        plusNode.visibleProperty().bind( visibleProperty() );
+        minusNode.visibleProperty().bind( visibleProperty() );
     }
 
     @Override

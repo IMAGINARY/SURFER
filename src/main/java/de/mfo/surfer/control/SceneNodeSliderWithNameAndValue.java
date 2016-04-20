@@ -60,8 +60,11 @@ public class SceneNodeSliderWithNameAndValue extends Region
         valueLabel.setMinHeight( valueBB.getHeight() );
         valueLabel.relocate( valueBB.getMinX(), valueBB.getMinY() );
 
-        nameLabel.textProperty().bind( L.lb( name ) );
+        nameLabel.setText( name );
 
+        slider.visibleProperty().bind( visibleProperty() );
+        nameLabel.visibleProperty().bind( visibleProperty() );
+        valueLabel.visibleProperty().bind( visibleProperty() );
 
         this.getChildren().addAll( slider, nameLabel, valueLabel );
     }
