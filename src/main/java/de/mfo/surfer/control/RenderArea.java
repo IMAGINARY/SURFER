@@ -645,14 +645,31 @@ class RenderingTask extends Task< Double >
 
     @Override
     protected Double call() throws Exception {
-        // wait until dcsd is initialized on JavaFX application thread
-        semaphore.acquire();
-        long t_start = System.nanoTime();
-        asr.draw( dcsd );
-        long t_end = System.nanoTime();
+        try
+        {
+            // wait until dcsd is initialized on JavaFX application thread
+            semaphore.acquire();
+            long t_start = System.nanoTime();
+            asr.draw( dcsd );
+            long t_end = System.nanoTime();
 
-        // return time per pixel
-        return ( ( t_end - t_start ) / 1000000000.0 ) / ( renderSize * renderSize );
+            // return time per pixel
+            return ( ( t_end - t_start ) / 1000000000.0 ) / ( renderSize * renderSize );
+        }
+        catch( InterruptedException ie )
+        {
+            throw ie;
+        }
+        catch( RenderingInterruptedException rie )
+        {
+            throw rie;
+        }
+        catch( Throwable t )
+        {
+            // rethrow on JavaFX application thread as well for reporting
+            Platform.runLater( () -> { throw new RuntimeException( "Uncaught exception in rendering thread", t ); } );
+            throw t;
+        }
     }
 
     // automatically called on the JavaFX application thread
