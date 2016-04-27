@@ -222,7 +222,7 @@ public class RenderArea extends Region
     ExecutorService executor = Executors.newSingleThreadExecutor( r -> { Thread t = new Thread( r ); t.setDaemon( true ); return t; } );
     void triggerRepaint()
     {
-        if( this.getScene() != null && this.getParent() != null && isValid.get() && triggerRepaintOnChange.get() )
+        if( this.getScene() != null && this.getParent() != null && triggerRepaintOnChange.get() )
         {
             if( taskLowQuality != null && !taskLowQuality.isRunning() )
                 taskLowQuality.cancel();
@@ -235,78 +235,80 @@ public class RenderArea extends Region
 
             // set up rendering environemnt
             passDataToASR();
-
-            // calculate upper bound of the resolution
-            Bounds b = this.localToScene( this.getBoundsInLocal(), true );
-            int maxSize = (int) Math.round( Math.max( b.getWidth(), b.getHeight() ) );
-            int lowResSize = ( int ) Math.max( Math.min( maxSize, Math.sqrt( 1.0 / ( targetFps * secondsPerPixel ) ) ), 100 );
-
-            taskUltraQuality = new RenderingTask(
-                asr,
-                this.canvas.getGraphicsContext2D(),
-                maxSize,
-                renderSize,
-                AntiAliasingMode.SUPERSAMPLING,
-                AntiAliasingPattern.OG_4x4
-            );
-
-            taskHighQuality = new RenderingTask(
-                asr,
-                this.canvas.getGraphicsContext2D(),
-                maxSize,
-                renderSize,
-                AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
-                AntiAliasingPattern.OG_4x4
-            );
-            taskHighQuality.setOnSucceeded( e -> executor.submit( taskUltraQuality ) );
-
-            if( lowResSize < maxSize / 2 )
+            if( isValid.get() )
             {
-                // add rendering step with intermediate resolution
-                taskMediumQuality = new RenderingTask(
+                // calculate upper bound of the resolution
+                Bounds b = this.localToScene( this.getBoundsInLocal(), true );
+                int maxSize = (int) Math.round( Math.max( b.getWidth(), b.getHeight() ) );
+                int lowResSize = ( int ) Math.max( Math.min( maxSize, Math.sqrt( 1.0 / ( targetFps * secondsPerPixel ) ) ), 100 );
+
+                taskUltraQuality = new RenderingTask(
                     asr,
                     this.canvas.getGraphicsContext2D(),
-                    ( maxSize + lowResSize ) / 2,
+                    maxSize,
+                    renderSize,
+                    AntiAliasingMode.SUPERSAMPLING,
+                    AntiAliasingPattern.OG_4x4
+                );
+
+                taskHighQuality = new RenderingTask(
+                    asr,
+                    this.canvas.getGraphicsContext2D(),
+                    maxSize,
+                    renderSize,
+                    AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
+                    AntiAliasingPattern.OG_4x4
+                );
+                taskHighQuality.setOnSucceeded( e -> executor.submit( taskUltraQuality ) );
+
+                if( lowResSize < maxSize / 2 )
+                {
+                    // add rendering step with intermediate resolution
+                    taskMediumQuality = new RenderingTask(
+                        asr,
+                        this.canvas.getGraphicsContext2D(),
+                        ( maxSize + lowResSize ) / 2,
+                        renderSize,
+                        AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
+                        AntiAliasingPattern.QUINCUNX
+                    );
+                }
+                else
+                {
+                    // add dummy rendering task, that does nothing
+                    taskMediumQuality = new RenderingTask(
+                        asr,
+                        this.canvas.getGraphicsContext2D(),
+                        ( maxSize + lowResSize ) / 2,
+                        renderSize,
+                        AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
+                        AntiAliasingPattern.QUINCUNX
+                    )
+                    {
+                        @Override protected void scheduled() {}
+                        @Override public Double call() { return secondsPerPixel; }
+                        @Override protected void succeeded() {}
+                    };
+                }
+                taskMediumQuality.setOnSucceeded( e -> executor.submit( taskHighQuality ) );
+
+                taskLowQuality = new RenderingTask(
+                    asr,
+                    this.canvas.getGraphicsContext2D(),
+                    lowResSize,
                     renderSize,
                     AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
                     AntiAliasingPattern.QUINCUNX
                 );
-            }
-            else
-            {
-                // add dummy rendering task, that does nothing
-                taskMediumQuality = new RenderingTask(
-                    asr,
-                    this.canvas.getGraphicsContext2D(),
-                    ( maxSize + lowResSize ) / 2,
-                    renderSize,
-                    AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
-                    AntiAliasingPattern.QUINCUNX
-                )
-                {
-                    @Override protected void scheduled() {}
-                    @Override public Double call() { return secondsPerPixel; }
-                    @Override protected void succeeded() {}
-                };
-            }
-            taskMediumQuality.setOnSucceeded( e -> executor.submit( taskHighQuality ) );
+                taskLowQuality.setOnSucceeded( e ->
+                    {
+                        secondsPerPixel = ( double ) e.getSource().getValue();
+                        executor.submit( taskMediumQuality );
+                    }
+                );
 
-            taskLowQuality = new RenderingTask(
-                asr,
-                this.canvas.getGraphicsContext2D(),
-                lowResSize,
-                renderSize,
-                AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
-                AntiAliasingPattern.QUINCUNX
-            );
-            taskLowQuality.setOnSucceeded( e ->
-                {
-                    secondsPerPixel = ( double ) e.getSource().getValue();
-                    executor.submit( taskMediumQuality );
-                }
-            );
-
-            executor.submit( taskLowQuality );
+                executor.submit( taskLowQuality );
+            }
         }
     }
 
@@ -329,10 +331,23 @@ public class RenderArea extends Region
 
     void passDataToASR()
     {
+        // avoid recursing into triggerRepaint()
+        boolean troc = triggerRepaintOnChange.get();
+        triggerRepaintOnChange.set( false );
+
         try
         {
+            isFormulaValid.set( true );
             if( !formula.getValue().equals( asr.getSurfaceFamilyString() ) )
+            {
                 asr.setSurfaceFamily( formula.getValue() );
+
+                Set< String > newParameterNames = asr.getAllParameterNames();
+                newParameterNames.add( "scale_factor" );
+                parameters.keySet().retainAll( newParameterNames );
+                newParameterNames.removeAll( parameters.keySet() );
+                newParameterNames.forEach( e -> { parameters.put( e, 0.0 ); asr.setParameterValue( e, 0.0 ); } );
+            }
 
             asr.setTransform( rsd.getRotation() );
             double scaleFactor = parameters.get( "scale_factor" );
@@ -358,11 +373,14 @@ public class RenderArea extends Region
             error.setValue( e );
             isFormulaValid.set( false );
         }
+
+        triggerRepaintOnChange.set( troc );
     }
 
     void retriveDataFromASR()
     {
-        triggerRepaintOnChange.setValue( false );
+        boolean troc = triggerRepaintOnChange.get();
+        triggerRepaintOnChange.set( false );
         formula.setValue( asr.getSurfaceFamilyString() );
 
         asr.getAssignedParameters().forEach( e -> parameters.put( e.getKey(), e.getValue() ) );
@@ -372,7 +390,7 @@ public class RenderArea extends Region
         frontColor.setValue( c3f2c.apply( asr.getFrontMaterial().getColor() ) );
         backColor.setValue( c3f2c.apply( asr.getBackMaterial().getColor() ) );
 
-        triggerRepaintOnChange.setValue( true );
+        triggerRepaintOnChange.setValue( troc );
         triggerRepaint();
     }
 
