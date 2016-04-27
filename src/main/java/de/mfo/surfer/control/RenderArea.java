@@ -44,7 +44,9 @@ import javafx.concurrent.Task;
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
@@ -136,6 +138,17 @@ public class RenderArea extends Region
         isFormulaValid = new SimpleBooleanProperty();
 
         isValid.bind( hasNullValues.not().and( isFormulaValid ) );
+
+        ColorAdjust grayscale = new ColorAdjust();
+        grayscale.setSaturation( -0.75 );
+        GaussianBlur blurredGrayscale = new GaussianBlur();
+        grayscale.setInput( blurredGrayscale );
+        canvas.effectProperty().bind( Bindings.createObjectBinding(
+            () -> isValid.get() ? null : grayscale,
+            isValid
+        ) );
+
+        this.disableProperty().bind( isValid.not() );
 
         ChangeListener cl = ( observable, oldValue, newValue ) -> Platform.runLater( () -> triggerRepaint() );
 
