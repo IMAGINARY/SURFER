@@ -23,10 +23,7 @@ public class SceneNodeSliderPanel extends Region
     SimpleMapProperty< String, Double > parameters;
 
     SceneNodeSliderWithNameAndValue[] sliderABCD;
-    MapChangeListener< String, Double >[] mapListernersABCD;
-    ChangeListener< Number >[] sliderListenersABCD;
-    MapChangeListener< String, Double > dummyMapListerner;
-    ChangeListener< Number > dummySliderListener;
+    String[] assignment;
 
     SceneNodeSliderWithNameAndValue sliderZoom;
 
@@ -34,24 +31,9 @@ public class SceneNodeSliderPanel extends Region
     {
         setPickOnBounds( false );
 
+        assignment = new String[ 4 ];
+
         parameters = new SimpleMapProperty< String, Double >( FXCollections.< String, Double >observableHashMap() );
-
-        parameters.addListener( new MapChangeListener< String, Double >()
-            {
-                @Override
-                public void onChanged( Change<? extends String,? extends Double> change ) {
-                    if( ( change.wasAdded() || change.wasRemoved() ) && !( change.wasAdded() && change.wasRemoved() ) )
-                        rebindSlidersToParametersBidirectional();
-                }
-            }
-        );
-
-        dummyMapListerner = new MapChangeListener< String, Double >()
-            {
-                @Override
-                public void onChanged( Change<? extends String,? extends Double> change ) {}
-            };
-        dummySliderListener = ( p0, p1, p2 ) -> {};
 
         sliderABCD = new SceneNodeSliderWithNameAndValue[]
         {
@@ -70,84 +52,89 @@ public class SceneNodeSliderPanel extends Region
         sliderZoom.getSlider().setMax( 2.0 );
         sliderZoom.getNameLabel().textProperty().bind( L.lb( "zoom" ) );
 
-        mapListernersABCD = new MapChangeListener[ 4 ];
-        sliderListenersABCD = new ChangeListener[ 4 ];
-        for( int i = 0; i < 4; i++ )
-        {
-            mapListernersABCD[ i ] = dummyMapListerner;
-            sliderListenersABCD[ i ] = dummySliderListener;
-        }
-
-        rebindSlidersToParametersBidirectional();
-
-        bindSliderToParameterBidirectional( sliderZoom, "scale_factor" );
+        initListeners();
+        assignParametersToSliders();
 
         getChildren().addAll( sliderABCD );
         getChildren().add( sliderZoom );
     }
 
-    private void rebindSlidersToParametersBidirectional()
+    private void initListeners()
     {
-        // unbind
+        // listener that recreates the assignment of parameters to sliders
+        parameters.addListener( new MapChangeListener< String, Double >()
+            {
+                @Override
+                public void onChanged( Change<? extends String,? extends Double> change ) {
+                    if( ( change.wasAdded() || change.wasRemoved() ) && !( change.wasAdded() && change.wasRemoved() ) )
+                        assignParametersToSliders();
+                }
+            }
+        );
+
+        // listeners that propagate changes of slider values to the parameter map and vice versa
+        parameters.addListener( new MapChangeListener< String, Double >()
+            {
+                @Override
+                public void onChanged( Change<? extends String,? extends Double> change )
+                {
+                    if( change.wasAdded() )
+                    {
+                        for( int i = 0; i < 4; i++ )
+                        {
+                            if( change.getKey().equals( assignment[ i ] ) )
+                            {
+                                sliderABCD[ i ].getSlider().setValue( change.getValueAdded() );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
         for( int i = 0; i < 4; i++ )
         {
-            parameters.removeListener( mapListernersABCD[ i ] );
-            sliderABCD[ i ].getSlider().valueProperty().asObject().removeListener( sliderListenersABCD[ i ] );
+            final int fi = i;
+            sliderABCD[ fi ].getSlider().valueProperty().addListener( ( p0, p1, newValue ) -> parameters.put( assignment[ fi ], newValue.doubleValue() ) );
+        }
+
+        // same for the zoom slider
+        parameters.addListener( new MapChangeListener< String, Double >()
+            {
+                @Override
+                public void onChanged( Change<? extends String,? extends Double> change )
+                {
+                    if( change.wasAdded() && change.getKey().equals( "scale_factor" ) )
+                        sliderZoom.getSlider().setValue( change.getValueAdded() );
+                }
+            }
+        );
+        sliderZoom.getSlider().valueProperty().addListener( ( p0, p1, newValue ) -> parameters.put( "scale_factor", newValue.doubleValue() ) );
+    }
+
+    private void assignParametersToSliders()
+    {
+        // unassign sliders
+        for( int i = 0; i < 4; i++ )
+        {
+            sliderABCD[ i ].setVisible( false );
+            assignment[ i ] = "";
         }
 
         // retrieve new parameter names
         TreeSet< String > occuringABCDParams_tmp = new TreeSet< String >();
         parameters.forEach( ( k, v ) -> { if( k.equals( "a" ) || k.equals( "b" ) || k.equals( "c" ) || k.equals( "d" ) ) occuringABCDParams_tmp.add( k ); } );
 
-        // bind unassigned parameters to dummy listeners for consistency
-        for( int i = 0; i < 4 - occuringABCDParams_tmp.size(); i++ )
-        {
-            mapListernersABCD[ i ] = dummyMapListerner;
-            sliderListenersABCD[ i ] = dummySliderListener;
-            parameters.addListener( dummyMapListerner );
-            sliderABCD[ i ].getSlider().valueProperty().addListener( dummySliderListener );
-            sliderABCD[ i ].setVisible( false );
-        }
-
-        // bind occuring parameters
+        // assign occuring parameters to sliders
         String[] occuringABCDParams = occuringABCDParams_tmp.toArray( new String[ occuringABCDParams_tmp.size() ] );
         for( int paramIndex = 0; paramIndex < occuringABCDParams.length; paramIndex++ )
         {
             int sliderIndex = 4 - occuringABCDParams.length + paramIndex;
-            SceneNodeSliderWithNameAndValue s = sliderABCD[ sliderIndex ];
-            String p = occuringABCDParams[ paramIndex ];
-            logger.debug( "{}", p );
-            mapListernersABCD[ sliderIndex ] = new MapChangeListener< String, Double >()
-                {
-                    @Override
-                    public void onChanged( Change<? extends String,? extends Double> change )
-                    {
-                        if( change.wasAdded() && change.getKey().equals( p ) )
-                            s.getSlider().setValue( change.getValueAdded() );
-                    }
-                };
-            sliderListenersABCD[ sliderIndex ] = ( p0, p1, newValue ) -> parameters.put( p, newValue.doubleValue() );
-
-            parameters.addListener( mapListernersABCD[ sliderIndex ] );
-            s.getSlider().valueProperty().addListener( sliderListenersABCD[ sliderIndex ] );
-            s.setVisible( true );
-            s.getNameLabel().setText( p );
+            assignment[ sliderIndex ] = occuringABCDParams[ paramIndex ];
+            sliderABCD[ sliderIndex ].getNameLabel().setText( assignment[ sliderIndex ] );
+            sliderABCD[ sliderIndex ].setVisible( true );
         }
-    }
-
-    private void bindSliderToParameterBidirectional( SceneNodeSliderWithNameAndValue s, String p )
-    {
-        parameters.addListener( new MapChangeListener< String, Double >()
-            {
-                @Override
-                public void onChanged( Change<? extends String,? extends Double> change )
-                {
-                    if( change.wasAdded() && change.getKey().equals( p ) )
-                        s.getSlider().setValue( change.getValueAdded() );
-                }
-            }
-        );
-        s.getSlider().valueProperty().addListener( ( p0, p1, newValue ) -> parameters.put( p, newValue.doubleValue() ) );
     }
 
     public ObservableMap< String, Double > getParameters()
