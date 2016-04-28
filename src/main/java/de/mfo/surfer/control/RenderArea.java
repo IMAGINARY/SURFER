@@ -197,9 +197,8 @@ public class RenderArea extends Region
         setOnMousePressed( e -> rsd.startDrag( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ) );
         setOnMouseDragged( e -> { rsd.dragTo( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ); triggerRepaint(); } );
 
-        Consumer< Function< Double, Double > > changeScale = f -> parameters.put( "scale_factor", Math.pow( 10.0, f.apply( Math.log10( parameters.get( "scale_factor" ) ) ) ) );
-        setOnScroll( e -> changeScale.accept( v -> v - ( ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) ) );
-        setOnZoom( e -> changeScale.accept( v -> v / e.getZoomFactor() ) );
+        setOnScroll( e -> parameters.put( "scale_factor", parameters.get( "scale_factor" ) - ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) );
+        setOnZoom( e -> parameters.put( "scale_factor", parameters.get( "scale_factor" ) - Math.log10( e.getZoomFactor() ) ) );
 
         try
         {
