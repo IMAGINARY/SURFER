@@ -12,6 +12,7 @@ import java.io.*;
 import javax.vecmath.*;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.Preferences;
 import java.nio.IntBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -197,8 +198,14 @@ public class RenderArea extends Region
         setOnMousePressed( e -> rsd.startDrag( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ) );
         setOnMouseDragged( e -> { rsd.dragTo( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ); triggerRepaint(); } );
 
-        setOnScroll( e -> parameters.put( "scale_factor", parameters.get( "scale_factor" ) - ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) );
-        setOnZoom( e -> parameters.put( "scale_factor", parameters.get( "scale_factor" ) - Math.log10( e.getZoomFactor() ) ) );
+        Consumer< Function< Double, Double > > changeScale = f ->
+        {
+            double newScale = f.apply( parameters.get( "scale_factor" ) );
+            newScale = newScale < Preferences.Limits.getMinScaleFactor() ? Preferences.Limits.getMinScaleFactor() : ( newScale > Preferences.Limits.getMaxScaleFactor() ? Preferences.Limits.getMaxScaleFactor() : newScale );
+            parameters.put( "scale_factor", newScale );
+        };
+        setOnScroll( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) );
+        setOnZoom( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - Math.log10( e.getZoomFactor() ) ) );
 
         try
         {

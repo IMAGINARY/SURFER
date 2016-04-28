@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.util.L;
+import de.mfo.surfer.util.Preferences;
 import java.util.Map;
 import java.util.TreeSet;
 import javafx.beans.binding.Bindings;
@@ -48,8 +49,8 @@ public class SceneNodeSliderPanel extends Region
             1.0,
             v -> String.format( getLocale(), "%.3gx", Math.pow( 10.0, v ) )
         );
-        sliderZoom.getSlider().setMin( -2.0 );
-        sliderZoom.getSlider().setMax( 2.0 );
+        sliderZoom.getSlider().minProperty().bind( Preferences.Limits.minScaleFactorProperty() );
+        sliderZoom.getSlider().maxProperty().bind( Preferences.Limits.maxScaleFactorProperty() );
         sliderZoom.getNameLabel().textProperty().bind( L.lb( "zoom" ) );
 
         initListeners();
