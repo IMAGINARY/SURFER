@@ -7,6 +7,27 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 public class Preferences
 {
+    public static class PropertyTypeTest
+    {
+        static
+        {
+            doubleTest = new SimpleDoubleProperty();
+            booleanTest = new SimpleBooleanProperty();
+        }
+
+        private static SimpleDoubleProperty doubleTest;
+        public static DoubleProperty doubleTestProperty()
+        {
+            return doubleTest;
+        }
+
+        private static SimpleBooleanProperty booleanTest;
+        public static BooleanProperty booleanTestProperty()
+        {
+            return booleanTest;
+        }
+    }
+    
     public static class Limits
     {
         static
