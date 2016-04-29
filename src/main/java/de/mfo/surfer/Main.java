@@ -122,7 +122,17 @@ public class Main extends Application
                         new ExceptionDialog( Alert.AlertType.ERROR, "Error saving to " + f.toString(), e ).showAndWait();
                     }
                 },
-                f -> logger.debug( "Export to {}", f ),
+                f ->
+                {
+                    try
+                    {
+                        ra.export( f );
+                    }
+                    catch( Exception e )
+                    {
+                        new ExceptionDialog( Alert.AlertType.ERROR, "Error exporting to " + f.toString(), e ).showAndWait();
+                    }
+                },
                 p -> logger.debug( "Printing ..." )
             );
 

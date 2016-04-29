@@ -14,6 +14,14 @@ import javax.vecmath.*;
 
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.Preferences;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
+import java.awt.image.SampleModel;
+import java.awt.image.WritableRaster;
+import java.awt.Point;
 import java.nio.IntBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -63,6 +71,11 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -494,6 +507,67 @@ public class RenderArea extends Region
         jsurfProperties.put( "rotation_matrix", BasicIO.toString( rsd.getRotation() ) );
         jsurfProperties.put( "scale_factor", parameters.get( "scale_factor" ).toString() );
         jsurfProperties.store( new FileWriter( file ), "SURFER surface description" );
+    }
+
+    private static BufferedImage createBufferedImageFromRGB( int[] rgbBuffer, int w, int h )
+    {
+        DirectColorModel colormodel = new DirectColorModel( 24, 0xff0000, 0xff00, 0xff );
+        SampleModel sampleModel = colormodel.createCompatibleSampleModel( w, h );
+        DataBufferInt data = new DataBufferInt( rgbBuffer, w * h );
+        WritableRaster raster = WritableRaster.createWritableRaster( sampleModel, data, new Point( 0, 0 ) );
+        return new BufferedImage( colormodel, raster, false, null );
+    }
+
+    private static BufferedImage flipV( BufferedImage bi )
+    {
+        AffineTransform tx = AffineTransform.getScaleInstance( 1, -1 );
+        tx.translate( 0, -bi.getHeight( null ) );
+        AffineTransformOp op = new AffineTransformOp( tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR );
+        return op.filter( bi, null );
+    }
+
+    public void export( File file )
+    {
+        int renderSize = Preferences.General.getExportSize();
+        int colorBuffer[] = new int[ renderSize * renderSize ];
+
+        passDataToASR();
+        asr.setAntiAliasingMode( AntiAliasingMode.SUPERSAMPLING );
+        asr.setAntiAliasingPattern( AntiAliasingPattern.OG_4x4 );
+        asr.draw( colorBuffer, renderSize, renderSize );
+
+        BufferedImage im = flipV( createBufferedImageFromRGB( colorBuffer, renderSize, renderSize ) );
+
+        try
+        {
+            if( file.getName().endsWith( ".png" ) )
+            {
+                ImageIO.write( im, "png", file );
+            }
+            else if( file.getName().endsWith( ".jpg" ) || file.getName().endsWith( ".jpeg" ) )
+            {
+                ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName( "jpg" ).next();
+                ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
+                jpgWriteParam.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
+                jpgWriteParam.setCompressionQuality( Preferences.General.getJpegQuality() / 100f );
+
+                FileImageOutputStream outputStream = new FileImageOutputStream( file );
+                jpgWriter.setOutput( outputStream );
+                IIOImage outputImage = new IIOImage( im, null, null);
+                jpgWriter.write( null, outputImage, jpgWriteParam );
+                jpgWriter.dispose();
+                outputStream.close();
+            }
+            else
+                throw new IllegalArgumentException( "Unsupported file extension of " + file.getName() );
+        }
+        catch( Exception e )
+        {
+            if( RuntimeException.class.isAssignableFrom( e.getClass() ) )
+                throw ( RuntimeException ) e;
+            else
+                throw new RuntimeException( e );
+        }
     }
 
     // triggerRepaintOnChange

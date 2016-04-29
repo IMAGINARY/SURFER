@@ -73,4 +73,41 @@ public class Preferences
             return maxScaleFactor;
         }
     }
+
+    public static class General
+    {
+        static
+        {
+            exportSize = new SimpleIntegerProperty( 512 );
+            jpegQuality = new SimpleIntegerProperty( 85 );
+        }
+
+        private static SimpleIntegerProperty exportSize;
+        public static int getExportSize()
+        {
+            return exportSize.get();
+        }
+        public static void setExportSize( int value )
+        {
+            exportSize.set( value );
+        }
+        public static IntegerProperty exportSizeProperty()
+        {
+            return exportSize;
+        }
+
+        private static SimpleIntegerProperty jpegQuality;
+        public static int getJpegQuality()
+        {
+            return jpegQuality.get();
+        }
+        public static void setJpegQuality( int value )
+        {
+            jpegQuality.set( value );
+        }
+        public static IntegerProperty jpegQualityProperty()
+        {
+            return jpegQuality;
+        }
+    }
 }
