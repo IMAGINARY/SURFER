@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -111,6 +112,8 @@ public class PreferenceDialog extends Dialog< ButtonType >
             return createBooleanEditor( ( BooleanProperty ) p );
         else if( DoubleProperty.class.isAssignableFrom( p.getClass() ) )
             return createDoubleEditor( ( DoubleProperty ) p );
+        else if( IntegerProperty.class.isAssignableFrom( p.getClass() ) )
+            return createIntegerEditor( ( IntegerProperty ) p );
         else
             throw new ClassCastException( "Unsupported property type: " + p.getClass().getName() );
     }
@@ -134,6 +137,18 @@ public class PreferenceDialog extends Dialog< ButtonType >
         spinner.setEditable( true );
         spinner.getValueFactory().valueProperty().bindBidirectional( dp.asObject() );
         resetters.add( () -> dp.set( originalValue ) );
+
+        return spinner;
+    }
+
+    private Node createIntegerEditor( IntegerProperty ip )
+    {
+        final int originalValue = ip.get();
+
+        Spinner< Integer > spinner = new Spinner( Integer.MIN_VALUE, Integer.MAX_VALUE, originalValue, 1 );
+        spinner.setEditable( true );
+        spinner.getValueFactory().valueProperty().bindBidirectional( ip.asObject() );
+        resetters.add( () -> ip.set( originalValue ) );
 
         return spinner;
     }

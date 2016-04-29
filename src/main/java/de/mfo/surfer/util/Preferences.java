@@ -2,8 +2,10 @@ package de.mfo.surfer.util;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class Preferences
 {
@@ -13,6 +15,7 @@ public class Preferences
         {
             doubleTest = new SimpleDoubleProperty();
             booleanTest = new SimpleBooleanProperty();
+            integerTest = new SimpleIntegerProperty();
         }
 
         private static SimpleDoubleProperty doubleTest;
@@ -26,8 +29,14 @@ public class Preferences
         {
             return booleanTest;
         }
+
+        private static SimpleIntegerProperty integerTest;
+        public static IntegerProperty integerTestProperty()
+        {
+            return integerTest;
+        }
     }
-    
+
     public static class Limits
     {
         static
