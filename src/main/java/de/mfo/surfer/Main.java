@@ -111,7 +111,17 @@ public class Main extends Application
                         new ExceptionDialog( Alert.AlertType.ERROR, "Error loading " + f.toString(), e ).showAndWait();
                     }
                 },
-                f -> logger.debug( "Save to {}", f ),
+                f ->
+                {
+                    try
+                    {
+                        ra.store( f );
+                    }
+                    catch( Exception e )
+                    {
+                        new ExceptionDialog( Alert.AlertType.ERROR, "Error saving to " + f.toString(), e ).showAndWait();
+                    }
+                },
                 f -> logger.debug( "Export to {}", f ),
                 p -> logger.debug( "Printing ..." )
             );

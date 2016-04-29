@@ -4,6 +4,7 @@ import de.mfo.jsurf.rendering.*;
 import de.mfo.jsurf.rendering.cpu.*;
 import de.mfo.jsurf.util.RotateSphericalDragger;
 import de.mfo.jsurf.util.BasicIO;
+import de.mfo.jsurf.util.FileFormat;
 import static de.mfo.jsurf.rendering.cpu.CPUAlgebraicSurfaceRenderer.AntiAliasingMode;
 import de.mfo.jsurf.parser.*;
 import java.net.URL;
@@ -479,6 +480,20 @@ public class RenderArea extends Region
         }
         triggerRepaintOnChange.setValue( true );
         triggerRepaint();
+    }
+
+    public void store( File file )
+        throws IOException
+    {
+        passDataToASR();
+        Properties jsurfProperties = FileFormat.save( asr );
+        Matrix4d identity = new Matrix4d();
+        identity.setIdentity();
+        jsurfProperties.put( "transform", BasicIO.toString( identity ) );
+        jsurfProperties.put( "surface_transform", BasicIO.toString( identity ) );
+        jsurfProperties.put( "rotation_matrix", BasicIO.toString( rsd.getRotation() ) );
+        jsurfProperties.put( "scale_factor", parameters.get( "scale_factor" ).toString() );
+        jsurfProperties.store( new FileWriter( file ), "SURFER surface description" );
     }
 
     // triggerRepaintOnChange
