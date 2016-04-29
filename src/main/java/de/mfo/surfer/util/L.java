@@ -1,5 +1,7 @@
 package de.mfo.surfer.util;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
@@ -58,6 +60,25 @@ public class L
                 localizedNames.put( "fileExtensionFilterAll", "All files" );
 
                 localizedNames.put( "preferences", "Preferences" );
+
+                // labels to be used in the preferences window
+                for( Class<?> cls : Preferences.class.getDeclaredClasses() )
+                {
+                    if( Modifier.isStatic( cls.getModifiers() ) )
+                    {
+                        String prefix = Preferences.class.getSimpleName() + "." + cls.getSimpleName();
+                        localizedNames.put( prefix, cls.getSimpleName() );
+                        for( Method m : cls.getDeclaredMethods() )
+                        {
+                            if( Modifier.isStatic( m.getModifiers() ) && m.getName().endsWith( "Property" ) )
+                            {
+                                String propertyName = m.getName().substring( 0, m.getName().length() - "Property".length() );
+                                String key = prefix + "." + propertyName;
+                                localizedNames.put( key, propertyName );
+                            }
+                        }
+                    }
+                }
 
                 // not to be localized
                 localizedNames.put( "a", "a" );
