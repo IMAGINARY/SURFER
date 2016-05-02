@@ -668,7 +668,7 @@ public class RenderArea extends Region
     }
 
     // backColor
-    public Color getbackColor()
+    public Color getBackColor()
     {
         return backColor.getValue();
     }
