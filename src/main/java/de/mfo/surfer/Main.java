@@ -134,16 +134,20 @@ public class Main extends Application
                     }
                 },
                 p -> logger.debug( "Printing ..." )
+            );
+            ColorPickerPanel cpp = new ColorPickerPanel();
             TabPanel tp = new TabPanel(
                 new javafx.scene.layout.Pane( new javafx.scene.control.Label( "gallery" ) ),
                 new javafx.scene.layout.Pane( new javafx.scene.control.Label( "info" ) ),
-                new javafx.scene.layout.Pane( new javafx.scene.control.Label( "color" ) )
+                cpp
             );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );
             fif.errorMessageProperty().bind( ra.errorMessageProperty() );
             snsp.parametersProperty().bindBidirectional( ra.parametersProperty() );
+            cpp.frontColorProperty().bindBidirectional( ra.frontColorProperty() );
+            cpp.backColorProperty().bindBidirectional( ra.backColorProperty() );
 
             overlay.getChildren().add( fif );
             overlay.getChildren().add( msnbp );
