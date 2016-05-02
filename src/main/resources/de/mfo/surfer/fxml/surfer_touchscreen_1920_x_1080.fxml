@@ -1026,6 +1026,247 @@
                     <children>
                         <Group>
                             <children>
+                                <Group id="Button_Over_Info">
+                                    <children>
+                                        <Group blendMode="MULTIPLY">
+                                            <children>
+                                                <Group>
+                                                    <children>
+                                                        <Group blendMode="MULTIPLY">
+                                                            <children>
+                                                                <Group>
+                                                                    <children>
+                                                                        <Group blendMode="MULTIPLY">
+                                                                            <children>
+                                                                                <Rectangle height="95.0" opacity="0.1" width="147.0" x="174.0" y="757.0">
+                                                                                    <fill>
+                                                                                        <LinearGradient endX="247.5" endY="849.6" proportional="false" startX="247.5" startY="758.38">
+                                                                                            <stops>
+                                                                                                <Stop>
+                                                                                                    <color>
+                                                                                                        <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0168">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.9411765" green="0.9411765" red="0.9411765"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0341">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.8862745" green="0.8862745" red="0.8862745"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0519">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.83137256" green="0.83137256" red="0.83137256"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0705">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7764706" green="0.7764706" red="0.7764706"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0898">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7176471" green="0.72156864" red="0.72156864"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.1099">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.6627451" green="0.6627451" red="0.6627451"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.1311">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.60784316" green="0.60784316" red="0.60784316"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.1534">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.5529412" green="0.5529412" red="0.5529412"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.177">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.49411765" green="0.49803922" red="0.49803922"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.2024">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.4392157" green="0.44313726" red="0.44313726"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.2298">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.38431373" green="0.38431373" red="0.38431373"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.26">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.32941177" green="0.32941177" red="0.32941177"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.294">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.27058825" green="0.27450982" red="0.27450982"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.3341">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.21568628" green="0.21960784" red="0.21960784"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.3856">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.16078432" green="0.16470589" red="0.16470589"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.503">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.6737">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.16078432" green="0.16470589" red="0.16470589"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.7259">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.21568628" green="0.21960784" red="0.21960784"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.7637">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.27058825" green="0.27450982" red="0.27450982"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.7942">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.32941177" green="0.32941177" red="0.32941177"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8204">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.38431373" green="0.38431373" red="0.38431373"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8435">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.4392157" green="0.44313726" red="0.44313726"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8643">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.49411765" green="0.49803922" red="0.49803922"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8834">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.5529412" green="0.5529412" red="0.5529412"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9011">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.60784316" green="0.60784316" red="0.60784316"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9176">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.6627451" green="0.6627451" red="0.6627451"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9332">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7176471" green="0.72156864" red="0.72156864"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9478">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7764706" green="0.7764706" red="0.7764706"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9617">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.83137256" green="0.83137256" red="0.83137256"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9751">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.8862745" green="0.8862745" red="0.8862745"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9878">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.9411765" green="0.9411765" red="0.9411765"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="1.0">
+                                                                                                    <color>
+                                                                                                        <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                            </stops>
+                                                                                        </LinearGradient>
+                                                                                    </fill>
+                                                                                </Rectangle>
+                                                                            </children>
+                                                                        </Group>
+                                                                    </children>
+                                                                </Group>
+                                                                <Group>
+                                                                    <children>
+                                                                        <SVGPath content="M321.00,850.88 L321.00,757.00 C316.00,790.90 316.00,820.89 321.00,850.88 Z " opacity="0.3">
+                                                                            <fill>
+                                                                                <LinearGradient endX="317.26" endY="803.94" proportional="false" startX="321.01" startY="803.94">
+                                                                                    <stops>
+                                                                                        <Stop>
+                                                                                            <color>
+                                                                                                <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                                            </color>
+                                                                                        </Stop>
+                                                                                        <Stop offset="1.0">
+                                                                                            <color>
+                                                                                                <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                            </color>
+                                                                                        </Stop>
+                                                                                    </stops>
+                                                                                </LinearGradient>
+                                                                            </fill>
+                                                                        </SVGPath>
+                                                                    </children>
+                                                                </Group>
+                                                            </children>
+                                                        </Group>
+                                                    </children>
+                                                </Group>
+                                                <Group opacity="0.9">
+                                                    <children>
+                                                        <SVGPath content="M174.00,850.88 L174.00,757.00 C178.33,790.90 178.33,820.89 174.00,850.88 Z " opacity="0.3">
+                                                            <fill>
+                                                                <LinearGradient endX="177.25" endY="803.94" proportional="false" startX="174.0" startY="803.94">
+                                                                    <stops>
+                                                                        <Stop>
+                                                                            <color>
+                                                                                <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                            </color>
+                                                                        </Stop>
+                                                                        <Stop offset="1.0">
+                                                                            <color>
+                                                                                <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                            </color>
+                                                                        </Stop>
+                                                                    </stops>
+                                                                </LinearGradient>
+                                                            </fill>
+                                                        </SVGPath>
+                                                    </children>
+                                                </Group>
+                                            </children>
+                                        </Group>
+                                    </children>
+                                </Group>
                                 <Group id="Button_Pressed_Info">
                                     <children>
                                         <Group blendMode="MULTIPLY">
@@ -1272,6 +1513,247 @@
                                         <Color blue="1.0" green="1.0" red="1.0"/>
                                     </fill>
                                 </Rectangle>
+                                <Group id="Button_Over_Color">
+                                    <children>
+                                        <Group blendMode="MULTIPLY">
+                                            <children>
+                                                <Group>
+                                                    <children>
+                                                        <Group blendMode="MULTIPLY">
+                                                            <children>
+                                                                <Group>
+                                                                    <children>
+                                                                        <Group blendMode="MULTIPLY">
+                                                                            <children>
+                                                                                <Rectangle height="95.0" opacity="0.1" width="147.0" x="321.0" y="757.0">
+                                                                                    <fill>
+                                                                                        <LinearGradient endX="394.5" endY="849.6" proportional="false" startX="394.5" startY="758.38">
+                                                                                            <stops>
+                                                                                                <Stop>
+                                                                                                    <color>
+                                                                                                        <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0168">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.9411765" green="0.9411765" red="0.9411765"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0341">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.8862745" green="0.8862745" red="0.8862745"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0519">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.83137256" green="0.83137256" red="0.83137256"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0705">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7764706" green="0.7764706" red="0.7764706"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.0898">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7176471" green="0.72156864" red="0.72156864"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.1099">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.6627451" green="0.6627451" red="0.6627451"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.1311">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.60784316" green="0.60784316" red="0.60784316"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.1534">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.5529412" green="0.5529412" red="0.5529412"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.177">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.49411765" green="0.49803922" red="0.49803922"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.2024">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.4392157" green="0.44313726" red="0.44313726"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.2298">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.38431373" green="0.38431373" red="0.38431373"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.26">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.32941177" green="0.32941177" red="0.32941177"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.294">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.27058825" green="0.27450982" red="0.27450982"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.3341">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.21568628" green="0.21960784" red="0.21960784"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.3856">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.16078432" green="0.16470589" red="0.16470589"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.503">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.6737">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.16078432" green="0.16470589" red="0.16470589"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.7259">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.21568628" green="0.21960784" red="0.21960784"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.7637">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.27058825" green="0.27450982" red="0.27450982"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.7942">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.32941177" green="0.32941177" red="0.32941177"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8204">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.38431373" green="0.38431373" red="0.38431373"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8435">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.4392157" green="0.44313726" red="0.44313726"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8643">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.49411765" green="0.49803922" red="0.49803922"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.8834">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.5529412" green="0.5529412" red="0.5529412"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9011">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.60784316" green="0.60784316" red="0.60784316"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9176">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.6627451" green="0.6627451" red="0.6627451"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9332">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7176471" green="0.72156864" red="0.72156864"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9478">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.7764706" green="0.7764706" red="0.7764706"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9617">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.83137256" green="0.83137256" red="0.83137256"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9751">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.8862745" green="0.8862745" red="0.8862745"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="0.9878">
+                                                                                                    <color>
+                                                                                                        <Color blue="0.9411765" green="0.9411765" red="0.9411765"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                                <Stop offset="1.0">
+                                                                                                    <color>
+                                                                                                        <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                                    </color>
+                                                                                                </Stop>
+                                                                                            </stops>
+                                                                                        </LinearGradient>
+                                                                                    </fill>
+                                                                                </Rectangle>
+                                                                            </children>
+                                                                        </Group>
+                                                                    </children>
+                                                                </Group>
+                                                                <Group>
+                                                                    <children>
+                                                                        <SVGPath content="M468.00,850.88 L468.00,757.00 C463.00,790.90 463.00,820.89 468.00,850.88 Z " opacity="0.3">
+                                                                            <fill>
+                                                                                <LinearGradient endX="464.26" endY="803.94" proportional="false" startX="468.01" startY="803.94">
+                                                                                    <stops>
+                                                                                        <Stop>
+                                                                                            <color>
+                                                                                                <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                                            </color>
+                                                                                        </Stop>
+                                                                                        <Stop offset="1.0">
+                                                                                            <color>
+                                                                                                <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                            </color>
+                                                                                        </Stop>
+                                                                                    </stops>
+                                                                                </LinearGradient>
+                                                                            </fill>
+                                                                        </SVGPath>
+                                                                    </children>
+                                                                </Group>
+                                                            </children>
+                                                        </Group>
+                                                    </children>
+                                                </Group>
+                                                <Group opacity="0.9">
+                                                    <children>
+                                                        <SVGPath content="M321.00,850.88 L321.00,757.00 C325.33,790.90 325.33,820.89 321.00,850.88 Z " opacity="0.3">
+                                                            <fill>
+                                                                <LinearGradient endX="324.25" endY="803.94" proportional="false" startX="321.0" startY="803.94">
+                                                                    <stops>
+                                                                        <Stop>
+                                                                            <color>
+                                                                                <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                            </color>
+                                                                        </Stop>
+                                                                        <Stop offset="1.0">
+                                                                            <color>
+                                                                                <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                            </color>
+                                                                        </Stop>
+                                                                    </stops>
+                                                                </LinearGradient>
+                                                            </fill>
+                                                        </SVGPath>
+                                                    </children>
+                                                </Group>
+                                            </children>
+                                        </Group>
+                                    </children>
+                                </Group>
                                 <Group id="Button_Pressed_Color">
                                     <children>
                                         <Group blendMode="MULTIPLY">
@@ -1540,6 +2022,247 @@
                                                         </LinearGradient>
                                                     </fill>
                                                 </SVGPath>
+                                            </children>
+                                        </Group>
+                                    </children>
+                                </Group>
+                                <Group id="Button_Over_Gallery">
+                                    <children>
+                                        <Group blendMode="MULTIPLY">
+                                            <children>
+                                                <Group>
+                                                    <children>
+                                                        <Group blendMode="MULTIPLY">
+                                                            <children>
+                                                                <Group>
+                                                                    <children>
+                                                                        <Group blendMode="MULTIPLY">
+                                                                            <children>
+                                                                                <Group>
+                                                                                    <children>
+                                                                                        <SVGPath content="M174.00,850.88 L174.00,757.00 C169.67,790.90 169.67,820.89 174.00,850.88 Z " opacity="0.3">
+                                                                                            <fill>
+                                                                                                <LinearGradient endX="170.75" endY="803.94" proportional="false" startX="174.0" startY="803.94">
+                                                                                                    <stops>
+                                                                                                        <Stop>
+                                                                                                            <color>
+                                                                                                                <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                                                            </color>
+                                                                                                        </Stop>
+                                                                                                        <Stop offset="1.0">
+                                                                                                            <color>
+                                                                                                                <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                                            </color>
+                                                                                                        </Stop>
+                                                                                                    </stops>
+                                                                                                </LinearGradient>
+                                                                                            </fill>
+                                                                                        </SVGPath>
+                                                                                    </children>
+                                                                                </Group>
+                                                                            </children>
+                                                                        </Group>
+                                                                    </children>
+                                                                </Group>
+                                                                <Group>
+                                                                    <children>
+                                                                        <SVGPath content="M27.00,850.88 L27.00,757.00 C31.33,790.90 31.33,820.89 27.00,850.88 Z " opacity="0.3">
+                                                                            <fill>
+                                                                                <LinearGradient endX="30.25" endY="803.94" proportional="false" startX="27.0" startY="803.94">
+                                                                                    <stops>
+                                                                                        <Stop>
+                                                                                            <color>
+                                                                                                <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                                            </color>
+                                                                                        </Stop>
+                                                                                        <Stop offset="1.0">
+                                                                                            <color>
+                                                                                                <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                                            </color>
+                                                                                        </Stop>
+                                                                                    </stops>
+                                                                                </LinearGradient>
+                                                                            </fill>
+                                                                        </SVGPath>
+                                                                    </children>
+                                                                </Group>
+                                                            </children>
+                                                        </Group>
+                                                    </children>
+                                                </Group>
+                                                <Rectangle height="95.0" opacity="0.1" width="147.0" x="27.0" y="757.0">
+                                                    <fill>
+                                                        <LinearGradient endX="100.5" endY="849.6" proportional="false" startX="100.5" startY="758.38">
+                                                            <stops>
+                                                                <Stop>
+                                                                    <color>
+                                                                        <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.0168">
+                                                                    <color>
+                                                                        <Color blue="0.9411765" green="0.9411765" red="0.9411765"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.0341">
+                                                                    <color>
+                                                                        <Color blue="0.8862745" green="0.8862745" red="0.8862745"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.0519">
+                                                                    <color>
+                                                                        <Color blue="0.83137256" green="0.83137256" red="0.83137256"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.0705">
+                                                                    <color>
+                                                                        <Color blue="0.7764706" green="0.7764706" red="0.7764706"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.0898">
+                                                                    <color>
+                                                                        <Color blue="0.7176471" green="0.72156864" red="0.72156864"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.1099">
+                                                                    <color>
+                                                                        <Color blue="0.6627451" green="0.6627451" red="0.6627451"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.1311">
+                                                                    <color>
+                                                                        <Color blue="0.60784316" green="0.60784316" red="0.60784316"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.1534">
+                                                                    <color>
+                                                                        <Color blue="0.5529412" green="0.5529412" red="0.5529412"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.177">
+                                                                    <color>
+                                                                        <Color blue="0.49411765" green="0.49803922" red="0.49803922"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.2024">
+                                                                    <color>
+                                                                        <Color blue="0.4392157" green="0.44313726" red="0.44313726"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.2298">
+                                                                    <color>
+                                                                        <Color blue="0.38431373" green="0.38431373" red="0.38431373"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.26">
+                                                                    <color>
+                                                                        <Color blue="0.32941177" green="0.32941177" red="0.32941177"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.294">
+                                                                    <color>
+                                                                        <Color blue="0.27058825" green="0.27450982" red="0.27450982"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.3341">
+                                                                    <color>
+                                                                        <Color blue="0.21568628" green="0.21960784" red="0.21960784"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.3856">
+                                                                    <color>
+                                                                        <Color blue="0.16078432" green="0.16470589" red="0.16470589"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.503">
+                                                                    <color>
+                                                                        <Color blue="0.105882354" green="0.10980392" red="0.10980392"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.6737">
+                                                                    <color>
+                                                                        <Color blue="0.16078432" green="0.16470589" red="0.16470589"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.7259">
+                                                                    <color>
+                                                                        <Color blue="0.21568628" green="0.21960784" red="0.21960784"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.7637">
+                                                                    <color>
+                                                                        <Color blue="0.27058825" green="0.27450982" red="0.27450982"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.7942">
+                                                                    <color>
+                                                                        <Color blue="0.32941177" green="0.32941177" red="0.32941177"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.8204">
+                                                                    <color>
+                                                                        <Color blue="0.38431373" green="0.38431373" red="0.38431373"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.8435">
+                                                                    <color>
+                                                                        <Color blue="0.4392157" green="0.44313726" red="0.44313726"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.8643">
+                                                                    <color>
+                                                                        <Color blue="0.49411765" green="0.49803922" red="0.49803922"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.8834">
+                                                                    <color>
+                                                                        <Color blue="0.5529412" green="0.5529412" red="0.5529412"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9011">
+                                                                    <color>
+                                                                        <Color blue="0.60784316" green="0.60784316" red="0.60784316"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9176">
+                                                                    <color>
+                                                                        <Color blue="0.6627451" green="0.6627451" red="0.6627451"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9332">
+                                                                    <color>
+                                                                        <Color blue="0.7176471" green="0.72156864" red="0.72156864"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9478">
+                                                                    <color>
+                                                                        <Color blue="0.7764706" green="0.7764706" red="0.7764706"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9617">
+                                                                    <color>
+                                                                        <Color blue="0.83137256" green="0.83137256" red="0.83137256"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9751">
+                                                                    <color>
+                                                                        <Color blue="0.8862745" green="0.8862745" red="0.8862745"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="0.9878">
+                                                                    <color>
+                                                                        <Color blue="0.9411765" green="0.9411765" red="0.9411765"/>
+                                                                    </color>
+                                                                </Stop>
+                                                                <Stop offset="1.0">
+                                                                    <color>
+                                                                        <Color blue="1.0" green="1.0" red="1.0"/>
+                                                                    </color>
+                                                                </Stop>
+                                                            </stops>
+                                                        </LinearGradient>
+                                                    </fill>
+                                                </Rectangle>
                                             </children>
                                         </Group>
                                     </children>

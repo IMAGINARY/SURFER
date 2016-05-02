@@ -134,6 +134,10 @@ public class Main extends Application
                     }
                 },
                 p -> logger.debug( "Printing ..." )
+            TabPanel tp = new TabPanel(
+                new javafx.scene.layout.Pane( new javafx.scene.control.Label( "gallery" ) ),
+                new javafx.scene.layout.Pane( new javafx.scene.control.Label( "info" ) ),
+                new javafx.scene.layout.Pane( new javafx.scene.control.Label( "color" ) )
             );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
@@ -145,6 +149,7 @@ public class Main extends Application
             overlay.getChildren().add( msnbp );
             overlay.getChildren().add( snsp );
             overlay.getChildren().add( ra );
+            overlay.getChildren().add( tp );
 
             stage.setScene( scene );
             stage.show();

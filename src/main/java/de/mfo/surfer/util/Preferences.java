@@ -80,6 +80,7 @@ public class Preferences
         {
             exportSize = new SimpleIntegerProperty( 512 );
             jpegQuality = new SimpleIntegerProperty( 85 );
+            initiallyOpenedTab = new SimpleIntegerProperty( 2 );
         }
 
         private static SimpleIntegerProperty exportSize;
@@ -108,6 +109,20 @@ public class Preferences
         public static IntegerProperty jpegQualityProperty()
         {
             return jpegQuality;
+        }
+
+        private static SimpleIntegerProperty initiallyOpenedTab;
+        public static int getInitiallyOpenedTab()
+        {
+            return initiallyOpenedTab.get();
+        }
+        public static void setiInitiallyOpenedTab( int value )
+        {
+            initiallyOpenedTab.set( value );
+        }
+        public static IntegerProperty initiallyOpenedTabProperty()
+        {
+            return initiallyOpenedTab;
         }
     }
 }

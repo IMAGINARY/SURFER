@@ -119,3 +119,9 @@ LanguageSelector.choice-box {
     -fx-opacity: 0%;
     -fx-font-size: 150%;
 }
+
+TabPanel > Label {
+    -fx-font-size: 125%;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
