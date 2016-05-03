@@ -382,6 +382,11 @@ public class RenderArea extends Region
             List< String > names = Arrays.asList( new String[]{ "a", "b", "c", "d" } );
             names.forEach( n -> { if( parameters.containsKey( n ) ) asr.setParameterValue( n, parameters.get( n ) ); } );
 
+            Set< String > unassignedParameterNames = new HashSet< String >( asr.getAllParameterNames() );
+            asr.getAssignedParameters().forEach( e -> unassignedParameterNames.remove( e.getKey() ) );
+            if( unassignedParameterNames.size() > 0 )
+                throw new UnsupportedOperationException( "No value assigned to parameters: " + unassignedParameterNames );
+
             Function< Color, Color3f > c2c3f = c -> new Color3f( ( float ) c.getRed(), ( float ) c.getGreen(), ( float ) c.getBlue() );
 
             asr.getFrontMaterial().setColor( c2c3f.apply( frontColor.getValue() ) );
