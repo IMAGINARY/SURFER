@@ -358,14 +358,18 @@ public class RenderArea extends Region
         try
         {
             isFormulaValid.set( true );
+
+            List< String > namesABCD = Arrays.asList( new String[]{ "a", "b", "c", "d" } );
+
             if( !formula.getValue().equals( asr.getSurfaceFamilyString() ) )
             {
                 asr.setSurfaceFamily( formula.getValue() );
 
-                Set< String > newParameterNames = asr.getAllParameterNames();
+                Set< String > newParameterNames = new HashSet< String >( asr.getAllParameterNames() );
                 newParameterNames.add( "scale_factor" );
                 parameters.keySet().retainAll( newParameterNames );
                 newParameterNames.removeAll( parameters.keySet() );
+                newParameterNames.retainAll( namesABCD );
                 newParameterNames.forEach( e -> { parameters.put( e, 0.0 ); asr.setParameterValue( e, 0.0 ); } );
             }
 
@@ -379,13 +383,12 @@ public class RenderArea extends Region
             ) );
             setOptimalCameraDistance( asr.getCamera() );
 
-            List< String > names = Arrays.asList( new String[]{ "a", "b", "c", "d" } );
-            names.forEach( n -> { if( parameters.containsKey( n ) ) asr.setParameterValue( n, parameters.get( n ) ); } );
+            namesABCD.forEach( n -> { if( parameters.containsKey( n ) ) asr.setParameterValue( n, parameters.get( n ) ); } );
 
             Set< String > unassignedParameterNames = new HashSet< String >( asr.getAllParameterNames() );
             asr.getAssignedParameters().forEach( e -> unassignedParameterNames.remove( e.getKey() ) );
             if( unassignedParameterNames.size() > 0 )
-                throw new UnsupportedOperationException( "No value assigned to parameters: " + unassignedParameterNames );
+                throw new UnsupportedOperationException( "No value assigned to some parameters: " + unassignedParameterNames );
 
             Function< Color, Color3f > c2c3f = c -> new Color3f( ( float ) c.getRed(), ( float ) c.getGreen(), ( float ) c.getBlue() );
 
