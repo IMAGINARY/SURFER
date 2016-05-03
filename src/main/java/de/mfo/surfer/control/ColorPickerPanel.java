@@ -10,16 +10,16 @@ import javafx.scene.paint.Color;
 
 public class ColorPickerPanel extends VBox
 {
-    ColorPicker frontColor;
-    ColorPicker backColor;
+    CustomColorPicker frontColor;
+    CustomColorPicker backColor;
 
     public ColorPickerPanel()
     {
         super();
         setAlignment( Pos.CENTER );
 
-        frontColor = new ColorPicker();
-        backColor = new ColorPicker();
+        frontColor = new CustomColorPicker();
+        backColor = new CustomColorPicker();
 
         Region spring0 = new Region();
         Region spring1 = new Region();
@@ -34,31 +34,31 @@ public class ColorPickerPanel extends VBox
 
     public Color getFrontColor()
     {
-        return frontColor.getValue();
+        return frontColor.getCustomColor();
     }
 
     public void setFrontColor( Color value )
     {
-        frontColor.setValue( value );
+        frontColor.setCustomColor( value );
     }
 
     public ObjectProperty< Color > frontColorProperty()
     {
-        return frontColor.valueProperty();
+        return frontColor.customColorProperty();
     }
 
     public Color getbackColor()
     {
-        return backColor.getValue();
+        return backColor.getCustomColor();
     }
 
     public void setBackColor( Color value )
     {
-        backColor.setValue( value );
+        backColor.setCustomColor( value );
     }
 
     public ObjectProperty< Color > backColorProperty()
     {
-        return backColor.valueProperty();
+        return backColor.customColorProperty();
     }
 }
