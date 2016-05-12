@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.L;
 import java.util.HashMap;
 import java.util.Locale;
@@ -13,12 +14,7 @@ public class LanguageSelector extends ChoiceBox< Locale >
 {
     public LanguageSelector()
     {
-        Bounds languageButtonBB = Main.fxmlLookup( "#Button_Language" ).getBoundsInParent();
-        relocate( languageButtonBB.getMinX(), languageButtonBB.getMinY() );
-        setMinWidth( languageButtonBB.getWidth() );
-        setMaxWidth( languageButtonBB.getWidth() );
-        setMinHeight( languageButtonBB.getHeight() );
-        setMaxHeight( languageButtonBB.getHeight() );
+        FXUtils.resizeRelocateTo( this, Main.fxmlLookup( "#Button_Language" ) );
         //setMouseTransparent( true );
 
         setConverter( new StringConverter< Locale >()

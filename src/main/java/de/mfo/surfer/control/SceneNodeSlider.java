@@ -1,5 +1,6 @@
 package de.mfo.surfer.control;
 
+import de.mfo.surfer.util.FXUtils;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -63,9 +64,7 @@ public class SceneNodeSlider extends Slider
             )
         );
 
-        relocate( sliderBB.getMinX(), sliderBB.getMinY() );
-        setMinWidth( sliderBB.getWidth() );
-        setMinHeight( sliderBB.getHeight() );
+        FXUtils.resizeRelocateTo( this, sliderBB );
         setOpacity( 0.0 );
 
         // increment on click

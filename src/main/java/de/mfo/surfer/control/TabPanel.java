@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.FXUtils;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
@@ -38,17 +39,9 @@ public class TabPanel extends Region
 
     private void initTabLabel( String placeholderId, String lbId )
     {
-        Node labelPlaceholder = Main.fxmlLookup( "#" + placeholderId );
-        labelPlaceholder.setVisible( false );
-
-        Bounds labelBB = labelPlaceholder.getBoundsInParent();
-
         Label label = new Label();
-        label.setMinWidth( labelBB.getWidth() );
-        label.setMinHeight( labelBB.getHeight() );
-        label.relocate( labelBB.getMinX(), labelBB.getMinY() );
+        FXUtils.resizeRelocateTo( label, FXUtils.setVisible( Main.fxmlLookup( "#" + placeholderId ), false ) );
         label.textProperty().bind( lb( lbId ) );
-
         getChildren().add( label );
     }
 
@@ -65,16 +58,9 @@ public class TabPanel extends Region
 
     private void initTabContent( Pane tabContent, int index )
     {
-        Bounds placeholderBB = Main.fxmlLookup( "#Tab_Box" ).getBoundsInParent();
-
-        tabContent.setMinWidth( placeholderBB.getWidth() );
-        tabContent.setMinHeight( placeholderBB.getHeight() );
-        tabContent.setMaxWidth( placeholderBB.getWidth() );
-        tabContent.setMaxHeight( placeholderBB.getHeight() );
-        tabContent.relocate( placeholderBB.getMinX(), placeholderBB.getMinY() );
+        FXUtils.resizeRelocateTo( tabContent, FXUtils.setVisible( Main.fxmlLookup( "#Tab_Box" ), false ) );
         tabContent.visibleProperty().bind( activeTab.isEqualTo( index ) );
         tabContent.disableProperty().bind( activeTab.isNotEqualTo( index ) );
-
         getChildren().add( tabContent );
     }
 

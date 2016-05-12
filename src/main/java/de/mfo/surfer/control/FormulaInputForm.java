@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.FXUtils;
 import static de.mfo.surfer.util.L.lb;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -80,13 +81,12 @@ public class FormulaInputForm extends Region
             );
         }
 
-        textField.setMinWidth( textFieldBB.getWidth() );
-        textField.setMinHeight( textFieldBB.getHeight() );
+        FXUtils.resizeTo( textField, textFieldBB );
         equalsZero.setMinHeight( textFieldBB.getHeight() );
 
         StackPane stackPane = new StackPane( textField, equalsZero );
         stackPane.setAlignment( Pos.BASELINE_RIGHT );
-        stackPane.relocate( textFieldBB.getMinX(), textFieldBB.getMinY() );
+        FXUtils.relocateTo( stackPane, textFieldBB );
 
         this.getChildren().add( stackPane );
     }
@@ -145,32 +145,17 @@ public class FormulaInputForm extends Region
 
     void initLabels()
     {
-        Node variablesPlaceholder = Main.< Node >fxmlLookup( "#Text_Keyboard_XYZ" );
-        variablesPlaceholder.setVisible( false );
-        Bounds variablesBB = variablesPlaceholder.getBoundsInParent();
         Label variables = new Label();
         variables.textProperty().bind( lb( "variables" ) );
-        variables.relocate( variablesBB.getMinX(), variablesBB.getMinY() );
-        variables.setMinWidth( variablesBB.getWidth() );
-        variables.setMinHeight( variablesBB.getHeight() );
+        FXUtils.resizeRelocateTo( variables, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_XYZ" ), false ) );
 
-        Node arithmeticOperationsPlaceholder = Main.< Node >fxmlLookup( "#Text_Keyboard_Operations" );
-        arithmeticOperationsPlaceholder.setVisible( false );
-        Bounds arithmeticOperationsBB = arithmeticOperationsPlaceholder.getBoundsInParent();
         Label arithmeticOperations = new Label();
         arithmeticOperations.textProperty().bind( lb( "arithmeticOperations" ) );
-        arithmeticOperations.relocate( arithmeticOperationsBB.getMinX(), arithmeticOperationsBB.getMinY() );
-        arithmeticOperations.setMinWidth( arithmeticOperationsBB.getWidth() );
-        arithmeticOperations.setMinHeight( arithmeticOperationsBB.getHeight() );
+        FXUtils.resizeRelocateTo( arithmeticOperations, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Operations" ), false ) );
 
-        Node parametersPlaceholder = Main.< Node >fxmlLookup( "#Text_Keyboard_Parameters" );
-        parametersPlaceholder.setVisible( false );
-        Bounds parametersBB = parametersPlaceholder.getBoundsInParent();
         Label parameters = new Label();
         parameters.textProperty().bind( lb( "parameters" ) );
-        parameters.relocate( parametersBB.getMinX(), parametersBB.getMinY() );
-        parameters.setMinWidth( parametersBB.getWidth() );
-        parameters.setMinHeight( parametersBB.getHeight() );
+        FXUtils.resizeRelocateTo( parameters, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Parameters" ), false ) );
 
         this.getChildren().addAll( variables, arithmeticOperations, parameters );
     }

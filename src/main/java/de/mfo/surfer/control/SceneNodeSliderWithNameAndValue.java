@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.L;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Bounds;
@@ -44,21 +45,8 @@ public class SceneNodeSliderWithNameAndValue extends Region
 
         setPickOnBounds( false );
 
-        Node namePlaceholderNode = Main.< Node >fxmlLookup( "#" + groupName + "_Name" );
-        Node valuePlaceholderNode = Main.< Node >fxmlLookup( "#" + groupName + "_Value" );
-
-        namePlaceholderNode.setVisible( false );
-        valuePlaceholderNode.setVisible( false );
-
-        Bounds nameBB = namePlaceholderNode.getBoundsInParent();
-        Bounds valueBB = valuePlaceholderNode.getBoundsInParent();
-
-        nameLabel.setMinWidth( nameBB.getWidth() );
-        nameLabel.setMinHeight( nameBB.getHeight() );
-        nameLabel.relocate( nameBB.getMinX(), nameBB.getMinY() );
-        valueLabel.setMinWidth( valueBB.getWidth() );
-        valueLabel.setMinHeight( valueBB.getHeight() );
-        valueLabel.relocate( valueBB.getMinX(), valueBB.getMinY() );
+        FXUtils.resizeRelocateTo( nameLabel, FXUtils.setVisible( Main.fxmlLookup( "#" + groupName + "_Name" ), false ) );
+        FXUtils.resizeRelocateTo( valueLabel, FXUtils.setVisible( Main.fxmlLookup( "#" + groupName + "_Value" ), false ) );
 
         nameLabel.setText( name );
 
