@@ -5,19 +5,22 @@ import de.mfo.surfer.gallery.GalleryItem;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.L;
 import java.util.LinkedList;
+import javafx.beans.value.WritableValue;
+import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 
 public class GallerySelector extends VBox
 {
     LinkedList< Gallery > galleries;
-    Pane introPageContainer;
-    Pane infoPageContainer;
-    Pane galleryIconContainer;
+    WritableValue< Node > introPageContainer;
+    WritableValue< Node > infoPageContainer;
+    ObservableList< Node > galleryIconContainer;
     RenderArea renderArea;
     Main mainWindow;
 
-    public GallerySelector( Pane galleryIconContainer, Pane introPageContainer, Pane infoPageContainer, RenderArea renderArea, Main mainWindow )
+    public GallerySelector( ObservableList< Node > galleryIconContainer, WritableValue< Node > introPageContainer, WritableValue< Node > infoPageContainer, RenderArea renderArea, Main mainWindow )
     {
         super();
 
@@ -49,19 +52,19 @@ public class GallerySelector extends VBox
 
     private void selectGallery( Gallery g )
     {
-        introPageContainer.getChildren().setAll( g.getGalleryItems().get( 0 ).getInfoPage() );
-        galleryIconContainer.getChildren().clear();
+        introPageContainer.setValue( g.getGalleryItems().get( 0 ).getInfoPage() );
+        galleryIconContainer.clear();
         g.getGalleryItems()
             .stream()
             .sequential()
             .skip( 1 )
-            .forEach( gi -> galleryIconContainer.getChildren().add( gi.getIcon() ) );
+            .forEach( gi -> galleryIconContainer.add( gi.getIcon() ) );
         mainWindow.setMode( Main.Mode.GALLERY );
     }
 
     private void selectGalleryItem( GalleryItem gi )
     {
-        infoPageContainer.getChildren().setAll( gi.getInfoPage() );
+        infoPageContainer.setValue( gi.getInfoPage() );
         try
         {
             renderArea.load( gi.getJsurfURL() );

@@ -13,6 +13,7 @@ import javafx.beans.binding.When;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.Group;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -79,8 +80,8 @@ public class Main extends Application
     private GallerySelector gs;
     private TabPanel tp;
     private Pane galleryIconContainer;
-    private Pane introPageContainer;
-    private Pane infoPageContainer;
+    private BorderPane introPageContainer;
+    private BorderPane infoPageContainer;
 
     @Override
     public void start( Stage stage ) throws Exception
@@ -152,17 +153,15 @@ public class Main extends Application
             cpp = new ColorPickerPanel();
 
             galleryIconContainer = new javafx.scene.layout.TilePane();
-            galleryIconContainer.setStyle( "-fx-background-color: red;" );
             FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
-            introPageContainer = new Pane();
-            introPageContainer.setStyle( "-fx-background-color: green;" );
+            introPageContainer = new BorderPane();
             FXUtils.resizeRelocateTo( introPageContainer, fxmlLookup( "#Gallery_Text" ) );
-            infoPageContainer = new Pane();
+            infoPageContainer = new BorderPane();
 
             gs = new GallerySelector(
-                galleryIconContainer,
-                introPageContainer,
-                infoPageContainer,
+                galleryIconContainer.getChildren(),
+                introPageContainer.centerProperty(),
+                infoPageContainer.centerProperty(),
                 ra,
                 this
             );
