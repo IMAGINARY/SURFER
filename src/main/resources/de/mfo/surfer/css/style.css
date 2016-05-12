@@ -125,3 +125,11 @@ TabPanel > Label {
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
+
+.galleryIcon {
+    -fx-content-display: left;
+}
+
+.galleryItemIcon {
+    -fx-content-display: top;
+}

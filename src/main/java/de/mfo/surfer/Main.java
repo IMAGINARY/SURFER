@@ -1,6 +1,8 @@
 package de.mfo.surfer;
 
 import de.mfo.surfer.control.*;
+import de.mfo.surfer.gallery.*;
+import de.mfo.surfer.util.FXUtils;
 
 import java.io.IOException;
 
@@ -11,6 +13,7 @@ import javafx.beans.binding.When;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.transform.Scale;
@@ -68,6 +71,17 @@ public class Main extends Application
         }
     }
 
+    private FormulaInputForm fif;
+    private SceneNodeSliderPanel snsp;
+    private RenderArea ra;
+    private MiscSceneNodeButtonPanel msnbp;
+    private ColorPickerPanel cpp;
+    private GallerySelector gs;
+    private TabPanel tp;
+    private Pane galleryIconContainer;
+    private Pane introPageContainer;
+    private Pane infoPageContainer;
+
     @Override
     public void start( Stage stage ) throws Exception
     {
@@ -95,10 +109,10 @@ public class Main extends Application
             root.getTransforms().add( scale );
             root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
-            FormulaInputForm fif = new FormulaInputForm();
-            SceneNodeSliderPanel snsp = new SceneNodeSliderPanel();
-            RenderArea ra = new RenderArea();
-            MiscSceneNodeButtonPanel msnbp = new MiscSceneNodeButtonPanel(
+            fif = new FormulaInputForm();
+            snsp = new SceneNodeSliderPanel();
+            ra = new RenderArea();
+            msnbp = new MiscSceneNodeButtonPanel(
                 f ->
                 {
                     logger.debug( "Open {}", f );
@@ -135,12 +149,32 @@ public class Main extends Application
                 },
                 p -> logger.debug( "Printing ..." )
             );
-            ColorPickerPanel cpp = new ColorPickerPanel();
-            TabPanel tp = new TabPanel(
-                new javafx.scene.layout.Pane( new javafx.scene.control.Label( "gallery" ) ),
-                new javafx.scene.layout.Pane( new javafx.scene.control.Label( "info" ) ),
+            cpp = new ColorPickerPanel();
+
+            galleryIconContainer = new javafx.scene.layout.TilePane();
+            galleryIconContainer.setStyle( "-fx-background-color: red;" );
+            FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
+            introPageContainer = new Pane();
+            introPageContainer.setStyle( "-fx-background-color: green;" );
+            FXUtils.resizeRelocateTo( introPageContainer, fxmlLookup( "#Gallery_Text" ) );
+            infoPageContainer = new Pane();
+
+            gs = new GallerySelector(
+                galleryIconContainer,
+                introPageContainer,
+                infoPageContainer,
+                ra,
+                this
+            );
+            tp = new TabPanel(
+                gs,
+                infoPageContainer,
                 cpp
             );
+            tp.activeTabIndexProperty().addListener( ( observable, oldValue, newValue ) -> {
+                if( newValue.intValue() == 1 || newValue.intValue() == 2 )
+                    setMode( Mode.RENDERING );
+            } );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );
@@ -154,6 +188,10 @@ public class Main extends Application
             overlay.getChildren().add( snsp );
             overlay.getChildren().add( ra );
             overlay.getChildren().add( tp );
+            overlay.getChildren().add( introPageContainer );
+            overlay.getChildren().add( galleryIconContainer );
+
+            setMode( Mode.RENDERING );
 
             stage.setScene( scene );
             stage.show();
@@ -161,6 +199,38 @@ public class Main extends Application
         catch( Throwable t )
         {
             handleUncaughtException( Thread.currentThread(), t );
+        }
+    }
+
+    public enum Mode
+    {
+        RENDERING, GALLERY, INFO
+    }
+
+    public void setMode( Mode mode )
+    {
+        switch( mode )
+        {
+            case RENDERING:
+                ra.setVisible( true );
+                snsp.setVisible( true );
+                galleryIconContainer.setVisible( false );
+                introPageContainer.setVisible( false );
+                break;
+            case GALLERY:
+                ra.setVisible( false );
+                snsp.setVisible( false );
+                galleryIconContainer.setVisible( true );
+                introPageContainer.setVisible( true );
+                tp.setActiveTabIndex( 0 );
+                break;
+            case INFO:
+                ra.setVisible( true );
+                snsp.setVisible( true );
+                galleryIconContainer.setVisible( false );
+                introPageContainer.setVisible( false );
+                tp.setActiveTabIndex( 1 );
+                break;
         }
     }
 }

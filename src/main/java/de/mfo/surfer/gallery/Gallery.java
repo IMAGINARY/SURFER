@@ -4,6 +4,7 @@ import de.mfo.surfer.control.GalleryIcon;
 import de.mfo.surfer.control.GalleryInfoPage;
 import de.mfo.surfer.util.ThumbnailGenerator;
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.scene.image.Image;
@@ -22,6 +23,12 @@ public class Gallery
                     new ImageView( GalleryItemImpl.this.getThumbnailImage() )
                 );
             }
+
+            @Override
+            public String getUserAgentStylesheet()
+            {
+                return Gallery.class.getResource( "../css/style.css" ).toExternalForm();
+            }
         }
 
         private class GalleryInfoPageImpl extends GalleryInfoPage
@@ -29,6 +36,7 @@ public class Gallery
             public GalleryInfoPageImpl()
             {
                 super();
+                getChildren().add( new javafx.scene.control.Label( "TODO: Read and render PDF" ) );
             }
         }
 
@@ -76,16 +84,28 @@ public class Gallery
         }
     }
 
+    URL pdfURL;
+    List< GalleryItem > galleryItems;
+
     public Gallery( URL pdfURL )
     {
-
+        this.pdfURL = pdfURL;
     }
 
     public List< GalleryItem > getGalleryItems()
     {
-        LinkedList< GalleryItem > items = new LinkedList<>();
-        for( int i = 0; i < 13; ++i )
-            items.add( new GalleryItemImpl( "item " + i, getClass().getResource( "default.jsurf" ) ) );
-        return items;
+        if( galleryItems == null )
+        {
+            galleryItems = new LinkedList<>();
+            for( int i = 0; i < 13; ++i )
+            {
+                GalleryItem gi = new GalleryItemImpl( "item " + i, getClass().getResource( "default.jsurf" ) );
+                gi.getIcon().getStyleClass().addAll( i == 0 ? "galleryIcon" : "galleryItemIcon" );
+                galleryItems.add( gi );
+            }
+            galleryItems = Collections.unmodifiableList( galleryItems );
+        }
+
+        return galleryItems;
     }
 }
