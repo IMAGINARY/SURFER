@@ -1,6 +1,7 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.Main;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,7 +20,7 @@ public class TabPanel extends Region
     public TabPanel( Pane galleryPanel, Pane infoPanel, Pane colorPanel )
     {
         super();
-        
+
         activeTab = new SimpleIntegerProperty( Preferences.General.getInitiallyOpenedTab() );
 
         initTabLabel( "Tab_Text_Gallery", "start" );
@@ -75,6 +76,21 @@ public class TabPanel extends Region
         tabContent.disableProperty().bind( activeTab.isNotEqualTo( index ) );
 
         getChildren().add( tabContent );
+    }
+
+    public int getActiveTabIndex()
+    {
+        return activeTab.get();
+    }
+
+    public void setActiveTabIndex( int value )
+    {
+        activeTab.set( value );
+    }
+
+    public IntegerProperty activeTabIndexProperty()
+    {
+        return activeTab;
     }
 
     @Override
