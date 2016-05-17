@@ -6,8 +6,10 @@ import de.mfo.surfer.util.ThumbnailGenerator;
 import de.mfo.surfer.util.Utils;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingFXUtils;
@@ -16,7 +18,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Pair;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -26,6 +30,51 @@ import org.slf4j.LoggerFactory;
 public class Gallery
 {
     private static final Logger logger = LoggerFactory.getLogger( Gallery.class );
+
+    private static PDDocument pdfDocument;
+    private static PDFRenderer pdfRenderer;
+    private static HashMap< Pair< Locale, Type >, Gallery > galleries;
+
+    private static PDDocument getGalleryPdf()
+    {
+        if( pdfDocument == null )
+        {
+            pdfDocument = Utils.wrapInRte( () -> PDDocument.load( Gallery.class.getResourceAsStream( "SURFER-Galleries.pdf" ) ) );
+        }
+        return pdfDocument;
+    }
+
+    private static PDFRenderer getGalleryRenderer()
+    {
+        if( pdfRenderer == null )
+            pdfRenderer = new PDFRenderer( pdfDocument );
+        return pdfRenderer;
+    }
+
+    private static void initGalleries()
+    {
+        galleries = new HashMap<>();
+        PDOutlineItem localeKey = Gallery.getGalleryPdf().getDocumentCatalog().getDocumentOutline().getFirstChild();
+        while( localeKey != null )
+        {
+            Locale locale = new Locale( localeKey.getTitle() );
+            PDOutlineItem galleryKey = localeKey.getFirstChild();
+            while( galleryKey != null )
+            {
+                Type type = Type.valueOf( galleryKey.getTitle().toUpperCase() );
+                galleries.put( new Pair<>( locale, type ), new Gallery( galleryKey.getFirstChild() ) );
+                galleryKey = galleryKey.getNextSibling();
+            }
+            localeKey = localeKey.getNextSibling();
+        }
+    }
+
+    public static Gallery getGallery( Locale locale, Type type )
+    {
+        if( galleries == null )
+            initGalleries();
+        return galleries.get( new Pair<>( locale, type ) );
+    }
 
     private class GalleryItemImpl implements GalleryItem
     {
@@ -57,7 +106,7 @@ public class Gallery
                 super();
 
                 lastScale = 0f;
-                cropBox = pdfDocument.getPage( pdfPageIndex ).getCropBox();
+                cropBox = Gallery.getGalleryPdf().getPage( pdfPageIndex ).getCropBox();
 
                 canvas = new Canvas();
                 canvas.widthProperty().bind( widthProperty() );
@@ -82,7 +131,7 @@ public class Gallery
                     logger.debug( "redraw at  {}x{}", Math.round( scale * cropBox.getWidth() ), Math.round( scale * cropBox.getHeight() ) );
                     GraphicsContext gc = canvas.getGraphicsContext2D();
                     gc.clearRect( 0.0, 0.0, getWidth(), getHeight() );
-                    Image image = SwingFXUtils.toFXImage( Utils.wrapInRte( () -> pdfRenderer.renderImage( pdfPageIndex, scale ) ), null );
+                    Image image = SwingFXUtils.toFXImage( Utils.wrapInRte( () -> Gallery.getGalleryRenderer().renderImage( pdfPageIndex, scale ) ), null );
                     if( image.getWidth() / image.getHeight() > canvas.getWidth() / canvas.getHeight() )
                         gc.drawImage( image, 0.0, 0.0, image.getWidth(), image.getHeight(), 0.0, 0.0, canvas.getWidth(), ( canvas.getWidth() * image.getHeight() ) / image.getWidth() );
                     else
@@ -138,36 +187,38 @@ public class Gallery
         }
     }
 
-    URL pdfURL;
-    PDDocument pdfDocument;
-    PDFRenderer pdfRenderer;
     List< GalleryItem > galleryItems;
 
-    public Gallery( URL pdfURL )
+    public enum Type
     {
-        this.pdfURL = pdfURL;
-        this.pdfDocument = Utils.wrapInRte( () -> PDDocument.load( this.pdfURL.openStream() ) );
-        this.pdfRenderer = new PDFRenderer( this.pdfDocument );
+        TUTORIAL, FANTASY, RECORD;
+    }
+
+    private PDOutlineItem rootItem;
+
+    private Gallery( PDOutlineItem rootItem )
+    {
+        this.rootItem = rootItem;
     }
 
     public List< GalleryItem > getGalleryItems()
     {
         if( galleryItems == null )
         {
-            PDOutlineItem item = pdfDocument.getDocumentCatalog().getDocumentOutline().getFirstChild();
+            PDOutlineItem item = rootItem;
             galleryItems = new LinkedList<>();
-            int pageIndex = 0;
             while( item != null )
             {
+                final PDOutlineItem finalItem = item;
+                int pageIndex = Utils.wrapInRte( () -> ( ( PDPageDestination ) finalItem.getDestination() ) ).retrievePageNumber();
                 GalleryItem gi = new GalleryItemImpl(
                     pageIndex,
                     item.getTitle(),
-                    getClass().getResource( "default.jsurf" /* item.getFirstChild().getTitle() */ )
+                    getClass().getResource( item.getFirstChild().getTitle() + ".jsurf" )
                 );
-                gi.getIcon().getStyleClass().addAll( pageIndex == 0 ? "galleryIcon" : "galleryItemIcon" );
+                gi.getIcon().getStyleClass().addAll( item == rootItem ? "galleryIcon" : "galleryItemIcon" );
                 galleryItems.add( gi );
                 item = item.getNextSibling();
-                ++pageIndex;
             }
             galleryItems = Collections.unmodifiableList( galleryItems );
         }

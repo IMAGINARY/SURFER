@@ -31,9 +31,9 @@ public class GallerySelector extends VBox
         this.mainWindow = mainWindow;
 
         galleries = new LinkedList<>();
-        galleries.add( new Gallery( null ) );
-        galleries.add( new Gallery( null ) );
-        galleries.add( new Gallery( null ) );
+        galleries.add( Gallery.getGallery( java.util.Locale.ENGLISH, Gallery.Type.TUTORIAL ) );
+        galleries.add( Gallery.getGallery( java.util.Locale.ENGLISH, Gallery.Type.FANTASY ) );
+        galleries.add( Gallery.getGallery( java.util.Locale.ENGLISH, Gallery.Type.RECORD ) );
 
         galleries.forEach( g -> getChildren().add( prepareGallery( g ) ) );
     }
