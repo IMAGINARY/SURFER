@@ -1,0 +1,56 @@
+#jSurfer surface description
+#Fri Jul 08 16:58:33 CEST 2011
+front_material_specular_iIntensity=0.5
+camera_type=ORTHOGRAPHIC_CAMERA
+back_material_specular_iIntensity=0.5
+surface_parameter_b=0.5
+#0.41559362411499023
+surface_parameter_a=0.5
+#0.41736117005348206
+light_position_7=0.0 0.0 0.0
+light_position_6=0.0 0.0 0.0
+light_position_5=0.0 0.0 0.0
+light_position_4=0.0 0.0 0.0
+light_position_3=0.0 0.0 0.0
+light_position_2=0.0 -100.0 100.0
+camera_fov_y=60.0
+light_position_1=100.0 100.0 100.0
+light_position_0=-100.0 100.0 100.0
+front_material_color=0.9411765 0.25882354 0.05882353
+background_color=1.0 1.0 1.0
+light_intensity_7=1.0
+front_material_ambient_intensity=0.4
+light_intensity_6=1.0
+scale_factor=0.11388256
+light_intensity_5=1.0
+light_intensity_4=1.0
+light_intensity_3=1.0
+light_intensity_2=0.3
+light_intensity_1=0.7
+light_intensity_0=0.5
+rotation_matrix=-0.9975637 0.06831278 -0.014604302 0.0 -0.050649248 -0.56332713 0.82468677 0.0 0.048110377 0.82340914 0.5654113 0.0 0.0 0.0 0.0 1.0
+light_color_7=1.0 1.0 1.0
+light_color_6=1.0 1.0 1.0
+front_material_diffuse_intensity=0.8
+light_color_5=1.0 1.0 1.0
+light_color_4=1.0 1.0 1.0
+light_color_3=1.0 1.0 1.0
+light_color_2=1.0 1.0 1.0
+light_color_1=1.0 1.0 1.0
+light_color_0=1.0 1.0 1.0
+light_status_7=OFF
+light_status_6=OFF
+light_status_5=OFF
+light_status_4=OFF
+front_material_shininess=30.0
+light_status_3=OFF
+light_status_2=ON
+light_status_1=ON
+light_status_0=ON
+camera_height=2.0
+surface_equation=(x^2+y^2+z^2+a^2-b^2)^2-4*b^2*(x^2+y^2)
+camera_transform=1.0 0.0 0.0 -0.0 0.0 1.0 0.0 -0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0
+back_material_ambient_intensity=0.4
+back_material_color=0.87058824 0.41960785 0.101960786
+back_material_shininess=30.0
+back_material_diffuse_intensity=0.8
