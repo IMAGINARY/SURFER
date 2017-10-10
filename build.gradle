@@ -12,12 +12,19 @@ apply from: 'gradle/plugins/javafx.plugin'
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
 
+configurations.all {
+    // check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 repositories {
     jcenter()
     maven { url "https://raw.github.com/IMAGINARY/maven-repository/master/" }
+    mavenLocal()
 }
 
 dependencies {
+    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '2.0.0-SNAPSHOT', changing: true
     compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.3.0'
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.0'

@@ -39,7 +39,7 @@ public class Gallery
     {
         if( pdfDocument == null )
         {
-            pdfDocument = Utils.wrapInRte( () -> PDDocument.load( Gallery.class.getResourceAsStream( "SURFER-Galleries.pdf" ) ) );
+            pdfDocument = Utils.wrapInRte( () -> PDDocument.load( Gallery.class.getResourceAsStream( "Surfer-Galleries.pdf" ) ) );
         }
         return pdfDocument;
     }
