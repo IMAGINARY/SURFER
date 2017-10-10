@@ -154,7 +154,10 @@ public class Main extends Application
                         new ExceptionDialog( Alert.AlertType.ERROR, "Error exporting to " + f.toString(), e ).showAndWait();
                     }
                 },
-                p -> logger.debug( "Printing ..." )
+                printJob -> {
+                        java.util.Optional<java.util.function.Consumer<javafx.print.PrinterJob>>result = new PrintDialog( "x^2+y^2=0", "/Users/stussak/Desktop/IMAGINARY/SURFER/SURFER/test.jpg" ).showAndWait();
+                        result.ifPresent( printJobConsumer -> printJobConsumer.accept(printJob) );
+                    }
             );
             cpp = new ColorPickerPanel();
 
