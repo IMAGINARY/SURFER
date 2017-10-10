@@ -15,12 +15,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.Group;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javafx.geometry.Pos;
 
 public class Main extends Application
 {
@@ -79,7 +81,7 @@ public class Main extends Application
     private ColorPickerPanel cpp;
     private GallerySelector gs;
     private TabPanel tp;
-    private Pane galleryIconContainer;
+    private TilePane galleryIconContainer;
     private BorderPane introPageContainer;
     private BorderPane infoPageContainer;
 
@@ -152,8 +154,10 @@ public class Main extends Application
             );
             cpp = new ColorPickerPanel();
 
-            galleryIconContainer = new javafx.scene.layout.TilePane();
+            galleryIconContainer = new javafx.scene.layout.TilePane( 50.0, 10.0 );
             FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
+            galleryIconContainer.setStyle("-fx-background-color: #00FFFF;");
+            galleryIconContainer.setAlignment( Pos.CENTER );
             introPageContainer = new BorderPane();
             FXUtils.resizeRelocateTo( introPageContainer, fxmlLookup( "#Gallery_Text" ) );
             infoPageContainer = new BorderPane();
