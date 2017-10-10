@@ -1,5 +1,6 @@
 package de.mfo.surfer.util;
 
+import de.mfo.surfer.gallery.Gallery;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
@@ -104,26 +105,28 @@ public class L
         return instance;
     }
 
+    private static TreeSet< Locale > availableLocales;
     public static Set< Locale > getAvailableLocales()
     {
-        Set< Locale > l = new TreeSet<>(
-            new Comparator< Locale >()
-            {
-                @Override
-                public int compare( Locale l1, Locale l2 )
+        if( availableLocales == null )
+        {
+            availableLocales = new TreeSet<>(
+                new Comparator< Locale >()
                 {
-                    int lComp = l( l1, "language" ).compareTo( l( l2, "language" ) );
-                    if( lComp == 0 )
-                        return l1.toString().compareTo( l2.toString() );
-                    else
-                        return lComp;
+                    @Override
+                    public int compare( Locale l1, Locale l2 )
+                    {
+                        int lComp = l( l1, "language" ).compareTo( l( l2, "language" ) );
+                        if( lComp == 0 )
+                            return l1.toString().compareTo( l2.toString() );
+                        else
+                            return lComp;
+                    }
                 }
-            }
-        );
-        l.add( Locale.US );
-        l.add( Locale.FRENCH );
-        l.add( Locale.GERMAN );
-        return l;
+            );
+            availableLocales.addAll( Gallery.getAvailableLocales() );
+        }
+        return availableLocales;
     }
 
     public static Locale getLocale()

@@ -7,9 +7,11 @@ import de.mfo.surfer.util.Utils;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingFXUtils;
@@ -34,6 +36,7 @@ public class Gallery
     private static PDDocument pdfDocument;
     private static PDFRenderer pdfRenderer;
     private static HashMap< Pair< Locale, Type >, Gallery > galleries;
+    private static Set< Locale > availableLocales;
 
     private static PDDocument getGalleryPdf()
     {
@@ -74,6 +77,18 @@ public class Gallery
         if( galleries == null )
             initGalleries();
         return galleries.get( new Pair<>( locale, type ) );
+    }
+
+    public static Set< Locale > getAvailableLocales()
+    {
+        if( availableLocales == null )
+        {
+            availableLocales = new HashSet<>();
+            if( galleries == null )
+                initGalleries();
+            galleries.keySet().forEach( e -> availableLocales.add( e.getKey() ) );
+        }
+        return Collections.unmodifiableSet( availableLocales );
     }
 
     private class GalleryItemImpl implements GalleryItem
