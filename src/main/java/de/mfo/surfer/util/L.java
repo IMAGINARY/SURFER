@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 import javafx.beans.binding.Bindings;
@@ -37,30 +38,10 @@ public class L
         locale = new SimpleObjectProperty< Locale >( null );
 
         // bind to locale change
-        locale.addListener( ( observable, oldValue, newValue ) ->
+        locale.addListener( ( observable, oldLocale, newLocale ) ->
             {
                 // set as JVM-wide default locale
-                Locale.setDefault( newValue );
-
-                // to be localized via external message bundle
-                localizedNames.put( "arithmeticOperations", "Arithmetic operations" );
-                localizedNames.put( "colors", "Colours" );
-                localizedNames.put( "info", "Info" );
-                localizedNames.put( "language", "English" );
-                localizedNames.put( "parameters", "Parameters" );
-                localizedNames.put( "start", "Start" );
-                localizedNames.put( "variables", "Variables" );
-                localizedNames.put( "zoom", "Zoom" );
-
-                localizedNames.put( "loadScene", "Load scene" );
-                localizedNames.put( "saveScene", "Save scene" );
-                localizedNames.put( "exportImage", "Export image" );
-                localizedNames.put( "fileExtensionFilterSURFER", "SURFER files" );
-                localizedNames.put( "fileExtensionFilterPNG", "PNG files" );
-                localizedNames.put( "fileExtensionFilterJPG", "JPEG files" );
-                localizedNames.put( "fileExtensionFilterAll", "All files" );
-
-                localizedNames.put( "preferences", "Preferences" );
+                //Locale.setDefault( newLocale );
 
                 // labels to be used in the preferences window
                 for( Class<?> cls : Preferences.class.getDeclaredClasses() )
@@ -81,17 +62,19 @@ public class L
                     }
                 }
 
+                // read external messages bundle and set localized strings
+                ResourceBundle labels = ResourceBundle.getBundle( "de.mfo.surfer.MessagesBundle", newLocale );
+                labels.keySet().forEach(key -> localizedNames.put(key,labels.getString(key)));
+
                 // not to be localized
                 localizedNames.put( "a", "a" );
                 localizedNames.put( "b", "b" );
                 localizedNames.put( "c", "c" );
                 localizedNames.put( "d", "d" );
-
-                // TODO: read external message bundles and set localized strings
             }
         );
 
-        locale.setValue( Locale.US );
+        locale.setValue( Locale.getDefault() );
     }
 
     private L() {}
@@ -116,7 +99,7 @@ public class L
                     @Override
                     public int compare( Locale l1, Locale l2 )
                     {
-                        int lComp = l( l1, "language" ).compareTo( l( l2, "language" ) );
+                        int lComp = l1.getDisplayName().compareTo( l2.getDisplayName() );
                         if( lComp == 0 )
                             return l1.toString().compareTo( l2.toString() );
                         else
@@ -148,11 +131,6 @@ public class L
     }
 
     public static String l( String key )
-    {
-        return localizedNames.get( key );
-    }
-
-    public static String l( Locale locale, String key )
     {
         return localizedNames.get( key );
     }
