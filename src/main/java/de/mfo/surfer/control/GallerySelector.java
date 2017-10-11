@@ -72,7 +72,7 @@ public class GallerySelector extends VBox
         }
         catch( Exception e )
         {
-            throw new RuntimeException( "Unable to surface from gallery: " + gi.getJsurfURL(), e );
+            throw new RuntimeException( "Unable to load surface from gallery: " + gi.getJsurfURL(), e );
         }
     }
 }
