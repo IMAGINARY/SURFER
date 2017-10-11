@@ -60,7 +60,7 @@ public class Gallery
         PDOutlineItem localeKey = Gallery.getGalleryPdf().getDocumentCatalog().getDocumentOutline().getFirstChild();
         while( localeKey != null )
         {
-            Locale locale = new Locale( localeKey.getTitle() );
+            Locale locale = Locale.forLanguageTag( localeKey.getTitle().replaceAll( "_", "-" ) );
             PDOutlineItem galleryKey = localeKey.getFirstChild();
             while( galleryKey != null )
             {
