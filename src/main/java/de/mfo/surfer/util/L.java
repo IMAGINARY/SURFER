@@ -34,15 +34,12 @@ public class L
         // initialize the localization map
         localizedNames = FXCollections.observableMap( new HashMap< String, String >() );
 
-        // set default locale
+        // create the locale property
         locale = new SimpleObjectProperty< Locale >( null );
 
         // bind to locale change
         locale.addListener( ( observable, oldLocale, newLocale ) ->
             {
-                // set as JVM-wide default locale
-                //Locale.setDefault( newLocale );
-
                 // labels to be used in the preferences window
                 for( Class<?> cls : Preferences.class.getDeclaredClasses() )
                 {
@@ -74,7 +71,12 @@ public class L
             }
         );
 
-        locale.setValue( Locale.getDefault() );
+        // look up the default locale based on the available locales
+        Locale defaultLocale = Locale.lookup(
+            Locale.LanguageRange.parse(Locale.getDefault().toLanguageTag()),
+            getAvailableLocales()
+        );
+        locale.setValue( defaultLocale );
     }
 
     private L() {}
