@@ -4,10 +4,11 @@ import de.mfo.surfer.control.GalleryIcon;
 import de.mfo.surfer.control.GalleryInfoPage;
 import java.net.URL;
 import javafx.scene.image.Image;
+import javafx.beans.property.ReadOnlyStringProperty;
 
 public interface GalleryItem
 {
-    public String getTitle();
+    public ReadOnlyStringProperty titleProperty();
     public URL getJsurfURL();
     public Image getThumbnailImage();
     public GalleryIcon getIcon();
