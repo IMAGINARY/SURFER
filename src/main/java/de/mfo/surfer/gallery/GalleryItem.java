@@ -12,5 +12,5 @@ public interface GalleryItem
     public URL getJsurfURL();
     public Image getThumbnailImage();
     public GalleryIcon getIcon();
-    public GalleryInfoPage getInfoPage();
+    public Image getInfoPageRendering( float scale ); // TODO: use BBox parameter instead of scale
 }

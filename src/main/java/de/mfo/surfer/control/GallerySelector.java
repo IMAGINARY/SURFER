@@ -14,8 +14,8 @@ import javafx.scene.Node;
 public class GallerySelector extends VBox
 {
     LinkedList< Gallery > galleries;
-    WritableValue< Node > introPageContainer;
-    WritableValue< Node > infoPageContainer;
+    GalleryInfoPage introPage; /* TODO: move infoPage node into creating class and remove the container */
+    GalleryInfoPage infoPage; /* TODO: move infoPage node into creating class and remove the container */
     ObservableList< Node > galleryIconContainer;
     RenderArea renderArea;
     Main mainWindow;
@@ -24,16 +24,18 @@ public class GallerySelector extends VBox
     {
         super();
 
+        this.introPage = new GalleryInfoPage();
+        this.infoPage = new GalleryInfoPage();
+
         this.galleryIconContainer = galleryIconContainer;
-        this.introPageContainer = introPageContainer;
-        this.infoPageContainer = infoPageContainer;
+        introPageContainer.setValue( introPage );
+        infoPageContainer.setValue( infoPage );
         this.renderArea = renderArea;
         this.mainWindow = mainWindow;
 
         galleries = new LinkedList<>();
-        galleries.add( new Gallery( L.localeProperty(), Gallery.Type.TUTORIAL ) );
-        galleries.add( new Gallery( L.localeProperty(), Gallery.Type.FANTASY ) );
-        galleries.add( new Gallery( L.localeProperty(), Gallery.Type.RECORD ) );
+        for( Gallery.Type type : Gallery.Type.values() )
+            galleries.add( new Gallery( L.localeProperty(), type ) );
 
         galleries.forEach( g -> getChildren().add( prepareGallery( g ) ) );
     }
@@ -52,7 +54,7 @@ public class GallerySelector extends VBox
 
     private void selectGallery( Gallery g )
     {
-        introPageContainer.setValue( g.getGalleryItems().get( 0 ).getInfoPage() );
+        introPage.setGalleryItem( g.getGalleryItems().get( 0 ) );
         galleryIconContainer.clear();
         g.getGalleryItems()
             .stream()
@@ -64,7 +66,7 @@ public class GallerySelector extends VBox
 
     private void selectGalleryItem( GalleryItem gi )
     {
-        infoPageContainer.setValue( gi.getInfoPage() );
+        infoPage.setGalleryItem( gi );
         try
         {
             renderArea.load( gi.getJsurfURL() );

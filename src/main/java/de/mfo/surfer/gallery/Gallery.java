@@ -55,8 +55,8 @@ public class Gallery
 
     private static final Logger logger = LoggerFactory.getLogger( Gallery.class );
 
-    private static PDDocument pdfDocument;
-    private static PDFRenderer pdfRenderer;
+    public static PDDocument pdfDocument; // TODO: make private again
+    public static PDFRenderer pdfRenderer; // TODO: make private again
 
     private static Set< Locale > availableLocales;
     private static HashMap< Type, HashMap< String, HashMap< Locale, TitleAndPageNumber > > > allGalleryEntries;
@@ -113,7 +113,7 @@ public class Gallery
         return availableLocales;
     }
 
-    protected static Image getGalleryInfoPageRendering( int pdfPageIndex, float scale )
+    public static Image getGalleryInfoPageRendering( int pdfPageIndex, float scale )
     {
         return SwingFXUtils.toFXImage( Utils.wrapInRte( () -> Gallery.pdfRenderer.renderImage( pdfPageIndex, scale ) ), null );
     }
@@ -136,7 +136,7 @@ public class Gallery
         return this.galleryItems;
     }
 
-    private class GalleryItemImpl implements GalleryItem
+    public class GalleryItemImpl implements GalleryItem // TODO: make private again
     {
         private class GalleryIconImpl extends GalleryIcon
         {
@@ -154,63 +154,15 @@ public class Gallery
             }
         }
 
-        private class GalleryInfoPageImpl extends GalleryInfoPage
-        {
-            Canvas canvas;
-            PDRectangle cropBox;
-            float lastScale;
-
-            public GalleryInfoPageImpl()
-            {
-                super();
-
-                lastScale = 0f;
-                cropBox = Gallery.pdfDocument.getPage( GalleryItemImpl.this.pdfPageNumber.get() ).getCropBox();
-
-                canvas = new Canvas();
-                canvas.widthProperty().bind( widthProperty() );
-                canvas.heightProperty().bind( heightProperty() );
-
-                widthProperty().addListener( ( o, ov, nv ) -> Platform.runLater( () -> render() ) );
-                heightProperty().addListener( ( o, ov, nv ) -> Platform.runLater( () -> render() ) );
-                localToSceneTransformProperty().addListener( ( o, ov, nv ) -> Platform.runLater( () -> render() ) );
-                GalleryItemImpl.this.pdfPageNumber.addListener( ( o, ov, nv ) -> Platform.runLater( () -> { lastScale = 0.0f; render(); } ) );
-
-                getChildren().add( canvas );
-            }
-
-            void render()
-            {
-                Bounds bb = localToScene( getBoundsInLocal(), false );
-                float scale_x = ( float ) bb.getWidth() / cropBox.getWidth();
-                float scale_y = ( float ) bb.getHeight() / cropBox.getHeight();
-                float scale = 2f * Math.min( scale_x, scale_y );
-
-                if( scale * Math.min( cropBox.getWidth(), cropBox.getHeight() )  >= 1f && ( scale != lastScale || lastScale == 0f ) )
-                {
-                    logger.debug( "redraw at  {}x{}", Math.round( scale * cropBox.getWidth() ), Math.round( scale * cropBox.getHeight() ) );
-                    GraphicsContext gc = canvas.getGraphicsContext2D();
-                    gc.clearRect( 0.0, 0.0, getWidth(), getHeight() );
-                    Image image = Gallery.this.getGalleryInfoPageRendering( GalleryItemImpl.this.pdfPageNumber.get(), scale );
-                    if( image.getWidth() / image.getHeight() > canvas.getWidth() / canvas.getHeight() )
-                        gc.drawImage( image, 0.0, 0.0, image.getWidth(), image.getHeight(), 0.0, 0.0, canvas.getWidth(), ( canvas.getWidth() * image.getHeight() ) / image.getWidth() );
-                    else
-                        gc.drawImage( image, 0.0, 0.0, image.getWidth(), image.getHeight(), 0.0, 0.0, ( canvas.getHeight() * image.getWidth() ) / image.getHeight(), canvas.getHeight() );
-                    lastScale = scale;
-                }
-            }
-        }
-
         private String idInGallery;
         private HashMap< Locale, TitleAndPageNumber > localizationMap;
         private boolean isFirst;
 
-        private SimpleIntegerProperty pdfPageNumber;
+        public SimpleIntegerProperty pdfPageNumber; // TODO: make private again
         private SimpleStringProperty title;
         private URL jsurfURL;
         private Image thumbnailImage;
         private GalleryIcon icon;
-        private GalleryInfoPage infoPage;
 
         public GalleryItemImpl( String idInGallery, HashMap< Locale, TitleAndPageNumber > localizationMap, boolean isFirst )
         {
@@ -257,11 +209,9 @@ public class Gallery
             return icon;
         }
 
-        public GalleryInfoPage getInfoPage()
+        public Image getInfoPageRendering( float scale )
         {
-            if( infoPage == null )
-                infoPage = new GalleryInfoPageImpl();
-            return infoPage;
+            return Gallery.getGalleryInfoPageRendering( pdfPageNumber.get(), scale );
         }
     }
 }
