@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -78,14 +79,15 @@ public class Gallery
             for( PDOutlineItem typeItem : localeItem.children() )  // type loop
             {
                 Type type = Type.valueOf( typeItem.getTitle().toUpperCase() );
+                int index = 0;
                 for( PDOutlineItem idParentItem : typeItem.children() ) // id loop
                 {
-                    String id = idParentItem.getFirstChild().getTitle();
+                    String id = (index++) + " " + idParentItem.getFirstChild().getTitle();
 
                     HashMap< String, HashMap< Locale, TitleAndPageNumber > > typeHM = allGalleryEntries.get( type );
                     if( typeHM == null )
                     {
-                        typeHM = new HashMap<>();
+                        typeHM = new LinkedHashMap<>();
                         allGalleryEntries.put( type, typeHM );
                     }
 
@@ -122,7 +124,10 @@ public class Gallery
 
         LinkedList< GalleryItem > tmpGalleryItems = new LinkedList<>();
         for( HashMap.Entry< String, HashMap< Locale, TitleAndPageNumber > > thisGalleryEntries : allGalleryEntries.get( type ).entrySet() )
-            tmpGalleryItems.add( new GalleryItemImpl( thisGalleryEntries.getKey(), thisGalleryEntries.getValue() ) );
+        {
+            String[] parts = thisGalleryEntries.getKey().split( " ", 2 );
+            tmpGalleryItems.add( new GalleryItemImpl( parts[ 1 ], thisGalleryEntries.getValue(), parts[ 0 ].equals( "0" ) ) );
+        }
         this.galleryItems = Collections.unmodifiableList( tmpGalleryItems );
     }
 
@@ -139,6 +144,7 @@ public class Gallery
             {
                 textProperty().bind( GalleryItemImpl.this.titleProperty() );
                 setGraphic( new ImageView( GalleryItemImpl.this.getThumbnailImage() ) );
+                getStyleClass().addAll( GalleryItemImpl.this.isFirst ? "galleryIcon" : "galleryItemIcon" );
             }
 
             @Override
@@ -197,6 +203,7 @@ public class Gallery
 
         private String idInGallery;
         private HashMap< Locale, TitleAndPageNumber > localizationMap;
+        private boolean isFirst;
 
         private SimpleIntegerProperty pdfPageNumber;
         private SimpleStringProperty title;
@@ -205,14 +212,16 @@ public class Gallery
         private GalleryIcon icon;
         private GalleryInfoPage infoPage;
 
-        public GalleryItemImpl( String idInGallery, HashMap< Locale, TitleAndPageNumber > localizationMap )
+        public GalleryItemImpl( String idInGallery, HashMap< Locale, TitleAndPageNumber > localizationMap, boolean isFirst )
         {
             this.idInGallery = idInGallery;
             this.localizationMap = localizationMap;
+            this.isFirst = isFirst;
 
             this.pdfPageNumber = new SimpleIntegerProperty();
             this.title = new SimpleStringProperty();
             Gallery.this.locale.addListener( ( o, ov, nv ) -> updateProperties( nv ) );
+            updateProperties( Gallery.this.locale.get() );
 
             this.jsurfURL = getClass().getResource( idInGallery + ".jsurf" );
         }
