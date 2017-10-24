@@ -3,7 +3,7 @@ package de.mfo.surfer.control;
 import de.mfo.surfer.gallery.Gallery;
 import de.mfo.surfer.gallery.GalleryItem;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
+import javafx.beans.InvalidationListener;
 import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,7 +17,7 @@ public class GalleryInfoPage extends Region
     Canvas canvas;
     PDRectangle cropBox;
     float lastScale;
-    ChangeListener<Number> pageNumberListener;
+    InvalidationListener galleryItemInvalidationListener;
 
     public GalleryInfoPage()
     {
@@ -28,11 +28,11 @@ public class GalleryInfoPage extends Region
         canvas.heightProperty().bind( heightProperty() );
 
         // TODO: somehow bind the invalidation of the three properties together and call render() only once
-        widthProperty().addListener( ( o, ov, nv ) -> Platform.runLater( () -> render() ) );
-        heightProperty().addListener( ( o, ov, nv ) -> Platform.runLater( () -> render() ) );
-        localToSceneTransformProperty().addListener( ( o, ov, nv ) -> Platform.runLater( () -> render() ) );
+        widthProperty().addListener( __ -> Platform.runLater( this::render ) );
+        heightProperty().addListener( __ -> Platform.runLater( this::render ) );
+        localToSceneTransformProperty().addListener( __ -> Platform.runLater(this::render) );
 
-        pageNumberListener = (o, ov, nv ) -> Platform.runLater( () -> renderAnyway() );
+        galleryItemInvalidationListener = __ -> Platform.runLater( this::renderAnyway );
 
         getChildren().add( canvas );
     }
@@ -46,10 +46,12 @@ public class GalleryInfoPage extends Region
     void setGalleryItem( GalleryItem galleryItem )
     {
         if( this.galleryItem != null )
-            ( ( Gallery.GalleryItemImpl ) this.galleryItem ).pdfPageNumber.removeListener( pageNumberListener );
+            this.galleryItem.removeListener( galleryItemInvalidationListener );
         this.galleryItem = galleryItem;
-        ((Gallery.GalleryItemImpl) this.galleryItem).pdfPageNumber.addListener( pageNumberListener );
-        this.cropBox = Gallery.pdfDocument.getPage( ((Gallery.GalleryItemImpl) galleryItem).pdfPageNumber.get() ).getCropBox();
+        galleryItem.addListener( galleryItemInvalidationListener );
+        this.cropBox = Gallery.pdfDocument.getPage(
+            1 // ((Gallery.GalleryItemImpl) galleryItem).pdfPageNumber.get() // TODO: use alternative to page number
+        ).getCropBox();
         renderAnyway();
     }
 
@@ -61,15 +63,13 @@ public class GalleryInfoPage extends Region
 
     void render()
     {
-        if( cropBox != null )
-        {
+        if( cropBox != null ) {
             Bounds bb = localToScene(getBoundsInLocal(), false);
             float scale_x = (float) bb.getWidth() / cropBox.getWidth();
             float scale_y = (float) bb.getHeight() / cropBox.getHeight();
             float scale = 2f * Math.min(scale_x, scale_y);
 
-            if (scale * Math.min(cropBox.getWidth(), cropBox.getHeight()) >= 1f && (scale != lastScale || lastScale == 0f))
-            {
+            if (scale * Math.min(cropBox.getWidth(), cropBox.getHeight()) >= 1f && (scale != lastScale || lastScale == 0f)) {
                 //logger.debug( "redraw at  {}x{}", Math.round( scale * cropBox.getWidth() ), Math.round( scale * cropBox.getHeight() ) );
                 GraphicsContext gc = canvas.getGraphicsContext2D();
                 gc.clearRect(0.0, 0.0, getWidth(), getHeight());

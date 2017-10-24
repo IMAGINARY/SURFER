@@ -1,9 +1,9 @@
 package de.mfo.surfer.gallery;
 
 import de.mfo.surfer.control.GalleryIcon;
-import de.mfo.surfer.control.GalleryInfoPage;
 import de.mfo.surfer.util.ThumbnailGenerator;
 import de.mfo.surfer.util.Utils;
+
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,20 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.InvalidationListener;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Bounds;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Pair;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -136,7 +130,7 @@ public class Gallery
         return this.galleryItems;
     }
 
-    public class GalleryItemImpl implements GalleryItem // TODO: make private again
+    private class GalleryItemImpl implements GalleryItem
     {
         private class GalleryIconImpl extends GalleryIcon
         {
@@ -158,11 +152,12 @@ public class Gallery
         private HashMap< Locale, TitleAndPageNumber > localizationMap;
         private boolean isFirst;
 
-        public SimpleIntegerProperty pdfPageNumber; // TODO: make private again
+        private SimpleIntegerProperty pdfPageNumber;
         private SimpleStringProperty title;
         private URL jsurfURL;
         private Image thumbnailImage;
         private GalleryIcon icon;
+        private LinkedList<InvalidationListener> invalidationListeners;
 
         public GalleryItemImpl( String idInGallery, HashMap< Locale, TitleAndPageNumber > localizationMap, boolean isFirst )
         {
@@ -172,10 +167,12 @@ public class Gallery
 
             this.pdfPageNumber = new SimpleIntegerProperty();
             this.title = new SimpleStringProperty();
+            this.jsurfURL = getClass().getResource( idInGallery + ".jsurf" );
+
+            this.invalidationListeners = new LinkedList<>();
+
             Gallery.this.locale.addListener( ( o, ov, nv ) -> updateProperties( nv ) );
             updateProperties( Gallery.this.locale.get() );
-
-            this.jsurfURL = getClass().getResource( idInGallery + ".jsurf" );
         }
 
         private void updateProperties( Locale locale )
@@ -183,6 +180,7 @@ public class Gallery
             TitleAndPageNumber tapn = localizationMap.get( locale );
             pdfPageNumber.setValue( tapn.pageNumber );
             title.setValue( tapn.title );
+            invalidationListeners.forEach( l -> l.invalidated( this ) );
         }
 
         public ReadOnlyStringProperty titleProperty()
@@ -212,6 +210,16 @@ public class Gallery
         public Image getInfoPageRendering( float scale )
         {
             return Gallery.getGalleryInfoPageRendering( pdfPageNumber.get(), scale );
+        }
+
+        @Override
+        public void addListener(InvalidationListener listener) {
+            invalidationListeners.add( listener );
+        }
+
+        @Override
+        public void removeListener(InvalidationListener listener) {
+            invalidationListeners.remove( listener );
         }
     }
 }
