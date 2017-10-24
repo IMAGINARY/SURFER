@@ -19,8 +19,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.InvalidationListener;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -49,8 +51,8 @@ public class Gallery
 
     private static final Logger logger = LoggerFactory.getLogger( Gallery.class );
 
-    public static PDDocument pdfDocument; // TODO: make private again
-    public static PDFRenderer pdfRenderer; // TODO: make private again
+    private static PDDocument pdfDocument;
+    private static PDFRenderer pdfRenderer;
 
     private static Set< Locale > availableLocales;
     private static HashMap< Type, HashMap< String, HashMap< Locale, TitleAndPageNumber > > > allGalleryEntries;
@@ -107,9 +109,15 @@ public class Gallery
         return availableLocales;
     }
 
-    public static Image getGalleryInfoPageRendering( int pdfPageIndex, float scale )
+    public static Image getGalleryInfoPageRendering( int pdfPageNumber, Bounds boundingBox )
     {
-        return SwingFXUtils.toFXImage( Utils.wrapInRte( () -> Gallery.pdfRenderer.renderImage( pdfPageIndex, scale ) ), null );
+        PDRectangle cropBox = pdfDocument.getPage( pdfPageNumber ).getCropBox();
+
+        float scale_x = (float) boundingBox.getWidth() / cropBox.getWidth();
+        float scale_y = (float) boundingBox.getHeight() / cropBox.getHeight();
+        float scale = 2f * Math.min(scale_x, scale_y);
+
+        return SwingFXUtils.toFXImage( Utils.wrapInRte( () -> pdfRenderer.renderImage( pdfPageNumber, scale ) ), null );
     }
 
     public Gallery( ReadOnlyObjectProperty< Locale > locale, Type type )
@@ -207,9 +215,9 @@ public class Gallery
             return icon;
         }
 
-        public Image getInfoPageRendering( float scale )
+        public Image getInfoPageRendering( Bounds boundingBox )
         {
-            return Gallery.getGalleryInfoPageRendering( pdfPageNumber.get(), scale );
+            return Gallery.getGalleryInfoPageRendering( pdfPageNumber.get(), boundingBox );
         }
 
         @Override
