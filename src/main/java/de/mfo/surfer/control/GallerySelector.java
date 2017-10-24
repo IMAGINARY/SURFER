@@ -20,16 +20,14 @@ public class GallerySelector extends VBox
     RenderArea renderArea;
     Main mainWindow;
 
-    public GallerySelector( ObservableList< Node > galleryIconContainer, WritableValue< Node > introPageContainer, WritableValue< Node > infoPageContainer, RenderArea renderArea, Main mainWindow )
+    public GallerySelector( ObservableList< Node > galleryIconContainer, GalleryInfoPage introPage, GalleryInfoPage infoPage, RenderArea renderArea, Main mainWindow )
     {
         super();
 
-        this.introPage = new GalleryInfoPage();
-        this.infoPage = new GalleryInfoPage();
+        this.introPage = introPage;
+        this.infoPage = infoPage;
 
         this.galleryIconContainer = galleryIconContainer;
-        introPageContainer.setValue( introPage );
-        infoPageContainer.setValue( infoPage );
         this.renderArea = renderArea;
         this.mainWindow = mainWindow;
 

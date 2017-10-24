@@ -82,8 +82,8 @@ public class Main extends Application
     private GallerySelector gs;
     private TabPanel tp;
     private TilePane galleryIconContainer;
-    private BorderPane introPageContainer;
-    private BorderPane infoPageContainer;
+    private GalleryInfoPage galleryIntroPage;
+    private GalleryInfoPage galleryInfoPage;
 
     @Override
     public void start( Stage stage ) throws Exception
@@ -158,20 +158,20 @@ public class Main extends Application
             FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
             galleryIconContainer.setStyle("-fx-background-color: #00FFFF;");
             galleryIconContainer.setAlignment( Pos.CENTER );
-            introPageContainer = new BorderPane();
-            FXUtils.resizeRelocateTo( introPageContainer, fxmlLookup( "#Gallery_Text" ) );
-            infoPageContainer = new BorderPane();
+            galleryIntroPage = new GalleryInfoPage();
+            FXUtils.resizeRelocateTo( galleryIntroPage, fxmlLookup( "#Gallery_Text" ) );
+            galleryInfoPage = new GalleryInfoPage();
 
             gs = new GallerySelector(
                 galleryIconContainer.getChildren(),
-                introPageContainer.centerProperty(),
-                infoPageContainer.centerProperty(),
+                galleryIntroPage,
+                galleryInfoPage,
                 ra,
                 this
             );
             tp = new TabPanel(
                 gs,
-                infoPageContainer,
+                new BorderPane( galleryInfoPage ),
                 cpp
             );
             tp.activeTabIndexProperty().addListener( ( observable, oldValue, newValue ) -> {
@@ -191,7 +191,7 @@ public class Main extends Application
             overlay.getChildren().add( snsp );
             overlay.getChildren().add( ra );
             overlay.getChildren().add( tp );
-            overlay.getChildren().add( introPageContainer );
+            overlay.getChildren().add( galleryIntroPage );
             overlay.getChildren().add( galleryIconContainer );
 
             setMode( Mode.RENDERING );
@@ -218,20 +218,20 @@ public class Main extends Application
                 ra.setVisible( true );
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
-                introPageContainer.setVisible( false );
+                galleryIntroPage.setVisible( false );
                 break;
             case GALLERY:
                 ra.setVisible( false );
                 snsp.setVisible( false );
                 galleryIconContainer.setVisible( true );
-                introPageContainer.setVisible( true );
+                galleryIntroPage.setVisible( true );
                 tp.setActiveTabIndex( 0 );
                 break;
             case INFO:
                 ra.setVisible( true );
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
-                introPageContainer.setVisible( false );
+                galleryIntroPage.setVisible( false );
                 tp.setActiveTabIndex( 1 );
                 break;
         }
