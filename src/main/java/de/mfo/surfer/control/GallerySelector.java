@@ -4,7 +4,10 @@ import de.mfo.surfer.gallery.Gallery;
 import de.mfo.surfer.gallery.GalleryItem;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.L;
+
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import javafx.beans.value.WritableValue;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
@@ -13,7 +16,7 @@ import javafx.scene.Node;
 
 public class GallerySelector extends VBox
 {
-    LinkedList< Gallery > galleries;
+    List< Gallery > galleries;
     GalleryInfoPage introPage; /* TODO: move infoPage node into creating class and remove the container */
     GalleryInfoPage infoPage; /* TODO: move infoPage node into creating class and remove the container */
     ObservableList< Node > galleryIconContainer;
@@ -36,6 +39,8 @@ public class GallerySelector extends VBox
             galleries.add( new Gallery( L.localeProperty(), type ) );
 
         galleries.forEach( g -> getChildren().add( prepareGallery( g ) ) );
+
+        this.galleries = Collections.unmodifiableList( galleries );
     }
 
     private GalleryIcon prepareGallery( Gallery g )
@@ -50,7 +55,12 @@ public class GallerySelector extends VBox
         return icon;
     }
 
-    private void selectGallery( Gallery g )
+    public List< Gallery > getGalleries()
+    {
+        return galleries;
+    }
+
+    public void selectGallery( Gallery g )
     {
         introPage.setGalleryItem( g.getGalleryItems().get( 0 ) );
         galleryIconContainer.clear();
@@ -62,7 +72,7 @@ public class GallerySelector extends VBox
         mainWindow.setMode( Main.Mode.GALLERY );
     }
 
-    private void selectGalleryItem( GalleryItem gi )
+    public void selectGalleryItem( GalleryItem gi )
     {
         infoPage.setGalleryItem( gi );
         try

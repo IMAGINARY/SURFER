@@ -221,15 +221,6 @@ public class RenderArea extends Region
         };
         setOnScroll( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) );
         setOnZoom( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - Math.log10( e.getZoomFactor() ) ) );
-
-        try
-        {
-            load( Main.class.getResource( "gallery/default.jsurf" ) );
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
     }
 
     RenderingTask taskLowQuality;
