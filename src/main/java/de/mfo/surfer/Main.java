@@ -175,8 +175,11 @@ public class Main extends Application
                 cpp
             );
             tp.activeTabIndexProperty().addListener( ( observable, oldValue, newValue ) -> {
-                if( newValue.intValue() == 1 || newValue.intValue() == 2 )
-                    setMode( Mode.RENDERING );
+                switch( newValue.intValue() ) {
+                    case 0: setMode( Mode.GALLERY ); break;
+                    case 1: setMode( Mode.INFO ); break;
+                    case 2: setMode( Mode.COLORS ); break;
+                }
             } );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
@@ -194,7 +197,7 @@ public class Main extends Application
             overlay.getChildren().add( galleryIntroPage );
             overlay.getChildren().add( galleryIconContainer );
 
-            setMode( Mode.RENDERING );
+            setMode( Mode.COLORS );
 
             stage.setScene( scene );
             stage.show();
@@ -207,7 +210,7 @@ public class Main extends Application
 
     public enum Mode
     {
-        RENDERING, GALLERY, INFO
+        RENDERING, GALLERY, INFO, COLORS;
     }
 
     public void setMode( Mode mode )
@@ -233,6 +236,13 @@ public class Main extends Application
                 galleryIconContainer.setVisible( false );
                 galleryIntroPage.setVisible( false );
                 tp.setActiveTabIndex( 1 );
+                break;
+            case COLORS:
+                ra.setVisible( true );
+                snsp.setVisible( true );
+                galleryIconContainer.setVisible( false );
+                galleryIntroPage.setVisible( false );
+                tp.setActiveTabIndex( 2 );
                 break;
         }
     }
