@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
@@ -17,12 +18,14 @@ import static de.mfo.surfer.util.L.lb;
 public class TabPanel extends Region
 {
     SimpleIntegerProperty activeTab;
+    ToggleGroup toggleGroup;
 
     public TabPanel( Pane galleryPanel, Pane infoPanel, Pane colorPanel )
     {
         super();
 
         activeTab = new SimpleIntegerProperty( Preferences.General.getInitiallyOpenedTab() );
+        toggleGroup = new ToggleGroup();
 
         initTabLabel( "Tab_Text_Gallery", "start" );
         initTabLabel( "Tab_Text_Info", "info" );
@@ -47,11 +50,12 @@ public class TabPanel extends Region
 
     private void initTabButton( String suffix, EventHandler< ActionEvent > handler )
     {
-        SceneNodeButton button = new SceneNodeButton(
+        SceneNodeToggleButton button = new SceneNodeToggleButton(
             Main.fxmlLookup( "#Button_" + suffix ),
             Main.fxmlLookup( "#Button_Over_" + suffix ),
             Main.fxmlLookup( "#Button_Pressed_" + suffix )
         );
+        button.setToggleGroup( toggleGroup );
         button.setOnAction( handler );
         getChildren().add( button );
     }

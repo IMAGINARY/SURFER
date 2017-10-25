@@ -1,4 +1,4 @@
-SceneNodeButton {
+SceneNodeButton, SceneNodeToggleButton {
     -fx-cursor: null;
     -fx-effect: null;
     -fx-focus-traversable: false;
