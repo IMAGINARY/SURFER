@@ -1,9 +1,12 @@
 package de.mfo.surfer.gallery;
 
 import de.mfo.surfer.control.GalleryIcon;
+import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.ThumbnailGenerator;
 import de.mfo.surfer.util.Utils;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -117,7 +120,13 @@ public class Gallery
         float scale_y = (float) boundingBox.getHeight() / cropBox.getHeight();
         float scale = 2f * Math.min(scale_x, scale_y);
 
-        return SwingFXUtils.toFXImage( Utils.wrapInRte( () -> pdfRenderer.renderImage( pdfPageNumber, scale ) ), null );
+        return Utils.wrapInRte( () -> {
+            try {
+                return SwingFXUtils.toFXImage(pdfRenderer.renderImage(pdfPageNumber, scale), null);
+            } catch (IllegalArgumentException iae) {
+                return SwingFXUtils.toFXImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), null);
+            }
+        } );
     }
 
     public Gallery( ReadOnlyObjectProperty< Locale > locale, Type type )
