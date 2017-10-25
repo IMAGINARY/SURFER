@@ -67,7 +67,7 @@ public class GallerySelector extends VBox
         infoPage.setGalleryItem( gi );
         try
         {
-            renderArea.load( gi.getJsurfURL() );
+            renderArea.load( gi );
             mainWindow.setMode( Main.Mode.INFO );
         }
         catch( Exception e )
