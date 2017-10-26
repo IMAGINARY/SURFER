@@ -60,6 +60,7 @@ public class Gallery
     private static Set< Locale > availableLocales;
     private static HashMap< Type, HashMap< String, HashMap< Locale, TitleAndPageNumber > > > allGalleryEntries;
 
+    private Type type;
     private List< GalleryItem > galleryItems;
     private ReadOnlyObjectProperty< Locale > locale;
 
@@ -131,6 +132,7 @@ public class Gallery
 
     public Gallery( ReadOnlyObjectProperty< Locale > locale, Type type )
     {
+        this.type = type;
         this.locale = locale;
 
         LinkedList< GalleryItem > tmpGalleryItems = new LinkedList<>();
@@ -142,6 +144,11 @@ public class Gallery
         this.galleryItems = Collections.unmodifiableList( tmpGalleryItems );
     }
 
+    public Type getType()
+    {
+        return this.type;
+    }
+
     public List< GalleryItem > getGalleryItems()
     {
         return this.galleryItems;
@@ -149,22 +156,6 @@ public class Gallery
 
     private class GalleryItemImpl implements GalleryItem
     {
-        private class GalleryIconImpl extends GalleryIcon
-        {
-            public GalleryIconImpl()
-            {
-                textProperty().bind( GalleryItemImpl.this.titleProperty() );
-                setGraphic( new ImageView( GalleryItemImpl.this.getThumbnailImage() ) );
-                getStyleClass().addAll( GalleryItemImpl.this.isFirst ? "galleryIcon" : "galleryItemIcon" );
-            }
-
-            @Override
-            public String getUserAgentStylesheet()
-            {
-                return Gallery.class.getResource( "../css/style.css" ).toExternalForm();
-            }
-        }
-
         private String idInGallery;
         private HashMap< Locale, TitleAndPageNumber > localizationMap;
         private boolean isFirst;
@@ -173,7 +164,6 @@ public class Gallery
         private SimpleStringProperty title;
         private URL jsurfURL;
         private Image thumbnailImage;
-        private GalleryIcon icon;
         private LinkedList<InvalidationListener> invalidationListeners;
 
         public GalleryItemImpl( String idInGallery, HashMap< Locale, TitleAndPageNumber > localizationMap, boolean isFirst )
@@ -200,9 +190,18 @@ public class Gallery
             invalidationListeners.forEach( l -> l.invalidated( this ) );
         }
 
+        public boolean isFirst() {
+            return isFirst;
+        }
+
         public ReadOnlyStringProperty titleProperty()
         {
             return title;
+        }
+
+        public String getTitle()
+        {
+            return title.get();
         }
 
         public URL getJsurfURL()
@@ -215,13 +214,6 @@ public class Gallery
             if( thumbnailImage == null )
                 thumbnailImage = ThumbnailGenerator.getImage( getJsurfURL() );
             return thumbnailImage;
-        }
-
-        public GalleryIcon getIcon()
-        {
-            if( icon == null )
-                icon = new GalleryIconImpl();
-            return icon;
         }
 
         public Image getInfoPageRendering( Bounds boundingBox )

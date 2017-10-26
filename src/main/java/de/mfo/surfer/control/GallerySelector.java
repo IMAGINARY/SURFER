@@ -5,23 +5,46 @@ import de.mfo.surfer.gallery.GalleryItem;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.L;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import javafx.beans.value.WritableValue;
+import java.util.*;
+
 import javafx.collections.ObservableList;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 
 public class GallerySelector extends VBox
 {
-    List< Gallery > galleries;
+    private class GalleryWithIcons {
+        public Gallery gallery;
+        public GalleryIcon first;
+        public List< GalleryIcon > others;
+
+        public GalleryWithIcons( Gallery gallery )
+        {
+            this.gallery = gallery;
+            this.first = new GalleryIcon( gallery.getGalleryItems().get( 0 ), GallerySelector.this.galleryToggleGroup );
+            this.first.setOnMouseClicked( e -> selectGallery( gallery.getType() ) );
+
+
+            this.others = new ArrayList<>( gallery.getGalleryItems().size() - 1 );
+            gallery.getGalleryItems().stream().skip( 1 ).forEach( galleryItem -> {
+                GalleryIcon galleryIcon = new GalleryIcon( galleryItem, GallerySelector.this.galleryItemToggleGroup );
+                galleryIcon.setOnMouseClicked( e -> GallerySelector.this.selectGalleryItem( galleryItem ) );
+                this.others.add( galleryIcon );
+            } );
+        }
+    }
+
+    Map< Gallery.Type, GalleryWithIcons > galleriesWithIcons;
     GalleryInfoPage introPage; /* TODO: move infoPage node into creating class and remove the container */
     GalleryInfoPage infoPage; /* TODO: move infoPage node into creating class and remove the container */
     ObservableList< Node > galleryIconContainer;
     RenderArea renderArea;
     Main mainWindow;
+    ToggleGroup galleryToggleGroup;
+    ToggleGroup galleryItemToggleGroup;
+    Map< Gallery, List< GalleryIcon > > galleryIcons;
 
     public GallerySelector( ObservableList< Node > galleryIconContainer, GalleryInfoPage introPage, GalleryInfoPage infoPage, RenderArea renderArea, Main mainWindow )
     {
@@ -34,41 +57,31 @@ public class GallerySelector extends VBox
         this.renderArea = renderArea;
         this.mainWindow = mainWindow;
 
-        galleries = new LinkedList<>();
-        for( Gallery.Type type : Gallery.Type.values() )
-            galleries.add( new Gallery( L.localeProperty(), type ) );
+        this.galleryToggleGroup = new ToggleGroup();
+        this.galleryItemToggleGroup = new ToggleGroup();
 
-        galleries.forEach( g -> getChildren().add( prepareGallery( g ) ) );
-
-        this.galleries = Collections.unmodifiableList( galleries );
+        this.galleriesWithIcons = new EnumMap<>( Gallery.Type.class );
+        for( Gallery.Type type : Gallery.Type.values() ) {
+            GalleryWithIcons galleryWithIcons = new GalleryWithIcons( new Gallery(L.localeProperty(), type ) );
+            this.getChildren().add( galleryWithIcons.first );
+            VBox.setVgrow( galleryWithIcons.first, Priority.ALWAYS );
+            this.galleriesWithIcons.put( type, galleryWithIcons );
+        }
     }
 
-    private GalleryIcon prepareGallery( Gallery g )
+    public Gallery getGallery( Gallery.Type galleryType )
     {
-        GalleryIcon icon = g.getGalleryItems().get( 0 ).getIcon();
-        icon.setOnMouseClicked( e -> selectGallery( g ) );
-
-        g.getGalleryItems()
-            .stream()
-            .skip( 1 )
-            .forEach( gi -> gi.getIcon().setOnMouseClicked( e -> selectGalleryItem( gi ) ) );
-        return icon;
+        return galleriesWithIcons.get( galleryType ).gallery;
     }
 
-    public List< Gallery > getGalleries()
+    public void selectGallery( Gallery.Type galleryType )
     {
-        return galleries;
-    }
-
-    public void selectGallery( Gallery g )
-    {
-        introPage.setGalleryItem( g.getGalleryItems().get( 0 ) );
+        GalleryWithIcons galleryWithIcons = galleriesWithIcons.get( galleryType );
+        galleryWithIcons.first.setSelected( true );
+        introPage.setGalleryItem( galleryWithIcons.first.getGalleryItem() );
         galleryIconContainer.clear();
-        g.getGalleryItems()
-            .stream()
-            .sequential()
-            .skip( 1 )
-            .forEach( gi -> galleryIconContainer.add( gi.getIcon() ) );
+        for( GalleryIcon galleryIcon : galleryWithIcons.others )
+            galleryIconContainer.add( galleryIcon );
         mainWindow.setMode( Main.Mode.GALLERY );
     }
 

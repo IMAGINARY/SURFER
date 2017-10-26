@@ -197,7 +197,7 @@ public class Main extends Application
             overlay.getChildren().add( galleryIntroPage );
             overlay.getChildren().add( galleryIconContainer );
 
-            gs.selectGallery( gs.getGalleries().get( 0 ) );
+            gs.selectGallery( Gallery.Type.values()[ 0 ] );
             ra.load( Main.class.getResource( "gallery/default.jsurf" ) );
             setMode( Mode.COLORS );
 
