@@ -31,9 +31,9 @@ public class TabPanel extends Region
         initTabLabel( "Tab_Text_Info", "info" );
         initTabLabel( "Tab_Text_Color", "colors" );
 
-        initTabButton( "Gallery", e -> activeTab.set( 0 ) );
-        initTabButton( "Info", e -> activeTab.set( 1 ) );
-        initTabButton( "Color", e -> activeTab.set( 2 ) );
+        initTabButton( "Gallery", 0 );
+        initTabButton( "Info", 1 );
+        initTabButton( "Color", 2 );
 
         initTabContent( galleryPanel, 0 );
         initTabContent( infoPanel, 1 );
@@ -48,7 +48,7 @@ public class TabPanel extends Region
         getChildren().add( label );
     }
 
-    private void initTabButton( String suffix, EventHandler< ActionEvent > handler )
+    private void initTabButton( String suffix, int tabIndex )
     {
         SceneNodeToggleButton button = new SceneNodeToggleButton(
             Main.fxmlLookup( "#Button_" + suffix ),
@@ -56,7 +56,8 @@ public class TabPanel extends Region
             Main.fxmlLookup( "#Button_Pressed_" + suffix )
         );
         button.setToggleGroup( toggleGroup );
-        button.setOnAction( handler );
+        button.setOnAction( e -> activeTab.set( tabIndex ) );
+        activeTab.addListener( ( o, ov, nv ) -> button.setSelected( nv.equals( tabIndex ) ) );
         getChildren().add( button );
     }
 
