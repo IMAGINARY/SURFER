@@ -99,6 +99,7 @@ public class Main extends Application
             root.getChildren().setAll( fxmlRoot, overlay );
 
             Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
+            scene.getStylesheets().add( Main.class.getResource( "css/style.css" ).toExternalForm() );
 
             Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
             NumberBinding scaleValue = new When(
@@ -154,10 +155,9 @@ public class Main extends Application
             );
             cpp = new ColorPickerPanel();
 
-            galleryIconContainer = new javafx.scene.layout.TilePane( 50.0, 10.0 );
+            galleryIconContainer = new javafx.scene.layout.TilePane();
+            galleryIconContainer.getStyleClass().add( "galleryIconContainer" );
             FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
-            galleryIconContainer.setStyle("-fx-background-color: #00FFFF;");
-            galleryIconContainer.setAlignment( Pos.CENTER );
             galleryIntroPage = new GalleryInfoPage();
             FXUtils.resizeRelocateTo( galleryIntroPage, fxmlLookup( "#Gallery_Text" ) );
             galleryInfoPage = new GalleryInfoPage();

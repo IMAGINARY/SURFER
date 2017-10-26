@@ -12,7 +12,7 @@ import javafx.scene.image.WritableImage;
 
 public class ThumbnailGenerator
 {
-    static int thumbnailSize = 170;
+    static int thumbnailSize = 150;
     static HashMap< URL, Image > cachedImages;
     static
     {
