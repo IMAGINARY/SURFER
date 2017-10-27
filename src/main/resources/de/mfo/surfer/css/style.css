@@ -1,6 +1,9 @@
-* {
+/*.root {
 -fx-font-family: Verdanna;
--fx-font-size: 16px;
+}
+*/
+#overlay {
+-fx-font-size: 18px;
 }
 
 SceneNodeButton, SceneNodeToggleButton {
@@ -91,8 +94,8 @@ FormulaInputForm .formulaFont {
     -fx-font: 60px sans-serif;
 }
 
-FormulaInputForm > Label {
-    -fx-font-size: 125%;
+FormulaInputForm > .keypad-label {
+    -fx-font-size: 20px;
 }
 
 SceneNodeSlider.slider {
@@ -128,7 +131,6 @@ TabPanel > Label {
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
-
 
 GalleryIcon.galleryIcon, GalleryIcon.galleryIcon:selected, GalleryIcon.galleryItemIcon, GalleryIcon.galleryItemIcon:selected {
     -fx-background-color: transparent;

@@ -44,6 +44,7 @@ public class TabPanel extends Region
     {
         Label label = new Label();
         FXUtils.resizeRelocateTo( label, FXUtils.setVisible( Main.fxmlLookup( "#" + placeholderId ), false ) );
+        label.setMaxHeight( label.getMaxHeight() * 2.0 );
         label.textProperty().bind( lb( lbId ) );
         getChildren().add( label );
     }

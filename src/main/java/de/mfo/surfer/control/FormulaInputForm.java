@@ -146,16 +146,19 @@ public class FormulaInputForm extends Region
     void initLabels()
     {
         Label variables = new Label();
+        variables.getStyleClass().add( "keypad-label" );
         variables.textProperty().bind( lb( "variables" ) );
-        FXUtils.resizeRelocateTo( variables, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_XYZ" ), false ) );
+        FXUtils.relocateTo( variables, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_XYZ" ), false ) );
 
         Label arithmeticOperations = new Label();
+        arithmeticOperations.getStyleClass().add( "keypad-label" );
         arithmeticOperations.textProperty().bind( lb( "arithmeticOperations" ) );
-        FXUtils.resizeRelocateTo( arithmeticOperations, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Operations" ), false ) );
+        FXUtils.relocateTo( arithmeticOperations, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Operations" ), false ) );
 
         Label parameters = new Label();
+        parameters.getStyleClass().add( "keypad-label" );
         parameters.textProperty().bind( lb( "parameters" ) );
-        FXUtils.resizeRelocateTo( parameters, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Parameters" ), false ) );
+        FXUtils.relocateTo( parameters, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Parameters" ), false ) );
 
         this.getChildren().addAll( variables, arithmeticOperations, parameters );
     }

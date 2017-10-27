@@ -96,6 +96,7 @@ public class Main extends Application
         {
             Group root = new Group();
             Group overlay = new Group();
+            overlay.setId( "overlay" );
             root.getChildren().setAll( fxmlRoot, overlay );
 
             Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
