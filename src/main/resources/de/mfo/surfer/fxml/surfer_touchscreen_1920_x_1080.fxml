@@ -4238,25 +4238,6 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group id="Button_Over_Delete">
-                    <children>
-                        <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
-                            <fill>
-                                <Color blue="0.84705883" green="0.84705883" red="0.84705883"/>
-                            </fill>
-                        </SVGPath>
-                        <Line endX="1774.15" endY="986.53" startX="1754.03" startY="1006.65" strokeLineCap="BUTT" strokeWidth="3.09">
-                            <stroke>
-                                <Color blue="1.0" green="1.0" red="1.0"/>
-                            </stroke>
-                        </Line>
-                        <Line endX="1754.03" endY="986.53" startX="1774.15" startY="1006.65" strokeLineCap="BUTT" strokeWidth="3.09">
-                            <stroke>
-                                <Color blue="1.0" green="1.0" red="1.0"/>
-                            </stroke>
-                        </Line>
-                    </children>
-                </Group>
                 <Group id="Button_Over_MFO_Surfer_Info" opacity="0.4">
                     <children>
                         <Rectangle fill="${null}" height="47.0" width="231.0" x="34.0" y="16.0"/>
@@ -6045,7 +6026,7 @@
                         </SVGPath>
                     </children>
                 </Group>
-                <Group id="Button_Pressed_Delete">
+                <Group id="Button_Pressed_Complete_Delete">
                     <children>
                         <SVGPath content="M1783.87,996.53 C1783.87,1007.57 1774.92,1016.53 1763.87,1016.53 C1752.83,1016.53 1743.87,1007.57 1743.87,996.53 C1743.87,985.48 1752.83,976.53 1763.87,976.53 C1774.92,976.53 1783.87,985.48 1783.87,996.53 Z ">
                             <fill>
