@@ -36,6 +36,7 @@ public class FormulaInputForm extends Region
     public FormulaInputForm()
     {
         setPickOnBounds( false );
+        hideUnusedNodes();
         initTextField();
         initButtons();
         initFeedbackNodes();
@@ -161,6 +162,13 @@ public class FormulaInputForm extends Region
         FXUtils.relocateTo( parameters, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Parameters" ), false ) );
 
         this.getChildren().addAll( variables, arithmeticOperations, parameters );
+    }
+
+    void hideUnusedNodes()
+    {
+        String[] ids = { "#Button_Over_draw", "#Button_Pressed_draw", "#Layer_31" };
+        for( String id : ids )
+            Main.fxmlLookup( id ).setVisible( false );
     }
 
     void insertText( String text )
