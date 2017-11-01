@@ -5,6 +5,7 @@ import de.mfo.surfer.gallery.*;
 import de.mfo.surfer.util.FXUtils;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -218,6 +219,13 @@ public class Main extends Application
 
     public void setMode( Mode mode )
     {
+        Consumer< Boolean > disableButtons = disable -> msnbp.setDisable( disable,
+            MiscSceneNodeButtonPanel.ButtonType.OPEN,
+            MiscSceneNodeButtonPanel.ButtonType.SAVE,
+            MiscSceneNodeButtonPanel.ButtonType.EXPORT,
+            MiscSceneNodeButtonPanel.ButtonType.PRINT
+        );
+
         switch( mode )
         {
             case RENDERING:
@@ -225,12 +233,16 @@ public class Main extends Application
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
                 galleryIntroPage.setVisible( false );
+                disableButtons.accept( false );
+                fif.setDisable( false );
                 break;
             case GALLERY:
                 ra.setVisible( false );
                 snsp.setVisible( false );
                 galleryIconContainer.setVisible( true );
                 galleryIntroPage.setVisible( true );
+                disableButtons.accept( true );
+                fif.setDisable( true );
                 tp.setActiveTabIndex( 0 );
                 break;
             case INFO:
@@ -238,6 +250,8 @@ public class Main extends Application
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
                 galleryIntroPage.setVisible( false );
+                disableButtons.accept( false );
+                fif.setDisable( false );
                 tp.setActiveTabIndex( 1 );
                 break;
             case COLORS:
@@ -245,6 +259,8 @@ public class Main extends Application
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
                 galleryIntroPage.setVisible( false );
+                disableButtons.accept( false );
+                fif.setDisable( false );
                 tp.setActiveTabIndex( 2 );
                 break;
         }

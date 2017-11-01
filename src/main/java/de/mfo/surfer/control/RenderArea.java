@@ -14,6 +14,7 @@ import javax.vecmath.*;
 
 import de.mfo.surfer.Main;
 import de.mfo.surfer.gallery.GalleryItem;
+import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.Preferences;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -155,12 +156,8 @@ public class RenderArea extends Region
 
         isValid.bind( hasNullValues.not().and( isFormulaValid ) );
 
-        ColorAdjust grayscale = new ColorAdjust();
-        grayscale.setSaturation( -0.75 );
-        GaussianBlur blurredGrayscale = new GaussianBlur();
-        grayscale.setInput( blurredGrayscale );
         canvas.effectProperty().bind( Bindings.createObjectBinding(
-            () -> isValid.get() ? null : grayscale,
+            () -> isValid.get() ? null : FXUtils.getEffectForDisabledNodes(),
             isValid
         ) );
 
