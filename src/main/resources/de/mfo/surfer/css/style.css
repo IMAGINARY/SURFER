@@ -124,7 +124,7 @@ SceneNodeSliderWithNameAndValue > Label {
 
 LanguageSelector.choice-box {
     -fx-opacity: 0%;
-    -fx-font-size: 30px;
+    -fx-font-size: 20px;
 }
 
 TabPanel > Label {
