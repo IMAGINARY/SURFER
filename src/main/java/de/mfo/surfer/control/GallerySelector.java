@@ -37,8 +37,8 @@ public class GallerySelector extends VBox
     }
 
     Map< Gallery.Type, GalleryWithIcons > galleriesWithIcons;
-    GalleryInfoPage introPage; /* TODO: move infoPage node into creating class and remove the container */
-    GalleryInfoPage infoPage; /* TODO: move infoPage node into creating class and remove the container */
+    GalleryInfoPage introPage;
+    GalleryInfoPage infoPage;
     ObservableList< Node > galleryIconContainer;
     RenderArea renderArea;
     Main mainWindow;
