@@ -190,6 +190,8 @@ public class Main extends Application
                 }
             } );
 
+            ra.load( Main.class.getResource( "gallery/default.jsurf" ) );
+
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );
             fif.errorMessageProperty().bind( ra.errorMessageProperty() );
@@ -206,7 +208,6 @@ public class Main extends Application
             scaledOverlay.getChildren().add( galleryIconContainer );
 
             gs.selectGallery( Gallery.Type.values()[ 0 ] );
-            ra.load( Main.class.getResource( "gallery/default.jsurf" ) );
             setMode( Mode.COLORS );
 
             stage.setScene( scene );
