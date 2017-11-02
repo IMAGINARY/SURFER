@@ -1,43 +1,81 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.gallery.GalleryItem;
+import de.mfo.surfer.util.FXUtils;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Region;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class GalleryInfoPage extends Region
+public class GalleryInfoPage extends Pane
 {
+    private static final Logger logger = LoggerFactory.getLogger( GalleryInfoPage.class );
+
     GalleryItem galleryItem;
-    Canvas canvas;
+    ImageView imageView;
+
+    ObjectBinding< BoundingBox > targetBoundsBinding;
     InvalidationListener galleryItemInvalidationListener;
     ObjectBinding<Void> invalidationCombiner;
 
-    public GalleryInfoPage()
+    /**
+     * This is a hack. imageView is an external node that needs to be placed outside of the scaled content but still
+     * needs to be resized and relocated properly. This class than paints onto the external component.
+     * Not really a good solution, but otherwise the renderings of the gallery info pages are not aligned to pixels which
+     * causes almost unreadable text (scaled bitmap fonts are always ugly).
+     * TODO: use different mechanism for UI scaling
+     * @param imageView
+     */
+    public GalleryInfoPage( ImageView imageView )
     {
         super();
 
-        canvas = new Canvas();
-        canvas.widthProperty().bind( widthProperty() );
-        canvas.heightProperty().bind( heightProperty() );
+        this.setSnapToPixel( true );
 
-        invalidationCombiner = Bindings.createObjectBinding( () -> { return null; }, widthProperty(), heightProperty(), localToSceneTransformProperty() );
+        this.imageView = imageView;
+        this.imageView.visibleProperty().bind( visibleProperty() );
+        this.imageView.setMouseTransparent( true );
+        this.imageView.setPreserveRatio( true );
+
+        targetBoundsBinding = Bindings.createObjectBinding( () -> {
+                Bounds boundsInScene = this.localToSceneTransformProperty().get().transform( boundsInLocalProperty().get() );
+                BoundingBox boundsInSceneSnapped = new BoundingBox( Math.round( boundsInScene.getMinX() ),
+                    Math.round( boundsInScene.getMinY() ),
+                    Math.ceil( boundsInScene.getWidth() ),
+                    Math.ceil( boundsInScene.getHeight() )
+                );
+                return boundsInSceneSnapped;
+            },
+            this.boundsInLocalProperty(),
+            this.localToSceneTransformProperty()
+        );
+
+        invalidationCombiner = Bindings.createObjectBinding( () -> { return null; }, imageView.fitWidthProperty(), imageView.fitHeightProperty() );
         invalidationCombiner.addListener( __ -> Platform.runLater( this::render ) );
+        ChangeListener<BoundingBox> l = (o, ov, nv ) -> {
+            FXUtils.relocateTo( imageView, nv );
+            imageView.setFitWidth( nv.getWidth() );
+            imageView.setFitHeight( nv.getHeight() );
+        };
+        l.changed(targetBoundsBinding, targetBoundsBinding.getValue(), targetBoundsBinding.getValue());
+        targetBoundsBinding.addListener( l );
 
         galleryItemInvalidationListener = __ -> Platform.runLater( this::render );
 
-        getChildren().add( getEmptyPageSymbol() );
-        getChildren().add( canvas );
+        getChildren().setAll( getEmptyPageSymbol() );
     }
 
-    public GalleryInfoPage( GalleryItem galleryItem )
+    public GalleryInfoPage(ImageView imageView, GalleryItem galleryItem )
     {
-        this();
+        this(imageView);
         setGalleryItem( galleryItem );
     }
 
@@ -53,20 +91,14 @@ public class GalleryInfoPage extends Region
     void render()
     {
         // needs to be called to activate InvalidationListeners again
-        widthProperty().get();
-        heightProperty().get();
-        localToSceneTransformProperty().get();
         invalidationCombiner.get();
 
         if( this.galleryItem != null ) {
-            GraphicsContext gc = canvas.getGraphicsContext2D();
-            gc.clearRect(0.0, 0.0, getWidth(), getHeight() );
-            Image image = this.galleryItem.getInfoPageRendering(localToScene(getBoundsInLocal(), false));
-
-            if (image.getWidth() / image.getHeight() > canvas.getWidth() / canvas.getHeight())
-                gc.drawImage(image, 0.0, 0.0, image.getWidth(), image.getHeight(), 0.0, 0.0, canvas.getWidth(), (canvas.getWidth() * image.getHeight()) / image.getWidth());
-            else
-                gc.drawImage(image, 0.0, 0.0, image.getWidth(), image.getHeight(), 0.0, 0.0, (canvas.getHeight() * image.getWidth()) / image.getHeight(), canvas.getHeight());
+            int maxImageWidth = (int) imageView.getFitWidth();
+            int maxImageHeight = (int) imageView.getFitHeight();
+            assert ( double ) maxImageWidth == imageView.getFitWidth() && ( double ) maxImageHeight == imageView.getFitHeight()
+                : "target dimensions are not integral";
+            imageView.setImage(this.galleryItem.getInfoPageRendering( maxImageWidth, maxImageHeight ));
         }
     }
 

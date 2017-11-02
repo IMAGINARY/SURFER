@@ -39,7 +39,7 @@ public class FXUtils
         target.setMaxHeight( source.getHeight() );
     }
 
-    public static void relocateTo( Region target, Bounds source )
+    public static void relocateTo( Node target, Bounds source )
     {
         target.relocate( source.getMinX(), source.getMinY() );
     }

@@ -14,8 +14,7 @@ import javafx.beans.binding.When;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.Group;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -23,7 +22,6 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javafx.geometry.Pos;
 
 public class Main extends Application
 {
@@ -95,12 +93,14 @@ public class Main extends Application
 
         try
         {
-            Group root = new Group();
-            Group overlay = new Group();
-            overlay.setId( "overlay" );
-            root.getChildren().setAll( fxmlRoot, overlay );
+            Group scaledOverlay = new Group();
+            scaledOverlay.setId( "scaled-overlay" );
 
-            Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
+            Group scaledRoot = new Group( fxmlRoot, scaledOverlay );
+
+            Group overlay = new Group();
+
+            Scene scene = new Scene( new Group( scaledRoot, overlay ), 192.0 * 6.0, 108.0 * 6.0 );
             scene.getStylesheets().add( Main.class.getResource( "css/style.css" ).toExternalForm() );
 
             Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
@@ -112,8 +112,8 @@ public class Main extends Application
             scale.xProperty().bind( scaleValue );
             scale.yProperty().bind( scaleValue );
 
-            root.getTransforms().add( scale );
-            root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
+            scaledRoot.getTransforms().add( scale );
+            scaledRoot.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
             fif = new FormulaInputForm();
             snsp = new SceneNodeSliderPanel();
@@ -160,9 +160,15 @@ public class Main extends Application
             galleryIconContainer = new javafx.scene.layout.TilePane();
             galleryIconContainer.getStyleClass().add( "galleryIconContainer" );
             FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
-            galleryIntroPage = new GalleryInfoPage();
+
+            ImageView galleryIntroCanvas = new ImageView();
+            galleryIntroPage = new GalleryInfoPage( galleryIntroCanvas );
             FXUtils.resizeRelocateTo( galleryIntroPage, fxmlLookup( "#Gallery_Text" ) );
-            galleryInfoPage = new GalleryInfoPage();
+
+            ImageView galleryInfoCanvas = new ImageView();
+            galleryInfoPage = new GalleryInfoPage( galleryInfoCanvas );
+
+            overlay.getChildren().setAll( galleryIntroCanvas, galleryInfoCanvas );
 
             gs = new GallerySelector(
                 galleryIconContainer.getChildren(),
@@ -173,7 +179,7 @@ public class Main extends Application
             );
             tp = new TabPanel(
                 gs,
-                new BorderPane( galleryInfoPage ),
+                galleryInfoPage,
                 cpp
             );
             tp.activeTabIndexProperty().addListener( ( observable, oldValue, newValue ) -> {
@@ -191,13 +197,13 @@ public class Main extends Application
             cpp.frontColorProperty().bindBidirectional( ra.frontColorProperty() );
             cpp.backColorProperty().bindBidirectional( ra.backColorProperty() );
 
-            overlay.getChildren().add( fif );
-            overlay.getChildren().add( msnbp );
-            overlay.getChildren().add( snsp );
-            overlay.getChildren().add( ra );
-            overlay.getChildren().add( tp );
-            overlay.getChildren().add( galleryIntroPage );
-            overlay.getChildren().add( galleryIconContainer );
+            scaledOverlay.getChildren().add( fif );
+            scaledOverlay.getChildren().add( msnbp );
+            scaledOverlay.getChildren().add( snsp );
+            scaledOverlay.getChildren().add( ra );
+            scaledOverlay.getChildren().add( tp );
+            scaledOverlay.getChildren().add( galleryIntroPage );
+            scaledOverlay.getChildren().add( galleryIconContainer );
 
             gs.selectGallery( Gallery.Type.values()[ 0 ] );
             ra.load( Main.class.getResource( "gallery/default.jsurf" ) );

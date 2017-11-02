@@ -1,12 +1,10 @@
 package de.mfo.surfer.gallery;
 
-import de.mfo.surfer.control.GalleryIcon;
-import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.ThumbnailGenerator;
 import de.mfo.surfer.util.Utils;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,9 +20,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.InvalidationListener;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
@@ -113,16 +109,18 @@ public class Gallery
         return availableLocales;
     }
 
-    public static Image getGalleryInfoPageRendering( int pdfPageNumber, Bounds boundingBox )
+    public static Image getGalleryInfoPageRendering( int pdfPageNumber, int maxWidth, int maxHeight )
     {
         PDRectangle cropBox = pdfDocument.getPage( pdfPageNumber ).getCropBox();
 
-        float scale_x = (float) boundingBox.getWidth() / cropBox.getWidth();
-        float scale_y = (float) boundingBox.getHeight() / cropBox.getHeight();
-        float scale = 2f * Math.min(scale_x, scale_y);
+        float scale_x = maxWidth / cropBox.getWidth();
+        float scale_y = maxHeight / cropBox.getHeight();
+        float scale = Math.min(scale_x, scale_y);
 
         return Utils.wrapInRte( () -> {
             try {
+                BufferedImage bi = new BufferedImage( maxWidth, maxHeight, BufferedImage.TYPE_INT_RGB );
+                pdfRenderer.renderPageToGraphics( pdfPageNumber, (Graphics2D) bi.getGraphics(), scale );
                 return SwingFXUtils.toFXImage(pdfRenderer.renderImage(pdfPageNumber, scale), null);
             } catch (IllegalArgumentException iae) {
                 return SwingFXUtils.toFXImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), null);
@@ -216,9 +214,9 @@ public class Gallery
             return thumbnailImage;
         }
 
-        public Image getInfoPageRendering( Bounds boundingBox )
+        public Image getInfoPageRendering( int maxWidth, int maxHeight )
         {
-            return Gallery.getGalleryInfoPageRendering( pdfPageNumber.get(), boundingBox );
+            return Gallery.getGalleryInfoPageRendering( pdfPageNumber.get(), maxWidth, maxHeight );
         }
 
         @Override
