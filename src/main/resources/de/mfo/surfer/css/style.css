@@ -177,3 +177,7 @@ TilePane.galleryIconContainer {
     -fx-background-color: #FFFFFF;
     -fx-alignment: center;
 }
+
+.my-custom-color {
+    -fx-font-size: 13px;
+}
