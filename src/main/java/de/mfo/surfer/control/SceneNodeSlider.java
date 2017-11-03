@@ -114,6 +114,6 @@ public class SceneNodeSlider extends Slider
     @Override
     public String getUserAgentStylesheet()
     {
-        return SceneNodeButton.class.getResource( "../css/style.css" ).toExternalForm();
+        return SceneNodeButton.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm();
     }
 }

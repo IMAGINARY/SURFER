@@ -208,7 +208,7 @@ public class FormulaInputForm extends Region
     @Override
     public String getUserAgentStylesheet()
     {
-        return FormulaInputForm.class.getResource( "../css/style.css" ).toExternalForm();
+        return FormulaInputForm.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm();
     }
 
     public String getFormula()

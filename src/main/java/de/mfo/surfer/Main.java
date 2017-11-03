@@ -33,7 +33,7 @@ public class Main extends Application
         try
         {
             fxmlRoot = ( Group ) new FXMLLoader().load(
-                getClass().getResource( "fxml/surfer_touchscreen_1920_x_1080.fxml" )
+                getClass().getResource( "/de/mfo/surfer/fxml/surfer_touchscreen_1920_x_1080.fxml" )
             );
         }
         catch( IOException ioe )
@@ -101,7 +101,7 @@ public class Main extends Application
             Group overlay = new Group();
 
             Scene scene = new Scene( new Group( scaledRoot, overlay ), 192.0 * 6.0, 108.0 * 6.0 );
-            scene.getStylesheets().add( Main.class.getResource( "css/style.css" ).toExternalForm() );
+            scene.getStylesheets().add( Main.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm() );
 
             Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
             NumberBinding scaleValue = new When(
@@ -188,7 +188,7 @@ public class Main extends Application
                 }
             } );
 
-            ra.load( Main.class.getResource( "gallery/default.jsurf" ) );
+            ra.load( Main.class.getResource( "/de/mfo/surfer/gallery/default.jsurf" ) );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );

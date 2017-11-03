@@ -32,6 +32,6 @@ public class GalleryIcon extends RadioButton
     @Override
     public String getUserAgentStylesheet()
     {
-        return GalleryIcon.class.getResource( "../css/style.css" ).toExternalForm();
+        return GalleryIcon.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm();
     }
 }

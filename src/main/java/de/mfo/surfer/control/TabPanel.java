@@ -88,6 +88,6 @@ public class TabPanel extends Region
     @Override
     public String getUserAgentStylesheet()
     {
-        return SceneNodeSliderWithNameAndValue.class.getResource( "../css/style.css" ).toExternalForm();
+        return SceneNodeSliderWithNameAndValue.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm();
     }
 }

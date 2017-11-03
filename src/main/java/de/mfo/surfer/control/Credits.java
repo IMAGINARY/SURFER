@@ -29,7 +29,7 @@ public class Credits extends Region
 
         WebEngine webEngine = webView.getEngine();
         webEngine.setUserStyleSheetLocation(
-            Credits.class.getResource( "../css/credits.css" ).toExternalForm()
+            Credits.class.getResource( "/de/mfo/surfer/css/credits.css" ).toExternalForm()
         );
 
         webEngine.getLoadWorker().stateProperty().addListener(
@@ -44,7 +44,7 @@ public class Credits extends Region
             }
         );
 
-        webEngine.load( Credits.class.getResource( "../credits/credits.html" ).toExternalForm() );
+        webEngine.load( Credits.class.getResource( "/de/mfo/surfer/credits/credits.html" ).toExternalForm() );
 
         L.localeProperty().addListener( ( observable, oldValue, newValue ) -> webEngine.reload() );
 

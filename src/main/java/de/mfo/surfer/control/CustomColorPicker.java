@@ -220,6 +220,6 @@ public class CustomColorPicker extends VBox {
     @Override
     public String getUserAgentStylesheet()
     {
-        return CustomColorPicker.class.getResource( "../css/customcolorpicker.css" ).toExternalForm();
+        return CustomColorPicker.class.getResource( "/de/mfo/surfer/css/customcolorpicker.css" ).toExternalForm();
     }
 }

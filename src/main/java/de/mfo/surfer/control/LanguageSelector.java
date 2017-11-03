@@ -70,6 +70,6 @@ public class LanguageSelector extends ChoiceBox< Locale >
     @Override
     public String getUserAgentStylesheet()
     {
-        return LanguageSelector.class.getResource( "../css/style.css" ).toExternalForm();
+        return LanguageSelector.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm();
     }
 }

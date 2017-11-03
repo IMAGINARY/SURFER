@@ -43,6 +43,6 @@ public class SceneNodeToggleButton extends ToggleButton
     @Override
     public String getUserAgentStylesheet()
     {
-        return SceneNodeToggleButton.class.getResource( "../css/style.css" ).toExternalForm();
+        return SceneNodeToggleButton.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm();
     }
 }

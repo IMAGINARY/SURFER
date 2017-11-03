@@ -61,7 +61,7 @@ public class Gallery
     private ReadOnlyObjectProperty< Locale > locale;
 
     static {
-        pdfDocument = Utils.wrapInRte( () -> PDDocument.load( Gallery.class.getResourceAsStream( "Surfer-Galleries.pdf" ) ) );
+        pdfDocument = Utils.wrapInRte( () -> PDDocument.load( Gallery.class.getResourceAsStream( "/de/mfo/surfer/gallery/Surfer-Galleries.pdf" ) ) );
         pdfRenderer = new PDFRenderer( pdfDocument );
 
         availableLocales = new HashSet<>();
@@ -172,7 +172,7 @@ public class Gallery
 
             this.pdfPageNumber = new SimpleIntegerProperty();
             this.title = new SimpleStringProperty();
-            this.jsurfURL = getClass().getResource( idInGallery + ".jsurf" );
+            this.jsurfURL = getClass().getResource( "/de/mfo/surfer/gallery/" + idInGallery + ".jsurf" );
 
             this.invalidationListeners = new LinkedList<>();
 
