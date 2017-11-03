@@ -1,12 +1,37 @@
 package de.mfo.surfer.control;
 
-import javafx.scene.control.Label;
-import javafx.scene.Node;
+import de.mfo.surfer.gallery.GalleryItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 
-public abstract class GalleryIcon extends Label
+public class GalleryIcon extends RadioButton
 {
-    // to be implemented in subclasses in the gallery package
-    public GalleryIcon() { super(); }
-    public GalleryIcon( String text ) { super( text ); }
-    public GalleryIcon( String text, Node graphic ) { super( text, graphic ); }
+    private GalleryItem galleryItem;
+
+    public GalleryIcon( GalleryItem galleryItem )
+    {
+        this.galleryItem = galleryItem;
+        this.textProperty().bind( galleryItem.titleProperty() );
+        this.graphicProperty().setValue( new ImageView( galleryItem.getThumbnailImage() ) );
+        getStyleClass().clear();
+        getStyleClass().addAll( galleryItem.isFirst() ? "galleryIcon" : "galleryItemIcon" );
+    }
+
+    public GalleryIcon( GalleryItem galleryItem, ToggleGroup toggleGroup )
+    {
+        this( galleryItem );
+        this.setToggleGroup( toggleGroup );
+    }
+
+    public GalleryItem getGalleryItem()
+    {
+        return this.galleryItem;
+    }
+
+    @Override
+    public String getUserAgentStylesheet()
+    {
+        return GalleryIcon.class.getResource( "../css/style.css" ).toExternalForm();
+    }
 }

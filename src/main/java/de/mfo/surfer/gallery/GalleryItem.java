@@ -1,15 +1,17 @@
 package de.mfo.surfer.gallery;
 
-import de.mfo.surfer.control.GalleryIcon;
-import de.mfo.surfer.control.GalleryInfoPage;
 import java.net.URL;
-import javafx.scene.image.Image;
 
-public interface GalleryItem
+import javafx.scene.image.Image;
+import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyStringProperty;
+
+public interface GalleryItem extends Observable
 {
-    public String getTitle();
-    public URL getJsurfURL();
-    public Image getThumbnailImage();
-    public GalleryIcon getIcon();
-    public GalleryInfoPage getInfoPage();
+    boolean isFirst();
+    ReadOnlyStringProperty titleProperty();
+    String getTitle();
+    URL getJsurfURL();
+    Image getThumbnailImage();
+    Image getInfoPageRendering( int maxWidth, int maxHeight );
 }

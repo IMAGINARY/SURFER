@@ -1,4 +1,12 @@
-SceneNodeButton {
+/*.root {
+-fx-font-family: Verdanna;
+}
+*/
+#scaled-overlay {
+-fx-font-size: 18px;
+}
+
+SceneNodeButton, SceneNodeToggleButton {
     -fx-cursor: null;
     -fx-effect: null;
     -fx-focus-traversable: false;
@@ -86,8 +94,8 @@ FormulaInputForm .formulaFont {
     -fx-font: 60px sans-serif;
 }
 
-FormulaInputForm > Label {
-    -fx-font-size: 125%;
+FormulaInputForm > .keypad-label {
+    -fx-font-size: 20px;
 }
 
 SceneNodeSlider.slider {
@@ -110,26 +118,66 @@ SceneNodeSlider.slider .thumb, SceneNodeSlider.slider:focused .thumb {
 }
 
 SceneNodeSliderWithNameAndValue > Label {
-    -fx-font-size: 125%;
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
 
 LanguageSelector.choice-box {
     -fx-opacity: 0%;
-    -fx-font-size: 150%;
+    -fx-font-size: 20px;
 }
 
 TabPanel > Label {
-    -fx-font-size: 125%;
     -fx-alignment: center;
     -fx-text-alignment: center;
 }
 
-.galleryIcon {
-    -fx-content-display: left;
+GalleryIcon.galleryIcon, GalleryIcon.galleryIcon:selected, GalleryIcon.galleryItemIcon, GalleryIcon.galleryItemIcon:selected {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 0 0 0 0;
+    -fx-background-image: null;
+    -fx-background-position: 0% 0%;
+    -fx-background-repeat: repeat repeat;
+    -fx-background-image-slice: 100%;
+    -fx-background-size: auto auto;
 }
 
-.galleryItemIcon {
+GalleryIcon.galleryIcon {
+    -fx-content-display: left;
+    -fx-alignment: center-left;
+    -fx-max-width: 10000000000000;
+    -fx-max-height: 10000000000000;
+    -fx-graphic-text-gap: 20px;
+    -fx-wrap-text: true;
+}
+
+GalleryIcon.galleryIcon * {
+    -fx-font-size: 20px;
+}
+
+GalleryIcon.galleryIcon:selected, GalleryIcon.galleryItemIcon:selected  {
+    -fx-font-weight: bold;
+}
+
+GalleryIcon.galleryItemIcon {
+    -fx-alignment: center;
     -fx-content-display: top;
+    -fx-min-width: 224px;
+    -fx-max-width: 224px;
+    -fx-min-height: 204px;
+    -fx-max-height: 204px;
+    -fx-graphic-text-gap: 14px;
+    -fx-padding: 0px;
+}
+
+TilePane.galleryIconContainer {
+    -fx-hgap: 0px;
+    -fx-vgap: 0px;
+    -fx-background-color: #FFFFFF;
+    -fx-alignment: center;
+}
+
+.my-custom-color {
+    -fx-font-size: 13px;
 }

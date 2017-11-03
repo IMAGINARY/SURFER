@@ -7,21 +7,20 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
 import javafx.application.Platform;
+import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +35,7 @@ public class FormulaInputForm extends Region
     public FormulaInputForm()
     {
         setPickOnBounds( false );
+        hideUnusedNodes();
         initTextField();
         initButtons();
         initFeedbackNodes();
@@ -47,16 +47,26 @@ public class FormulaInputForm extends Region
         Label equalsZero = new Label( " = 0" );
         equalsZero.getStyleClass().setAll( "formulaFont" );
         equalsZero.setPadding( new Insets( 0, 5, 0, 0 ) );
+        equalsZero.effectProperty().bind( Bindings.when( equalsZero.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
+
+        Node formulaBox = Main.< Node >fxmlLookup( "#Formula_Box" );
+        formulaBox.effectProperty().bind( Bindings.when( this.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
+
 
         textField = new TextField();
         textField.getStyleClass().setAll( "formulaFont", "noDecoration" );
         textField.focusedProperty().addListener(
             // always grab input focus
-            ( observable, newValue, oldValue ) -> textField.requestFocus()
+            ( observable, oldValue, newValue ) -> textField.requestFocus()
         );
         textField.textProperty().addListener(
             // don't automatically select text that has been changed through external binding
-            ( observable, newValue, oldValue ) -> Platform.runLater( () -> textField.deselect() )
+            ( observable, oldValue, newValue ) -> Platform.runLater( () -> textField.deselect() )
+        );
+        textField.disabledProperty().addListener(
+            // don't automatically select text after the text field has been enabled again
+            // TODO: (de)selection always clears caret position
+            ( observable, oldValue, newValue ) -> { if( newValue ) Platform.runLater( () -> textField.deselect() ); }
         );
         textField.paddingProperty().bind(
             Bindings.createObjectBinding(
@@ -64,6 +74,7 @@ public class FormulaInputForm extends Region
                 equalsZero.widthProperty()
             )
         );
+        textField.effectProperty().bind( Bindings.when( textField.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
 
         BoundingBox textFieldBB;
         {
@@ -135,29 +146,58 @@ public class FormulaInputForm extends Region
 
     void initFeedbackNodes()
     {
-        Main.< Node >fxmlLookup( "#Button_Correct" ).visibleProperty().bind( isValidProperty() );
-        Main.< Node >fxmlLookup( "#Button_Wrong" ).visibleProperty().bind( isValidProperty().not() );
+        // this can't be used as a button because it misses the "Hover" and "Pressed" states
+        Node correct = Main.< Node >fxmlLookup( "#Button_Correct" );
+        correct.visibleProperty().bind( isValidProperty() );
+        correct.effectProperty().bind( Bindings.when( this.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
 
+        // this can be used as a button
+        Button wrong = createButton( "Button", "Wrong",  event -> {} );
+        wrong.visibleProperty().bind( isValidProperty().not() );
+        this.getChildren().add( wrong );
+
+        // show error message in tooltip over the "Wrong" button
         errorMessage = new Tooltip();
-        Tooltip.install( Main.< Node >fxmlLookup( "#Button_Wrong" ), errorMessage );
-        errorMessage.setAutoHide( false );
+        errorMessage.setAutoHide( true );
+        wrong.setOnAction( e -> {
+            Point2D p = wrong.localToScene(0.0, 0.0);
+            Scene scene = wrong.getScene();
+            Window window = scene.getWindow();
+            errorMessage.show( window,
+                p.getX() + scene.getX() + window.getX(),
+                p.getY() + scene.getY() + window.getY()
+            );
+        } );
     }
 
     void initLabels()
     {
         Label variables = new Label();
+        variables.getStyleClass().add( "keypad-label" );
         variables.textProperty().bind( lb( "variables" ) );
-        FXUtils.resizeRelocateTo( variables, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_XYZ" ), false ) );
+        variables.effectProperty().bind( Bindings.when( variables.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( (Effect) null ) );
+        FXUtils.relocateTo( variables, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_XYZ" ), false ) );
 
         Label arithmeticOperations = new Label();
+        arithmeticOperations.getStyleClass().add( "keypad-label" );
         arithmeticOperations.textProperty().bind( lb( "arithmeticOperations" ) );
-        FXUtils.resizeRelocateTo( arithmeticOperations, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Operations" ), false ) );
+        arithmeticOperations.effectProperty().bind( Bindings.when( arithmeticOperations.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( (Effect) null ) );
+        FXUtils.relocateTo( arithmeticOperations, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Operations" ), false ) );
 
         Label parameters = new Label();
+        parameters.getStyleClass().add( "keypad-label" );
         parameters.textProperty().bind( lb( "parameters" ) );
-        FXUtils.resizeRelocateTo( parameters, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Parameters" ), false ) );
+        parameters.effectProperty().bind( Bindings.when( parameters.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( (Effect) null ) );
+        FXUtils.relocateTo( parameters, FXUtils.setVisible( Main.fxmlLookup( "#Text_Keyboard_Parameters" ), false ) );
 
         this.getChildren().addAll( variables, arithmeticOperations, parameters );
+    }
+
+    void hideUnusedNodes()
+    {
+        String[] ids = { "#Button_Over_draw", "#Button_Pressed_draw", "#Layer_31" };
+        for( String id : ids )
+            Main.fxmlLookup( id ).setVisible( false );
     }
 
     void insertText( String text )

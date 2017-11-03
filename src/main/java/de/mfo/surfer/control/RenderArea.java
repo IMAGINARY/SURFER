@@ -13,6 +13,8 @@ import java.io.*;
 import javax.vecmath.*;
 
 import de.mfo.surfer.Main;
+import de.mfo.surfer.gallery.GalleryItem;
+import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.Preferences;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -154,12 +156,8 @@ public class RenderArea extends Region
 
         isValid.bind( hasNullValues.not().and( isFormulaValid ) );
 
-        ColorAdjust grayscale = new ColorAdjust();
-        grayscale.setSaturation( -0.75 );
-        GaussianBlur blurredGrayscale = new GaussianBlur();
-        grayscale.setInput( blurredGrayscale );
         canvas.effectProperty().bind( Bindings.createObjectBinding(
-            () -> isValid.get() ? null : grayscale,
+            () -> isValid.get() ? null : FXUtils.getEffectForDisabledNodes(),
             isValid
         ) );
 
@@ -220,15 +218,6 @@ public class RenderArea extends Region
         };
         setOnScroll( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) );
         setOnZoom( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - Math.log10( e.getZoomFactor() ) ) );
-
-        try
-        {
-            load( Main.class.getResource( "gallery/default.jsurf" ) );
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
     }
 
     RenderingTask taskLowQuality;
@@ -330,6 +319,22 @@ public class RenderArea extends Region
                 executor.submit( taskLowQuality );
             }
         }
+    }
+
+    public void setPreviewImage( Image previewImage )
+    {
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext.clearRect( 0, 0, canvas.getWidth(), canvas.getHeight() );
+        graphicsContext.save();
+        graphicsContext.scale( 1.0, -1.0 );
+        graphicsContext.drawImage(
+            previewImage,
+            0, 0,
+            previewImage.getWidth(), previewImage.getHeight(),
+            0, -canvas.getHeight(),
+            canvas.getWidth(), canvas.getHeight()
+        );
+        graphicsContext.restore();
     }
 
     protected static void setOptimalCameraDistance( Camera c )
@@ -501,6 +506,13 @@ public class RenderArea extends Region
         }
         triggerRepaintOnChange.setValue( true );
         triggerRepaint();
+    }
+
+    public void load( GalleryItem galleryItem )
+        throws IOException
+    {
+        load( galleryItem.getJsurfURL() );
+        setPreviewImage( galleryItem.getThumbnailImage() );
     }
 
     public void store( File file )

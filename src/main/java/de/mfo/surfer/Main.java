@@ -5,6 +5,7 @@ import de.mfo.surfer.gallery.*;
 import de.mfo.surfer.util.FXUtils;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -13,8 +14,7 @@ import javafx.beans.binding.When;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.Group;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.TilePane;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,7 +22,6 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javafx.geometry.Pos;
 
 public class Main extends Application
 {
@@ -82,8 +81,8 @@ public class Main extends Application
     private GallerySelector gs;
     private TabPanel tp;
     private TilePane galleryIconContainer;
-    private BorderPane introPageContainer;
-    private BorderPane infoPageContainer;
+    private GalleryInfoPage galleryIntroPage;
+    private GalleryInfoPage galleryInfoPage;
 
     @Override
     public void start( Stage stage ) throws Exception
@@ -94,11 +93,15 @@ public class Main extends Application
 
         try
         {
-            Group root = new Group();
-            Group overlay = new Group();
-            root.getChildren().setAll( fxmlRoot, overlay );
+            Group scaledOverlay = new Group();
+            scaledOverlay.setId( "scaled-overlay" );
 
-            Scene scene = new Scene( root, 192.0 * 6.0, 108.0 * 6.0 );
+            Group scaledRoot = new Group( fxmlRoot, scaledOverlay );
+
+            Group overlay = new Group();
+
+            Scene scene = new Scene( new Group( scaledRoot, overlay ), 192.0 * 6.0, 108.0 * 6.0 );
+            scene.getStylesheets().add( Main.class.getResource( "css/style.css" ).toExternalForm() );
 
             Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
             NumberBinding scaleValue = new When(
@@ -109,8 +112,8 @@ public class Main extends Application
             scale.xProperty().bind( scaleValue );
             scale.yProperty().bind( scaleValue );
 
-            root.getTransforms().add( scale );
-            root.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
+            scaledRoot.getTransforms().add( scale );
+            scaledRoot.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
             fif = new FormulaInputForm();
             snsp = new SceneNodeSliderPanel();
@@ -154,30 +157,40 @@ public class Main extends Application
             );
             cpp = new ColorPickerPanel();
 
-            galleryIconContainer = new javafx.scene.layout.TilePane( 50.0, 10.0 );
+            galleryIconContainer = new javafx.scene.layout.TilePane();
+            galleryIconContainer.getStyleClass().add( "galleryIconContainer" );
             FXUtils.resizeRelocateTo( galleryIconContainer, fxmlLookup( "#Gallery_Select" ) );
-            galleryIconContainer.setStyle("-fx-background-color: #00FFFF;");
-            galleryIconContainer.setAlignment( Pos.CENTER );
-            introPageContainer = new BorderPane();
-            FXUtils.resizeRelocateTo( introPageContainer, fxmlLookup( "#Gallery_Text" ) );
-            infoPageContainer = new BorderPane();
+
+            ImageView galleryIntroCanvas = new ImageView();
+            galleryIntroPage = new GalleryInfoPage( galleryIntroCanvas );
+            FXUtils.resizeRelocateTo( galleryIntroPage, fxmlLookup( "#Gallery_Text" ) );
+
+            ImageView galleryInfoCanvas = new ImageView();
+            galleryInfoPage = new GalleryInfoPage( galleryInfoCanvas );
+
+            overlay.getChildren().setAll( galleryIntroCanvas, galleryInfoCanvas );
 
             gs = new GallerySelector(
                 galleryIconContainer.getChildren(),
-                introPageContainer.centerProperty(),
-                infoPageContainer.centerProperty(),
+                galleryIntroPage,
+                galleryInfoPage,
                 ra,
                 this
             );
             tp = new TabPanel(
                 gs,
-                infoPageContainer,
+                galleryInfoPage,
                 cpp
             );
             tp.activeTabIndexProperty().addListener( ( observable, oldValue, newValue ) -> {
-                if( newValue.intValue() == 1 || newValue.intValue() == 2 )
-                    setMode( Mode.RENDERING );
+                switch( newValue.intValue() ) {
+                    case 0: setMode( Mode.GALLERY ); break;
+                    case 1: setMode( Mode.INFO ); break;
+                    case 2: setMode( Mode.COLORS ); break;
+                }
             } );
+
+            ra.load( Main.class.getResource( "gallery/default.jsurf" ) );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );
@@ -186,15 +199,16 @@ public class Main extends Application
             cpp.frontColorProperty().bindBidirectional( ra.frontColorProperty() );
             cpp.backColorProperty().bindBidirectional( ra.backColorProperty() );
 
-            overlay.getChildren().add( fif );
-            overlay.getChildren().add( msnbp );
-            overlay.getChildren().add( snsp );
-            overlay.getChildren().add( ra );
-            overlay.getChildren().add( tp );
-            overlay.getChildren().add( introPageContainer );
-            overlay.getChildren().add( galleryIconContainer );
+            scaledOverlay.getChildren().add( fif );
+            scaledOverlay.getChildren().add( msnbp );
+            scaledOverlay.getChildren().add( snsp );
+            scaledOverlay.getChildren().add( ra );
+            scaledOverlay.getChildren().add( tp );
+            scaledOverlay.getChildren().add( galleryIntroPage );
+            scaledOverlay.getChildren().add( galleryIconContainer );
 
-            setMode( Mode.RENDERING );
+            gs.selectGallery( Gallery.Type.values()[ 0 ] );
+            setMode( Mode.COLORS );
 
             stage.setScene( scene );
             stage.show();
@@ -207,32 +221,54 @@ public class Main extends Application
 
     public enum Mode
     {
-        RENDERING, GALLERY, INFO
+        RENDERING, GALLERY, INFO, COLORS;
     }
 
     public void setMode( Mode mode )
     {
+        Consumer< Boolean > disableButtons = disable -> msnbp.setDisable( disable,
+            MiscSceneNodeButtonPanel.ButtonType.OPEN,
+            MiscSceneNodeButtonPanel.ButtonType.SAVE,
+            MiscSceneNodeButtonPanel.ButtonType.EXPORT,
+            MiscSceneNodeButtonPanel.ButtonType.PRINT
+        );
+
         switch( mode )
         {
             case RENDERING:
                 ra.setVisible( true );
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
-                introPageContainer.setVisible( false );
+                galleryIntroPage.setVisible( false );
+                disableButtons.accept( false );
+                fif.setDisable( false );
                 break;
             case GALLERY:
                 ra.setVisible( false );
                 snsp.setVisible( false );
                 galleryIconContainer.setVisible( true );
-                introPageContainer.setVisible( true );
+                galleryIntroPage.setVisible( true );
+                disableButtons.accept( true );
+                fif.setDisable( true );
                 tp.setActiveTabIndex( 0 );
                 break;
             case INFO:
                 ra.setVisible( true );
                 snsp.setVisible( true );
                 galleryIconContainer.setVisible( false );
-                introPageContainer.setVisible( false );
+                galleryIntroPage.setVisible( false );
+                disableButtons.accept( false );
+                fif.setDisable( false );
                 tp.setActiveTabIndex( 1 );
+                break;
+            case COLORS:
+                ra.setVisible( true );
+                snsp.setVisible( true );
+                galleryIconContainer.setVisible( false );
+                galleryIntroPage.setVisible( false );
+                disableButtons.accept( false );
+                fif.setDisable( false );
+                tp.setActiveTabIndex( 2 );
                 break;
         }
     }

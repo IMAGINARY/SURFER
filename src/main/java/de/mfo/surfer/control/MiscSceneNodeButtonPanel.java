@@ -2,12 +2,16 @@ package de.mfo.surfer.control;
 
 import de.mfo.surfer.control.SceneNodeButton;
 import de.mfo.surfer.Main;
+
+import java.awt.*;
 import java.io.File;
+import java.util.EnumMap;
 import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.print.PrinterJob;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import org.slf4j.Logger;
@@ -16,6 +20,23 @@ import static de.mfo.surfer.util.L.l;
 
 public class MiscSceneNodeButtonPanel extends Region
 {
+    public enum ButtonType {
+        PREFERENCES( "Preferences" ),
+        OPEN( "Open_File" ),
+        SAVE( "Save_File" ),
+        EXPORT( "Export" ),
+        PRINT( "Print" ),
+        ABOUT( "Imprint" ),
+        LANGUAGE( "Language" );
+
+        private String fxmlName;
+
+        private ButtonType( String fxmlName ) { this.fxmlName = fxmlName; }
+        protected String getFXMLName() { return this.fxmlName; };
+    }
+
+    private EnumMap< ButtonType, Node > buttons;
+
     private static final Logger logger = LoggerFactory.getLogger( MiscSceneNodeButtonPanel.class );
 
     PreferenceDialog prefsDialog;
@@ -36,26 +57,29 @@ public class MiscSceneNodeButtonPanel extends Region
         credits.setOnMouseClicked( e -> ( ( Group ) credits.getParent() ).getChildren().removeAll( credits ) );
         languageSelector = new LanguageSelector();
 
-        getChildren().add( createButton( "Preferences", e -> handlePreferences() ) );
-        getChildren().add( createButton( "Open_File", e -> handleFileOpen( fileOpenAction ) ) );
-        getChildren().add( createButton( "Save_File", e -> handleFileSave( fileSaveAction ) ) );
-        getChildren().add( createButton( "Export", e -> handleFileExport( fileExportAction ) ) );
-        getChildren().add( createButton( "Print", e -> handlePrint( printAction ) ) );
-        getChildren().add( createButton( "Imprint", e -> handleCredits() ) );
+        buttons = new EnumMap<ButtonType, Node>( ButtonType.class );
+        createButton( ButtonType.PREFERENCES, e -> handlePreferences() );
+        createButton( ButtonType.OPEN, e -> handleFileOpen( fileOpenAction ) );
+        createButton( ButtonType.SAVE , e -> handleFileSave( fileSaveAction ) );
+        createButton( ButtonType.EXPORT, e -> handleFileExport( fileExportAction ) );
+        createButton( ButtonType.PRINT, e -> handlePrint( printAction ) );
+        createButton( ButtonType.ABOUT, e -> handleCredits() );
         // not needed; does not work anyway
-        //getChildren().add( createButton( "Language", e -> handleChangeLanguage() ) );
+        //getChildren().add( createButton( ButtonType.LANGUAGE, e -> handleChangeLanguage() ) );
+        buttons.put( ButtonType.LANGUAGE, languageSelector );
         getChildren().add( languageSelector );
     }
 
-    static SceneNodeButton createButton( String suffix, EventHandler< ActionEvent > handler )
+    private void createButton( ButtonType buttonType, EventHandler< ActionEvent > handler )
     {
         SceneNodeButton result = new SceneNodeButton(
-            Main.fxmlLookup( "#Button_" + suffix ),
-            Main.fxmlLookup( "#Button_Over_" + suffix ),
-            Main.fxmlLookup( "#Button_Pressed_" + suffix )
+            Main.fxmlLookup( "#Button_" + buttonType.getFXMLName() ),
+            Main.fxmlLookup( "#Button_Over_" + buttonType.getFXMLName() ),
+            Main.fxmlLookup( "#Button_Pressed_" + buttonType.getFXMLName() )
         );
         result.setOnAction( handler );
-        return result;
+        this.buttons.put( buttonType, result );
+        this.getChildren().add( result );
     }
 
     static FileChooser.ExtensionFilter createExtensionFilter( String descriptionKey, String... extensions )
@@ -128,5 +152,12 @@ public class MiscSceneNodeButtonPanel extends Region
     protected void handleChangeLanguage()
     {
         // NOOP: all the work is done by languageSelector
+    }
+
+    public void setDisable( boolean disabled, ButtonType firstButtonType, ButtonType... otherButtonTypes )
+    {
+        buttons.get( firstButtonType ).setDisable( disabled );
+        for( ButtonType buttonType : otherButtonTypes )
+            buttons.get( buttonType ).setDisable( disabled );
     }
 }

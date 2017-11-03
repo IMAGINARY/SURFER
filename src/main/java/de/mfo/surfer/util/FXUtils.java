@@ -1,11 +1,21 @@
 package de.mfo.surfer.util;
 
 import javafx.geometry.Bounds;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
 
 public class FXUtils
 {
+    private static Effect grayscaleAndBlur;
+    static {
+        ColorAdjust grayscale = new ColorAdjust();
+        grayscale.setSaturation( -0.75 );
+        grayscale.setInput( new GaussianBlur() );
+        grayscaleAndBlur = grayscale;
+    }
 
     public static void resizeTo( Region target, Node source )
     {
@@ -29,7 +39,7 @@ public class FXUtils
         target.setMaxHeight( source.getHeight() );
     }
 
-    public static void relocateTo( Region target, Bounds source )
+    public static void relocateTo( Node target, Bounds source )
     {
         target.relocate( source.getMinX(), source.getMinY() );
     }
@@ -44,5 +54,10 @@ public class FXUtils
     {
         node.setVisible( visible );
         return node;
+    }
+
+    public static Effect getEffectForDisabledNodes()
+    {
+        return grayscaleAndBlur;
     }
 }
