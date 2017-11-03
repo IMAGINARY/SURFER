@@ -5,16 +5,23 @@ import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.L;
 import java.util.HashMap;
 import java.util.Locale;
+
+import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.StringConverter;
 
+// TODO: should scale with scene size
 public class LanguageSelector extends ChoiceBox< Locale >
 {
     public LanguageSelector()
     {
         FXUtils.resizeRelocateTo( this, Main.fxmlLookup( "#Button_Language" ) );
+
+        // TODO: Maybe implementing a ChoiceBox skin (JavaFX 9?) fixes the strange and unreliable behavior that is caused by scaling the popup via -fx-font-size
+        styleProperty().bind(Bindings.createStringBinding( () -> ( "-fx-font-size: " + localToSceneTransformProperty().get().getMxx() * 24.0 ) + "px;", localToSceneTransformProperty() ) );
+
         //setMouseTransparent( true );
 
         setConverter( new StringConverter< Locale >()
