@@ -6,7 +6,7 @@ import de.mfo.jsurf.util.RotateSphericalDragger;
 import de.mfo.jsurf.util.BasicIO;
 import de.mfo.jsurf.util.FileFormat;
 import static de.mfo.jsurf.rendering.cpu.CPUAlgebraicSurfaceRenderer.AntiAliasingMode;
-import de.mfo.jsurf.parser.*;
+
 import java.net.URL;
 import java.util.*;
 import java.io.*;
@@ -24,20 +24,17 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.awt.Point;
-import java.nio.IntBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.Map;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
@@ -48,7 +45,6 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -59,20 +55,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Region;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -85,7 +76,7 @@ public class RenderArea extends Region
 {
     private static final Logger logger = LoggerFactory.getLogger( RenderArea.class );
 
-    Canvas canvas;
+    ImageView imageView;
     SimpleBooleanProperty triggerRepaintOnChange;
 
     SimpleStringProperty formula;
@@ -105,14 +96,18 @@ public class RenderArea extends Region
 
     SimpleIntegerProperty renderSize;
 
+    ObjectBinding< BoundingBox > targetBoundsBinding;
+
     RotateSphericalDragger rsd;
 
     public RenderArea()
     {
         setPickOnBounds( false );
 
-        canvas = new Canvas();
-        getChildren().add( canvas );
+        imageView = new ImageView();
+        imageView.setPreserveRatio( true );
+        imageView.setScaleY( -1.0 ); // because jsurf writes pixel lines in opposite order
+        getChildren().add(imageView);
 
         asr = new CPUAlgebraicSurfaceRendererExt();
 
@@ -156,7 +151,7 @@ public class RenderArea extends Region
 
         isValid.bind( hasNullValues.not().and( isFormulaValid ) );
 
-        canvas.effectProperty().bind( Bindings.createObjectBinding(
+        imageView.effectProperty().bind( Bindings.createObjectBinding(
             () -> isValid.get() ? null : FXUtils.getEffectForDisabledNodes(),
             isValid
         ) );
@@ -190,21 +185,30 @@ public class RenderArea extends Region
         this.sceneProperty().addListener( cl );
 
         Node renderAreaPlaceholder = Main.< Node >fxmlLookup( "#Surfer_Rendering" );
-        //renderAreaPlaceholder.setVisible( false );
-        Bounds renderAreaBB = renderAreaPlaceholder.getBoundsInParent();
-        this.relocate( renderAreaBB.getMinX(), renderAreaBB.getMinY() );
-        this.canvas.widthProperty().bind( renderSize );
-        this.canvas.heightProperty().bind( renderSize );
+        renderAreaPlaceholder.setVisible( false );
 
         renderAreaPlaceholder.localToSceneTransformProperty().addListener( cl );
 
-        Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
-        scale.xProperty().bind( Bindings.divide( renderAreaBB.getWidth(), renderSize ) );
-        scale.yProperty().bind( Bindings.divide( renderAreaBB.getHeight(), renderSize ).negate() );
-        Translate translate = new Translate();
-        translate.yProperty().bind( renderSize.negate() );
+        targetBoundsBinding = Bindings.createObjectBinding( () -> {
+                Bounds boundsInScene = renderAreaPlaceholder.localToSceneTransformProperty().get().transform( renderAreaPlaceholder.boundsInLocalProperty().get() );
+                BoundingBox boundsInSceneSnapped = new BoundingBox( Math.round( boundsInScene.getMinX() ),
+                    Math.round( boundsInScene.getMinY() ),
+                    Math.ceil( boundsInScene.getWidth() ),
+                    Math.ceil( boundsInScene.getHeight() )
+                );
+                return boundsInSceneSnapped;
+            },
+            renderAreaPlaceholder.boundsInLocalProperty(),
+            renderAreaPlaceholder.localToSceneTransformProperty()
+        );
 
-        this.canvas.getTransforms().addAll( scale, translate );
+        ChangeListener<BoundingBox> l = (o, ov, nv ) -> {
+            FXUtils.relocateTo( this, nv );
+            this.imageView.setFitWidth( nv.getWidth() );
+            this.imageView.setFitHeight( nv.getHeight() );
+        };
+        l.changed(targetBoundsBinding, targetBoundsBinding.getValue(), targetBoundsBinding.getValue());
+        targetBoundsBinding.addListener( l );
 
         rsd = new RotateSphericalDragger();
         setOnMousePressed( e -> rsd.startDrag( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ) );
@@ -216,7 +220,7 @@ public class RenderArea extends Region
             newScale = newScale < Preferences.Limits.getMinScaleFactor() ? Preferences.Limits.getMinScaleFactor() : ( newScale > Preferences.Limits.getMaxScaleFactor() ? Preferences.Limits.getMaxScaleFactor() : newScale );
             parameters.put( "scale_factor", newScale );
         };
-        setOnScroll( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - ( e.getDeltaX() + e.getDeltaY() ) / renderAreaBB.getWidth() ) );
+        setOnScroll( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - ( e.getDeltaX() + e.getDeltaY() ) / imageView.getFitWidth() ) );
         setOnZoom( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - Math.log10( e.getZoomFactor() ) ) );
     }
 
@@ -253,7 +257,7 @@ public class RenderArea extends Region
 
                 taskUltraQuality = new RenderingTask(
                     asr,
-                    this.canvas.getGraphicsContext2D(),
+                    this.imageView,
                     maxSize,
                     renderSize,
                     AntiAliasingMode.SUPERSAMPLING,
@@ -262,7 +266,7 @@ public class RenderArea extends Region
 
                 taskHighQuality = new RenderingTask(
                     asr,
-                    this.canvas.getGraphicsContext2D(),
+                    this.imageView,
                     maxSize,
                     renderSize,
                     AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
@@ -275,7 +279,7 @@ public class RenderArea extends Region
                     // add rendering step with intermediate resolution
                     taskMediumQuality = new RenderingTask(
                         asr,
-                        this.canvas.getGraphicsContext2D(),
+                        this.imageView,
                         ( maxSize + lowResSize ) / 2,
                         renderSize,
                         AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
@@ -287,7 +291,7 @@ public class RenderArea extends Region
                     // add dummy rendering task, that does nothing
                     taskMediumQuality = new RenderingTask(
                         asr,
-                        this.canvas.getGraphicsContext2D(),
+                        this.imageView,
                         ( maxSize + lowResSize ) / 2,
                         renderSize,
                         AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
@@ -303,7 +307,7 @@ public class RenderArea extends Region
 
                 taskLowQuality = new RenderingTask(
                     asr,
-                    this.canvas.getGraphicsContext2D(),
+                    this.imageView,
                     lowResSize,
                     renderSize,
                     AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
@@ -323,18 +327,7 @@ public class RenderArea extends Region
 
     public void setPreviewImage( Image previewImage )
     {
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.clearRect( 0, 0, canvas.getWidth(), canvas.getHeight() );
-        graphicsContext.save();
-        graphicsContext.scale( 1.0, -1.0 );
-        graphicsContext.drawImage(
-            previewImage,
-            0, 0,
-            previewImage.getWidth(), previewImage.getHeight(),
-            0, -canvas.getHeight(),
-            canvas.getWidth(), canvas.getHeight()
-        );
-        graphicsContext.restore();
+        this.imageView.setImage( previewImage );
     }
 
     protected static void setOptimalCameraDistance( Camera c )
@@ -708,7 +701,7 @@ class RenderingTask extends Task< Double >
 {
     protected CPUAlgebraicSurfaceRendererExt asr;
     protected CPUAlgebraicSurfaceRendererExt.DrawcallStaticDataExt dcsd;
-    protected GraphicsContext graphicsContext;
+    protected ImageView imageView;
     protected int renderSize;
     protected IntegerProperty renderSizeProperty;
     protected AntiAliasingMode aam;
@@ -719,7 +712,7 @@ class RenderingTask extends Task< Double >
 
     public RenderingTask(
         CPUAlgebraicSurfaceRendererExt asr,
-        GraphicsContext graphicsContext,
+        ImageView imageView,
         int renderSize,
         IntegerProperty renderSizeProperty,
         AntiAliasingMode aam,
@@ -727,7 +720,7 @@ class RenderingTask extends Task< Double >
     )
     {
         this.asr = asr;
-        this.graphicsContext = graphicsContext;
+        this.imageView = imageView;
         this.renderSize = renderSize;
         this.renderSizeProperty = renderSizeProperty;
         this.aam = aam;
@@ -794,12 +787,17 @@ class RenderingTask extends Task< Double >
         super.succeeded();
 
         renderSizeProperty.setValue( Math.max( dcsd.getWidth(), dcsd.getHeight() ) );
-        graphicsContext.clearRect( 0, 0, dcsd.getWidth() + 1, dcsd.getHeight() + 1 );
+        imageView.setImage( createImageFromRGB( dcsd.getColorBuffer(), dcsd.getWidth(), dcsd.getHeight() ) );
+    }
 
-        graphicsContext.getPixelWriter().setPixels(
-            0, 0, dcsd.getWidth(), dcsd.getHeight(),
+    private static Image createImageFromRGB( int[] rgbBuffer, int w, int h )
+    {
+        WritableImage image = new WritableImage( w, h );
+        image.getPixelWriter().setPixels(
+            0, 0, w, h,
             PixelFormat.getIntArgbInstance(),
-            dcsd.getColorBuffer(), 0, dcsd.getWidth()
+            rgbBuffer, 0, w
         );
+        return image;
     }
 };

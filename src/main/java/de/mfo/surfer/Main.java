@@ -168,8 +168,6 @@ public class Main extends Application
             ImageView galleryInfoCanvas = new ImageView();
             galleryInfoPage = new GalleryInfoPage( galleryInfoCanvas );
 
-            overlay.getChildren().setAll( galleryIntroCanvas, galleryInfoCanvas );
-
             gs = new GallerySelector(
                 galleryIconContainer.getChildren(),
                 galleryIntroPage,
@@ -202,10 +200,13 @@ public class Main extends Application
             scaledOverlay.getChildren().add( fif );
             scaledOverlay.getChildren().add( msnbp );
             scaledOverlay.getChildren().add( snsp );
-            scaledOverlay.getChildren().add( ra );
             scaledOverlay.getChildren().add( tp );
             scaledOverlay.getChildren().add( galleryIntroPage );
             scaledOverlay.getChildren().add( galleryIconContainer );
+
+            overlay.getChildren().add( galleryIntroCanvas );
+            overlay.getChildren().add( galleryInfoCanvas );
+            overlay.getChildren().add( ra );
 
             gs.selectGallery( Gallery.Type.values()[ 0 ] );
             setMode( Mode.COLORS );
