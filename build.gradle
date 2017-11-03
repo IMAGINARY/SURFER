@@ -2,12 +2,18 @@ group = 'de.mfo.surfer'
 version = '2.0.0-SNAPSHOT'
 
 buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
     repositories {
         jcenter()
     }
 }
 
-apply from: 'gradle/plugins/javafx.plugin'
+
+apply plugin: 'java'
+apply plugin: 'javafx-gradle-plugin'
+
 
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
@@ -33,9 +39,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
 
-jar.dependsOn test
-run.dependsOn test
+
+jfx {
+    mainClass = 'de.mfo.surfer.Main'
+    vendor = 'IMAGINARY'
+}
