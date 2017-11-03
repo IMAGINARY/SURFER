@@ -13,6 +13,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'javafx-gradle-plugin'
+apply plugin: 'idea'
 
 
 targetCompatibility = 1.8
@@ -48,4 +49,10 @@ task wrapper(type: Wrapper) {
 jfx {
     mainClass = 'de.mfo.surfer.Main'
     vendor = 'IMAGINARY'
+}
+
+idea {
+    module {
+        inheritOutputDirs = true
+    }
 }
