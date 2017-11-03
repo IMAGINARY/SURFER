@@ -21,6 +21,7 @@ public class GalleryInfoPage extends Pane
 
     GalleryItem galleryItem;
     ImageView imageView;
+    Node emptyPageSymbol;
 
     ObjectBinding< BoundingBox > targetBoundsBinding;
     InvalidationListener galleryItemInvalidationListener;
@@ -98,18 +99,22 @@ public class GalleryInfoPage extends Pane
             int maxImageHeight = (int) imageView.getFitHeight();
             assert ( double ) maxImageWidth == imageView.getFitWidth() && ( double ) maxImageHeight == imageView.getFitHeight()
                 : "target dimensions are not integral";
+            getChildren().remove( getEmptyPageSymbol() );
             imageView.setImage(this.galleryItem.getInfoPageRendering( maxImageWidth, maxImageHeight ));
         }
     }
 
     private Node getEmptyPageSymbol()
     {
-        javafx.scene.shape.SVGPath svgPath = new javafx.scene.shape.SVGPath();
-        svgPath.setContent( "M 112.28516,897.95508 C 50.428286,897.95508 0,948.37749 0,1010.2344 c 0,61.8568 50.428286,112.2851 112.28516,112.2851 61.85687,0 112.27929,-50.4283 112.27929,-112.2851 0,-61.85691 -50.42242,-112.27932 -112.27929,-112.27932 z m 0,26.26562 c 19.03541,0 36.57732,6.1299 50.79296,16.51563 L 42.789062,1061.0234 c -10.385241,-14.2154 -16.517578,-31.7541 -16.517578,-50.789 0,-47.66006 38.353652,-86.0137 86.013676,-86.0137 z m 69.49804,35.22071 c 10.38573,14.21565 16.51563,31.75755 16.51563,50.79299 0,47.66 -38.35365,86.0136 -86.01367,86.0136 -19.034931,0 -36.57361,-6.1323 -50.789066,-16.5175 z" );
-        svgPath.setFill( new javafx.scene.paint.Color( 0.5, 0.5, 0.5, 0.25 ) );
-        javafx.scene.layout.StackPane stackPane = new javafx.scene.layout.StackPane( svgPath );
-        stackPane.prefWidthProperty().bind( widthProperty() );
-        stackPane.prefHeightProperty().bind( heightProperty() );
-        return stackPane;
+        if( emptyPageSymbol == null ) {
+            javafx.scene.shape.SVGPath svgPath = new javafx.scene.shape.SVGPath();
+            svgPath.setContent("M 112.28516,897.95508 C 50.428286,897.95508 0,948.37749 0,1010.2344 c 0,61.8568 50.428286,112.2851 112.28516,112.2851 61.85687,0 112.27929,-50.4283 112.27929,-112.2851 0,-61.85691 -50.42242,-112.27932 -112.27929,-112.27932 z m 0,26.26562 c 19.03541,0 36.57732,6.1299 50.79296,16.51563 L 42.789062,1061.0234 c -10.385241,-14.2154 -16.517578,-31.7541 -16.517578,-50.789 0,-47.66006 38.353652,-86.0137 86.013676,-86.0137 z m 69.49804,35.22071 c 10.38573,14.21565 16.51563,31.75755 16.51563,50.79299 0,47.66 -38.35365,86.0136 -86.01367,86.0136 -19.034931,0 -36.57361,-6.1323 -50.789066,-16.5175 z");
+            svgPath.setFill(new javafx.scene.paint.Color(0.5, 0.5, 0.5, 0.25));
+            javafx.scene.layout.StackPane stackPane = new javafx.scene.layout.StackPane(svgPath);
+            stackPane.prefWidthProperty().bind(widthProperty());
+            stackPane.prefHeightProperty().bind(heightProperty());
+            this.emptyPageSymbol = stackPane;
+        }
+        return emptyPageSymbol;
     }
 }

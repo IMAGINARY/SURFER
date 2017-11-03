@@ -96,11 +96,9 @@ public class Main extends Application
             Group scaledOverlay = new Group();
             scaledOverlay.setId( "scaled-overlay" );
 
-            Group scaledRoot = new Group( fxmlRoot, scaledOverlay );
-
             Group overlay = new Group();
 
-            Scene scene = new Scene( new Group( scaledRoot, overlay ), 192.0 * 6.0, 108.0 * 6.0 );
+            Scene scene = new Scene( new Group( fxmlRoot, overlay, scaledOverlay ), 192.0 * 6.0, 108.0 * 6.0 );
             scene.getStylesheets().add( Main.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm() );
 
             Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
@@ -112,8 +110,11 @@ public class Main extends Application
             scale.xProperty().bind( scaleValue );
             scale.yProperty().bind( scaleValue );
 
-            scaledRoot.getTransforms().add( scale );
-            scaledRoot.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
+            fxmlRoot.getTransforms().add( scale );
+            fxmlRoot.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
+
+            scaledOverlay.getTransforms().add( scale );
+            scaledOverlay.translateYProperty().bind( scene.heightProperty().subtract( scaleValue.multiply( 1080 ) ) );
 
             fif = new FormulaInputForm();
             snsp = new SceneNodeSliderPanel();
