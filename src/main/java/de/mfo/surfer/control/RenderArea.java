@@ -106,7 +106,6 @@ public class RenderArea extends Region
 
         imageView = new ImageView();
         imageView.setPreserveRatio( true );
-        imageView.setScaleY( -1.0 ); // because jsurf writes pixel lines in opposite order
         getChildren().add(imageView);
 
         asr = new CPUAlgebraicSurfaceRendererExt();
@@ -328,6 +327,7 @@ public class RenderArea extends Region
     public void setPreviewImage( Image previewImage )
     {
         this.imageView.setImage( previewImage );
+        this.imageView.setScaleY( 1.0 );
     }
 
     protected static void setOptimalCameraDistance( Camera c )
@@ -788,6 +788,7 @@ class RenderingTask extends Task< Double >
 
         renderSizeProperty.setValue( Math.max( dcsd.getWidth(), dcsd.getHeight() ) );
         imageView.setImage( createImageFromRGB( dcsd.getColorBuffer(), dcsd.getWidth(), dcsd.getHeight() ) );
+        this.imageView.setScaleY( -1.0 ); // because jsurf writes pixel lines in opposite order
     }
 
     private static Image createImageFromRGB( int[] rgbBuffer, int w, int h )
