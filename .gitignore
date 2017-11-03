@@ -5,11 +5,19 @@ gradle.properties
 # build files
 build
 bin
+out
 
 # Eclipse project files
 .classpath
 .project
 .settings
+
+# IntelliJ project files
+.idea
+*.iml
+
+# ScenicView settings file
+scenicView.properties
 
 # OS generated files #
 ######################
