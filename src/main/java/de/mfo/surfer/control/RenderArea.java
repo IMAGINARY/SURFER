@@ -541,7 +541,11 @@ public class RenderArea extends Region
 
     public void export( File file )
     {
-        int renderSize = Preferences.General.getExportSize();
+        export( file, Preferences.General.getExportSize() );
+    }
+
+    public void export( File file, int renderSize )
+    {
         int colorBuffer[] = new int[ renderSize * renderSize ];
 
         passDataToASR();

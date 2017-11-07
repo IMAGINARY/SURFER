@@ -4,9 +4,12 @@ import de.mfo.surfer.control.*;
 import de.mfo.surfer.gallery.*;
 import de.mfo.surfer.util.FXUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.function.Consumer;
 
+import de.mfo.surfer.util.Utils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.NumberBinding;
@@ -155,7 +158,12 @@ public class Main extends Application
                     }
                 },
                 printJob -> {
-                        java.util.Optional<java.util.function.Consumer<javafx.print.PrinterJob>>result = new PrintDialog( "x^2+y^2=0", "/Users/stussak/Desktop/IMAGINARY/SURFER/SURFER/test.jpg" ).showAndWait();
+                        // TODO: render in a background thread and send the result to the print dialog when it is ready (maybe use a low resolution while rendering)
+                        File tempFile = Utils.wrapInRte( () -> Files.createTempFile("SURFER-", ".png" ) ).toFile();
+                        tempFile.deleteOnExit();
+                        ra.export( tempFile, 512 );
+
+                        java.util.Optional<java.util.function.Consumer<javafx.print.PrinterJob>>result = new PrintDialog( fif.getFormula(), tempFile.getAbsolutePath() ).showAndWait();
                         result.ifPresent( printJobConsumer -> printJobConsumer.accept(printJob) );
                     }
             );

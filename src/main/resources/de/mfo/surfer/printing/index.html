@@ -149,9 +149,12 @@
                 }
             </script>
             <script>
+                var url = new URL( window.location.href );
+                var formula = url.searchParams.get( "formula" );
+                var image = url.searchParams.get( "image" );
                 createSVG(
-                    "https://upload.wikimedia.org/wikipedia/commons/f/fd/Ghostscript_Tiger.svg",
-                    "x+x+x+x+x+x+x+x+xx+x+x+x+x+x+x+x+x+x+x",
+                    image,
+                    formula,
                     function( svgSource ) { console.log( svgSource ); }
                 );
         	</script>
