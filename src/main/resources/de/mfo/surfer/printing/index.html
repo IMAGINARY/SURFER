@@ -5,7 +5,8 @@
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>-->
+        <script src="jsinjar:///META-INF/resources/webjars/Snap.svg/0.4.1/snap.svg-min.js"></script>
         <script type="text/x-mathjax-config">
             MathJax.Hub.Config({
                 jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
@@ -28,7 +29,8 @@
                 return MathJax.Hub.setRenderer( "SVG" );
             });
         </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>-->
+        <script src="jsinjar:///META-INF/resources/webjars/mathjax/2.7.1/MathJax.js"></script>
     </head>
     <body>
         <div id="template">
@@ -149,6 +151,7 @@
                 }
             </script>
             <script>
+                /*
                 var url = new URL( window.location.href );
                 var formula = url.searchParams.get( "formula" );
                 var image = url.searchParams.get( "image" );
@@ -157,6 +160,7 @@
                     formula,
                     function( svgSource ) { console.log( svgSource ); }
                 );
+                */
         	</script>
     </body>
 </html>

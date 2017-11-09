@@ -2,10 +2,12 @@ package de.mfo.surfer;
 
 import de.mfo.surfer.control.*;
 import de.mfo.surfer.gallery.*;
+import de.mfo.surfer.util.CustomURLStreamHandlerFactory;
 import de.mfo.surfer.util.FXUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.function.Consumer;
 
@@ -90,6 +92,9 @@ public class Main extends Application
     @Override
     public void start( Stage stage ) throws Exception
     {
+        // set custom protocol handler, especially to deal with webjar based JS libraries (MathJax, Snap.svg)
+        URL.setURLStreamHandlerFactory(new CustomURLStreamHandlerFactory());
+
         Thread.currentThread().setUncaughtExceptionHandler( Main::handleUncaughtException );
 
         stage.setTitle( "SURFER" );
@@ -163,7 +168,7 @@ public class Main extends Application
                         tempFile.deleteOnExit();
                         ra.export( tempFile, 512 );
 
-                        java.util.Optional<java.util.function.Consumer<javafx.print.PrinterJob>>result = new PrintDialog( fif.getFormula(), tempFile.getAbsolutePath() ).showAndWait();
+                        java.util.Optional<java.util.function.Consumer<javafx.print.PrinterJob>>result = new PrintDialog( fif.getFormula(), tempFile.toURI().toString() ).showAndWait();
                         result.ifPresent( printJobConsumer -> printJobConsumer.accept(printJob) );
                     }
             );

@@ -2,15 +2,24 @@ package de.mfo.surfer.control;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import javafx.concurrent.Worker;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.print.PrinterJob;
+import netscape.javascript.JSObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class PrintDialog extends Dialog< Consumer< PrinterJob > >
 {
+    private static final Logger logger = LoggerFactory.getLogger( PrintDialog.class );
+
     public PrintDialog( String formula, String image )
     {
         super();
@@ -18,13 +27,26 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
 
         getDialogPane().getButtonTypes().addAll( ButtonType.APPLY, ButtonType.CANCEL );
 
-        String url = PrintDialog.class.getResource("/de/mfo/surfer/printing/index.html").toExternalForm();
-        url = url + "?formula=" + encodeURIComponent( toLaTeX( formula ) ) + "&image=" + encodeURIComponent( image );
         WebView webView = new WebView();
 
         WebEngine webEngine = webView.getEngine();
 
-        webEngine.load( url );
+        webEngine.getLoadWorker().stateProperty().addListener(
+            ( ov, oldState, newState) -> {
+                    if( newState == Worker.State.SUCCEEDED )
+                    {
+                        // create the SVG via JavaScript
+                        JSObject window = (JSObject) webEngine.executeScript("window");
+                        JSObject callback = (JSObject) webEngine.executeScript("(function( svgSource ) { console.log( svgSource ); })");
+                        window.call("createSVG",image, formula, callback );
+                    }
+                }
+            );
+        webEngine.setOnError(e -> logger.debug( "{}", e ) );
+
+        // pass HTML content into the webEngine instead of the path to index.html because otherwise it won't resolve file:// URLs
+        String html = new Scanner(PrintDialog.class.getResourceAsStream( "/de/mfo/surfer/printing/index.html" ), "UTF-8").useDelimiter("\\A").next();
+        webEngine.loadContent( html );
 
         getDialogPane().setContent( webView );
 
