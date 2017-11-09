@@ -124,7 +124,7 @@
 
                     var e_bbox = equationGroup.getBBox();
                     var scale = Math.min( ep_bbox.w / e_bbox.w, ep_bbox.h / e_bbox.h );
-                    equationGroup.transform( "t" + ( ep_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
+                    equationGroup.transform( "t" + ( ep_bbox.x - e_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y - e_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
 
                     // fix image tag: replace href with xlink:href
                     return snap.outerSVG().replace( /(<image[^>]* )href=/g, "$1xlink:href=" );
