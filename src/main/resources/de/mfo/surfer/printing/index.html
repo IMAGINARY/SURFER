@@ -60,17 +60,6 @@
         <div id="drawing">
         </div>
         <textarea id="source" cols="100" rows="5"></textarea>
-        <script>
-            function createTemplate()
-            {
-                var size = 600.0;
-                var draw = SVG( 'drawing' ).size( size, size * Math.sqrt( 2 ));
-                var page = draw.rect( size, size * Math.sqrt( 2 ) ).attr( { fill: '#BBB' } );
-                var placeholder_surface = draw.rect( size, size ).attr( { y: 0.1 * size, fill: '#777', id: 'placeholder_surface' } );
-                var placeholder_equation = draw.rect( size, 0.2 * size ).attr( { y: 1.15 * size, fill: '#777', id: 'placeholder_equation' } );
-                document.getElementById( "source" ).value = draw.svg();
-            }
-        </script>
 
         <div id="equation_wrapper" style="background-color:red; width:30ex;">$$0$$</div>
 
