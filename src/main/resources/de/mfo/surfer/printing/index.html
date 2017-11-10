@@ -26,9 +26,33 @@
                 return MathJax.Hub.setRenderer( "SVG" );
             });
         </script>
+        <style type="text/css">
+            #template, #drawing {
+                display: inline-block;
+                border: solid 1px black;
+            }
+
+            #template > svg, #drawing > svg {
+                display: block;
+            }
+
+            #placeholder_surface, #placeholder_equation {
+                fill: LightGray;
+            }
+
+            #template {
+                display: none;
+            }
+
+            #equation_wrapper {
+                background-color:red;
+                width:30ex;
+                display: none;
+            }
+        </style>
     </head>
     <body>
-         <script>
+        <script>
             var allLibs = {
                 "SURFER": [
                     "fileinjar:///META-INF/resources/webjars/Snap.svg/0.4.1/snap.svg-min.js",
@@ -51,18 +75,12 @@
         </script>
         <div id="template">
             <svg height="848.5281374238571" width="600" xmlns:svgjs="http://svgjs.com/svgjs" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <defs id="SvgjsDefs1001"></defs>
-                <rect fill="#bbbbbb" height="848.5281374238571" width="600" id="SvgjsRect1007"></rect>
-                <rect fill="#777777" y="60" height="600" width="600" id="placeholder_surface"></rect>
-                <rect fill="#777777" y="690" height="120" width="600" id="placeholder_equation"></rect>
+                <rect x="25" y="60" height="550" width="550" id="placeholder_surface"></rect>
+                <rect x="25" y="650" height="170" width="550" id="placeholder_equation"></rect>
             </svg>
         </div>
-        <div id="drawing">
-        </div>
-        <textarea id="source" cols="100" rows="5"></textarea>
-
-        <div id="equation_wrapper" style="background-color:red; width:30ex;">$$0$$</div>
-
+        <div id="drawing"></div>
+        <div id="equation_wrapper">$$0$$</div>
         <script type="text/javascript">
                 var image_url = null;
                 var equation_wrapper = document.getElementById('equation_wrapper');
