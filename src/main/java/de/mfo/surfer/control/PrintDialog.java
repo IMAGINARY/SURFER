@@ -39,7 +39,7 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
                         // create the SVG via JavaScript
                         JSObject window = (JSObject) webEngine.executeScript("window");
                         JSObject callback = (JSObject) webEngine.executeScript("(function( svgSource ) { console.log( svgSource ); })");
-                        window.call("createSVG",image, formula, callback );
+                        window.call("createSVG",image, toLaTeX(formula), callback );
                     }
                 }
             );
@@ -61,7 +61,55 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
 
     public static String toLaTeX( String formula )
     {
-        // TODO: turn SURFER formula into LaTeX formula
+        // this isn't a very efficient implementation, but it happens only once per
+        // per print job, so it should be OK
+
+        // get rid of whitespace
+        formula = formula.replaceAll(" ","");
+
+        // proper formatting of powers
+        formula = formula.replaceAll("\\^(\\d*)","^{$1}");
+
+        // unary double operators
+        // TODO: convert all possible operators (see de.mfo.jsurf.algebra.DoubleUnaryOperation.Op)
+        formula = formula.replaceAll("sin","\\\\sin");
+        formula = formula.replaceAll("cos","\\\\cos");
+        formula = formula.replaceAll("tan","\\\\tan");
+        formula = formula.replaceAll("asin","\\\\sin^{-1}");
+        formula = formula.replaceAll("acos","\\\\cos^{-1}");
+        formula = formula.replaceAll("atan","\\\\tan^{-1}");
+        formula = formula.replaceAll("exp","\\\\exp");
+        formula = formula.replaceAll("log","\\\\log");
+        formula = formula.replaceAll("sqrt","\\\\sqrt");
+
+        // binary double operators
+        // TODO: convert all possible operators (see de.mfo.jsurf.algebra.DoubleBinaryOperation.Op)
+        formula = formula.replaceAll("atan2","\\tan^{-1}");
+
+        // use a centered dot for multiplications
+        formula = formula.replaceAll("\\*","\\\\cdot{}");
+
+        // turn all () into [] for later iterative processing of matching [ and ]
+        formula = formula.replaceAll("\\(","[");
+        formula = formula.replaceAll("\\)","]");
+
+        // iteratively process all innermost [] pairs
+        boolean match;
+        do {
+            String newFormula = formula;
+
+            // proper formatting of sqrt
+            newFormula = newFormula.replaceAll("sqrt\\[([^\\[\\]]*)]","sqrt\\{$1\\}");
+            // proper formatting of parentheses
+            newFormula = newFormula.replaceAll("\\[([^\\[\\]]*)]","\\\\left($1\\\\right)");
+
+            // inefficient way to check if an actual replacement occurred
+            match = !newFormula.equals(formula);
+
+            formula = newFormula;
+        }
+        while( match );
+
         return formula;
     }
 
