@@ -89,12 +89,11 @@
                 var external_callback = null;
 
                 function mathjaxCallback() {
-    //    			equation = MathJax.Hub.getAllJax("MathOutput")[0];
                     if( isLaTeXOneLine() || getPlaceholderAspectRatio() - getLaTeXAspectRatio() < 0.1 )
                     {
-                        svgSource = composeSVG();
-                        document.getElementById( "source" ).value = svgSource;
-                        external_callback( svgSource );
+                        var svgElem = document.getElementById( "drawing" ).firstChild;
+                        composeSVG( svgElem );
+                        external_callback( svgElem );
                     }
                     else
                     {
@@ -131,9 +130,9 @@
                     return bbox.w / bbox.h;
                 }
 
-                function composeSVG()
+                function composeSVG( svgElement )
                 {
-                    var snap = Snap( document.getElementById( "template" ).children[ 0 ] );
+                    var snap = Snap( svgElement );
                     var placeholder_surface = snap.select( "#placeholder_surface" );
                     var placeholder_equation = snap.select( "#placeholder_equation" );
                     var sp_bbox = placeholder_surface.getBBox();
@@ -165,6 +164,18 @@
 
                 function createSVG( imageURL, tex, callback )
                 {
+                    // tidy up template
+                    var template = document.getElementById( "template" );
+                    while( template.firstChild && template.firstChild.nodeName.toUpperCase() !== "SVG" )
+                        template.removeChild(template.firstChild );
+
+                    // wipe drawing and clone template into it
+                    var drawing = document.getElementById( "drawing" );
+                    while( drawing.firstChild )
+                        drawing.removeChild(drawing.firstChild);
+                    drawing.appendChild( template.firstChild.cloneNode( true ) );
+
+                    // enqueue MathJax job
                     MathJax.Hub.Queue( function() {
                         equation = MathJax.Hub.getAllJax("MathOutput")[0];
                         image_url = imageURL;
