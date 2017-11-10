@@ -162,7 +162,7 @@
                     var scale = Math.min( ep_bbox.w / e_bbox.w, ep_bbox.h / e_bbox.h );
                     equationGroup.transform( "t" + ( ep_bbox.x - e_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y - e_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
 
-                    return svgElement.outerHTML;
+                    return svgElement;
                 }
 
                 function htmlEscape( str ) {
