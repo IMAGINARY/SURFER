@@ -141,6 +141,7 @@
                     placeholder_equation.remove();
 
                     var image = snap.image( image_url, sp_bbox.x, sp_bbox.y, sp_bbox.w, sp_bbox.h );
+                    image.node.setAttribute( "preserveAspectRatio", "xMidYMid" );
 
                     var equationSVGNode = Snap( document.getElementById( equation.root.inputID+'-Frame').firstChild );
                     var equationGroup = snap.group().append( equationSVGNode.clone() );
