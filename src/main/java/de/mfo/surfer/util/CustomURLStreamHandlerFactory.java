@@ -15,21 +15,21 @@ public class CustomURLStreamHandlerFactory implements URLStreamHandlerFactory
 
     public URLStreamHandler createURLStreamHandler(String protocol)
     {
-        return protocol.equalsIgnoreCase( JsInJarURLStreamHandler.PROTOCOL ) ? new JsInJarURLStreamHandler() : null;
+        return protocol.equalsIgnoreCase( FileInJarURLStreamHandler.PROTOCOL ) ? new FileInJarURLStreamHandler() : null;
     }
 }
 
-class JsInJarURLStreamHandler extends URLStreamHandler
+class FileInJarURLStreamHandler extends URLStreamHandler
 {
-    private static final Logger logger = LoggerFactory.getLogger( JsInJarURLStreamHandler.class );
+    private static final Logger logger = LoggerFactory.getLogger( FileInJarURLStreamHandler.class );
 
-    public static final String PROTOCOL = "jsinjar";
+    public static final String PROTOCOL = "fileinjar";
 
     @Override
     protected URLConnection openConnection(URL url) throws IOException
     {
         // remove the custom protocol handler and possible query string
         String sanitizedUrl = url.toExternalForm().substring((PROTOCOL+":/").length()).split("\\?", 2 )[0];
-        return JsInJarURLStreamHandler.class.getClassLoader().getResource( sanitizedUrl ).openConnection();
+        return FileInJarURLStreamHandler.class.getClassLoader().getResource( sanitizedUrl ).openConnection();
     }
 }
