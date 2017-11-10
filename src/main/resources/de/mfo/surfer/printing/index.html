@@ -197,16 +197,20 @@
                 }
             </script>
             <script>
-                /*
-                var url = new URL( window.location.href );
-                var formula = url.searchParams.get( "formula" );
-                var image = url.searchParams.get( "image" );
-                createSVG(
-                    image,
-                    formula,
-                    function( svgSource ) { console.log( svgSource ); }
-                );
-                */
+                function testRun() {
+                    createSVG(
+                        "http://localhost:8888/tmp.png",
+                        "x^{19}-36\\cdot x^7\\cdot y^2+126\\cdot x^5\\cdot y^4-84\\cdot x^3\\cdot y^6+9\\cdot x\\cdot y^8\
+                            +64\\cdot z^9-9\\cdot x^8+126\\cdot x^6\\cdot y^2-126\\cdot x^2\\cdot y^6+9\\cdot y^8+\
+                            27\\cdot x^7-27\\cdot x^5\\cdot y^2-135\\cdot x^3\\cdot y^4-81\\cdot x\\cdot y^6-144\\cdot z^7\
+                            -21\\cdot x^6-225\\cdot x^4\\cdot y^2+45\\cdot x^2\\cdot y^4-39\\cdot y^6-36\\cdot x^5+\
+                            72\\cdot x^3\\cdot y^2+108\\cdot x\\cdot y^4+108\\cdot z^5+54\\cdot x^4+108\\cdot x^2\\cdot y^2\
+                            +54\\cdot y^4+9\\cdot x^3-27\\cdot x\\cdot y^2-30\\cdot z^3-27\\cdot x^2-27\\cdot y^2+\
+                            2.25\\cdot z+4.25=0",
+                        function(){}
+                    );
+                }
+                if( !navigator.userAgent.startsWith( "SURFER" ) ) testRun();
         	</script>
     </body>
 </html>
