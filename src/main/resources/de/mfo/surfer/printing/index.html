@@ -4,8 +4,6 @@
         <meta charset="utf-8" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>-->
-        <script src="jsinjar:///META-INF/resources/webjars/Snap.svg/0.4.1/snap.svg-min.js"></script>
         <script type="text/x-mathjax-config">
             MathJax.Hub.Config({
                 jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
@@ -28,10 +26,29 @@
                 return MathJax.Hub.setRenderer( "SVG" );
             });
         </script>
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>-->
-        <script src="jsinjar:///META-INF/resources/webjars/mathjax/2.7.1/MathJax.js"></script>
     </head>
     <body>
+         <script>
+            var allLibs = {
+                "SURFER": [
+                    "jsinjar:///META-INF/resources/webjars/Snap.svg/0.4.1/snap.svg-min.js",
+                    "jsinjar:///META-INF/resources/webjars/mathjax/2.7.1/MathJax.js"
+                ],
+                "online": [
+                    "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js",
+                    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+                ]
+            };
+            var libs = allLibs[ navigator.userAgent.startsWith( "SURFER" ) ? "SURFER" : "online" ];
+            libs.forEach( function( lib ) {
+                // The following loads the script synchronously.
+                // It is bad practice, but at least it works.
+                var script = document.createElement('script');
+                script.setAttribute( 'src', lib );
+                script.setAttribute( 'type', 'text/javascript' );
+                document.write( script.outerHTML );
+            });
+        </script>
         <div id="template">
             <svg height="848.5281374238571" width="600" xmlns:svgjs="http://svgjs.com/svgjs" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
                 <defs id="SvgjsDefs1001"></defs>

@@ -30,6 +30,7 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
         WebView webView = new WebView();
 
         WebEngine webEngine = webView.getEngine();
+        webEngine.setUserAgent("SURFER");
 
         webEngine.getLoadWorker().stateProperty().addListener(
             ( ov, oldState, newState) -> {
