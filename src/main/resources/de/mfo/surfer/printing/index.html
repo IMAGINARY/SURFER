@@ -88,6 +88,18 @@
                 var width_ex = 30;
                 var external_callback = null;
 
+                function svgSourceWithXlinkHref( svgElem )
+                {
+                    // fix image tag: replace href with xlink:href
+                    var images = svgElem.querySelectorAll( "image" );
+                    images.forEach( function( image ) {
+                        image = image.cloneNode( true );
+                        image.setAttribute( "xlink:href", image.getAttribute( "href" ) );
+                        image.removeAttribute( "href" );
+                    });
+                    return svgElem.outerHTML;
+                }
+
                 function mathjaxCallback() {
                     if( isLaTeXOneLine() || getPlaceholderAspectRatio() - getLaTeXAspectRatio() < 0.1 )
                     {
@@ -150,8 +162,7 @@
                     var scale = Math.min( ep_bbox.w / e_bbox.w, ep_bbox.h / e_bbox.h );
                     equationGroup.transform( "t" + ( ep_bbox.x - e_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y - e_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
 
-                    // fix image tag: replace href with xlink:href
-                    return snap.outerSVG().replace( /(<image[^>]* )href=/g, "$1xlink:href=" );
+                    return svgElement.outerHTML;
                 }
 
                 function htmlEscape( str ) {
