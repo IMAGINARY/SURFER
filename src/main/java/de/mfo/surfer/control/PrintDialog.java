@@ -24,10 +24,13 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
     {
         super();
         setHeaderText( null );
+        setResizable( true );
 
         getDialogPane().getButtonTypes().addAll( ButtonType.APPLY, ButtonType.CANCEL );
 
         WebView webView = new WebView();
+        webView.setMinWidth( 600.0 );
+        webView.setMinHeight( 900.0 );
 
         WebEngine webEngine = webView.getEngine();
         webEngine.setUserAgent("SURFER");
