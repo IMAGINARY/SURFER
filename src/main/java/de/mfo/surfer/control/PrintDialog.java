@@ -20,6 +20,14 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
 {
     private static final Logger logger = LoggerFactory.getLogger( PrintDialog.class );
 
+    public class JavaBridge {
+        public void svgCallback( String svg )
+        {
+            // TODO: further process SVG image
+            //logger.debug( svg );
+        }
+    }
+
     public PrintDialog( String formula, String image )
     {
         super();
@@ -41,8 +49,9 @@ public class PrintDialog extends Dialog< Consumer< PrinterJob > >
                     {
                         // create the SVG via JavaScript
                         JSObject window = (JSObject) webEngine.executeScript("window");
-                        JSObject callback = (JSObject) webEngine.executeScript("(function( svgSource ) { console.log( svgSource ); })");
-                        window.call("createSVG",image, toLaTeX(formula), callback );
+                        window.setMember( "javaBridge", new JavaBridge() );
+                        JSObject callback = (JSObject) webEngine.executeScript("(function( svgElem  ) { javaBridge.svgCallback( svgSourceWithXlinkHref( svgElem ) ); })");
+                        window.call("createSVG",image, toLaTeX(formula+"=0"), callback );
                     }
                 }
             );
