@@ -24,7 +24,7 @@ public class TabPanel extends Region
     {
         super();
 
-        activeTab = new SimpleIntegerProperty( Preferences.General.getInitiallyOpenedTab() );
+        activeTab = new SimpleIntegerProperty( Preferences.General.initiallyOpenedTabProperty().get() );
         toggleGroup = new ToggleGroup();
 
         initTabLabel( "Tab_Text_Gallery", "start" );
