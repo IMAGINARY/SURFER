@@ -20,6 +20,20 @@
                     EqnChunkDelay: 100
                 }
             });
+            MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+                var MML = MathJax.ElementJax.mml;
+                var TEX = MathJax.InputJax.TeX;
+
+                TEX.Definitions.macros.bfrac = "myBevelFraction";
+
+                TEX.Parse.Augment({
+                    myBevelFraction: function (name) {
+                        var num = this.ParseArg(name);
+                        var den = this.ParseArg(name);
+                        this.Push(MML.mfrac(num,den).With({bevelled: true}));
+                    }
+                });
+            });
             MathJax.Hub.Register.StartupHook("End Jax",function () {
                 return MathJax.Hub.setRenderer( "SVG" );
             });
