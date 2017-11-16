@@ -46,12 +46,28 @@
 
             #equation_wrapper {
                 background-color:red;
-                width:30ex;
-                display: none;
+                width: 30ex;
+            }
+
+            #equation_wrapper_wrapper:not(.debug) {
+                width: 0px;
+                height: 0px;
+                overflow: hidden;
+            }
+
+            #equation_wrapper_wrapper.debug {
+                width: 100%;
+                height: initial;
+                overflow: scroll;
+            }
+
             }
         </style>
     </head>
     <body>
+        <div id="equation_wrapper_wrapper" class="nodebug">
+            <div id="equation_wrapper">$$0$$</div>
+        </div>
         <script>
             var allLibs = {
                 "SURFER": [
@@ -80,7 +96,6 @@
             </svg>
         </div>
         <div id="drawing"></div>
-        <div id="equation_wrapper">$$0$$</div>
         <script type="text/javascript">
                 var image_url = null;
                 var equation_wrapper = document.getElementById('equation_wrapper');
