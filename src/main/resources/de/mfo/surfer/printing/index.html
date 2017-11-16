@@ -195,6 +195,14 @@
                     return svgElement;
                 }
 
+                function getTeampleSVG() {
+                    return document.querySelector( "#template svg" ).outerHTML;
+                }
+
+                function setTemplateSVG( svgString ) {
+                    document.querySelector( "#template svg" ).outerHTML = svgString;
+                }
+
                 function createSVG( imageUrl, tex, callback )
                 {
                     // avoid line breaks around the equation sign

@@ -2,6 +2,8 @@ package de.mfo.surfer.util;
 
 import javafx.beans.property.*;
 
+import java.io.File;
+
 public class Preferences
 {
     public static class PropertyTypeTest
@@ -76,6 +78,7 @@ public class Preferences
             exportSize = new SimpleIntegerProperty( 512 );
             jpegQuality = new SimpleIntegerProperty( 85 );
             initiallyOpenedTab = new SimpleIntegerProperty( 2 );
+            printTemplateFile = new SimpleObjectProperty<File>( );
         }
 
         private static SimpleIntegerProperty exportSize;
@@ -94,6 +97,12 @@ public class Preferences
         public static IntegerProperty initiallyOpenedTabProperty()
         {
             return initiallyOpenedTab;
+        }
+
+        private static SimpleObjectProperty<File> printTemplateFile;
+        public static SimpleObjectProperty<File> printTemplateFileProperty()
+        {
+            return printTemplateFile;
         }
     }
 }

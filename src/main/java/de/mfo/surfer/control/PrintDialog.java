@@ -1,8 +1,11 @@
 package de.mfo.surfer.control;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import de.mfo.surfer.util.Preferences;
+import de.mfo.surfer.util.Utils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -24,6 +27,7 @@ import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class PrintDialog extends Dialog< ButtonType >
@@ -213,6 +217,14 @@ public class PrintDialog extends Dialog< ButtonType >
                     JSObject window = (JSObject) webEngine.executeScript("window");
                     window.setMember("console", Console.getConsole() );
                     window.setMember("javaBridge", new JavaBridge());
+
+                    File externalSVGTemplate = Preferences.General.printTemplateFileProperty().get();
+                    if( externalSVGTemplate != null )
+                        Utils.wrapInRte( () -> {
+                            window.call( "setTemplateSVG", new String(Files.readAllBytes(externalSVGTemplate.toPath())));
+                            return null;
+                        } );
+
                     JSObject callback = (JSObject) webEngine.executeScript("(function( svgElem  ) { javaBridge.svgCallback( svgSourceWithXlinkHref( svgElem ), svgElem.getAttribute( 'width' ), svgElem.getAttribute( 'height' ) ); })");
                     window.call("createSVG", image, toLaTeX(formula + "=0"), callback);
 

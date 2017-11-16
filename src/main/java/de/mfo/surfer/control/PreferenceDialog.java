@@ -1,27 +1,23 @@
 package de.mfo.surfer.control;
 
 import de.mfo.surfer.util.Preferences;
+
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
+
+import javafx.beans.property.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.util.StringConverter;
+
 import static de.mfo.surfer.util.L.lb;
 
 public class PreferenceDialog extends Dialog< ButtonType >
@@ -114,6 +110,8 @@ public class PreferenceDialog extends Dialog< ButtonType >
             return createDoubleEditor( ( DoubleProperty ) p );
         else if( IntegerProperty.class.isAssignableFrom( p.getClass() ) )
             return createIntegerEditor( ( IntegerProperty ) p );
+        else if( new SimpleObjectProperty< File >().getClass().isAssignableFrom( p.getClass() ) )
+            return createFileChooser((ObjectProperty<File>) p);
         else
             throw new ClassCastException( "Unsupported property type: " + p.getClass().getName() );
     }
@@ -152,6 +150,33 @@ public class PreferenceDialog extends Dialog< ButtonType >
 
         return spinner;
     }
+
+    private Node createFileChooser( ObjectProperty<File> fp )
+    {
+        final File originalValue = fp.get();
+
+        TextField textField = new TextField();
+        textField.textProperty().bindBidirectional(fp, new StringConverter<File>() {
+            @Override
+            public String toString(File file) {
+                return file == null ? "" : file.toString();
+            }
+
+            @Override
+            public File fromString(String string) {
+                return new File( string );
+            }
+        });
+        Button button = new Button( "…" );
+        button.setOnAction( e -> {
+            File newFile = new FileChooser().showOpenDialog( null );
+            if( newFile != null )
+                fp.set( newFile );
+        } );
+
+        return new HBox( textField, button );
+    }
+
 
     public void reset()
     {
