@@ -97,12 +97,6 @@
         </div>
         <div id="drawing"></div>
         <script type="text/javascript">
-                var image_url = null;
-                var equation_wrapper = document.getElementById('equation_wrapper');
-        		var equation = null;
-                var width_ex = 30;
-                var external_callback = null;
-
                 function svgSourceWithXlinkHref( svgElem )
                 {
                     // work on a copy of the SVG node
@@ -130,49 +124,43 @@
                     return svgElem.outerHTML;
                 }
 
-                function mathjaxCallback() {
-                    if( isLaTeXOneLine() || getPlaceholderAspectRatio() - getLaTeXAspectRatio() < 0.1 )
+                function mathJaxCallback( p ) {
+                    var svgEquationElement = p.equationWrapperElem.querySelector( 'svg' );
+                    var equationBBox = getSvgElementBBox( svgEquationElement, "g" );
+                    var isMultiLine = p.mathJaxEquation.root.isMultiline;
+                    if( !isMultiLine || bBoxAspectRatio( p.placeholderBBox ) < bBoxAspectRatio( equationBBox ) )
                     {
-                        var svgElem = document.getElementById( "drawing" ).firstChild;
-                        composeSVG( svgElem );
-                        external_callback( svgElem );
+                        var svgElem = document.querySelector( '#drawing svg' );
+                        composeSVG( p.targetSvgElem, p.imageUrl, svgEquationElement, isMultiLine );
+                        p.externalCallback( svgElem );
                     }
                     else
                     {
-                        width_ex += 5;
-                        equation_wrapper.style.width = width_ex + "ex";
-                        console.log( "typesetting again at width of " + width_ex + "ex" );
-                        MathJax.Hub.Queue(['Reprocess', equation, mathjaxCallback ]);
+                        var increment = "5ex";
+                        var computedWidth = Number.parseFloat( window.getComputedStyle( p.equationWrapperElem.querySelector( "svg" ) ).width.replace( "px", "" ) );
+                        p.equationWrapperElem.style.width = "calc(" + computedWidth + "px + " + increment + ")";
+                        console.log( "typesetting again at width of " + window.getComputedStyle( p.equationWrapperElem ).width );
+                        MathJax.Hub.Queue(['Reprocess', p.mathJaxEquation, [ mathJaxCallback, p ] ]);
                     }
         		}
 
-                function getPlaceholderAspectRatio()
+                function bBoxAspectRatio( bbox ) {
+                    return bbox.w / bbox.h;
+                }
+
+                function getSvgBBox( svgElemOrQuerySelector )
                 {
-                    var bbox = Snap( document.getElementById( "template" ).children[ 0 ] )
-                        .select( "#placeholder_equation" )
+                    return Snap( svgElemOrQuerySelector ).getBbox();
+                }
+
+                function getSvgElementBBox( svgElemOrQuerySelector, elementQuerySelector )
+                {
+                    return Snap( svgElemOrQuerySelector )
+                        .select( elementQuerySelector )
                         .getBBox();
-                    return bbox.w / bbox.h;
                 }
 
-                function isLaTeXOneLine()
-                {
-                    // I am more or less guessing here, but it should work for simple
-                    // polynomial equations
-                    return getLaTeXBBox().h < 1500;
-                }
-
-                function getLaTeXBBox()
-                {
-                    return Snap( document.getElementById(equation.root.inputID+'-Frame').firstChild ).getBBox();
-                }
-
-                function getLaTeXAspectRatio()
-                {
-                    var bbox = getLaTeXBBox();
-                    return bbox.w / bbox.h;
-                }
-
-                function composeSVG( svgElement )
+                function composeSVG( svgElement, imageUrl, svgEquationElement, isMultiLine )
                 {
                     var snap = Snap( svgElement );
                     var placeholder_surface = snap.select( "#placeholder_surface" );
@@ -182,50 +170,49 @@
                     placeholder_surface.remove();
                     placeholder_equation.remove();
 
-                    var image = snap.image( image_url, sp_bbox.x, sp_bbox.y, sp_bbox.w, sp_bbox.h );
+                    var image = snap.image( imageUrl, sp_bbox.x, sp_bbox.y, sp_bbox.w, sp_bbox.h );
                     image.node.setAttribute( "preserveAspectRatio", "xMidYMid" );
 
-                    var equationSVGNode = Snap( document.getElementById( equation.root.inputID+'-Frame').firstChild );
-                    var equationGroup = snap.group().append( equationSVGNode.clone() );
+                    var equationSVGNode = Snap( svgEquationElement ).clone();
+                    equationSVGNode.attr( { class: "equation" } );
+
+                    var equationGroup = snap.group().append( equationSVGNode );
+
+                    equationGroup.attr( { fill: "#000000", stroke: "#000000" } ); // set text color to black
 
                     var e_bbox = equationGroup.getBBox();
-                    var scale = Math.min( ep_bbox.w / e_bbox.w, ep_bbox.h / e_bbox.h );
+                    var singleLineFactor = isMultiLine ? 1.0 : 0.5;
+                    var scale = Math.min( ep_bbox.w / e_bbox.w, singleLineFactor * ep_bbox.h / e_bbox.h );
                     equationGroup.transform( "t" + ( ep_bbox.x - e_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y - e_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
 
                     return svgElement;
                 }
 
-                function htmlEscape( str ) {
-                    return String( str )
-                        .replace(/&/g, '&amp;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#39;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
-                }
-
-                function createSVG( imageURL, tex, callback )
+                function createSVG( imageUrl, tex, callback )
                 {
                     // avoid line breaks around the equation sign
                     tex = tex.replace( "=", "\\mmlToken{mo}[linebreak=\"nobreak\"]{=}" );
-
-                    // tidy up template
-                    var template = document.getElementById( "template" );
-                    while( template.firstChild && template.firstChild.nodeName.toUpperCase() !== "SVG" )
-                        template.removeChild(template.firstChild );
 
                     // wipe drawing and clone template into it
                     var drawing = document.getElementById( "drawing" );
                     while( drawing.firstChild )
                         drawing.removeChild(drawing.firstChild);
-                    drawing.appendChild( template.firstChild.cloneNode( true ) );
+                    drawing.appendChild( document.querySelector( "#template svg" ).cloneNode( true ) );
 
                     // enqueue MathJax job
                     MathJax.Hub.Queue( function() {
-                        equation = MathJax.Hub.getAllJax("MathOutput")[0];
-                        image_url = imageURL;
-                        external_callback = callback;
-                        MathJax.Hub.Queue(['Text', equation, tex, mathjaxCallback ]);
+                        let callbackParams = {
+                            placeholderBBox: getSvgElementBBox( "#template svg", "#placeholder_equation" ),
+                            equationWrapperElem: document.querySelector( "#equation_wrapper" ),
+                            mathJaxEquation: MathJax.Hub.getAllJax( "equation_wrapper" )[0],
+                            targetSvgElem: drawing.querySelector( "svg" ),
+                            imageUrl: imageUrl,
+                            externalCallback: callback
+                        };
+                        MathJax.Hub.Queue(
+                            [ 'Text', callbackParams.mathJaxEquation, tex ],
+                            [ mathJaxCallback, callbackParams ]
+                        );
                     });
                 }
             </script>
