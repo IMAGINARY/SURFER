@@ -191,6 +191,9 @@
 
                 function createSVG( imageURL, tex, callback )
                 {
+                    // avoid line breaks around the equation sign
+                    tex = tex.replace( "=", "\\mmlToken{mo}[linebreak=\"nobreak\"]{=}" );
+
                     // tidy up template
                     var template = document.getElementById( "template" );
                     while( template.firstChild && template.firstChild.nodeName.toUpperCase() !== "SVG" )
