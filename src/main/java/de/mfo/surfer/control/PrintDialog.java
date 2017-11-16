@@ -296,6 +296,9 @@ public class PrintDialog extends Dialog< ButtonType >
         // this isn't a very efficient implementation, but it happens only once per
         // per print job, so it should be OK
 
+        if( debugWebView )
+            logger.debug( formula );
+
         // get rid of whitespace
         formula = formula.replaceAll(" ","");
 
@@ -325,24 +328,33 @@ public class PrintDialog extends Dialog< ButtonType >
         formula = formula.replaceAll("\\(","[");
         formula = formula.replaceAll("\\)","]");
 
-        // iteratively process all innermost [] pairs
+        // turn \sqrt[...] into \sqrt{...}
+        formula = iterativeReplaceAll(formula,"sqrt\\[([^\\[\\]]*)]","sqrt\\{$1\\}");
+
+        // turn [...] into \left(...\right)
+        formula = iterativeReplaceAll(formula,"\\[([^\\[\\]]*)]","\\\\left($1\\\\right)");
+
+        if( debugWebView )
+            logger.debug( formula );
+
+        return formula;
+    }
+
+    private static String iterativeReplaceAll(String text, String regex, String replacement) {
         boolean match;
         do {
-            String newFormula = formula;
+            String newText = text;
 
-            // proper formatting of sqrt
-            newFormula = newFormula.replaceAll("sqrt\\[([^\\[\\]]*)]","sqrt\\{$1\\}");
-            // proper formatting of parentheses
-            newFormula = newFormula.replaceAll("\\[([^\\[\\]]*)]","\\\\left($1\\\\right)");
+            newText = newText.replaceAll(regex,replacement);
 
             // inefficient way to check if an actual replacement occurred
-            match = !newFormula.equals(formula);
+            match = !newText.equals(text);
 
-            formula = newFormula;
+            text = newText;
         }
         while( match );
 
-        return formula;
+        return text;
     }
 
     public static String encodeURIComponent( String s )
