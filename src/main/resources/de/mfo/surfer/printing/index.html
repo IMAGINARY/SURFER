@@ -105,13 +105,28 @@
 
                 function svgSourceWithXlinkHref( svgElem )
                 {
+                    // work on a copy of the SVG node
+                    svgElem = svgElem.cloneNode( true );
+
                     // fix image tag: replace href with xlink:href
                     var images = svgElem.querySelectorAll( "image" );
                     images.forEach( function( image ) {
-                        image = image.cloneNode( true );
                         image.setAttribute( "xlink:href", image.getAttribute( "href" ) );
                         image.removeAttribute( "href" );
                     });
+
+                    // fix embedded svg: replace href with xlink:href
+                    let equationSvgElem = svgElem.querySelector( "svg.equation" );
+                    equationSvgElem.setAttribute( "xmlns", "http://www.w3.org/2000/svg" );
+                    equationSvgElem.setAttribute( "version", "1.1" );
+
+                    svgElem.querySelectorAll( "use").forEach(
+                        function(e) {
+                            e.setAttribute( "xlink:href", e.getAttribute( "href" ) );
+                            e.removeAttribute( "href" );
+                        }
+                    );
+
                     return svgElem.outerHTML;
                 }
 
