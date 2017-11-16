@@ -74,12 +74,19 @@
                     "fileinjar:///META-INF/resources/webjars/Snap.svg/0.4.1/snap.svg-min.js",
                     "fileinjar:///META-INF/resources/webjars/mathjax/2.7.1/MathJax.js"
                 ],
+                "SURFER debug": [
+                    "https://getfirebug.com/releases/lite/latest/firebug-lite.js#startOpened=false",
+                    "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js",
+                    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+                ],
                 "online": [
                     "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js",
                     "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
                 ]
             };
-            var libs = allLibs[ navigator.userAgent.startsWith( "SURFER" ) ? "SURFER" : "online" ];
+            var libs = allLibs[ navigator.userAgent ];
+            if( libs === undefined )
+                libs = allLibs[ "online" ];
             libs.forEach( function( lib ) {
                 // The following loads the script synchronously.
                 // It is bad practice, but at least it works.
