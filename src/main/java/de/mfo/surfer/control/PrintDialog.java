@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import de.mfo.jsurf.algebra.*;
+import de.mfo.jsurf.parser.AlgebraicExpressionParser;
 import de.mfo.surfer.util.Preferences;
 import de.mfo.surfer.util.Utils;
 import javafx.beans.value.ChangeListener;
@@ -226,7 +228,7 @@ public class PrintDialog extends Dialog< ButtonType >
                         } );
 
                     JSObject callback = (JSObject) webEngine.executeScript("(function( svgElem  ) { javaBridge.svgCallback( svgSourceWithXlinkHref( svgElem ), svgElem.getAttribute( 'width' ), svgElem.getAttribute( 'height' ) ); })");
-                    window.call("createSVG", image, toLaTeX(formula + "=0"), callback);
+                    window.call("createSVG", image, toMathJax(formula), callback);
 
                     // remove this listener
                     webEngine.getLoadWorker().stateProperty().removeListener(this);
@@ -291,70 +293,14 @@ public class PrintDialog extends Dialog< ButtonType >
         svgElemStyle.setMember( "transform", "scale(" + scale + "," + scale + ")" );
     }
 
-    public static String toLaTeX( String formula )
+    public static String toMathJax( String formula )
     {
-        // this isn't a very efficient implementation, but it happens only once per
-        // per print job, so it should be OK
+        StringBuilder sb = Utils.wrapInRte( () -> AlgebraicExpressionParser.parse( formula ).accept( new ToLaTeXVisitor(), new StringBuilder() ) );
 
-        if( debugWebView )
-            logger.debug( formula );
+        // add equation sign and avoid line breaks around it
+        sb.append( "\\mmlToken{mo}[linebreak=\"nobreak\"]{=}0" );
 
-        // get rid of whitespace
-        formula = formula.replaceAll(" ","");
-
-        // proper formatting of powers
-        formula = formula.replaceAll("\\^(\\d*)","^{$1}");
-
-        // unary double operators
-        // TODO: convert all possible operators (see de.mfo.jsurf.algebra.DoubleUnaryOperation.Op)
-        formula = formula.replaceAll("sin","\\\\sin");
-        formula = formula.replaceAll("cos","\\\\cos");
-        formula = formula.replaceAll("tan","\\\\tan");
-        formula = formula.replaceAll("asin","\\\\sin^{-1}");
-        formula = formula.replaceAll("acos","\\\\cos^{-1}");
-        formula = formula.replaceAll("atan","\\\\tan^{-1}");
-        formula = formula.replaceAll("exp","\\\\exp");
-        formula = formula.replaceAll("log","\\\\log");
-        formula = formula.replaceAll("sqrt","\\\\sqrt");
-
-        // binary double operators
-        // TODO: convert all possible operators (see de.mfo.jsurf.algebra.DoubleBinaryOperation.Op)
-        formula = formula.replaceAll("atan2","\\tan^{-1}");
-
-        // use a centered dot for multiplications
-        formula = formula.replaceAll("\\*","\\\\cdot{}");
-
-        // turn all () into [] for later iterative processing of matching [ and ]
-        formula = formula.replaceAll("\\(","[");
-        formula = formula.replaceAll("\\)","]");
-
-        // turn \sqrt[...] into \sqrt{...}
-        formula = iterativeReplaceAll(formula,"sqrt\\[([^\\[\\]]*)]","sqrt\\{$1\\}");
-
-        // turn [...] into \left(...\right)
-        formula = iterativeReplaceAll(formula,"\\[([^\\[\\]]*)]","\\\\left($1\\\\right)");
-
-        if( debugWebView )
-            logger.debug( formula );
-
-        return formula;
-    }
-
-    private static String iterativeReplaceAll(String text, String regex, String replacement) {
-        boolean match;
-        do {
-            String newText = text;
-
-            newText = newText.replaceAll(regex,replacement);
-
-            // inefficient way to check if an actual replacement occurred
-            match = !newText.equals(text);
-
-            text = newText;
-        }
-        while( match );
-
-        return text;
+        return sb.toString();
     }
 
     public static String encodeURIComponent( String s )
@@ -374,5 +320,221 @@ public class PrintDialog extends Dialog< ButtonType >
         {
             return s;
         }
+    }
+}
+
+class ToLaTeXVisitor extends AbstractVisitor< StringBuilder, StringBuilder >
+{
+    public static final String LPAR = "\\left(";
+    public static final String RPAR = "\\right)";
+
+    @Override
+    public StringBuilder visit(PolynomialAddition pa, StringBuilder sb) {
+        lp( pa, sb );
+        pa.getFirstOperand().accept( this, sb );
+        sb.append( '-' );
+        pa.getSecondOperand().accept( this, sb );
+        return rp( pa, sb );
+    }
+
+    @Override
+    public StringBuilder visit(PolynomialSubtraction ps, StringBuilder sb) {
+        lp( ps, sb );
+        ps.getFirstOperand().accept( this, sb );
+        sb.append( '-' );
+        ps.getSecondOperand().accept( this, sb );
+        return rp( ps, sb );
+    }
+
+    @Override
+    public StringBuilder visit(PolynomialMultiplication pm, StringBuilder sb) {
+        lp( pm, sb );
+        pm.getFirstOperand().accept( this, sb );
+        sb.append( "\\cdot{}" );
+        pm.getSecondOperand().accept( this, sb );
+        return rp( pm, sb );
+    }
+
+    @Override
+    public StringBuilder visit(PolynomialPower pp, StringBuilder sb) {
+        lp( pp, sb );
+        sb.append( '{' );
+        pp.getBase().accept( this, sb );
+        sb.append( "}^{" ).append( pp.getExponent() ).append( '}' );
+        return rp( pp, sb );
+    }
+
+    @Override
+    public StringBuilder visit(PolynomialNegation pn, StringBuilder sb) {
+        lp( pn, sb );
+        sb.append( '-' );
+        pn.getOperand().accept( this, sb );
+        return rp( pn, sb );
+    }
+
+    @Override
+    public StringBuilder visit(PolynomialDoubleDivision pdd, StringBuilder sb) {
+        lp( pdd, sb );
+        sb.append( "\\frac{" );
+        pdd.getDividend().accept( this, sb );
+        sb.append( "}{" );
+        pdd.getDivisor().accept( this, sb );
+        sb.append( '}' );
+        return rp( pdd, sb );
+    }
+
+    @Override
+    public StringBuilder visit(PolynomialVariable pv, StringBuilder sb) {
+        lp( pv, sb );
+        sb.append( pv.getVariable().toString() );
+        return rp( pv, sb );
+    }
+
+    @FunctionalInterface
+    private interface ComposeBinary {
+        void accept( String prefix, String infix, String suffix, boolean removeOuterParentheses);
+    }
+
+    @Override
+    public StringBuilder visit(DoubleBinaryOperation dbop, StringBuilder sb) {
+        lp( dbop, sb );
+
+        ComposeBinary composeBinary = ( prefix, infix, suffix, removeOuterParentheses ) -> {
+            sb.append( prefix );
+            if( removeOuterParentheses )
+                sb.append( removeOuterParentheses( dbop.getFirstOperand().accept(this, new StringBuilder() ) ) );
+            else
+                dbop.getFirstOperand().accept(this, sb);
+            sb.append( infix );
+            if( removeOuterParentheses )
+                sb.append( removeOuterParentheses( dbop.getSecondOperand().accept(this, new StringBuilder() ) ) );
+            else
+                dbop.getSecondOperand().accept(this, sb);
+
+            sb.append( suffix );
+        };
+
+        // TODO
+        switch( dbop.getOperator() )
+        {
+            case add:
+                composeBinary.accept( "", "+", "", false );
+                break;
+            case sub:
+                composeBinary.accept( "", "-", "", false );
+                break;
+            case mult:
+                composeBinary.accept( "", "\\cdot{}", "", false );
+                break;
+            case div:
+                composeBinary.accept( "\\frac{", "}{", "}", false );
+                break;
+            case pow:
+                composeBinary.accept( "{", "}^{", "}", false );
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+
+        return rp( dbop, sb );
+    }
+
+    @FunctionalInterface
+    private interface ComposeUnary {
+        void accept( String prefix, String suffix, boolean removeOuterParentheses);
+    }
+
+
+    @Override
+    public StringBuilder visit(DoubleUnaryOperation duop, StringBuilder sb) {
+        lp( duop, sb );
+
+        ComposeUnary composeUnary = ( prefix, suffix, removeOuterParentheses ) -> {
+            sb.append( prefix );
+            if( removeOuterParentheses )
+                sb.append( removeOuterParentheses( duop.getOperand().accept(this, new StringBuilder() ) ) );
+            else
+                duop.getOperand().accept(this, sb);
+            sb.append( suffix );
+        };
+
+        switch( duop.getOperator() )
+        {
+            case neg:
+                composeUnary.accept( "-", "", false );
+                break;
+            case sin:
+                composeUnary.accept( "\\sin", "", false );
+                break;
+            case cos:
+                composeUnary.accept( "\\cos", "", false );
+                break;
+            case tan:
+                composeUnary.accept( "\\tan", "", false );
+                break;
+            case asin:
+                composeUnary.accept( "\\sin^{-1}", "", false );
+                break;
+            case acos:
+                composeUnary.accept( "\\cos^{-1}", "", false );
+                break;
+            case atan:
+                composeUnary.accept( "\\tan^{-1}", "", false );
+                break;
+            case exp:
+                composeUnary.accept( "\\operatorname{e}^{", "}", true );
+                break;
+            case log:
+                composeUnary.accept( "\\ln", "", false );
+                break;
+            case sqrt:
+                composeUnary.accept( "\\sqrt{", "}", true );
+                break;
+            case ceil:
+                composeUnary.accept( "\\lceil", "\\rceil", true );
+                break;
+            case floor:
+                composeUnary.accept( "\\lfloor", "\\rfloor", true );
+                break;
+            case abs:
+                composeUnary.accept( "\\left|", "\\right|", true );
+                break;
+            case sign:
+                composeUnary.accept( "\\operatorname{sgn}", "", false );
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+
+        return rp( duop, sb );
+    }
+
+    @Override
+    public StringBuilder visit(DoubleValue dv, StringBuilder sb) {
+        lp( dv, sb );
+        sb.append( dv.toString() );
+        return rp( dv, sb );
+    }
+
+    @Override
+    public StringBuilder visit(DoubleVariable dv, StringBuilder sb) {
+        lp( dv, sb );
+        sb.append( dv.getName() );
+        return rp( dv, sb );
+    }
+
+    private static StringBuilder lp( PolynomialOperation pop, StringBuilder sb ) {
+        return pop.hasParentheses() ? sb.append( LPAR ) : sb;
+    }
+    private static StringBuilder rp( PolynomialOperation pop, StringBuilder sb ) {
+        return pop.hasParentheses() ? sb.append( RPAR ) : sb;
+    }
+
+    private static StringBuilder removeOuterParentheses( StringBuilder sb ) {
+        if( sb.length() >= LPAR.length() && sb.substring( 0, LPAR.length() ).equals( LPAR ) )
+            sb.delete( 0, LPAR.length() );
+        if( sb.length() >= RPAR.length() && sb.substring( sb.length() - RPAR.length(), sb.length() ).equals( RPAR ) )
+            sb.delete( sb.length() - RPAR.length(), sb.length() );
+        return sb;
     }
 }
