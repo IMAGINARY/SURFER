@@ -167,7 +167,7 @@ public class PreferenceDialog extends Dialog< ButtonType >
                 return new File( string );
             }
         });
-        Button button = new Button( "…" );
+        Button button = new Button( "\u2026" );
         button.setOnAction( e -> {
             File newFile = new FileChooser().showOpenDialog( null );
             if( newFile != null )
