@@ -541,7 +541,11 @@ public class RenderArea extends Region
 
     public void export( File file )
     {
-        int renderSize = Preferences.General.getExportSize();
+        export( file, Preferences.General.exportSizeProperty().get() );
+    }
+
+    public void export( File file, int renderSize )
+    {
         int colorBuffer[] = new int[ renderSize * renderSize ];
 
         passDataToASR();
@@ -562,7 +566,7 @@ public class RenderArea extends Region
                 ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName( "jpg" ).next();
                 ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
                 jpgWriteParam.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
-                jpgWriteParam.setCompressionQuality( Preferences.General.getJpegQuality() / 100f );
+                jpgWriteParam.setCompressionQuality( Preferences.General.jpegQualityProperty().get() / 100f );
 
                 FileImageOutputStream outputStream = new FileImageOutputStream( file );
                 jpgWriter.setOutput( outputStream );

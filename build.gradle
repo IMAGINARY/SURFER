@@ -32,9 +32,11 @@ repositories {
 
 dependencies {
     compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '2.0.0-SNAPSHOT', changing: true
-    compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.3.0'
+    compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.0-SNAPSHOT', changing: true
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.6'
+    compile group: 'org.webjars', name: 'Snap.svg', version: '0.4.1'
+    compile group: 'org.webjars.npm', name: 'mathjax', version: '2.7.1'
     compile 'org.slf4j:slf4j-api:1.7.10'
     runtime 'ch.qos.logback:logback-classic:1.0.13'
     testCompile 'junit:junit:4.12'

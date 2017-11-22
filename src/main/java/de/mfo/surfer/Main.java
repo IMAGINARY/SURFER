@@ -2,11 +2,16 @@ package de.mfo.surfer;
 
 import de.mfo.surfer.control.*;
 import de.mfo.surfer.gallery.*;
+import de.mfo.surfer.util.CustomURLStreamHandlerFactory;
 import de.mfo.surfer.util.FXUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.function.Consumer;
 
+import de.mfo.surfer.util.Utils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.NumberBinding;
@@ -87,6 +92,9 @@ public class Main extends Application
     @Override
     public void start( Stage stage ) throws Exception
     {
+        // set custom protocol handler, especially to deal with webjar based JS libraries (MathJax, Snap.svg)
+        URL.setURLStreamHandlerFactory(new CustomURLStreamHandlerFactory());
+
         Thread.currentThread().setUncaughtExceptionHandler( Main::handleUncaughtException );
 
         stage.setTitle( "SURFER" );
@@ -154,7 +162,14 @@ public class Main extends Application
                         new ExceptionDialog( Alert.AlertType.ERROR, "Error exporting to " + f.toString(), e ).showAndWait();
                     }
                 },
-                p -> logger.debug( "Printing ..." )
+                printJob -> {
+                        // TODO: render in a background thread and send the result to the print dialog when it is ready (maybe use a low resolution while rendering)
+                        File tempFile = Utils.wrapInRte( () -> Files.createTempFile("SURFER-", ".png" ) ).toFile();
+                        tempFile.deleteOnExit();
+                        ra.export( tempFile, 512 );
+
+                        new PrintDialog( stage, printJob, fif.getFormula(), snsp.getParameters(), tempFile.toURI().toString() ).showAndWait();
+                    }
             );
             cpp = new ColorPickerPanel();
 

@@ -4,16 +4,13 @@
         <meta charset="utf-8" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
         <script type="text/x-mathjax-config">
             MathJax.Hub.Config({
                 jax: ["input/TeX","output/SVG", "output/PreviewHTML"],
                 extensions: ["tex2jax.js"],
                 TeX: {
                     extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-                }
-            });
-            MathJax.Hub.Config({
+                },
                 SVG: {
                     linebreaks: { automatic: true },
                     font: "TeX",
@@ -23,91 +20,173 @@
                     EqnChunkDelay: 100
                 }
             });
+            MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+                var MML = MathJax.ElementJax.mml;
+                var TEX = MathJax.InputJax.TeX;
+
+                TEX.Definitions.macros.bfrac = "myBevelFraction";
+
+                TEX.Parse.Augment({
+                    myBevelFraction: function (name) {
+                        var num = this.ParseArg(name);
+                        var den = this.ParseArg(name);
+                        this.Push(MML.mfrac(num,den).With({bevelled: true}));
+                    }
+                });
+
+                MathJax.InputJax.TeX.Definitions.number = /^(?:[0-9]+(?:\.[0-9]{3})*(?:\{,\}[0-9]*)*|\{,\}[0-9]+)/;
+            });
             MathJax.Hub.Register.StartupHook("End Jax",function () {
                 return MathJax.Hub.setRenderer( "SVG" );
             });
         </script>
-        <script src="https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js"></script>
+        <style type="text/css">
+            #template, #drawing {
+                display: inline-block;
+                border: solid 1px black;
+            }
+
+            #template > svg, #drawing > svg {
+                display: block;
+            }
+
+            #placeholder_surface, #placeholder_equation {
+                fill: LightGray;
+            }
+
+            #template {
+                display: none;
+            }
+
+            #equation_wrapper {
+                background-color:red;
+                width: 30ex;
+            }
+
+            #equation_wrapper_wrapper:not(.debug) {
+                width: 0px;
+                height: 0px;
+                overflow: hidden;
+            }
+
+            #equation_wrapper_wrapper.debug {
+                width: 100%;
+                height: initial;
+                overflow: scroll;
+            }
+
+            body {
+                margin: 0px;
+            }
+        </style>
     </head>
     <body>
+        <div id="equation_wrapper_wrapper" class="nodebug">
+            <div id="equation_wrapper">$$0$$</div>
+        </div>
+        <script>
+            var allLibs = {
+                "SURFER": [
+                    "fileinjar:///META-INF/resources/webjars/Snap.svg/0.4.1/snap.svg-min.js",
+                    "fileinjar:///META-INF/resources/webjars/mathjax/2.7.1/MathJax.js"
+                ],
+                "SURFER debug": [
+                    "https://getfirebug.com/releases/lite/latest/firebug-lite.js#startOpened=false",
+                    "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js",
+                    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+                ],
+                "online": [
+                    "https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js",
+                    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+                ]
+            };
+            var libs = allLibs[ navigator.userAgent ];
+            if( libs === undefined )
+                libs = allLibs[ "online" ];
+            libs.forEach( function( lib ) {
+                // The following loads the script synchronously.
+                // It is bad practice, but at least it works.
+                var script = document.createElement('script');
+                script.setAttribute( 'src', lib );
+                script.setAttribute( 'type', 'text/javascript' );
+                document.write( script.outerHTML );
+            });
+        </script>
         <div id="template">
             <svg height="848.5281374238571" width="600" xmlns:svgjs="http://svgjs.com/svgjs" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <defs id="SvgjsDefs1001"></defs>
-                <rect fill="#bbbbbb" height="848.5281374238571" width="600" id="SvgjsRect1007"></rect>
-                <rect fill="#777777" y="60" height="600" width="600" id="placeholder_surface"></rect>
-                <rect fill="#777777" y="690" height="120" width="600" id="placeholder_equation"></rect>
+                <rect x="25" y="60" height="550" width="550" id="placeholder_surface"></rect>
+                <rect x="45" y="650" height="150" width="510" id="placeholder_equation"></rect>
             </svg>
         </div>
-        <div id="drawing">
-        </div>
-        <textarea id="source" cols="100" rows="5"></textarea>
-        <script>
-            function createTemplate()
-            {
-                var size = 600.0;
-                var draw = SVG( 'drawing' ).size( size, size * Math.sqrt( 2 ));
-                var page = draw.rect( size, size * Math.sqrt( 2 ) ).attr( { fill: '#BBB' } );
-                var placeholder_surface = draw.rect( size, size ).attr( { y: 0.1 * size, fill: '#777', id: 'placeholder_surface' } );
-                var placeholder_equation = draw.rect( size, 0.2 * size ).attr( { y: 1.15 * size, fill: '#777', id: 'placeholder_equation' } );
-                document.getElementById( "source" ).value = draw.svg();
-            }
-        </script>
-
-        <div id="equation_wrapper" style="background-color:red; width:30ex;">$$0$$</div>
-
+        <div id="drawing"></div>
         <script type="text/javascript">
-                var image_url = null;
-                var equation_wrapper = document.getElementById('equation_wrapper');
-        		var equation = null;
-                var width_ex = 30;
-                var external_callback = null;
+                function svgSourceWithXlinkHref( svgElem )
+                {
+                    // work on a copy of the SVG node
+                    svgElem = svgElem.cloneNode( true );
 
-                function mathjaxCallback() {
-    //    			equation = MathJax.Hub.getAllJax("MathOutput")[0];
-                    if( isLaTeXOneLine() || getPlaceholderAspectRatio() - getLaTeXAspectRatio() < 0.1 )
+                    // fix image tag: replace href with xlink:href
+                    var images = svgElem.querySelectorAll( "image" );
+                    images.forEach( function( image ) {
+                        image.setAttribute( "xlink:href", image.getAttribute( "href" ) );
+                        image.removeAttribute( "href" );
+                    });
+
+                    // fix embedded svg: replace href with xlink:href
+                    let equationSvgElem = svgElem.querySelector( "svg.equation" );
+                    equationSvgElem.setAttribute( "xmlns", "http://www.w3.org/2000/svg" );
+                    equationSvgElem.setAttribute( "version", "1.1" );
+
+                    svgElem.querySelectorAll( "use").forEach(
+                        function(e) {
+                            e.setAttribute( "xlink:href", e.getAttribute( "href" ) );
+                            e.removeAttribute( "href" );
+                        }
+                    );
+
+                    return svgElem.outerHTML;
+                }
+
+                function mathJaxCallback( p ) {
+                    var svgEquationElement = p.equationWrapperElem.querySelector( 'svg' );
+                    var equationBBox = getSvgElementBBox( svgEquationElement, "g" );
+                    var isMultiLine = p.mathJaxEquation.root.isMultiline;
+                    if( !isMultiLine || bBoxAspectRatio( p.placeholderBBox ) < bBoxAspectRatio( equationBBox ) )
                     {
-                        svgSource = composeSVG();
-                        document.getElementById( "source" ).value = svgSource;
-                        external_callback( svgSource );
+                        console.log( "typesetting done; composing SVG now" );
+                        var svgElem = document.querySelector( '#drawing svg' );
+                        composeSVG( p.targetSvgElem, p.imageUrl, svgEquationElement, isMultiLine );
+                        p.externalCallback( svgElem );
                     }
                     else
                     {
-                        width_ex += 5;
-                        equation_wrapper.style.width = width_ex + "ex";
-                        console.log( "typesetting again at width of " + width_ex + "ex" );
-                        MathJax.Hub.Queue(['Reprocess', equation, mathjaxCallback ]);
+                        var increment = "5ex";
+                        var computedWidth = Number.parseFloat( window.getComputedStyle( p.equationWrapperElem.querySelector( "svg" ) ).width.replace( "px", "" ) );
+                        p.equationWrapperElem.style.width = "calc(" + computedWidth + "px + " + increment + ")";
+                        console.log( "typesetting again at width of " + window.getComputedStyle( p.equationWrapperElem ).width );
+                        MathJax.Hub.Queue(['Reprocess', p.mathJaxEquation, [ mathJaxCallback, p ] ]);
                     }
         		}
 
-                function getPlaceholderAspectRatio()
+                function bBoxAspectRatio( bbox ) {
+                    return bbox.w / bbox.h;
+                }
+
+                function getSvgBBox( svgElemOrQuerySelector )
                 {
-                    var bbox = Snap( document.getElementById( "template" ).children[ 0 ] )
-                        .select( "#placeholder_equation" )
+                    return Snap( svgElemOrQuerySelector ).getBbox();
+                }
+
+                function getSvgElementBBox( svgElemOrQuerySelector, elementQuerySelector )
+                {
+                    return Snap( svgElemOrQuerySelector )
+                        .select( elementQuerySelector )
                         .getBBox();
-                    return bbox.w / bbox.h;
                 }
 
-                function isLaTeXOneLine()
+                function composeSVG( svgElement, imageUrl, svgEquationElement, isMultiLine )
                 {
-                    // I am more or less guessing here, but it should work for simple
-                    // polynomial equations
-                    return getLaTeXBBox().h < 1500;
-                }
-
-                function getLaTeXBBox()
-                {
-                    return Snap( document.getElementById(equation.root.inputID+'-Frame').firstChild ).getBBox();
-                }
-
-                function getLaTeXAspectRatio()
-                {
-                    var bbox = getLaTeXBBox();
-                    return bbox.w / bbox.h;
-                }
-
-                function composeSVG()
-                {
-                    var snap = Snap( document.getElementById( "template" ).children[ 0 ] );
+                    var snap = Snap( svgElement );
                     var placeholder_surface = snap.select( "#placeholder_surface" );
                     var placeholder_equation = snap.select( "#placeholder_equation" );
                     var sp_bbox = placeholder_surface.getBBox();
@@ -115,44 +194,72 @@
                     placeholder_surface.remove();
                     placeholder_equation.remove();
 
-                    var image = snap.image( image_url, sp_bbox.x, sp_bbox.y, sp_bbox.w, sp_bbox.h );
+                    var image = snap.image( imageUrl, sp_bbox.x, sp_bbox.y, sp_bbox.w, sp_bbox.h );
+                    image.node.setAttribute( "preserveAspectRatio", "xMidYMid" );
 
-                    var equationSVGNode = Snap( document.getElementById( equation.root.inputID+'-Frame').firstChild );
-                    var equationGroup = snap.group().append( equationSVGNode.clone() );
+                    var equationSVGNode = Snap( svgEquationElement ).clone();
+                    equationSVGNode.attr( { class: "equation" } );
+
+                    var equationGroup = snap.group().append( equationSVGNode );
+
+                    equationGroup.attr( { fill: "#000000", stroke: "#000000" } ); // set text color to black
 
                     var e_bbox = equationGroup.getBBox();
-                    var scale = Math.min( ep_bbox.w / e_bbox.w, ep_bbox.h / e_bbox.h );
-                    equationGroup.transform( "t" + ( ep_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
+                    var singleLineFactor = isMultiLine ? 1.0 : 0.5;
+                    var scale = Math.min( ep_bbox.w / e_bbox.w, singleLineFactor * ep_bbox.h / e_bbox.h );
+                    equationGroup.transform( "t" + ( ep_bbox.x - e_bbox.x + 0.5 * ( ep_bbox.w - e_bbox.w * scale ) ) + "," + ( ep_bbox.y - e_bbox.y + 0.5 * ( ep_bbox.h - e_bbox.h * scale ) ) + "s" + scale + "," + scale + "," + e_bbox.x + "," + e_bbox.y );
 
-                    // fix image tag: replace href with xlink:href
-                    return snap.outerSVG().replace( /(<image[^>]* )href=/g, "$1xlink:href=" );
+                    return svgElement;
                 }
 
-                function htmlEscape( str ) {
-                    return String( str )
-                        .replace(/&/g, '&amp;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#39;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
+                function getTeampleSVG() {
+                    return document.querySelector( "#template svg" ).outerHTML;
                 }
 
-                function createSVG( imageURL, tex, callback )
+                function setTemplateSVG( svgString ) {
+                    document.querySelector( "#template svg" ).outerHTML = svgString;
+                }
+
+                function createSVG( imageUrl, tex, callback )
                 {
+                    // wipe drawing and clone template into it
+                    var drawing = document.getElementById( "drawing" );
+                    while( drawing.firstChild )
+                        drawing.removeChild(drawing.firstChild);
+                    drawing.appendChild( document.querySelector( "#template svg" ).cloneNode( true ) );
+
+                    // enqueue MathJax job
                     MathJax.Hub.Queue( function() {
-                        equation = MathJax.Hub.getAllJax("MathOutput")[0];
-                        image_url = imageURL;
-                        external_callback = callback;
-                        MathJax.Hub.Queue(['Text', equation, tex, mathjaxCallback ]);
+                        let callbackParams = {
+                            placeholderBBox: getSvgElementBBox( "#template svg", "#placeholder_equation" ),
+                            equationWrapperElem: document.querySelector( "#equation_wrapper" ),
+                            mathJaxEquation: MathJax.Hub.getAllJax( "equation_wrapper" )[0],
+                            targetSvgElem: drawing.querySelector( "svg" ),
+                            imageUrl: imageUrl,
+                            externalCallback: callback
+                        };
+                        MathJax.Hub.Queue(
+                            [ 'Text', callbackParams.mathJaxEquation, tex ],
+                            [ mathJaxCallback, callbackParams ]
+                        );
                     });
                 }
             </script>
             <script>
-                createSVG(
-                    "https://upload.wikimedia.org/wikipedia/commons/f/fd/Ghostscript_Tiger.svg",
-                    "x+x+x+x+x+x+x+x+xx+x+x+x+x+x+x+x+x+x+x",
-                    function( svgSource ) { console.log( svgSource ); }
-                );
+                function testRun() {
+                    createSVG(
+                        "http://localhost:8888/tmp.png",
+                        "x^{19}-36\\cdot x^7\\cdot y^2+126\\cdot x^5\\cdot y^4-84\\cdot x^3\\cdot y^6+9\\cdot x\\cdot y^8\
+                            +64\\cdot z^9-9\\cdot x^8+126\\cdot x^6\\cdot y^2-126\\cdot x^2\\cdot y^6+9\\cdot y^8+\
+                            27\\cdot x^7-27\\cdot x^5\\cdot y^2-135\\cdot x^3\\cdot y^4-81\\cdot x\\cdot y^6-144\\cdot z^7\
+                            -21\\cdot x^6-225\\cdot x^4\\cdot y^2+45\\cdot x^2\\cdot y^4-39\\cdot y^6-36\\cdot x^5+\
+                            72\\cdot x^3\\cdot y^2+108\\cdot x\\cdot y^4+108\\cdot z^5+54\\cdot x^4+108\\cdot x^2\\cdot y^2\
+                            +54\\cdot y^4+9\\cdot x^3-27\\cdot x\\cdot y^2-30\\cdot z^3-27\\cdot x^2-27\\cdot y^2+\
+                            2.25\\cdot z+4.25=0",
+                        function(){}
+                    );
+                }
+                if( !navigator.userAgent.startsWith( "SURFER" ) ) testRun();
         	</script>
     </body>
 </html>
