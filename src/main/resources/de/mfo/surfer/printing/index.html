@@ -33,6 +33,8 @@
                         this.Push(MML.mfrac(num,den).With({bevelled: true}));
                     }
                 });
+
+                MathJax.InputJax.TeX.Definitions.number = /^(?:[0-9]+(?:\.[0-9]{3})*(?:\{,\}[0-9]*)*|\{,\}[0-9]+)/;
             });
             MathJax.Hub.Register.StartupHook("End Jax",function () {
                 return MathJax.Hub.setRenderer( "SVG" );

@@ -168,7 +168,7 @@ public class Main extends Application
                         tempFile.deleteOnExit();
                         ra.export( tempFile, 512 );
 
-                        new PrintDialog( stage, printJob, fif.getFormula(), tempFile.toURI().toString() ).showAndWait();
+                        new PrintDialog( stage, printJob, fif.getFormula(), snsp.getParameters(), tempFile.toURI().toString() ).showAndWait();
                     }
             );
             cpp = new ColorPickerPanel();

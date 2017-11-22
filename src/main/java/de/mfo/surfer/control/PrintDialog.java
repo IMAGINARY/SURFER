@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 
 import de.mfo.jsurf.algebra.*;
 import de.mfo.jsurf.parser.AlgebraicExpressionParser;
+import de.mfo.surfer.util.L;
 import de.mfo.surfer.util.Preferences;
 import de.mfo.surfer.util.Utils;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class PrintDialog extends Dialog< ButtonType >
 {
@@ -164,7 +170,7 @@ public class PrintDialog extends Dialog< ButtonType >
         }
     }
 
-    public PrintDialog( Window owner, PrinterJob printJob, String formula, String image )
+    public PrintDialog(Window owner, PrinterJob printJob, String formula, Map< String, Double > parameters, String image )
     {
         super();
         initOwner( owner );
@@ -193,7 +199,7 @@ public class PrintDialog extends Dialog< ButtonType >
         );
 
         setContentText( "Processing ..." );
-        initProcessing( formula, image ); // TODO: delayed loading to avoid blocking the UI
+        initProcessing( formula, parameters, image ); // TODO: delayed loading to avoid blocking the UI
 
         setResultConverter(dialogButton -> {
             if (dialogButton == ButtonType.OK)
@@ -202,7 +208,7 @@ public class PrintDialog extends Dialog< ButtonType >
         });
     }
 
-    void initProcessing( String formula, String image ) {
+    void initProcessing( String formula, Map< String, Double > parameters, String image ) {
         webView = new WebView();
 
         WebEngine webEngine = webView.getEngine();
@@ -228,7 +234,7 @@ public class PrintDialog extends Dialog< ButtonType >
                         } );
 
                     JSObject callback = (JSObject) webEngine.executeScript("(function( svgElem  ) { javaBridge.svgCallback( svgSourceWithXlinkHref( svgElem ), svgElem.getAttribute( 'width' ), svgElem.getAttribute( 'height' ) ); })");
-                    window.call("createSVG", image, toMathJax(formula), callback);
+                    window.call("createSVG", image, toMathJax(formula,parameters), callback);
 
                     // remove this listener
                     webEngine.getLoadWorker().stateProperty().removeListener(this);
@@ -293,12 +299,48 @@ public class PrintDialog extends Dialog< ButtonType >
         svgElemStyle.setMember( "transform", "scale(" + scale + "," + scale + ")" );
     }
 
-    public static String toMathJax( String formula )
+    public static String toMathJax( String formula, Map< String, Double > parameters )
     {
-        StringBuilder sb = Utils.wrapInRte( () -> AlgebraicExpressionParser.parse( formula ).accept( new ToLaTeXVisitor(), new StringBuilder() ) );
+        StringBuilder sb = new StringBuilder();
+        sb.append( "\\begin{equation}\n" );
+
+        Utils.wrapInRte( () -> AlgebraicExpressionParser.parse( formula ).accept( new ToLaTeXVisitor(), sb ) );
 
         // add equation sign and avoid line breaks around it
         sb.append( "\\mmlToken{mo}[linebreak=\"nobreak\"]{=}0" );
+
+        if( parameters.size() > 1 )
+        {
+
+            DecimalFormat df = new DecimalFormat("#.###", new DecimalFormatSymbols(L.getLocale()));
+            Function<Map.Entry<String,Double>,String> paramFormatter = param -> {
+                Double dv = param.getValue();
+                String dvString =  df.format( dv );
+                char equalOrApprox;
+                try {
+                    equalOrApprox = dv.equals( df.parse( dvString ).doubleValue() ) ? '=' : '\u2248';
+                } catch( Exception e ) {
+                    equalOrApprox = '\u2248';
+                }
+                return param.getKey()
+                    + "\\mmlToken{mo}[linebreak=\"nobreak\"]{"
+                    + equalOrApprox
+                    + "}"
+                    + dvString.replaceFirst( ",", "{,}" );
+            };
+
+            sb.append( "\\\\[1em]\n" );
+            sb.append( parameters
+                .entrySet()
+                .stream()
+                .filter( e -> e.getKey() != "scale_factor" )
+                .sorted( ( e1, e2 ) -> e1.getKey().compareTo( e2.getKey() ) )
+                .map( paramFormatter )
+                .collect(Collectors.joining( ", " ) )
+            );
+        }
+
+        sb.append( "\n\\end{equation}" );
 
         return sb.toString();
     }
