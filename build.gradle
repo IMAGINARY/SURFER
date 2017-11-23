@@ -58,5 +58,15 @@ jfx {
 idea {
     module {
         inheritOutputDirs = true
+
+        sourceDirs += file( "${project.buildDir}/gen" )
+        excludeDirs -= project.buildDir
+        file( "${project.buildDir}").listFiles().each{
+            if( !it.toPath().endsWith("gen") ) {
+                System.out.println(it);
+                excludeDirs += it
+            }
+        }
+
     }
 }
