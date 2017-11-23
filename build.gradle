@@ -49,10 +49,23 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
 
-
 jfx {
-    mainClass = 'de.mfo.surfer.Main'
-    vendor = 'IMAGINARY'
+    verbose = true
+    mainClass = "de.mfo.surfer.Main"
+    jfxMainAppJarName = "surfer-${project.version}.jar"
+
+    // gradle jfxJar
+    manifestAttributes = [
+        "Implementation-Title": project.name,
+        "Implementation-Version": project.version,
+        "Implementation-Vendor": "IMAGINARY gGmbH"
+    ]
+
+    // gradle jfxNative
+    identifier = "b177b263-e9d4-45cf-91f2-5b11d1792422"
+    vendor = "IMAGINARY gGmbH"
+    nativeReleaseVersion = "${project.version}"
+    appName = project.name
 }
 
 idea {
