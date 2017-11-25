@@ -32,8 +32,8 @@ repositories {
 }
 
 dependencies {
-    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.0', changing: true
-    compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.0-SNAPSHOT', changing: true
+    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.0' //, changing: true
+    compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.0' //, changing: true
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.6'
     compile group: 'org.webjars', name: 'Snap.svg', version: '0.4.1'
