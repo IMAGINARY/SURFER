@@ -1,6 +1,3 @@
-group = 'de.mfo.surfer'
-version = '2.0.0-SNAPSHOT'
-
 buildscript {
     dependencies {
         classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
@@ -10,11 +7,16 @@ buildscript {
     }
 }
 
+plugins {
+    id 'de.fuerstenau.buildconfig' version '1.1.8'
+    id 'java'
+    id 'idea'
+}
 
-apply plugin: 'java'
 apply plugin: 'javafx-gradle-plugin'
-apply plugin: 'idea'
 
+group = 'de.mfo.surfer'
+version = '2.0.0-SNAPSHOT'
 
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
@@ -27,12 +29,11 @@ configurations.all {
 repositories {
     jcenter()
     maven { url "https://raw.github.com/IMAGINARY/maven-repository/master/" }
-    mavenLocal()
 }
 
 dependencies {
-    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '2.0.0-SNAPSHOT', changing: true
-    compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.0-SNAPSHOT', changing: true
+    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.0' //, changing: true
+    compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.0' //, changing: true
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.6'
     compile group: 'org.webjars', name: 'Snap.svg', version: '0.4.1'
@@ -47,14 +48,43 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
 
-
 jfx {
-    mainClass = 'de.mfo.surfer.Main'
-    vendor = 'IMAGINARY'
+    verbose = true
+    mainClass = "de.mfo.surfer.Main"
+    jfxMainAppJarName = "surfer-${project.version}.jar"
+
+    // gradle jfxJar
+    manifestAttributes = [
+        "Implementation-Title": project.name,
+        "Implementation-Version": project.version,
+        "Implementation-Vendor": "IMAGINARY gGmbH"
+    ]
+
+    // gradle jfxNative
+    identifier = "b177b263-e9d4-45cf-91f2-5b11d1792422"
+    vendor = "IMAGINARY gGmbH"
+    nativeReleaseVersion = "${project.version}"
+    appName = project.name
+
+    // Code signing for MacOS X GateKeeper and AppStore requires certificates with the following prefix in your keychain:
+    // Developer ID Application:
+    // Developer ID Installer:
+    // 3rd Party Mac Developer Application:
+    // 3rd Party Mac Developer Installer:
 }
 
 idea {
     module {
         inheritOutputDirs = true
+
+        sourceDirs += file( "${project.buildDir}/gen" )
+        excludeDirs -= project.buildDir
+        file( "${project.buildDir}").listFiles().each{
+            if( !it.toPath().endsWith("gen") ) {
+                System.out.println(it);
+                excludeDirs += it
+            }
+        }
+
     }
 }

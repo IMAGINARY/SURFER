@@ -1,6 +1,6 @@
 package de.mfo.surfer.control;
 
-import de.mfo.surfer.Main;
+import de.mfo.surfer.BuildConfig;
 import de.mfo.surfer.util.L;
 import javafx.concurrent.Worker.State;
 import javafx.scene.layout.Region;
@@ -19,6 +19,22 @@ public class Credits extends Region
         public String localize( String key ) { return L.l( key ); }
     }
 
+    public class BuildConfigWrapper
+    {
+        public String getField( String fieldName ) {
+            try {
+                return (String) BuildConfig.class.getField( fieldName ).get( null );
+            }
+            catch( Exception e )
+            {
+                return "<" + fieldName + ">";
+            }
+        }
+    }
+
+    private Localizer localizer;
+    private BuildConfigWrapper buildConfigWrapper;
+
     public Credits()
     {
         WebView webView = new WebView();
@@ -32,14 +48,17 @@ public class Credits extends Region
             Credits.class.getResource( "/de/mfo/surfer/css/credits.css" ).toExternalForm()
         );
 
+        localizer = new Localizer();
+        buildConfigWrapper = new BuildConfigWrapper();
+
         webEngine.getLoadWorker().stateProperty().addListener(
-            ( observable, oldValue, newValue ) ->
-            {
+            ( observable, oldValue, newValue ) -> {
                 if( newValue == State.SUCCEEDED )
                 {
-                    JSObject jsobj = ( JSObject ) webEngine.executeScript( "window" );
-                    jsobj.setMember( "L", new Localizer() );
-                    webEngine.executeScript( "localize('colors')" );
+                    JSObject window = ( JSObject ) webEngine.executeScript( "window" );
+                    window.setMember( "L", localizer );
+                    window.setMember( "BC", buildConfigWrapper );
+                    window.call("generate" );
                 }
             }
         );

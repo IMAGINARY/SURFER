@@ -8,18 +8,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <script type="text/javascript">
-            function localize(id) {
+            function localize() {
                 var ids = [ "colors" ];
                 for( var i = 0; i < ids.length; i++ )
                     document.getElementById( ids[ i ] ).innerHTML
                         = L.localize( ids[ i ] );
+            }
+
+            function processBuildConfig() {
+                var ids = [ "NAME", "VERSION" ];
+                for( var i = 0; i < ids.length; i++ )
+                    document.getElementById( ids[ i ] ).innerHTML
+                        = BC.getField( ids[ i ] );
+            }
+
+            function generate() {
+                localize();
+                processBuildConfig();
             }
         </script>
     </head>
     <body>
         <div>
             <h1>Credits</h1>
-            <p>some text <span id="colors">to be localized</a> </p>
+            <p><span id="NAME">name</span> <span id="VERSION">version</span></p>
+            <p>some text <span id="colors">to be localized</span></p>
         </div>
     </body>
 </html>
