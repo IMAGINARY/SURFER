@@ -65,6 +65,12 @@ jfx {
     vendor = "IMAGINARY gGmbH"
     nativeReleaseVersion = "${project.version}"
     appName = project.name
+
+    // Code signing for MacOS X GateKeeper and AppStore requires certificates with the following prefix in your keychain:
+    // Developer ID Application:
+    // Developer ID Installer:
+    // 3rd Party Mac Developer Application:
+    // 3rd Party Mac Developer Installer:
 }
 
 idea {
