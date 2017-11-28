@@ -4,8 +4,11 @@ import javafx.beans.property.*;
 
 import java.io.File;
 
+// TODO: turn private static ..Property into public static final ..Property = ...
+// TODO: replace ..Type() methods with new annotation on property field
 public class Preferences
 {
+
     public static class PropertyTypeTest
     {
         static
@@ -103,6 +106,85 @@ public class Preferences
         public static SimpleObjectProperty<File> printTemplateFileProperty()
         {
             return printTemplateFile;
+        }
+        public static Class<?> printTemplateFileType()
+        {
+            return File.class;
+        }
+
+    }
+
+    public static class Kiosk
+    {
+        static
+        {
+            fullScreen = new SimpleBooleanProperty( false );
+            hideCursor = new SimpleBooleanProperty( false );
+            showPrintButton = new SimpleBooleanProperty( true );
+            showLoadButton = new SimpleBooleanProperty( true );
+            showSaveButton = new SimpleBooleanProperty( true );
+            showExportButton = new SimpleBooleanProperty( true );
+            showSettingsButton = new SimpleBooleanProperty( true );
+        }
+
+        private static SimpleBooleanProperty fullScreen;
+        public static BooleanProperty fullScreenProperty()
+        {
+            return fullScreen;
+        }
+
+        private static SimpleBooleanProperty hideCursor;
+        public static BooleanProperty hideCursorProperty()
+        {
+            return hideCursor;
+        }
+
+        private static SimpleBooleanProperty showPrintButton;
+        public static BooleanProperty showPrintButtonProperty()
+        {
+            return showPrintButton;
+        }
+
+        private static SimpleBooleanProperty showLoadButton;
+        public static BooleanProperty showLoadButtonProperty()
+        {
+            return showLoadButton;
+        }
+
+        private static SimpleBooleanProperty showSaveButton;
+        public static BooleanProperty showSaveButtonProperty()
+        {
+            return showSaveButton;
+        }
+
+        private static SimpleBooleanProperty showExportButton;
+        public static BooleanProperty showExportButtonProperty()
+        {
+            return showExportButton;
+        }
+
+        private static SimpleBooleanProperty showSettingsButton;
+        public static BooleanProperty showSettingsButtonProperty()
+        {
+            return showSettingsButton;
+        }
+    }
+
+    public static class Developer
+    {
+        static
+        {
+            logLevel = new SimpleObjectProperty<>( LogLevel.ERROR );
+        }
+
+        private static SimpleObjectProperty<LogLevel> logLevel;
+        public static SimpleObjectProperty<LogLevel> logLevelProperty()
+        {
+            return logLevel;
+        }
+        public static Class<?> logLevelType()
+        {
+            return LogLevel.class;
         }
     }
 }

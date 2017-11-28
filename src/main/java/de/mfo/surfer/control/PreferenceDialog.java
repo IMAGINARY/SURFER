@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 
+import de.mfo.surfer.util.Utils;
 import javafx.beans.property.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -20,11 +21,12 @@ import javafx.util.StringConverter;
 
 import static de.mfo.surfer.util.L.lb;
 
+// TODO: check if ressources are leaked due to bindings
 public class PreferenceDialog extends Dialog< ButtonType >
 {
     interface Resetter
     {
-        public void reset();
+        void reset();
     }
 
     LinkedList< Resetter > resetters;
@@ -110,8 +112,16 @@ public class PreferenceDialog extends Dialog< ButtonType >
             return createDoubleEditor( ( DoubleProperty ) p );
         else if( IntegerProperty.class.isAssignableFrom( p.getClass() ) )
             return createIntegerEditor( ( IntegerProperty ) p );
-        else if( new SimpleObjectProperty< File >().getClass().isAssignableFrom( p.getClass() ) )
-            return createFileChooser((ObjectProperty<File>) p);
+        else if( ObjectProperty.class.isAssignableFrom( p.getClass() ) )
+        {
+            Class<?> c = Utils.wrapInRte( () -> (Class<?>) m.getDeclaringClass().getMethod(m.getName().replaceAll("Property$", "Type")).invoke( null));
+            if( File.class.isAssignableFrom( c ) )
+                return createFileChooser((ObjectProperty<File>) p);
+            else if( Enum.class.isAssignableFrom( c ) )
+                return createEnumChooser((ObjectProperty<Enum>) p, ( Class<Enum>) c);
+            else
+                throw new ClassCastException( "Unsupported property type: " + p.getClass().getName() );
+        }
         else
             throw new ClassCastException( "Unsupported property type: " + p.getClass().getName() );
     }
@@ -173,10 +183,24 @@ public class PreferenceDialog extends Dialog< ButtonType >
             if( newFile != null )
                 fp.set( newFile );
         } );
+        resetters.add( () -> fp.set( originalValue ) );
 
         return new HBox( textField, button );
     }
 
+    private Node createEnumChooser( ObjectProperty<Enum> ep, Class< Enum > clazz )
+    {
+        final Enum originalValue = ep.get();
+
+        final ComboBox<Enum> cb = new ComboBox<>();
+        cb.getItems().addAll( clazz.getEnumConstants() );
+        cb.getSelectionModel().select( ep.get() );
+        ep.bind( cb.getSelectionModel().selectedItemProperty());
+        ep.addListener( (o,ov,nv) -> cb.getSelectionModel().select(nv));
+        resetters.add( () -> cb.getSelectionModel().select( originalValue ) );
+
+        return cb;
+    }
 
     public void reset()
     {

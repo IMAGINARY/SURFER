@@ -7,6 +7,9 @@ import java.awt.*;
 import java.io.File;
 import java.util.EnumMap;
 import java.util.function.Consumer;
+
+import de.mfo.surfer.util.Preferences;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.print.PrinterJob;
@@ -21,18 +24,27 @@ import static de.mfo.surfer.util.L.l;
 public class MiscSceneNodeButtonPanel extends Region
 {
     public enum ButtonType {
-        PREFERENCES( "Preferences" ),
-        OPEN( "Open_File" ),
-        SAVE( "Save_File" ),
-        EXPORT( "Export" ),
-        PRINT( "Print" ),
+        PREFERENCES( "Preferences", Preferences.Kiosk.showSettingsButtonProperty() ),
+        OPEN( "Open_File", Preferences.Kiosk.showLoadButtonProperty() ),
+        SAVE( "Save_File", Preferences.Kiosk.showSaveButtonProperty() ),
+        EXPORT( "Export", Preferences.Kiosk.showExportButtonProperty() ),
+        PRINT( "Print", Preferences.Kiosk.showPrintButtonProperty() ),
         ABOUT( "Imprint" ),
         LANGUAGE( "Language" );
 
         private String fxmlName;
+        private BooleanProperty visible;
 
-        private ButtonType( String fxmlName ) { this.fxmlName = fxmlName; }
-        protected String getFXMLName() { return this.fxmlName; };
+        private ButtonType( String fxmlName, BooleanProperty visible ) {
+            this.fxmlName = fxmlName;
+            this.visible = visible;
+        }
+        private ButtonType( String fxmlName ) {
+            this.fxmlName = fxmlName;
+            this.visible = null;
+        }
+        protected String getFXMLName() { return this.fxmlName; }
+        protected BooleanProperty visibleProperty() { return visible; }
     }
 
     private EnumMap< ButtonType, Node > buttons;
@@ -78,6 +90,9 @@ public class MiscSceneNodeButtonPanel extends Region
             Main.fxmlLookup( "#Button_Pressed_" + buttonType.getFXMLName() )
         );
         result.setOnAction( handler );
+        if( buttonType.visibleProperty() != null )
+            result.visibleProperty().bind( buttonType.visibleProperty() );
+
         this.buttons.put( buttonType, result );
         this.getChildren().add( result );
     }
