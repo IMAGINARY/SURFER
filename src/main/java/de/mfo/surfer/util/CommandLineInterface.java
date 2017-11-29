@@ -56,8 +56,8 @@ public class CommandLineInterface {
         if( optionsAndActions == null ) {
             Option help = Option.builder().longOpt("help").desc("display this help text and exit").build();
             Option version = Option.builder().longOpt("version").desc("print program version and exit").build();
-            Option disable = Option.builder().longOpt("disable").hasArgs().valueSeparator(',').desc("disable certain features (see below)").build();
-            Option enable = Option.builder().longOpt("enable").hasArgs().valueSeparator(',').desc("enable certain features (see below)").build();
+            Option disable = Option.builder().longOpt("disable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("disable certain features (see below)").build();
+            Option enable = Option.builder().longOpt("enable").hasArg().argName("f1[,f2,...]").valueSeparator(',').desc("enable certain features (see below)").build();
             Option fullscreen = Option.builder("f").longOpt("fullscreen").desc("run in full screen mode").build();
             Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS)").build();
             Option verbose = Option.builder("v").longOpt("verbose").desc("increase verbosity level").build();
@@ -132,7 +132,6 @@ public class CommandLineInterface {
         final StringWriter stringWriter = new StringWriter();
         final PrintWriter tmpWriter = new PrintWriter( stringWriter );
         final HelpFormatter formatter = new HelpFormatter();
-        formatter.setArgName("f1[,f2,...]");
         formatter.printUsage( tmpWriter, HELP_WIDTH, BuildConfig.NAME, getOptions() );
         tmpWriter.flush();
         stringWriter.flush();
@@ -165,7 +164,6 @@ public class CommandLineInterface {
 
     public static void printHelp( PrintWriter writer, int exitCode ) {
         final HelpFormatter formatter = new HelpFormatter();
-        formatter.setArgName("f1[,f2,...]");
         final String cmd_line_syntax = getUsageString();
         final String help_header = "\n" + BuildConfig.NAME + " is a renderer for real algebraic surfaces.\n\n";
         final String help_footer = "\nPossible features (with current value) are: "
