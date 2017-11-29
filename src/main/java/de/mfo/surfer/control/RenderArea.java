@@ -437,7 +437,9 @@ public class RenderArea extends Region
     public void load( File file )
         throws IOException
     {
-        load( file.toURI().toURL() );
+        Properties props = new Properties();
+        props.load( new FileReader( file ) );
+        load( props );
     }
 
     public void load( URL url )

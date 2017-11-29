@@ -2,8 +2,7 @@ package de.mfo.surfer;
 
 import de.mfo.surfer.control.*;
 import de.mfo.surfer.gallery.*;
-import de.mfo.surfer.util.CustomURLStreamHandlerFactory;
-import de.mfo.surfer.util.FXUtils;
+import de.mfo.surfer.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.function.Consumer;
 
-import de.mfo.surfer.util.Utils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.NumberBinding;
@@ -30,6 +28,13 @@ import org.slf4j.LoggerFactory;
 
 public class Main extends Application
 {
+    static
+    {
+        // set log level
+        Preferences.Developer.logLevelProperty().get().apply();
+        Preferences.Developer.logLevelProperty().addListener( (o,ov,nv) -> nv.apply() );
+    }
+
     private static final Logger logger = LoggerFactory.getLogger( Main.class );
 
     private static Group fxmlRoot;
@@ -97,7 +102,13 @@ public class Main extends Application
 
         Thread.currentThread().setUncaughtExceptionHandler( Main::handleUncaughtException );
 
+        CommandLineInterface.parse( getParameters().getRaw().toArray( new String[0] ) );
+
         stage.setTitle( "SURFER" );
+
+        stage.setFullScreenExitHint( "" );
+        stage.setFullScreen( Preferences.Kiosk.fullScreenProperty().get() );
+        Preferences.Kiosk.fullScreenProperty().addListener( ( o, ov, nv ) -> stage.setFullScreen( nv ) );
 
         try
         {
@@ -204,7 +215,7 @@ public class Main extends Application
                 }
             } );
 
-            ra.load( Main.class.getResource( "/de/mfo/surfer/gallery/default.jsurf" ) );
+            ra.load( Preferences.General.initialJSurfFileProperty().get() );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );
