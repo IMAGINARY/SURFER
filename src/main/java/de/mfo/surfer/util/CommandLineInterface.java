@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import static de.mfo.surfer.util.LogLevel.*;
 
 // TODO: order of cli options
-// TODO: one positional argument for .jsurf file that should be rendered on startup
 // TODO: option for template SVG file
 // TODO: maybe options for all fields in Preferences.Generic
 public class CommandLineInterface {
@@ -95,12 +94,31 @@ public class CommandLineInterface {
     public static void parse(String[] args )
         throws ParseException
     {
-        CommandLine cl = new DefaultParser().parse( getOptions(), args, true );
+        try {
+            CommandLine cl = new DefaultParser().parse(getOptions(), args, true);
 
-        for( Option o : cl.getOptions() )
-            logger.debug( "{}", o );
+            for (Option o : cl.getOptions())
+                logger.debug("{}", o);
 
-        Arrays.stream( cl.getOptions() ).forEach( o -> getOptionsAndActions().get( o ).accept( o.getValues() ) );
+            Arrays.stream(cl.getOptions()).forEach(o -> getOptionsAndActions().get(o).accept(o.getValues()));
+
+            String[] additionalArgs = cl.getArgs();
+            if( additionalArgs.length > 0 )
+            {
+                if( additionalArgs.length > 1 )
+                {
+                    System.err.println("Too many file arguments: " + additionalArgs.length + " (should be <=1)");
+                    printUsageOnError();
+                } else {
+                    // use the additional argument as initial jsurf file
+                    File jsurf = new File( additionalArgs[ 0 ] );
+                    Preferences.General.initialJSurfFileProperty().set(Utils.wrapInRte( () -> jsurf.toURI().toURL() ) );
+                }
+            }
+        } catch( MissingArgumentException mae ) {
+            System.err.println( mae.getMessage() );
+            printUsageOnError();
+        }
     }
 
     public static void printUsage() {

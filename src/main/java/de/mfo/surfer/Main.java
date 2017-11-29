@@ -215,7 +215,7 @@ public class Main extends Application
                 }
             } );
 
-            ra.load( Main.class.getResource( "/de/mfo/surfer/gallery/default.jsurf" ) );
+            ra.load( Preferences.General.initialJSurfFileProperty().get() );
 
             fif.formulaProperty().bindBidirectional( ra.formulaProperty() );
             fif.isValidProperty().bind( ra.isValidProperty() );

@@ -3,6 +3,7 @@ package de.mfo.surfer.util;
 import javafx.beans.property.*;
 
 import java.io.File;
+import java.net.URL;
 
 // TODO: turn private static ..Property into public static final ..Property = ...
 // TODO: replace ..Type() methods with new annotation on property field
@@ -82,6 +83,7 @@ public class Preferences
             jpegQuality = new SimpleIntegerProperty( 85 );
             initiallyOpenedTab = new SimpleIntegerProperty( 2 );
             printTemplateFile = new SimpleObjectProperty<File>( );
+            initialJSurfFile = new SimpleObjectProperty<URL>(Preferences.class.getResource("/de/mfo/surfer/gallery/default.jsurf"));
         }
 
         private static SimpleIntegerProperty exportSize;
@@ -112,6 +114,15 @@ public class Preferences
             return File.class;
         }
 
+        private static SimpleObjectProperty<URL> initialJSurfFile;
+        public static SimpleObjectProperty<URL> initialJSurfFileProperty()
+        {
+            return initialJSurfFile;
+        }
+        public static Class<?> initialJSurfFileType()
+        {
+            return URL.class;
+        }
     }
 
     public static class Kiosk
@@ -174,7 +185,7 @@ public class Preferences
     {
         static
         {
-            logLevel = new SimpleObjectProperty<>( LogLevel.ERROR );
+            logLevel = new SimpleObjectProperty<>( LogLevel.ALL );
         }
 
         private static SimpleObjectProperty<LogLevel> logLevel;
