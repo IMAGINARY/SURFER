@@ -107,6 +107,7 @@ public class Main extends Application
         stage.setTitle( "SURFER" );
 
         stage.setFullScreenExitHint( "" );
+        stage.setFullScreen( Preferences.Kiosk.fullScreenProperty().get() );
         Preferences.Kiosk.fullScreenProperty().addListener( ( o, ov, nv ) -> stage.setFullScreen( nv ) );
 
         try
