@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static de.mfo.surfer.util.LogLevel.*;
 
-// TODO: option for template SVG file
 // TODO: maybe options for all fields in Preferences.Generic
 public class CommandLineInterface {
 
@@ -60,6 +59,7 @@ public class CommandLineInterface {
             Option enable = Option.builder().longOpt("enable").hasArg().argName("f1[,f2,...]").valueSeparator(',').desc("enable certain features (see below)").build();
             Option fullscreen = Option.builder("f").longOpt("fullscreen").desc("run in full screen mode").build();
             Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS)").build();
+            Option printTemplate = Option.builder().longOpt("printTemplate").hasArg().argName("file").desc("SVG file to use as a print template").build();
             Option verbose = Option.builder("v").longOpt("verbose").desc("increase verbosity level").build();
 
             options = new Options();
@@ -67,6 +67,7 @@ public class CommandLineInterface {
             options.addOption( version );
             options.addOption( fullscreen );
             options.addOption( kiosk );
+            options.addOption( printTemplate );
             options.addOption( enable );
             options.addOption( disable );
             options.addOption( verbose );
@@ -78,6 +79,7 @@ public class CommandLineInterface {
             optionsAndActions.put( enable, v -> Arrays.stream(v).forEach( CommandLineInterface::enableFeature ) );
             optionsAndActions.put( fullscreen, v -> Preferences.Kiosk.fullScreenProperty().setValue( true ) );
             optionsAndActions.put( kiosk, v -> enableKiosk() );
+            optionsAndActions.put( printTemplate, v -> Preferences.General.printTemplateFileProperty().set(new File(v[0])));
             optionsAndActions.put( verbose, v -> increaseVerbosityLevel() );
         }
         return optionsAndActions;
