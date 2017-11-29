@@ -40,9 +40,10 @@ public class CommandLineInterface {
             this.negate = negate;
         }
 
-        public void enable() { enabledProperty.set( !negate ); }
-        public void disable() { enabledProperty.set( negate ); }
-        public void setEnabled( boolean enabled ) { enabledProperty.set( enabled ^ negate ); };
+        public void enable() { setEnabled( true ); }
+        public void disable() { setEnabled( false ); }
+        public void setEnabled( boolean enabled ) { enabledProperty.set( enabled ^ negate ); }
+        public boolean isEnabled() { return enabledProperty.get() ^ negate; }
 
     }
 
