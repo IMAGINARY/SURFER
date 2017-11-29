@@ -6,12 +6,15 @@ import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static de.mfo.surfer.util.LogLevel.*;
 
@@ -55,10 +58,10 @@ public class CommandLineInterface {
         if( optionsAndActions == null ) {
             Option help = Option.builder().longOpt("help").desc("display this help text and exit").build();
             Option version = Option.builder().longOpt("version").desc("print program version and exit").build();
-            Option disable = Option.builder().longOpt("disable").hasArgs().valueSeparator(',').desc("disable certain features").build();
-            Option enable = Option.builder().longOpt("enable").hasArgs().valueSeparator(',').desc("enable certain features").build();
+            Option disable = Option.builder().longOpt("disable").hasArgs().valueSeparator(',').desc("disable certain features (see below)").build();
+            Option enable = Option.builder().longOpt("enable").hasArgs().valueSeparator(',').desc("enable certain features (see below)").build();
             Option fullscreen = Option.builder("f").longOpt("fullscreen").desc("run in full screen mode").build();
-            Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode").build();
+            Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS)").build();
             Option verbose = Option.builder("v").longOpt("verbose").desc("increase verbosity level").build();
 
             options = new Options();
@@ -100,6 +103,41 @@ public class CommandLineInterface {
         Arrays.stream( cl.getOptions() ).forEach( o -> getOptionsAndActions().get( o ).accept( o.getValues() ) );
     }
 
+    public static void printUsage() {
+        printUsage( new PrintWriter( System.out ), 0 );
+    }
+
+    public static void printUsageOnError() {
+        printUsage( new PrintWriter( System.err ), -1 );
+    }
+
+    public static String getUsageString() {
+        final StringWriter stringWriter = new StringWriter();
+        final PrintWriter tmpWriter = new PrintWriter( stringWriter );
+        final HelpFormatter formatter = new HelpFormatter();
+        formatter.setArgName("f1[,f2,...]");
+        formatter.printUsage( tmpWriter, HELP_WIDTH, BuildConfig.NAME, getOptions() );
+        tmpWriter.flush();
+        stringWriter.flush();
+        StringBuffer sb = stringWriter.getBuffer();
+        // strip of trailing line breaks
+        while( sb.length() > 0 && ( sb.charAt( sb.length() - 1 ) == '\n' || sb.charAt( sb.length() - 1 ) == '\n' ) )
+            sb.deleteCharAt( sb.length() - 1 );
+
+        tmpWriter.println( " [jsurf file]" );
+        tmpWriter.flush();
+        tmpWriter.close();
+
+        return stringWriter.toString().replaceFirst( "^usage: ", "" );
+    }
+
+    public static void printUsage( PrintWriter writer, int exitCode ) {
+        final HelpFormatter formatter = new HelpFormatter();
+        formatter.printUsage( writer, HELP_WIDTH, getUsageString() );
+        writer.flush();
+        System.exit( exitCode );
+    }
+
     public static void printHelp() {
         printHelp( new PrintWriter( System.out ), 0 );
     }
@@ -110,9 +148,12 @@ public class CommandLineInterface {
 
     public static void printHelp( PrintWriter writer, int exitCode ) {
         final HelpFormatter formatter = new HelpFormatter();
-        final String cmd_line_syntax = BuildConfig.NAME;
+        formatter.setArgName("f1[,f2,...]");
+        final String cmd_line_syntax = getUsageString();
         final String help_header = "\n" + BuildConfig.NAME + " is a renderer for real algebraic surfaces.\n\n";
-        final String help_footer = "";
+        final String help_footer = "\nPossible features (with current value) are: "
+            + Arrays.stream(Feature.values() ).map( f -> f.name() + " (" + f.isEnabled() + ")" ).collect(Collectors.joining(", "))
+            + ". Feature names are case-insensitive.";
 
         formatter.printHelp(
             writer,
@@ -122,7 +163,7 @@ public class CommandLineInterface {
             getOptions(),
             formatter.getLeftPadding(),
             formatter.getDescPadding(),
-            help_footer, true );
+            help_footer );
 
         writer.flush();
 
