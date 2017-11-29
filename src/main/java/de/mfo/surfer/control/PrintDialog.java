@@ -178,8 +178,8 @@ public class PrintDialog extends Dialog< ButtonType >
         this.printerJob = printJob;
         setHeaderText( null );
 
-        ButtonType pageSetupDialogButton = new ButtonType( "Page Setup" );
-        ButtonType printDialogButton = new ButtonType( "Print Dialog" );
+        ButtonType pageSetupDialogButton = new ButtonType( "Page Setup" ); // TODO: localization
+        ButtonType printDialogButton = new ButtonType( "Print Dialog" ); // TODO: localization
         getDialogPane().getButtonTypes().addAll(
             ButtonType.OK,
             ButtonType.CANCEL,

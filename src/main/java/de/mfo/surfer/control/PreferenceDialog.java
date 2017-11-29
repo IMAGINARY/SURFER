@@ -23,7 +23,7 @@ import javafx.util.StringConverter;
 
 import static de.mfo.surfer.util.L.lb;
 
-// TODO: check if ressources are leaked due to bindings
+//// FIXME: check if ressources are leaked due to bindings
 public class PreferenceDialog extends Dialog< ButtonType >
 {
     interface Resetter

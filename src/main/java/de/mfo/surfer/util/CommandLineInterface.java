@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import static de.mfo.surfer.util.LogLevel.*;
 
-// TODO: order of cli options
 // TODO: option for template SVG file
 // TODO: maybe options for all fields in Preferences.Generic
 public class CommandLineInterface {
