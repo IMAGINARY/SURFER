@@ -1,38 +1,123 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Credits</title>
+<head>
+  <title>Credits</title>
 
-        <meta charset="utf-8" />
-        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="fonts/fira-sans-condensed-v2-latin/fira-sans-condensed-v2-latin.css">
+  <link rel="stylesheet" href="fonts/lato-v14-latin/lato-v14-latin.css">
+  <link rel="stylesheet" href="css/credits.css">
 
-        <script type="text/javascript">
-            function localize() {
-                var ids = [ "colors" ];
-                for( var i = 0; i < ids.length; i++ )
-                    document.getElementById( ids[ i ] ).innerHTML
-                        = L.localize( ids[ i ] );
-            }
+  <script type="text/javascript">
+    // L and BC are set from the Java side
+    function localize() {
+      var ids = ["colors"];
+      for (var i = 0; i < ids.length; i++)
+        document.getElementById(ids[i]).innerHTML
+          = L.localize(ids[i]);
+    }
 
-            function processBuildConfig() {
-                var ids = [ "NAME", "VERSION" ];
-                for( var i = 0; i < ids.length; i++ )
-                    document.getElementById( ids[ i ] ).innerHTML
-                        = BC.getField( ids[ i ] );
-            }
+    function processBuildConfig() {
+      // BuildConfig variables
+      var ids = ["NAME", "GIT_VERSION", "DEP_SURFER_GALLERY_VERSION", "DEP_JSURF_VERSION", "BUILD_YEAR"];
+      for (var i = 0; i < ids.length; i++)
+        document.getElementById("BC_" + ids[i]).innerHTML
+          = BC.getField(ids[i]);
 
-            function generate() {
-                localize();
-                processBuildConfig();
-            }
-        </script>
-    </head>
-    <body>
-        <div>
-            <h1>Credits</h1>
-            <p><span id="NAME">name</span> <span id="VERSION">version</span></p>
-            <p>some text <span id="colors">to be localized</span></p>
-        </div>
-    </body>
+      // list of gallery authors
+      var list = BC.getGalleryAuthors(); // get list of names
+      var n = new Array();
+      for( var i = 0; i < list.size(); i++ )
+        n[n.length] = list.get(i);
+      n = n.map(function(s) { return s.replace(/ /g,'&nbsp;').replace(/-/g,'&#8209;');}); // replace certain characters
+      document.getElementById("gallery-authors").innerHTML = n.join(', ');
+    }
+
+    // will be be called from the Java side
+    function generate() {
+      console.log("test");
+      localize();
+      processBuildConfig();
+    }
+  </script>
+</head>
+<body>
+<div id="container">
+  <img class="credits-image" src="img/sarti.jpg" height="331" width="331"/>
+  <div class="row">
+    <div class="col_3">
+      <h2><span id="BC_NAME">SURFER</span></h2>
+      <div class="version-tag"><span id="BC_GIT_VERSION">2.0.0</span></div>
+      <p id="authors">
+        Christian&nbsp;Stussak,
+        Andreas&nbsp;Daniel&nbsp;Matt,
+        Gert&#8209;Martin&nbsp;Greuel
+        <br/>
+        <br/>
+        Christoph&nbsp;Knoth,
+        Oliver&nbsp;Labs,
+        Anna&nbsp;Hartkopf,
+        Herwig&nbsp;Hauser,
+        Maik&nbsp;Urbannek,
+        Henning&nbsp;Meyer
+      </p>
+      <p>
+        <!--<i class="fa fa-fw fa-git" aria-hidden="true"></i> <span id="BC_GIT_VERSION">ge1cadbf.dirty</span><br/>-->
+        <i class="fa fa-fw fa-globe" aria-hidden="true"></i> https://www.imaginary.org/program/surfer<br/>
+        <i class="fa fa-fw fa-github" aria-hidden="true"></i> https://github.com/IMAGINARY/SURFER<br/>
+        <i class="fa fa-fw fa-envelope-o" aria-hidden="true"></i> surfer@imaginary.org&nbsp;<br/>
+      </p>
+      <p>
+      &copy; 2007-<span id="BC_BUILD_YEAR">xxxx</span> IMAGINARY gGmbH<br/>
+      Licensed under Apache v2.0
+      </p>
+        <h3>jsurf</h3>
+        <div class="version-tag">v<span id="BC_DEP_JSURF_VERSION">2.0.0</span></div>
+        <p id="jsurf_authors">
+            Christian&nbsp;Stussak
+        </p>
+        <p>
+            <!--<i class="fa fa-fw fa-git" aria-hidden="true"></i> <span id="BC_GIT_VERSION">ge1cadbf.dirty</span><br/>-->
+            <i class="fa fa-fw fa-globe" aria-hidden="true"></i> https://www.imaginary.org/program/jsurf<br/>
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> https://github.com/IMAGINARY/jsurf<br/>
+        </p>
+        <p>
+            &copy; 2007-2017 IMAGINARY gGmbH<br/>
+            Licensed under Apache v2.0
+        </p>
+    </div>
+    <div class="col_3">
+      <h3>Galleries and translations</h3>
+      <div class="version-tag">v<span id="BC_DEP_SURFER_GALLERY_VERSION">0.18.0</span></div>
+      <p id="gallery-authors">List of authors</p>
+      <p>
+        <i class="fa fa-fw fa-github" aria-hidden="true"></i> https://github.com/IMAGINARY/SURFER-Galleries<br/>
+      </p>
+      <p>
+        &copy; 2007-2017 IMAGINARY gGmbH<br/>
+        Licensed under CC-BY 4.0
+      </p>
+    </div>
+    <div class="col_3">
+      <div class="large">
+        <p>
+            This program is brought to you by IMAGINARY, a non-profit organisation for the communication of modern
+            mathematics (www.imaginary.org). It has been initiated by the Mathematisches Forschungsinstitut Oberwolfach
+            (MFO) in collaboration with the German Federal Ministry of Education and Research (BMBF) and the
+            Martin Luther University Halle-Wittenberg.
+        </p>
+        <p>
+            SURFER has been used in exhibitions, museums, at schools or in universities all over the world.
+        </p>
+        <!-- BEGIN test of localization feature - do not remove -->
+        <p style="display: none;">some text <span id="colors">to be localized via JavaScript</span></p>
+        <!-- END test of localization feature - do not remove -->
+      </div>
+    </div>
+  </div>
+</div>
+</body>
 </html>

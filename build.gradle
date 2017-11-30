@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.0' //, changing: true
+    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.1' //, changing: true
     compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.1' //, changing: true
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.6'
@@ -58,6 +58,8 @@ buildConfig {
         configurations.compile.dependencies.find { dep -> (dep.group == "de.mfo.jsurf" && dep.name == "jsurf") }.version
     }
     buildConfigField 'String', 'GIT_VERSION', gitVersion()
+    buildConfigField 'java.time.LocalDate', 'BUILD_DATE', 'java.time.LocalDate.parse("' + java.time.LocalDate.now().toString() + '")'
+    buildConfigField 'int', 'BUILD_YEAR', "${java.time.LocalDate.now().getYear()}"
 }
 
 jfx {
