@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'de.fuerstenau.buildconfig' version '1.1.8'
+    id 'com.palantir.git-version' version '0.10.0'
     id 'java'
     id 'idea'
 }
@@ -49,10 +50,20 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
 
+buildConfig {
+    buildConfigField 'String', 'DEP_SURFER_GALLERY_VERSION', {
+        configurations.compile.dependencies.find { dep -> (dep.group == "de.mfo.surfer" && dep.name == "surfer-galleries") }.version
+    }
+    buildConfigField 'String', 'DEP_JSURF_VERSION', {
+        configurations.compile.dependencies.find { dep -> (dep.group == "de.mfo.jsurf" && dep.name == "jsurf") }.version
+    }
+    buildConfigField 'String', 'GIT_VERSION', gitVersion()
+}
+
 jfx {
     verbose = true
     mainClass = "de.mfo.surfer.Main"
-    jfxMainAppJarName = "surfer-${project.version}.jar"
+    jfxMainAppJarName = "${project.name.toLowerCase()}-${project.version}.jar"
 
     // gradle jfxJar
     manifestAttributes = [
