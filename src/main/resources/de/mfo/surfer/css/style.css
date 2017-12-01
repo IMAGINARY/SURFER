@@ -92,10 +92,15 @@ FormulaInputForm .noDecoration {
     -fx-effect: none;
 }
 
-FormulaInputForm .formulaFont {
+.formulaFont {
     -fx-font-family: 'Oswald ExtraLight';
     -fx-font-weight: 200;
+}
+
+FormulaInputForm .formulaFont {
     -fx-font-size: 50px;
+    -fx-highlight-fill: #BBBBBB;
+    -fx-highlight-text-fill: #EEEEEE;
 }
 
 FormulaInputForm > .keypad-label {
