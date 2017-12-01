@@ -94,9 +94,14 @@ public class Main extends Application
     private GalleryInfoPage galleryIntroPage;
     private GalleryInfoPage galleryInfoPage;
 
+    private static Main instance; // useful to access in a debugger
+
     @Override
     public void start( Stage stage ) throws Exception
     {
+        // Keep the application reference for debugging purposes
+        Main.instance = this;
+
         // set custom protocol handler, especially to deal with webjar based JS libraries (MathJax, Snap.svg)
         URL.setURLStreamHandlerFactory(new CustomURLStreamHandlerFactory());
 
