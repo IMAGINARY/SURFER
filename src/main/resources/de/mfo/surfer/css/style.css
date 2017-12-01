@@ -1,7 +1,9 @@
-/*.root {
--fx-font-family: Verdanna;
+@font-face {
+  font-style: normal;
+  font-weight: 200;
+  src: url(../fonts/Oswald-ExtraLight.woff) format('woff');
 }
-*/
+
 #scaled-overlay {
 -fx-font-size: 18px;
 }
@@ -91,7 +93,9 @@ FormulaInputForm .noDecoration {
 }
 
 FormulaInputForm .formulaFont {
-    -fx-font: 60px sans-serif;
+    -fx-font-family: 'Oswald ExtraLight';
+    -fx-font-weight: 200;
+    -fx-font-size: 50px;
 }
 
 FormulaInputForm > .keypad-label {
