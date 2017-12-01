@@ -3,6 +3,7 @@ package de.mfo.surfer.control;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.FXUtils;
 import static de.mfo.surfer.util.L.lb;
+import de.mfo.surfer.util.TextFieldSelectionAndFocusManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -21,7 +22,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
-import javafx.application.Platform;
 import javafx.stage.Window;
 import javafx.util.StringConverter;
 import org.slf4j.Logger;
@@ -35,6 +35,7 @@ public class FormulaInputForm extends Region
     private SimpleStringProperty formula;
     private StringConverter< String > stringConverter;
     TextField textField;
+    TextFieldSelectionAndFocusManager textFieldManager;
     BooleanProperty isValid;
     Tooltip errorMessage;
 
@@ -80,19 +81,6 @@ public class FormulaInputForm extends Region
         textField.getStyleClass().setAll( "formulaFont", "noDecoration" );
         textField.addEventFilter(KeyEvent.KEY_TYPED , e -> { if( "*".equals( e.getCharacter() ) ) { e.consume(); insertText("*"); } } );
         textField.textProperty().bindBidirectional(formula, stringConverter );
-        textField.focusedProperty().addListener(
-            // always grab input focus
-            ( observable, oldValue, newValue ) -> textField.requestFocus()
-        );
-        textField.textProperty().addListener(
-            // don't automatically select text that has been changed through external binding
-            ( observable, oldValue, newValue ) -> Platform.runLater( () -> textField.deselect() )
-        );
-        textField.disabledProperty().addListener(
-            // don't automatically select text after the text field has been enabled again
-            // TODO: (de)selection always clears caret position
-            ( observable, oldValue, newValue ) -> { if( newValue ) Platform.runLater( () -> textField.deselect() ); }
-        );
         textField.paddingProperty().bind(
             Bindings.createObjectBinding(
                 () -> { return new Insets( 0, equalsZero.getWidth(), 0, 10 ); },
@@ -119,6 +107,8 @@ public class FormulaInputForm extends Region
 
         FXUtils.resizeTo( textField, textFieldBB );
         equalsZero.setMinHeight( textFieldBB.getHeight() );
+
+        textFieldManager = new TextFieldSelectionAndFocusManager( textField );
 
         StackPane stackPane = new StackPane( textField, equalsZero );
         stackPane.setAlignment( Pos.BASELINE_RIGHT );
