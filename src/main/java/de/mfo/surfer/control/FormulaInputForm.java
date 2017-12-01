@@ -3,9 +3,11 @@ package de.mfo.surfer.control;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.FXUtils;
 import static de.mfo.surfer.util.L.lb;
+import de.mfo.surfer.util.TextFieldSelectionAndFocusManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,19 +18,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Effect;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
-import javafx.application.Platform;
 import javafx.stage.Window;
+import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.regex.Pattern;
 
 public class FormulaInputForm extends Region
 {
     private static final Logger logger = LoggerFactory.getLogger( FormulaInputForm.class );
 
+    private SimpleStringProperty formula;
+    private StringConverter< String > stringConverter;
     TextField textField;
+    TextFieldSelectionAndFocusManager textFieldManager;
     BooleanProperty isValid;
     Tooltip errorMessage;
 
@@ -44,7 +51,7 @@ public class FormulaInputForm extends Region
 
     void initTextField()
     {
-        Label equalsZero = new Label( " = 0" );
+        Label equalsZero = new Label( "\u2009=\u20090" );
         equalsZero.getStyleClass().setAll( "formulaFont" );
         equalsZero.setPadding( new Insets( 0, 5, 0, 0 ) );
         equalsZero.effectProperty().bind( Bindings.when( equalsZero.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
@@ -52,22 +59,28 @@ public class FormulaInputForm extends Region
         Node formulaBox = Main.< Node >fxmlLookup( "#Formula_Box" );
         formulaBox.effectProperty().bind( Bindings.when( this.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
 
+        formula = new SimpleStringProperty("");
+
+        stringConverter = new StringConverter<String>() {
+
+            Pattern patternToString = Pattern.compile("\\*");
+            Pattern patternFromString = Pattern.compile("·");
+
+            @Override
+            public String toString(String s) {
+                return patternToString.matcher(s).replaceAll("·");
+            }
+
+            @Override
+            public String fromString(String s) {
+                return patternFromString.matcher(s).replaceAll("*");
+            }
+        };
 
         textField = new TextField();
         textField.getStyleClass().setAll( "formulaFont", "noDecoration" );
-        textField.focusedProperty().addListener(
-            // always grab input focus
-            ( observable, oldValue, newValue ) -> textField.requestFocus()
-        );
-        textField.textProperty().addListener(
-            // don't automatically select text that has been changed through external binding
-            ( observable, oldValue, newValue ) -> Platform.runLater( () -> textField.deselect() )
-        );
-        textField.disabledProperty().addListener(
-            // don't automatically select text after the text field has been enabled again
-            // TODO: (de)selection always clears caret position
-            ( observable, oldValue, newValue ) -> { if( newValue ) Platform.runLater( () -> textField.deselect() ); }
-        );
+        textField.addEventFilter(KeyEvent.KEY_TYPED , e -> { if( "*".equals( e.getCharacter() ) ) { e.consume(); insertText("*"); } } );
+        textField.textProperty().bindBidirectional(formula, stringConverter );
         textField.paddingProperty().bind(
             Bindings.createObjectBinding(
                 () -> { return new Insets( 0, equalsZero.getWidth(), 0, 10 ); },
@@ -94,6 +107,8 @@ public class FormulaInputForm extends Region
 
         FXUtils.resizeTo( textField, textFieldBB );
         equalsZero.setMinHeight( textFieldBB.getHeight() );
+
+        textFieldManager = new TextFieldSelectionAndFocusManager( textField );
 
         StackPane stackPane = new StackPane( textField, equalsZero );
         stackPane.setAlignment( Pos.BASELINE_RIGHT );
@@ -202,7 +217,7 @@ public class FormulaInputForm extends Region
 
     void insertText( String text )
     {
-        textField.insertText( textField.getCaretPosition(), text );
+        textField.insertText( textField.getCaretPosition(), stringConverter.toString(text) );
     }
 
     @Override
@@ -213,17 +228,17 @@ public class FormulaInputForm extends Region
 
     public String getFormula()
     {
-        return textField.getText();
+        return formula.get();
     }
 
     public void setFormula( String value )
     {
-        textField.setText( value );
+        formula.set( value );
     }
 
     public StringProperty formulaProperty()
     {
-        return textField.textProperty();
+        return formula;
     }
 
     public boolean getIsValid()
