@@ -50,7 +50,7 @@ public class FormulaInputForm extends Region
 
     void initTextField()
     {
-        Label equalsZero = new Label( " = 0" );
+        Label equalsZero = new Label( "\u2009=\u20090" );
         equalsZero.getStyleClass().setAll( "formulaFont" );
         equalsZero.setPadding( new Insets( 0, 5, 0, 0 ) );
         equalsZero.effectProperty().bind( Bindings.when( equalsZero.disabledProperty() ).then( FXUtils.getEffectForDisabledNodes() ).otherwise( ( Effect ) null ) );
