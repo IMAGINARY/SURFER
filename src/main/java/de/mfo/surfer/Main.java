@@ -150,6 +150,7 @@ public class Main extends Application
                     try
                     {
                         ra.load( f );
+                        setMode( Mode.COLORS );
                     }
                     catch( Exception e )
                     {
@@ -260,7 +261,6 @@ public class Main extends Application
     public void setMode( Mode mode )
     {
         Consumer< Boolean > disableButtons = disable -> msnbp.setDisable( disable,
-            MiscSceneNodeButtonPanel.ButtonType.OPEN,
             MiscSceneNodeButtonPanel.ButtonType.SAVE,
             MiscSceneNodeButtonPanel.ButtonType.EXPORT,
             MiscSceneNodeButtonPanel.ButtonType.PRINT
