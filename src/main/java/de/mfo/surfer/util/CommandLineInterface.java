@@ -57,7 +57,7 @@ public class CommandLineInterface {
             Option help = Option.builder().longOpt("help").desc("display this help text and exit").build();
             Option version = Option.builder().longOpt("version").desc("print program version and exit").build();
             Option disable = Option.builder().longOpt("disable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("disable certain features (see below)").build();
-            Option enable = Option.builder().longOpt("enable").hasArg().argName("f1[,f2,...]").valueSeparator(',').desc("enable certain features (see below)").build();
+            Option enable = Option.builder().longOpt("enable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("enable certain features (see below)").build();
             Option fullscreen = Option.builder("f").longOpt("fullscreen").desc("run in full screen mode").build();
             Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS -t 3.5m)").build();
             Option printTemplate = Option.builder().longOpt("printTemplate").hasArg().argName("file").desc("SVG file to use as a print template").build();
