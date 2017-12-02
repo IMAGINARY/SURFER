@@ -26,7 +26,7 @@ public class TextFieldSelectionAndFocusManager {
                 oldCaretPos = textField.getCaretPosition();
                 oldSelection = textField.getSelection();
                 oldText = textField.getText();
-                logger.debug("saving caret ({}), selction ({}) and text ({})",oldCaretPos,oldSelection,oldText);
+                logger.trace("saving caret ({}), selction ({}) and text ({})",oldCaretPos,oldSelection,oldText);
                 textField.requestFocus();
             }
             textField.selectionProperty().addListener( formulaSelectionChangeListener );
@@ -47,9 +47,9 @@ public class TextFieldSelectionAndFocusManager {
         textField.selectionProperty().removeListener(formulaSelectionChangeListener);
         if( oldText != null && oldText.equals( textField.getText() ) )
         {
-            logger.debug( "text is the same: {}", oldText );
+            logger.trace( "text is the same: {}", oldText );
             if(oldSelection != null && oldSelection.getLength() > 0) {
-                logger.debug("restoring caret ({}) and selction ({}) ",oldCaretPos,oldSelection);
+                logger.trace("restoring caret ({}) and selction ({}) ",oldCaretPos,oldSelection);
                 // move the the selected range into the visible area
                 textField.positionCaret(oldSelection.getStart());
                 textField.positionCaret(oldSelection.getEnd());
@@ -59,12 +59,12 @@ public class TextFieldSelectionAndFocusManager {
                     oldCaretPos
                 );
             } else {
-                logger.debug("restoring only caret ({})", oldCaretPos);
+                logger.trace("restoring only caret ({})", oldCaretPos);
                 textField.selectRange(oldCaretPos, oldCaretPos);
             }
         } else {
-            logger.debug( "text differs: old: {} new: {}", oldText, textField.getText() );
-            logger.debug( "clearing selecting" );
+            logger.trace( "text differs: old: {} new: {}", oldText, textField.getText() );
+            logger.trace( "clearing selecting" );
             textField.deselect();
         }
     }
