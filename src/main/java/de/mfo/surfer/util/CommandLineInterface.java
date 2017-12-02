@@ -98,10 +98,21 @@ public class CommandLineInterface {
         try {
             CommandLine cl = new DefaultParser().parse(getOptions(), args, true);
 
+            // process '-v' options first to set requested log level
+            Arrays.stream(cl.getOptions())
+                .filter(o -> getOptions().getOption("v").equals(o))
+                .forEach(o -> getOptionsAndActions().get(o).accept(o.getValues()));
+
+            logger.debug( "log level set to {}", Preferences.Developer.logLevelProperty().get() );
+
+            // log options
             for (Option o : cl.getOptions())
                 logger.debug("{}", o);
 
-            Arrays.stream(cl.getOptions()).forEach(o -> getOptionsAndActions().get(o).accept(o.getValues()));
+            // process all other options
+            Arrays.stream(cl.getOptions())
+                .filter(o -> !getOptions().getOption("v").equals(o))
+                .forEach(o -> getOptionsAndActions().get(o).accept(o.getValues()));
 
             String[] additionalArgs = cl.getArgs();
             if( additionalArgs.length > 0 )
