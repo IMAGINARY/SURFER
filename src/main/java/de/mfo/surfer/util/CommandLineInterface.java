@@ -110,8 +110,11 @@ public class CommandLineInterface {
             logger.debug( "log level set to {}", Preferences.Developer.logLevelProperty().get() );
 
             // log options
-            for (Option o : cl.getOptions())
-                logger.debug("{}", o);
+            for (Option o : cl.getOptions()) {
+                String name = o.getOpt() != null ? "-" + o.getOpt() : "--" + o.getLongOpt();
+                String values = o.getValuesList().stream().collect(Collectors.joining(""+o.getValueSeparator()));
+                logger.debug("CLI option: {} {}", name, values);
+            }
 
             // process all other options
             Arrays.stream(cl.getOptions())
