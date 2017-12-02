@@ -185,7 +185,7 @@ public class Preferences
     {
         static
         {
-            logLevel = new SimpleObjectProperty<>( LogLevel.ALL );
+            logLevel = new SimpleObjectProperty<>( LogLevel.WARN );
         }
 
         private static SimpleObjectProperty<LogLevel> logLevel;
