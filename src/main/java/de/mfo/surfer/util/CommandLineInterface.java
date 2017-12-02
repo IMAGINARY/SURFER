@@ -54,6 +54,10 @@ public class CommandLineInterface {
 
     public static Map<Option,Consumer<String[]>> getOptionsAndActions() {
         if( optionsAndActions == null ) {
+            String logLevels = Arrays.stream(LogLevel.values())
+                .map( l -> l.toString() )
+                .collect(Collectors.joining(", "));
+
             Option help = Option.builder().longOpt("help").desc("display this help text and exit").build();
             Option version = Option.builder().longOpt("version").desc("print program version and exit").build();
             Option disable = Option.builder().longOpt("disable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("disable certain features (see below)").build();
@@ -63,6 +67,7 @@ public class CommandLineInterface {
             Option printTemplate = Option.builder().longOpt("printTemplate").hasArg().argName("file").desc("SVG file to use as a print template").build();
             Option verbose = Option.builder("v").longOpt("verbose").desc("increase verbosity level").build();
             Option timeout = Option.builder("t").longOpt("timeout").hasArg().argName("time").desc("revert to tutorial gallery intro after idle time-out (format: [number][ms|s|m|h], e.g. 50s, 8m, 1h)").build();
+            Option loglevel = Option.builder().longOpt("loglevel").hasArg().argName("level").desc("set log level (" + logLevels + ")").build();
 
             options = new Options();
             options.addOption( help );
@@ -73,6 +78,7 @@ public class CommandLineInterface {
             options.addOption( enable );
             options.addOption( disable );
             options.addOption( verbose );
+            options.addOption( loglevel );
             options.addOption( timeout );
 
             optionsAndActions = new TreeMap<>(Comparator.comparing(o -> (o.getOpt() != null ? o.getOpt() : o.getLongOpt())));
@@ -84,6 +90,7 @@ public class CommandLineInterface {
             optionsAndActions.put( kiosk, v -> enableKiosk() );
             optionsAndActions.put( printTemplate, v -> Preferences.General.printTemplateFileProperty().set(new File(v[0])));
             optionsAndActions.put( verbose, v -> increaseVerbosityLevel() );
+            optionsAndActions.put( loglevel, v -> setLogLevel(v[0]) );
             optionsAndActions.put( timeout, v -> setIdleTimeOut(v[0]) );
         }
         return optionsAndActions;
@@ -102,9 +109,9 @@ public class CommandLineInterface {
         try {
             CommandLine cl = new DefaultParser().parse(getOptions(), args, true);
 
-            // process '-v' options first to set requested log level
+            // process '-v' and '--loglevel' options first to set requested log level
             Arrays.stream(cl.getOptions())
-                .filter(o -> getOptions().getOption("v").equals(o))
+                .filter(o -> getOptions().getOption("v").equals(o)||getOptions().getOption("loglevel").equals(o))
                 .forEach(o -> getOptionsAndActions().get(o).accept(o.getValues()));
 
             logger.debug( "log level set to {}", Preferences.Developer.logLevelProperty().get() );
@@ -118,7 +125,7 @@ public class CommandLineInterface {
 
             // process all other options
             Arrays.stream(cl.getOptions())
-                .filter(o -> !getOptions().getOption("v").equals(o))
+                .filter(o -> !(getOptions().getOption("v").equals(o)||getOptions().getOption("loglevel").equals(o)))
                 .forEach(o -> getOptionsAndActions().get(o).accept(o.getValues()));
 
             String[] additionalArgs = cl.getArgs();
@@ -254,6 +261,17 @@ public class CommandLineInterface {
             default:
                 Preferences.Developer.logLevelProperty().set( ALL );
                 break;
+        }
+    }
+
+    public static void setLogLevel( String logLevel )
+    {
+        try {
+            LogLevel.valueOf( logLevel.toUpperCase() ).apply();
+        }
+        catch( IllegalArgumentException iae ) {
+            System.err.println("Unknown log level: " + logLevel);
+            System.exit(-1);
         }
     }
 
