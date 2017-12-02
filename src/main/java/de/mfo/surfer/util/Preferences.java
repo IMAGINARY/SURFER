@@ -1,6 +1,7 @@
 package de.mfo.surfer.util;
 
 import javafx.beans.property.*;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.net.URL;
@@ -136,6 +137,7 @@ public class Preferences
             showSaveButton = new SimpleBooleanProperty( true );
             showExportButton = new SimpleBooleanProperty( true );
             showSettingsButton = new SimpleBooleanProperty( true );
+            idleTimeOut = new SimpleObjectProperty<Duration>( Duration.INDEFINITE );
         }
 
         private static SimpleBooleanProperty fullScreen;
@@ -178,6 +180,13 @@ public class Preferences
         public static BooleanProperty showSettingsButtonProperty()
         {
             return showSettingsButton;
+        }
+
+        private static SimpleObjectProperty<Duration> idleTimeOut;
+        public static SimpleObjectProperty<Duration> idleTimeOutProperty() { return idleTimeOut; }
+        public static Class<?> idleTimeOutType()
+        {
+            return Duration.class;
         }
     }
 

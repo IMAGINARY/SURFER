@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.Group;
@@ -23,6 +24,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +95,8 @@ public class Main extends Application
     private TilePane galleryIconContainer;
     private GalleryInfoPage galleryIntroPage;
     private GalleryInfoPage galleryInfoPage;
+
+    private IdleMonitor idleMonitor;
 
     private static Main instance; // useful to access in a debugger
 
@@ -246,11 +250,21 @@ public class Main extends Application
 
             stage.setScene( scene );
             stage.show();
+
+            idleMonitor = new IdleMonitor(Duration.INDEFINITE,this::onIdleTimeOut,true);
+            idleMonitor.register(scene, Event.ANY);
+            idleMonitor.idleTimeOutProperty().bind(Preferences.Kiosk.idleTimeOutProperty());
         }
         catch( Throwable t )
         {
             handleUncaughtException( Thread.currentThread(), t );
         }
+    }
+
+    public void onIdleTimeOut()
+    {
+        gs.selectGallery( Gallery.Type.values()[ 0 ] );
+        setMode( Mode.GALLERY );
     }
 
     public enum Mode

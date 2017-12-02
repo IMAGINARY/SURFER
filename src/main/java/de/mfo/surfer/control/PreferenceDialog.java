@@ -11,6 +11,7 @@ import java.util.function.Function;
 
 import de.mfo.surfer.util.Utils;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -19,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import static de.mfo.surfer.util.L.lb;
@@ -145,6 +147,9 @@ public class PreferenceDialog extends Dialog< ButtonType >
                 };
                 return createFileChooser((ObjectProperty<URL>) p, stringConverter, f -> Utils.wrapInRte( () -> f.toURI().toURL() ) );
             }
+            if( Duration.class.isAssignableFrom( c ) ) {
+                return createDurationEditor( ( SimpleObjectProperty<Duration> ) p );
+            }
             else if( Enum.class.isAssignableFrom( c ) )
                 return createEnumChooser((ObjectProperty<Enum>) p, ( Class<Enum>) c);
             else
@@ -219,6 +224,27 @@ public class PreferenceDialog extends Dialog< ButtonType >
         resetters.add( () -> cb.getSelectionModel().select( originalValue ) );
 
         return cb;
+    }
+
+    private Node createDurationEditor( SimpleObjectProperty<Duration> dp ) {
+        final Duration originalValue = dp.get();
+
+        final TextField tf = new TextField();
+        ChangeListener<Duration> cl = (o,ov,nv) -> tf.setText(dp.get().toString().replaceAll(" ", ""));
+        dp.addListener( cl );
+        cl.changed( null, null, dp.get());
+        tf.setOnAction( event -> {
+                try {
+                    dp.set(Duration.valueOf(tf.getText()));
+                    tf.setStyle("");
+                } catch (Exception e) {
+                    tf.setStyle("-fx-text-fill: red;");
+                }
+            }
+        );
+        resetters.add( () -> dp.set( originalValue ) );
+
+        return tf;
     }
 
     public void reset()

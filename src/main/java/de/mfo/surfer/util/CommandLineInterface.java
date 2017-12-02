@@ -2,6 +2,7 @@ package de.mfo.surfer.util;
 
 import de.mfo.surfer.BuildConfig;
 import javafx.beans.property.BooleanProperty;
+import javafx.util.Duration;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,9 +59,10 @@ public class CommandLineInterface {
             Option disable = Option.builder().longOpt("disable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("disable certain features (see below)").build();
             Option enable = Option.builder().longOpt("enable").hasArg().argName("f1[,f2,...]").valueSeparator(',').desc("enable certain features (see below)").build();
             Option fullscreen = Option.builder("f").longOpt("fullscreen").desc("run in full screen mode").build();
-            Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS)").build();
+            Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS -t 3.5m)").build();
             Option printTemplate = Option.builder().longOpt("printTemplate").hasArg().argName("file").desc("SVG file to use as a print template").build();
             Option verbose = Option.builder("v").longOpt("verbose").desc("increase verbosity level").build();
+            Option timeout = Option.builder("t").longOpt("timeout").hasArg().argName("time").desc("revert to tutorial gallery intro after idle time-out (format: [number][ms|s|m|h], e.g. 50s, 8m, 1h)").build();
 
             options = new Options();
             options.addOption( help );
@@ -71,6 +73,7 @@ public class CommandLineInterface {
             options.addOption( enable );
             options.addOption( disable );
             options.addOption( verbose );
+            options.addOption( timeout );
 
             optionsAndActions = new TreeMap<>(Comparator.comparing(o -> (o.getOpt() != null ? o.getOpt() : o.getLongOpt())));
             optionsAndActions.put( help, v -> printHelp() );
@@ -81,6 +84,7 @@ public class CommandLineInterface {
             optionsAndActions.put( kiosk, v -> enableKiosk() );
             optionsAndActions.put( printTemplate, v -> Preferences.General.printTemplateFileProperty().set(new File(v[0])));
             optionsAndActions.put( verbose, v -> increaseVerbosityLevel() );
+            optionsAndActions.put( timeout, v -> setIdleTimeOut(v[0]) );
         }
         return optionsAndActions;
     }
@@ -209,6 +213,7 @@ public class CommandLineInterface {
         Feature.SAVE.disable();
         Feature.EXPORT.disable();
         Feature.SETTINGS.disable();
+        Preferences.Kiosk.idleTimeOutProperty().set( Duration.minutes(3.5) );
     }
 
     public static void enableFeature( String feature ) { setFeatureEnabled( feature, true ); }
@@ -246,6 +251,16 @@ public class CommandLineInterface {
             default:
                 Preferences.Developer.logLevelProperty().set( ALL );
                 break;
+        }
+    }
+
+    public static void setIdleTimeOut( String durationString )
+    {
+        try {
+            Preferences.Kiosk.idleTimeOutProperty().set( Duration.valueOf(durationString) );
+        } catch( Exception e ) {
+            System.err.println("Invalid duration: " + durationString);
+            System.exit(-1);
         }
     }
 }
