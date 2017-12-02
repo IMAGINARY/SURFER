@@ -63,11 +63,12 @@ public class CommandLineInterface {
             Option disable = Option.builder().longOpt("disable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("disable certain features (see below)").build();
             Option enable = Option.builder().longOpt("enable").hasArgs().argName("f1[,f2,...]").valueSeparator(',').desc("enable certain features (see below)").build();
             Option fullscreen = Option.builder("f").longOpt("fullscreen").desc("run in full screen mode").build();
-            Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f -disable LOAD,SAVE,EXPORT,SETTINGS -t 3.5m)").build();
+            Option kiosk = Option.builder().longOpt("kiosk").desc("run in kiosk mode (alias for -f --disable LOAD,SAVE,EXPORT,SETTINGS -t 3.5m -l 30)").build();
             Option printTemplate = Option.builder().longOpt("printTemplate").hasArg().argName("file").desc("SVG file to use as a print template").build();
             Option verbose = Option.builder("v").longOpt("verbose").desc("increase verbosity level").build();
             Option timeout = Option.builder("t").longOpt("timeout").hasArg().argName("time").desc("revert to tutorial gallery intro after idle time-out (format: [number][ms|s|m|h], e.g. 50s, 8m, 1h)").build();
             Option loglevel = Option.builder().longOpt("loglevel").hasArg().argName("level").desc("set log level (" + logLevels + ")").build();
+            Option limit = Option.builder("l").longOpt("limit").hasArg().argName("degree").desc("reject surfaces with high degree (use 0 to disable)").build();
 
             options = new Options();
             options.addOption( help );
@@ -80,6 +81,7 @@ public class CommandLineInterface {
             options.addOption( verbose );
             options.addOption( loglevel );
             options.addOption( timeout );
+            options.addOption( limit );
 
             optionsAndActions = new TreeMap<>(Comparator.comparing(o -> (o.getOpt() != null ? o.getOpt() : o.getLongOpt())));
             optionsAndActions.put( help, v -> printHelp() );
@@ -92,6 +94,7 @@ public class CommandLineInterface {
             optionsAndActions.put( verbose, v -> increaseVerbosityLevel() );
             optionsAndActions.put( loglevel, v -> setLogLevel(v[0]) );
             optionsAndActions.put( timeout, v -> setIdleTimeOut(v[0]) );
+            optionsAndActions.put( limit, v -> setLimit(v[0]) );
         }
         return optionsAndActions;
     }
@@ -224,6 +227,7 @@ public class CommandLineInterface {
         Feature.EXPORT.disable();
         Feature.SETTINGS.disable();
         Preferences.Kiosk.idleTimeOutProperty().set( Duration.minutes(3.5) );
+        Preferences.General.degreeLimitProperty().set(30);
     }
 
     public static void enableFeature( String feature ) { setFeatureEnabled( feature, true ); }
@@ -284,4 +288,16 @@ public class CommandLineInterface {
             System.exit(-1);
         }
     }
+
+    private static void setLimit( String limit ) {
+        try {
+            Preferences.General.degreeLimitProperty().set(Integer.parseInt(limit));
+        }
+        catch( Exception e )
+        {
+            System.err.println("Invalid degree: " + limit);
+            System.exit(-1);
+        }
+    }
+
 }

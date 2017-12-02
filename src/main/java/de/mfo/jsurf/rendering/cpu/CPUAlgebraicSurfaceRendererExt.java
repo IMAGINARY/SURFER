@@ -1,5 +1,7 @@
 package de.mfo.jsurf.rendering.cpu;
 
+import de.mfo.jsurf.algebra.DegreeCalculator;
+import de.mfo.jsurf.algebra.PolynomialOperation;
 import de.mfo.jsurf.rendering.cpu.CPUAlgebraicSurfaceRenderer;
 import de.mfo.jsurf.rendering.cpu.DrawcallStaticData;
 import de.mfo.jsurf.rendering.RenderingInterruptedException;
@@ -82,5 +84,31 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
             if( !success || Thread.interrupted() )
                 throw new RenderingInterruptedException( "Rendering interrupted" );
         }
+    }
+
+    private Integer degree;
+    private DegreeCalculator degreeCalculator;
+
+    @Override
+    public void setSurfaceFamily( String expression )
+        throws Exception
+    {
+        super.setSurfaceFamily( expression );
+        degree = null;
+    }
+
+    @Override
+    public void setSurfaceFamily( PolynomialOperation expression )
+    {
+        super.setSurfaceFamily( expression );
+        degree = null;
+    }
+
+    public int getSurfaceFamilyDegree() {
+        if( degreeCalculator == null )
+            degreeCalculator = new DegreeCalculator();
+        if( degree == null )
+            degree = getSurfaceFamily().accept( degreeCalculator, (Void) null );
+        return degree;
     }
 }

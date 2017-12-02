@@ -85,6 +85,7 @@ public class Preferences
             initiallyOpenedTab = new SimpleIntegerProperty( 2 );
             printTemplateFile = new SimpleObjectProperty<File>( );
             initialJSurfFile = new SimpleObjectProperty<URL>(Preferences.class.getResource("/de/mfo/surfer/gallery/default.jsurf"));
+            degreeLimit = new SimpleIntegerProperty(0);
         }
 
         private static SimpleIntegerProperty exportSize;
@@ -123,6 +124,12 @@ public class Preferences
         public static Class<?> initialJSurfFileType()
         {
             return URL.class;
+        }
+
+        private static SimpleIntegerProperty degreeLimit;
+        public static IntegerProperty degreeLimitProperty()
+        {
+            return degreeLimit;
         }
     }
 
