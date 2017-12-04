@@ -271,7 +271,7 @@ public class CommandLineInterface {
     public static void setLogLevel( String logLevel )
     {
         try {
-            LogLevel.valueOf( logLevel.toUpperCase() ).apply();
+            Preferences.Developer.logLevelProperty().set(LogLevel.valueOf(logLevel.toUpperCase()));
         }
         catch( IllegalArgumentException iae ) {
             System.err.println("Unknown log level: " + logLevel);
