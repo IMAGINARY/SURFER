@@ -214,6 +214,7 @@ public class RenderArea extends Region
 
         rsd = new RotateSphericalDragger();
         setOnMousePressed( e -> rsd.startDrag( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ) );
+        setOnMouseReleased( e -> rsd.stopDrag() );
         setOnMouseDragged( e -> { rsd.dragTo( new java.awt.Point( ( int ) e.getX(), ( int ) e.getY() ) ); triggerRepaint(); } );
 
         Consumer< Function< Double, Double > > changeScale = f ->
