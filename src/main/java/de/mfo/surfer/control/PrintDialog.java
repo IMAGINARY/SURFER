@@ -9,6 +9,7 @@ import de.mfo.jsurf.parser.AlgebraicExpressionParser;
 import de.mfo.surfer.util.L;
 import de.mfo.surfer.util.Preferences;
 import de.mfo.surfer.util.Utils;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -54,6 +55,8 @@ public class PrintDialog extends Dialog< ButtonType >
 
     WebView webView;
     PrinterJob printerJob;
+
+    JavaBridge javaBridge = new JavaBridge();
 
     public class JavaBridge {
 
@@ -244,7 +247,7 @@ public class PrintDialog extends Dialog< ButtonType >
                     // create the SVG via JavaScript
                     JSObject window = (JSObject) webEngine.executeScript("window");
                     window.setMember("console", Console.getConsole() );
-                    window.setMember("javaBridge", new JavaBridge());
+                    window.setMember("javaBridge", javaBridge);
 
                     File externalSVGTemplate = Preferences.General.printTemplateFileProperty().get();
                     if( externalSVGTemplate != null )
@@ -299,13 +302,42 @@ public class PrintDialog extends Dialog< ButtonType >
         jobSettings.setPageLayout( pageLayout );
         jobSettings.setPageRanges( new PageRange( 1, 1 ) );
 
-        fitWebViewSvgTo( targetWidth, targetHeight );
+        logger.debug(System.getProperty("os.name"));
+        if( System.getProperty("os.name").equalsIgnoreCase("linux"))
+        {
+            logger.debug("linux pringing");
+            webView.snapshot( snapshotResult -> {
+                    // display rendering of SVG image
+                    Image image = snapshotResult.getImage();
+                    ImageView imageView = new ImageView( image );
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitHeight(pageLayout.getPrintableHeight());
+                    imageView.setFitWidth(pageLayout.getPrintableWidth());
 
-        webView.getEngine().print( printerJob );
+                    Platform.runLater( () -> {
+                        printerJob.printPage( imageView );
+                        // TODO: deal with print errors (maybe also connect printerJob.jobStatusProperty() to a Label
+                        printerJob.endJob();
+                    });
 
-        // TODO: deal with print errors
+                    logger.debug("linux pringing should be done");
 
-        printerJob.endJob();
+                    return (Void) null;
+                },
+                javaBridge.snapshotParameters,
+                null
+            );
+        }
+        else
+        {
+            fitWebViewSvgTo( targetWidth, targetHeight );
+
+            webView.getEngine().print( printerJob );
+
+            // TODO: deal with print errors
+
+            printerJob.endJob();
+        }
     }
 
     void fitWebViewSvgTo( double targetWidth, double targetHeight )
