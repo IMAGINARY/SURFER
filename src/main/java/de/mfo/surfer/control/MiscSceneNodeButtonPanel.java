@@ -59,7 +59,7 @@ public class MiscSceneNodeButtonPanel extends Region
         Consumer< File > fileOpenAction,
         Consumer< File > fileSaveAction,
         Consumer< File > fileExportAction,
-        Consumer< PrinterJob > printAction
+        Runnable printAction
     )
     {
         setPickOnBounds( false );
@@ -144,14 +144,9 @@ public class MiscSceneNodeButtonPanel extends Region
             fileExportAction.accept( selectedFile );
     }
 
-    protected void handlePrint( Consumer< PrinterJob > printAction )
+    protected void handlePrint( Runnable printAction )
     {
-        PrinterJob job = PrinterJob.createPrinterJob();
-        if( job != null )
-        {
-            printAction.accept( job );
-            job.endJob();
-        }
+        printAction.run();
     }
 
     protected void handleCredits()

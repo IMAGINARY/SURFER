@@ -183,13 +183,13 @@ public class Main extends Application
                         new ExceptionDialog( Alert.AlertType.ERROR, "Error exporting to " + f.toString(), e ).showAndWait();
                     }
                 },
-                printJob -> {
+                () -> {
                         // TODO: render in a background thread and send the result to the print dialog when it is ready (maybe use a low resolution while rendering)
                         File tempFile = Utils.wrapInRte( () -> Files.createTempFile("SURFER-", ".png" ) ).toFile();
                         tempFile.deleteOnExit();
                         ra.export( tempFile, 512 );
 
-                        new PrintDialog( stage, printJob, fif.getFormula(), snsp.getParameters(), tempFile.toURI().toString() ).showAndWait();
+                        new PrintDialog( stage, fif.getFormula(), snsp.getParameters(), tempFile.toURI().toString() ).showAndWait();
                     }
             );
             cpp = new ColorPickerPanel();

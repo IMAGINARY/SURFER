@@ -13,11 +13,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.print.*;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -69,7 +72,7 @@ public class PrintDialog extends Dialog< ButtonType >
             // add the WebView to the scene, but completely clip it to make it invisible
             // (it still gets rendered so we can take a snapshot later on)
             webViewWrapper.setClip(new Rectangle());
-            getDialogPane().getChildren().add(webViewWrapper);
+            getDialogPane().setContent(webViewWrapper);
 
             // do this once SVG loading finished
             webEngine.getLoadWorker().stateProperty().addListener( new ChangeListener< Worker.State > () {
@@ -133,13 +136,24 @@ public class PrintDialog extends Dialog< ButtonType >
                     // display rendering of SVG image
                     Image image = snapshotResult.getImage();
                     ImageView imageView = new ImageView( image );
-                    BorderPane bp = new BorderPane( imageView );
-                    bp.setMaxSize( image.getWidth(), image.getHeight() );
-                    bp.setStyle( "-fx-border-color: gray; -fx-border-style: solid; -fx-border-width: 1px;" );
-                    getDialogPane().setContent( new BorderPane( bp ));
+                    BorderPane centerBp = new BorderPane( imageView );
+                    centerBp.setMaxSize( image.getWidth(), image.getHeight() );
+                    centerBp.setStyle( "-fx-border-color: gray; -fx-border-style: solid; -fx-border-width: 1px;" );
 
-                    // enable the dialog buttons again
-                    getDialogPane().getButtonTypes().forEach( bt -> getDialogPane().lookupButton( bt ).setDisable( false ) );
+                    BorderPane outerBp = new BorderPane( centerBp );
+
+                    if( PrintDialog.this.printerJob == null ) {
+                        Label msg = new Label("ERROR: No printer detected!");
+                        msg.getStyleClass().add("print-error-msg");
+                        BorderPane.setAlignment(msg, Pos.CENTER);
+                        outerBp.bottomProperty().set(msg); // TODO: localize
+                    }
+
+                    getDialogPane().setContent( outerBp );
+
+                    if( PrintDialog.this.printerJob != null )
+                        // enable the dialog buttons again
+                        getDialogPane().getButtonTypes().forEach( bt -> getDialogPane().lookupButton( bt ).setDisable( false ) );
 
                     // resize and center dialog
                     getDialogPane().getScene().getWindow().sizeToScene();
@@ -170,32 +184,38 @@ public class PrintDialog extends Dialog< ButtonType >
         }
     }
 
-    public PrintDialog(Window owner, PrinterJob printJob, String formula, Map< String, Double > parameters, String image )
+    public PrintDialog(Window owner, String formula, Map< String, Double > parameters, String image )
     {
         super();
         initOwner( owner );
 
-        this.printerJob = printJob;
+        printerJob = PrinterJob.createPrinterJob();
+
         setHeaderText( null );
 
-        ButtonType pageSetupDialogButton = new ButtonType( "Page Setup" ); // TODO: localization
-        ButtonType printDialogButton = new ButtonType( "Print Dialog" ); // TODO: localization
+        ButtonType pageSetupDialogButtonType = new ButtonType( "Page Setup" ); // TODO: localization
+        ButtonType printDialogButtonType = new ButtonType( "Print Dialog" ); // TODO: localization
         getDialogPane().getButtonTypes().addAll(
             ButtonType.OK,
             ButtonType.CANCEL,
-            pageSetupDialogButton,
-            printDialogButton
+            pageSetupDialogButtonType,
+            printDialogButtonType
         );
-        getDialogPane().getButtonTypes().forEach( bt -> getDialogPane().lookupButton( bt ).setDisable( true ) );
+        getDialogPane()
+            .getButtonTypes()
+            .filtered( bt -> !bt.equals(ButtonType.CANCEL))
+            .forEach( bt -> getDialogPane().lookupButton( bt ).setDisable( true ) );
 
+        Button pageSetupDialogButton = (Button) getDialogPane().lookupButton( pageSetupDialogButtonType );
+        Button printDialogButton = (Button) getDialogPane().lookupButton( printDialogButtonType );
 
-        getDialogPane().lookupButton( pageSetupDialogButton ).addEventFilter(
+        pageSetupDialogButton.addEventFilter(
             ActionEvent.ACTION,
-            e -> { printJob.showPageSetupDialog( null ); e.consume(); }
+            e -> { printerJob.showPageSetupDialog( null ); e.consume(); }
         );
-        getDialogPane().lookupButton( printDialogButton ).addEventFilter(
+        printDialogButton.addEventFilter(
             ActionEvent.ACTION,
-            e -> { printJob.showPrintDialog( null ); e.consume(); }
+            e -> { printerJob.showPrintDialog( null ); e.consume(); }
         );
 
         setContentText( "Processing ..." );
@@ -284,6 +304,8 @@ public class PrintDialog extends Dialog< ButtonType >
         webView.getEngine().print( printerJob );
 
         // TODO: deal with print errors
+
+        printerJob.endJob();
     }
 
     void fitWebViewSvgTo( double targetWidth, double targetHeight )

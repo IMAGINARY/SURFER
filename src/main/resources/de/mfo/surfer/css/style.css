@@ -190,3 +190,8 @@ TilePane.galleryIconContainer {
 .my-custom-color {
     -fx-font-size: 13px;
 }
+
+.print-error-msg {
+    -fx-text-fill: red;
+    -fx-padding: 10px;
+}
