@@ -50,28 +50,12 @@ public class Preferences
         }
 
         private static SimpleDoubleProperty minScaleFactor;
-        public static double getMinScaleFactor()
-        {
-            return minScaleFactor.get();
-        }
-        public static void setMinScaleFactor( double value )
-        {
-            minScaleFactor.set( value );
-        }
         public static DoubleProperty minScaleFactorProperty()
         {
             return minScaleFactor;
         }
 
         private static SimpleDoubleProperty maxScaleFactor;
-        public static double getMaxScaleFactor()
-        {
-            return maxScaleFactor.get();
-        }
-        public static void setMaxScaleFactor( double value )
-        {
-            maxScaleFactor.set( value );
-        }
         public static DoubleProperty maxScaleFactorProperty()
         {
             return maxScaleFactor;

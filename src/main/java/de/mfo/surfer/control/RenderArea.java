@@ -220,7 +220,7 @@ public class RenderArea extends Region
         Consumer< Function< Double, Double > > changeScale = f ->
         {
             double newScale = f.apply( parameters.get( "scale_factor" ) );
-            newScale = newScale < Preferences.Limits.getMinScaleFactor() ? Preferences.Limits.getMinScaleFactor() : ( newScale > Preferences.Limits.getMaxScaleFactor() ? Preferences.Limits.getMaxScaleFactor() : newScale );
+            newScale = newScale < Preferences.Limits.minScaleFactorProperty().get() ? Preferences.Limits.minScaleFactorProperty().get() : ( newScale > Preferences.Limits.maxScaleFactorProperty().get() ? Preferences.Limits.maxScaleFactorProperty().get() : newScale );
             parameters.put( "scale_factor", newScale );
         };
         setOnScroll( e -> changeScale.accept( oldScaleFactor -> oldScaleFactor - ( e.getDeltaX() + e.getDeltaY() ) / imageView.getFitWidth() ) );
