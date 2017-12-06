@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'de.fuerstenau.buildconfig' version '1.1.8'
+    id 'com.palantir.git-version' version '0.10.0'
     id 'java'
     id 'idea'
 }
@@ -32,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.0' //, changing: true
+    compile group: 'de.mfo.surfer', name: 'surfer-galleries', version: '0.18.1' //, changing: true
     compile group: 'de.mfo.jsurf', name: 'jsurf', version: '0.4.1' //, changing: true
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.6'
@@ -49,10 +50,22 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
 
+buildConfig {
+    buildConfigField 'String', 'DEP_SURFER_GALLERY_VERSION', {
+        configurations.compile.dependencies.find { dep -> (dep.group == "de.mfo.surfer" && dep.name == "surfer-galleries") }.version
+    }
+    buildConfigField 'String', 'DEP_JSURF_VERSION', {
+        configurations.compile.dependencies.find { dep -> (dep.group == "de.mfo.jsurf" && dep.name == "jsurf") }.version
+    }
+    buildConfigField 'String', 'GIT_VERSION', gitVersion()
+    buildConfigField 'java.time.LocalDate', 'BUILD_DATE', 'java.time.LocalDate.parse("' + java.time.LocalDate.now().toString() + '")'
+    buildConfigField 'int', 'BUILD_YEAR', "${java.time.LocalDate.now().getYear()}"
+}
+
 jfx {
     verbose = true
     mainClass = "de.mfo.surfer.Main"
-    jfxMainAppJarName = "surfer-${project.version}.jar"
+    jfxMainAppJarName = "${project.name.toLowerCase()}-${project.version}.jar"
 
     // gradle jfxJar
     manifestAttributes = [

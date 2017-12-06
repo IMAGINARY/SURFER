@@ -1,0 +1,37 @@
+* {
+    font-family: Sans-Serif;
+}
+
+/* hide scrollbars */
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    width: 1920px;
+    height: 1080px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    background-color: white;
+    font-size: 150%;
+}
+
+#container {
+    padding: 50px;
+}
+
+#text {
+    width: 100%;
+}
+
+#image {
+    float: right;
+    width: 35%;
+}
+
+#image img {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+}

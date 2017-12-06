@@ -9,6 +9,7 @@ import de.mfo.jsurf.parser.AlgebraicExpressionParser;
 import de.mfo.surfer.util.L;
 import de.mfo.surfer.util.Preferences;
 import de.mfo.surfer.util.Utils;
+import de.mfo.surfer.util.WebConsole;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -122,7 +123,7 @@ public class PrintDialog extends Dialog< ButtonType >
 
                         // wait for the WebView to finish rendering of the SVG and call back to take the snapshot
                         JSObject svgWindow = (JSObject) webEngine.executeScript("window");
-                        svgWindow.setMember("console", Console.getConsole());
+                        svgWindow.setMember("console", WebConsole.get(JavaBridge.class));
                         svgWindow.setMember("javaBridge", JavaBridge.this);
                         webEngine.executeScript("window.requestAnimationFrame( function() { javaBridge.takeSnapshot(); } );");
                     }
@@ -167,23 +168,6 @@ public class PrintDialog extends Dialog< ButtonType >
                 snapshotParameters,
                 null
             );
-        }
-    }
-
-    public static class Console
-    {
-        private static final Logger consoleLogger = LoggerFactory.getLogger( Console.class );
-        private static final Console console = new Console();
-
-        public void log( Object o )
-        {
-            consoleLogger.debug( "{}", o );
-        }
-
-        private Console() {}
-
-        public static Console getConsole() {
-            return console;
         }
     }
 
@@ -246,7 +230,7 @@ public class PrintDialog extends Dialog< ButtonType >
                 if (newState == Worker.State.SUCCEEDED) {
                     // create the SVG via JavaScript
                     JSObject window = (JSObject) webEngine.executeScript("window");
-                    window.setMember("console", Console.getConsole() );
+                    window.setMember("console", WebConsole.get(PrintDialog.class) );
                     window.setMember("javaBridge", javaBridge);
 
                     File externalSVGTemplate = Preferences.General.printTemplateFileProperty().get();
