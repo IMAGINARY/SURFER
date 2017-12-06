@@ -151,7 +151,7 @@ public class RenderArea extends Region
         isValid.bind( hasNullValues.not().and( isFormulaValid ) );
 
         // repait if degree limit changes
-        Preferences.General.degreeLimitProperty().addListener( (o,ov,nv) -> this.triggerRepaint() );
+        Preferences.Limits.degreeLimitProperty().addListener( (o,ov,nv) -> this.triggerRepaint() );
 
         imageView.effectProperty().bind( Bindings.createObjectBinding(
             () -> isValid.get() ? null : FXUtils.getEffectForDisabledNodes(),
@@ -375,7 +375,7 @@ public class RenderArea extends Region
                 newParameterNames.forEach( e -> { parameters.put( e, 0.0 ); asr.setParameterValue( e, 0.0 ); } );
             }
 
-            int degreeLimit = Preferences.General.degreeLimitProperty().get();
+            int degreeLimit = Preferences.Limits.degreeLimitProperty().get();
             int degree = asr.getSurfaceFamilyDegree();
             if( degreeLimit > 0 && degree > degreeLimit )
                 throw new IllegalArgumentException( "Surface degree (" + degree + ") exceeds degree limit (" + degreeLimit + ")" );

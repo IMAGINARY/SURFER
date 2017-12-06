@@ -45,6 +45,8 @@ public class Preferences
         {
             minScaleFactor = new SimpleDoubleProperty( -2.0 );
             maxScaleFactor = new SimpleDoubleProperty( 2.0 );
+            degreeLimit = new SimpleIntegerProperty(0);
+
         }
 
         private static SimpleDoubleProperty minScaleFactor;
@@ -74,6 +76,13 @@ public class Preferences
         {
             return maxScaleFactor;
         }
+
+
+        private static SimpleIntegerProperty degreeLimit;
+        public static IntegerProperty degreeLimitProperty()
+        {
+            return degreeLimit;
+        }
     }
 
     public static class General
@@ -85,7 +94,6 @@ public class Preferences
             initiallyOpenedTab = new SimpleIntegerProperty( 2 );
             printTemplateFile = new SimpleObjectProperty<File>( );
             initialJSurfFile = new SimpleObjectProperty<URL>(Preferences.class.getResource("/de/mfo/surfer/gallery/default.jsurf"));
-            degreeLimit = new SimpleIntegerProperty(0);
         }
 
         private static SimpleIntegerProperty exportSize;
@@ -126,11 +134,6 @@ public class Preferences
             return URL.class;
         }
 
-        private static SimpleIntegerProperty degreeLimit;
-        public static IntegerProperty degreeLimitProperty()
-        {
-            return degreeLimit;
-        }
     }
 
     public static class Kiosk

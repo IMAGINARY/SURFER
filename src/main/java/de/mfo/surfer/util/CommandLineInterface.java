@@ -227,7 +227,7 @@ public class CommandLineInterface {
         Feature.EXPORT.disable();
         Feature.SETTINGS.disable();
         Preferences.Kiosk.idleTimeOutProperty().set( Duration.minutes(3.5) );
-        Preferences.General.degreeLimitProperty().set(30);
+        Preferences.Limits.degreeLimitProperty().set(30);
     }
 
     public static void enableFeature( String feature ) { setFeatureEnabled( feature, true ); }
@@ -291,7 +291,7 @@ public class CommandLineInterface {
 
     private static void setLimit( String limit ) {
         try {
-            Preferences.General.degreeLimitProperty().set(Integer.parseInt(limit));
+            Preferences.Limits.degreeLimitProperty().set(Integer.parseInt(limit));
         }
         catch( Exception e )
         {
