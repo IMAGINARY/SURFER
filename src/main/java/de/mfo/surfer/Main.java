@@ -16,6 +16,7 @@ import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
@@ -27,6 +28,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class Main extends Application
 {
@@ -128,6 +130,16 @@ public class Main extends Application
 
             Scene scene = new Scene( new Group( fxmlRoot, overlay, scaledOverlay ), 192.0 * 6.0, 108.0 * 6.0 );
             scene.getStylesheets().add( Main.class.getResource( "/de/mfo/surfer/css/style.css" ).toExternalForm() );
+
+            // hide mouse cursor if necessary
+            Runnable setCursor = () -> {
+                logger.debug("Set mouse cursor to {}", Preferences.Kiosk.hideCursorProperty().get() ? Cursor.NONE : Cursor.DEFAULT);
+                scene.setCursor(Cursor.DEFAULT);
+                Platform.runLater(() -> scene.setCursor(Preferences.Kiosk.hideCursorProperty().get() ? Cursor.NONE : Cursor.DEFAULT));
+            };
+            Preferences.Kiosk.hideCursorProperty().addListener((o,ov,nv)->setCursor.run());
+            stage.focusedProperty().addListener((o,ov,nv)->{if(nv) setCursor.run();});
+            scene.setOnMouseEntered(e->setCursor.run());
 
             Scale scale = new Scale( 1.0, 1.0, 0.0, 0.0 );
             NumberBinding scaleValue = new When(

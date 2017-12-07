@@ -25,6 +25,7 @@ public class CommandLineInterface {
     private static final Logger logger = LoggerFactory.getLogger( CommandLineInterface.class );
 
     public enum Feature {
+        CURSOR( Preferences.Kiosk.hideCursorProperty(), true ),
         PRINT( Preferences.Kiosk.showPrintButtonProperty(), false ),
         LOAD( Preferences.Kiosk.showLoadButtonProperty(), false ),
         SAVE( Preferences.Kiosk.showSaveButtonProperty(), false ),
