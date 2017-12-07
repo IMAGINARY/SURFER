@@ -4,6 +4,7 @@ import de.mfo.surfer.Main;
 import de.mfo.surfer.util.FXUtils;
 import static de.mfo.surfer.util.L.lb;
 
+import de.mfo.surfer.util.L;
 import de.mfo.surfer.util.Preferences;
 import de.mfo.surfer.util.TextFieldSelectionAndFocusManager;
 import javafx.beans.binding.Bindings;
@@ -28,7 +29,7 @@ import javafx.stage.Window;
 import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.regex.Pattern;
+import java.text.DecimalFormatSymbols;
 
 public class FormulaInputForm extends Region
 {
@@ -36,6 +37,7 @@ public class FormulaInputForm extends Region
 
     private SimpleStringProperty formula;
     private StringConverter< String > stringConverter;
+    private SimpleStringProperty decimalSeparator;
     TextField textField;
     TextFieldSelectionAndFocusManager textFieldManager;
     BooleanProperty isValid;
@@ -63,26 +65,60 @@ public class FormulaInputForm extends Region
 
         formula = new SimpleStringProperty("");
 
+        decimalSeparator = new SimpleStringProperty();
+        decimalSeparator.bind(Bindings.createStringBinding(
+            ()->String.valueOf(DecimalFormatSymbols.getInstance(L.localeProperty().get()).getDecimalSeparator()),
+            L.localeProperty()
+        ));
+
         stringConverter = new StringConverter<String>() {
-
-            Pattern patternToString = Pattern.compile("\\*");
-            Pattern patternFromString = Pattern.compile("·");
-
             @Override
             public String toString(String s) {
-                return patternToString.matcher(s).replaceAll("·");
+                StringBuffer sb = new StringBuffer();
+                for( int i = 0; i < s.length(); ++i )
+                    sb.append(formulaToTextFieldCharacter(s.charAt(i)));
+                return sb.toString();
             }
 
             @Override
             public String fromString(String s) {
-                return patternFromString.matcher(s).replaceAll("*");
+                StringBuffer sb = new StringBuffer();
+                for( int i = 0; i < s.length(); ++i )
+                    sb.append(textFieldToFormulaCharacter(s.charAt(i)));
+                return sb.toString();
             }
         };
 
         textField = new TextField();
         textField.getStyleClass().setAll( "formulaFont", "noDecoration" );
-        textField.addEventFilter(KeyEvent.KEY_TYPED , e -> { if( "*".equals( e.getCharacter() ) ) { e.consume(); insertText("*"); } } );
+        textField.addEventFilter(KeyEvent.KEY_TYPED , e -> {
+            if(e.getCharacter() != null && e.getCharacter().length() >= 1) {
+                char in = e.getCharacter().charAt(0);
+                char out = formulaToTextFieldCharacter(textFieldToFormulaCharacter(in));
+                logger.debug("via KEY: {} -> {}",in,out);
+                if(in!=out) {
+                    e.consume();
+                    insertText(String.valueOf(out));
+                }
+            }
+        });
         textField.textProperty().bindBidirectional(formula, stringConverter );
+        L.localeProperty().addListener( (o,ov,nv) -> {
+            int caretPosition = textField.getCaretPosition();
+            String text = textField.getText();
+            for(int i = 0; i < text.length(); ++i)
+            {
+                char in = text.charAt(i);
+                char out = formulaToTextFieldCharacter(textFieldToFormulaCharacter(in));
+                logger.debug("via LOCALE: {} -> {}",in,out);
+                if( in != out ) {
+                    logger.debug("via LOCALE: {} -> {}",in,out);
+                    textField.replaceText(i, i + 1, String.valueOf(out));
+                }
+            }
+            textField.positionCaret(caretPosition);
+        });
+
         textField.paddingProperty().bind(
             Bindings.createObjectBinding(
                 () -> { return new Insets( 0, equalsZero.getWidth(), 0, 10 ); },
@@ -119,6 +155,28 @@ public class FormulaInputForm extends Region
         this.getChildren().add( stackPane );
     }
 
+    char formulaToTextFieldCharacter( char c )
+    {
+        switch(c) {
+            case '*':
+                return '·';
+            case '.':
+                return decimalSeparator.get().charAt(0);
+        }
+        return c;
+    }
+
+    char textFieldToFormulaCharacter( char c )
+    {
+        switch(c) {
+            case '·':
+                return '*';
+            case ',':
+                return '.';
+        }
+        return c;
+    }
+
     void initButtons()
     {
         String characters = "xyzabcd0123456789";
@@ -135,7 +193,7 @@ public class FormulaInputForm extends Region
         this.getChildren().add( createButton( "Button", "Plus", ( event ) -> insertText( "+" ) ) );
         this.getChildren().add( createButton( "Button", "Minus", ( event ) -> insertText( "-" ) ) );
         this.getChildren().add( createButton( "Button", "Times", ( event ) -> insertText( "*" ) ) );
-        this.getChildren().add( createButton( "Button", "Comma", ( event ) -> insertText( "," ) ) );
+        this.getChildren().add( createButton( "Button", "Comma", ( event ) -> insertText( decimalSeparator.get() ) ) );
         this.getChildren().add( createButton( "Button", "Bracket_open", ( event ) -> insertText( "(" ) ) );
         this.getChildren().add( createButton( "Button", "Bracket_close", ( event ) -> insertText( ")" ) ) );
         this.getChildren().add( createButton( "Button", "Exp_2", ( event ) -> insertText( "^2" ) ) );
