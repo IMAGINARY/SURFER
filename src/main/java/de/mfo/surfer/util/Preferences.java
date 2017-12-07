@@ -132,6 +132,7 @@ public class Preferences
             showExportButton = new SimpleBooleanProperty( true );
             showSettingsButton = new SimpleBooleanProperty( true );
             idleTimeOut = new SimpleObjectProperty<Duration>( Duration.INDEFINITE );
+            showParserError = new SimpleBooleanProperty( false );
         }
 
         private static SimpleBooleanProperty fullScreen;
@@ -181,6 +182,12 @@ public class Preferences
         public static Class<?> idleTimeOutType()
         {
             return Duration.class;
+        }
+
+        private static SimpleBooleanProperty showParserError;
+        public static BooleanProperty showParserErrorProperty()
+        {
+            return showParserError;
         }
     }
 

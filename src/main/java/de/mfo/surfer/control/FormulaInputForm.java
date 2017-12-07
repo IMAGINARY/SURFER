@@ -3,6 +3,8 @@ package de.mfo.surfer.control;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.util.FXUtils;
 import static de.mfo.surfer.util.L.lb;
+
+import de.mfo.surfer.util.Preferences;
 import de.mfo.surfer.util.TextFieldSelectionAndFocusManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -175,13 +177,15 @@ public class FormulaInputForm extends Region
         errorMessage = new Tooltip();
         errorMessage.setAutoHide( true );
         wrong.setOnAction( e -> {
-            Point2D p = wrong.localToScene(0.0, 0.0);
-            Scene scene = wrong.getScene();
-            Window window = scene.getWindow();
-            errorMessage.show( window,
-                p.getX() + scene.getX() + window.getX(),
-                p.getY() + scene.getY() + window.getY()
-            );
+            if(Preferences.Kiosk.showParserErrorProperty().get()) {
+                Point2D p = wrong.localToScene(0.0, 0.0);
+                Scene scene = wrong.getScene();
+                Window window = scene.getWindow();
+                errorMessage.show(window,
+                    p.getX() + scene.getX() + window.getX(),
+                    p.getY() + scene.getY() + window.getY()
+                );
+            }
         } );
     }
 
