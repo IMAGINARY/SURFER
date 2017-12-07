@@ -467,6 +467,8 @@ public class RenderArea extends Region
         {
             asr.setSurfaceFamily( props.getProperty( "surface_equation" ) );
 
+            parameters.get().clear();
+
             Set< Map.Entry< Object, Object > > entries = props.entrySet();
             String parameter_prefix = "surface_parameter_";
             for( Map.Entry< Object, Object > entry : entries )
