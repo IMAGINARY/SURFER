@@ -48,7 +48,6 @@ public class SceneNodeSlider extends Slider
         }
 
         Bounds trackBB = trackNode.getBoundsInParent();
-        Bounds thumbBB = thumbNode.getBoundsInParent();
         BoundingBox sliderBB = new BoundingBox(
             trackBB.getMinX(),
             trackBB.getMinY() - 14,

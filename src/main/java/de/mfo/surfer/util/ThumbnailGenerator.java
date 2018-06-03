@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javafx.concurrent.Task;
 import javafx.scene.image.Image;
@@ -85,7 +84,7 @@ public class ThumbnailGenerator
             }
         };
 
-        Future f = executor.submit( renderTask );
+        executor.submit( renderTask );
 
         return image;
     }
