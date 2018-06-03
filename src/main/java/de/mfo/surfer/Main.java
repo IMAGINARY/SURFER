@@ -46,7 +46,7 @@ public class Main extends Application
     {
         try
         {
-            fxmlRoot = ( Group ) new FXMLLoader().load(
+            fxmlRoot = ( Group ) FXMLLoader.load(
                 getClass().getResource( "/de/mfo/surfer/fxml/surfer_touchscreen_1920_x_1080.fxml" )
             );
         }
