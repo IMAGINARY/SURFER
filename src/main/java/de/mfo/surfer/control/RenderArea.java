@@ -454,7 +454,7 @@ public class RenderArea extends Region
             asr.getFrontMaterial().loadProperties(props, "front_material_", "");
             asr.getBackMaterial().loadProperties(props, "back_material_", "");
 
-            for( int i = 0; i < asr.MAX_LIGHTS; i++ )
+            for( int i = 0; i < AlgebraicSurfaceRenderer.MAX_LIGHTS; i++ )
             {
                 asr.getLightSource( i ).setStatus(LightSource.Status.OFF);
                 asr.getLightSource( i ).loadProperties( props, "light_", "_" + i );
