@@ -122,7 +122,7 @@ public class PreferenceDialog extends Dialog< ButtonType >
         {
             Class<?> c = Utils.wrapInRte( () -> (Class<?>) m.getDeclaringClass().getMethod(m.getName().replaceAll("Property$", "Type")).invoke( null));
             if( File.class.isAssignableFrom( c ) ) {
-                StringConverter stringConverter = new StringConverter<File>() {
+                StringConverter<File> stringConverter = new StringConverter<File>() {
                     @Override
                     public String toString(File file) {
                         return file == null ? "" : file.toString();
@@ -174,7 +174,7 @@ public class PreferenceDialog extends Dialog< ButtonType >
     {
         final double originalValue = dp.get();
 
-        Spinner< Double > spinner = new Spinner( Double.MIN_VALUE, Double.MAX_VALUE, originalValue, 0.1 );
+        Spinner< Double > spinner = new Spinner< Double >( Double.MIN_VALUE, Double.MAX_VALUE, originalValue, 0.1 );
         spinner.setEditable( true );
         spinner.getValueFactory().valueProperty().bindBidirectional( dp.asObject() );
         resetters.add( () -> dp.set( originalValue ) );
@@ -186,7 +186,7 @@ public class PreferenceDialog extends Dialog< ButtonType >
     {
         final int originalValue = ip.get();
 
-        Spinner< Integer > spinner = new Spinner( Integer.MIN_VALUE, Integer.MAX_VALUE, originalValue, 1 );
+        Spinner< Integer > spinner = new Spinner< Integer >( Integer.MIN_VALUE, Integer.MAX_VALUE, originalValue, 1 );
         spinner.setEditable( true );
         spinner.getValueFactory().valueProperty().bindBidirectional( ip.asObject() );
         resetters.add( () -> ip.set( originalValue ) );
