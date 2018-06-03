@@ -260,8 +260,10 @@ public class PrintDialog extends Dialog< ButtonType >
         else
         {
             // pass HTML content into the webEngine instead of the path to index.html because otherwise it won't resolve file:// URLs
-            String html = new Scanner(PrintDialog.class.getResourceAsStream( resourceName ), "UTF-8").useDelimiter("\\A").next();
-            webEngine.loadContent(html);
+        	try ( Scanner scanner = new Scanner(PrintDialog.class.getResourceAsStream( resourceName ), "UTF-8") ) {
+                String html = scanner.useDelimiter("\\A").next();
+                webEngine.loadContent(html);
+        	}
         }
     }
 
