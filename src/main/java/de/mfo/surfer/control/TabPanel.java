@@ -4,14 +4,10 @@ import de.mfo.surfer.Main;
 import de.mfo.surfer.util.FXUtils;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.Node;
 import de.mfo.surfer.util.Preferences;
 import static de.mfo.surfer.util.L.lb;
 

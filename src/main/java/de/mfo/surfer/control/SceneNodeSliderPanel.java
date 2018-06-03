@@ -2,9 +2,7 @@ package de.mfo.surfer.control;
 
 import de.mfo.surfer.util.L;
 import de.mfo.surfer.util.Preferences;
-import java.util.Map;
 import java.util.TreeSet;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
@@ -14,8 +12,6 @@ import javafx.scene.layout.Region;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static de.mfo.surfer.util.L.getLocale;
-
-import javafx.beans.value.ChangeListener;
 
 public class SceneNodeSliderPanel extends Region
 {

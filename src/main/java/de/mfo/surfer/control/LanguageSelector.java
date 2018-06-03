@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
-import javafx.geometry.Bounds;
 import javafx.scene.control.ChoiceBox;
 import javafx.util.StringConverter;
 
