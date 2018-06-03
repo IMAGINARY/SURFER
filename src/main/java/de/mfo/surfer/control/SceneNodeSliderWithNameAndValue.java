@@ -4,7 +4,6 @@ import de.mfo.surfer.Main;
 import de.mfo.surfer.util.FXUtils;
 import de.mfo.surfer.util.L;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Region;

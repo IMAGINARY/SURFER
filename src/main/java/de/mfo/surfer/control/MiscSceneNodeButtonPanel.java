@@ -3,7 +3,6 @@ package de.mfo.surfer.control;
 import de.mfo.surfer.control.SceneNodeButton;
 import de.mfo.surfer.Main;
 
-import java.awt.*;
 import java.io.File;
 import java.util.EnumMap;
 import java.util.function.Consumer;
@@ -12,7 +11,6 @@ import de.mfo.surfer.util.Preferences;
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
