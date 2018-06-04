@@ -159,7 +159,7 @@ public class FormulaInputForm extends Region
     {
         switch(c) {
             case '*':
-                return '·';
+                return '\u00b7'; // '·'
             case '.':
                 return decimalSeparator.get().charAt(0);
         }
@@ -169,7 +169,7 @@ public class FormulaInputForm extends Region
     char textFieldToFormulaCharacter( char c )
     {
         switch(c) {
-            case '·':
+            case '\u00b7': // '·'
                 return '*';
             case ',':
                 return '.';
