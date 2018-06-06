@@ -38,37 +38,25 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
     	if (!validArea(dcsd))
             return;
 
-        boolean success = true;
     	List<FutureTask<Boolean>> tasks = createRenderTasks(dcsd);
 
-        renderingTasks = tasks;
+    	scheduleAndWait(tasks);
+    }
+    
+    private void scheduleAndWait(List<FutureTask<Boolean>> tasks) {
+        boolean success = false;
+        try {
+        	tasks.forEach( threadPoolExecutor::execute );
 
-        try
-        {
             for( FutureTask< Boolean > task : tasks )
-                threadPoolExecutor.execute( task );
-            for( FutureTask< Boolean > task : tasks )
-                success = success && task.get();
-        }
-        catch( ExecutionException ie )
-        {
-            success = false;
-        }
-        catch( InterruptedException ie )
-        {
-            super.stopDrawing();
-            success = false;
-        }
-        catch( RejectedExecutionException ree )
-        {
-            success = false;
-        }
-        catch( CancellationException ree )
-        {
-            success = false;
-        }
-        finally
-        {
+                if (!task.get())
+                	break;
+            
+            success = true;
+        } catch( ExecutionException | RejectedExecutionException | CancellationException e ) {
+        } catch( InterruptedException ie ) {
+        	stopTasks(tasks);
+        } finally {
             if( !success || Thread.interrupted() )
                 throw new RenderingInterruptedException( "Rendering interrupted" );
         }
