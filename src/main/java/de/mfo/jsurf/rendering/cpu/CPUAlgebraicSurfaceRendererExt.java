@@ -83,7 +83,31 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
                 throw new RenderingInterruptedException( "Rendering interrupted" );
         }
     }
+  
+	// TODO: the parent method stopDrawing uses implicitly the renderingTasks field, but it's not actually needed
+    private void stopTasks(List<FutureTask<Boolean>> tasks) {
+    	tasks.forEach( (task) -> task.cancel(true) );
+    }
 
+	private List<FutureTask<Boolean>> createRenderTasks(DrawcallStaticDataExt dcsd) {
+		int processors = Runtime.getRuntime().availableProcessors();
+        int xStep = dcsd.privateDcsd.width / Math.min( dcsd.privateDcsd.width, Math.max( 2, processors ) );
+        int yStep = dcsd.privateDcsd.height / Math.min( dcsd.privateDcsd.height, 3 );
+
+        List< FutureTask< Boolean > > tasks = new LinkedList< FutureTask< Boolean > >();
+        for( int x = 0; x < dcsd.privateDcsd.width; x += xStep )
+            for( int y = 0; y < dcsd.privateDcsd.height; y += yStep )
+                tasks.add( createRenderTask(dcsd, x, y, xStep, yStep) );
+
+		return tasks;
+	}
+
+	FutureTask<Boolean> createRenderTask(DrawcallStaticDataExt dcsd, int x, int y, int xStep, int yStep) {
+		int xEnd = Math.min( x + xStep, dcsd.privateDcsd.width - 1 );
+		int yEnd = Math.min( y + yStep, dcsd.privateDcsd.height - 1 );
+        return new FutureTask< Boolean >(new RenderingTask( dcsd.privateDcsd, x, y, xEnd, yEnd ) );
+	}
+	
     @Override
     public void setSurfaceFamily( String expression )
         throws Exception
