@@ -238,48 +238,58 @@ public class RenderArea extends Region
     ExecutorService executor = Executors.newSingleThreadExecutor( r -> { Thread t = new Thread( r ); t.setDaemon( true ); return t; } );
     void triggerRepaint()
     {
-        if( this.getScene() != null && this.getParent() != null && triggerRepaintOnChange.get() )
-        {
-            if( taskLowQuality != null && !taskLowQuality.isRunning() )
-                taskLowQuality.cancel();
-            if( taskMediumQuality != null )
-                taskMediumQuality.cancel();
-            if( taskHighQuality != null )
-                taskHighQuality.cancel();
-            if( taskUltraQuality != null )
-                taskUltraQuality.cancel();
+        if( !shouldRepaint() )
+        	return;
 
-            // set up rendering environemnt
-            passDataToASR();
-            if( isValid.get() )
-            {
-                // calculate upper bound of the resolution
-                Bounds b = this.localToScene( this.getBoundsInLocal(), true );
-                int maxSize = (int) Math.round( Math.max( b.getWidth(), b.getHeight() ) );
-                int lowResSize = ( int ) Math.max( Math.min( maxSize, Math.sqrt( 1.0 / ( targetFps * secondsPerPixel ) ) ), 100 );
+        cancelTasks();
 
-                taskLowQuality = createRenderingTask(lowResSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
-                taskLowQuality.setOnSucceeded( e ->
-                {
-                    secondsPerPixel = ( double ) e.getSource().getValue();
-                });
-                executor.submit( taskLowQuality );
-
-                if( lowResSize < maxSize / 2 )
-                {
-                    taskMediumQuality = createRenderingTask(( maxSize + lowResSize ) / 2,
-                    		AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
-                    executor.submit( taskMediumQuality );
-
-                }
-                taskHighQuality = createRenderingTask(maxSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
-                executor.submit( taskHighQuality );
-
-                taskUltraQuality = createRenderingTask(maxSize, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
-                executor.submit( taskUltraQuality );
-            }
-        }
+        // set up rendering environemnt
+        passDataToASR();
+        if( isValid.get() )
+            scheduleTasks();
     }
+
+	private boolean shouldRepaint() {
+		return this.getScene() != null && this.getParent() != null && triggerRepaintOnChange.get();
+	}
+
+	private void scheduleTasks() {
+		// calculate upper bound of the resolution
+		Bounds b = this.localToScene( this.getBoundsInLocal(), true );
+		int maxSize = (int) Math.round( Math.max( b.getWidth(), b.getHeight() ) );
+		int lowResSize = ( int ) Math.max( Math.min( maxSize, Math.sqrt( 1.0 / ( targetFps * secondsPerPixel ) ) ), 100 );
+
+		taskLowQuality = createRenderingTask(lowResSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
+		taskLowQuality.setOnSucceeded( e ->
+		{
+		    secondsPerPixel = ( double ) e.getSource().getValue();
+		});
+		executor.submit( taskLowQuality );
+
+		if( lowResSize < maxSize / 2 )
+		{
+		    taskMediumQuality = createRenderingTask(( maxSize + lowResSize ) / 2,
+		    		AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
+		    executor.submit( taskMediumQuality );
+
+		}
+		taskHighQuality = createRenderingTask(maxSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
+		executor.submit( taskHighQuality );
+
+		taskUltraQuality = createRenderingTask(maxSize, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
+		executor.submit( taskUltraQuality );
+	}
+
+	private void cancelTasks() {
+		if( taskLowQuality != null && !taskLowQuality.isRunning() )
+		    taskLowQuality.cancel();
+		if( taskMediumQuality != null )
+		    taskMediumQuality.cancel();
+		if( taskHighQuality != null )
+		    taskHighQuality.cancel();
+		if( taskUltraQuality != null )
+		    taskUltraQuality.cancel();
+	}
 
 	private RenderingTask createRenderingTask(int size, AntiAliasingMode aam, AntiAliasingPattern aap) {
 		return new RenderingTask(asr, this.imageView, size, renderSize, aam, aap);
