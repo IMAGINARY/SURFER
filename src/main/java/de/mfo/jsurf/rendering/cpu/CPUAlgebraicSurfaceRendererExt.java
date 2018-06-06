@@ -25,6 +25,8 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
         public int[] getColorBuffer() { return privateDcsd.colorBuffer; }
     }
 
+    private Integer degree;
+    private DegreeCalculator degreeCalculator;
 
     public synchronized DrawcallStaticDataExt collectDrawCallStaticDataExt( int[] colorBuffer, int width, int height )
     {
@@ -81,9 +83,6 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
                 throw new RenderingInterruptedException( "Rendering interrupted" );
         }
     }
-
-    private Integer degree;
-    private DegreeCalculator degreeCalculator;
 
     @Override
     public void setSurfaceFamily( String expression )
