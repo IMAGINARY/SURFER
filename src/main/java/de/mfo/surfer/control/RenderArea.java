@@ -258,51 +258,28 @@ public class RenderArea extends Region
                 int maxSize = (int) Math.round( Math.max( b.getWidth(), b.getHeight() ) );
                 int lowResSize = ( int ) Math.max( Math.min( maxSize, Math.sqrt( 1.0 / ( targetFps * secondsPerPixel ) ) ), 100 );
 
-                taskUltraQuality = createRenderingTask(maxSize, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
-                taskHighQuality = createRenderingTask(maxSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
-                taskHighQuality.setOnSucceeded( e -> executor.submit( taskUltraQuality ) );
+                taskLowQuality = createRenderingTask(lowResSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
+                taskLowQuality.setOnSucceeded( e ->
+                {
+                    secondsPerPixel = ( double ) e.getSource().getValue();
+                });
+                executor.submit( taskLowQuality );
 
                 if( lowResSize < maxSize / 2 )
                 {
-                    // add rendering step with intermediate resolution
                     taskMediumQuality = createRenderingTask(( maxSize + lowResSize ) / 2,
                     		AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
-                }
-                else
-                {
-                    // add dummy rendering task, that does nothing
-                    taskMediumQuality = createDummyRenderingTask(( maxSize + lowResSize ) / 2);
-                }
-                taskMediumQuality.setOnSucceeded( e -> executor.submit( taskHighQuality ) );
+                    executor.submit( taskMediumQuality );
 
-                taskLowQuality = createRenderingTask(lowResSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
-                taskLowQuality.setOnSucceeded( e ->
-                    {
-                        secondsPerPixel = ( double ) e.getSource().getValue();
-                        executor.submit( taskMediumQuality );
-                    }
-                );
+                }
+                taskHighQuality = createRenderingTask(maxSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
+                executor.submit( taskHighQuality );
 
-                executor.submit( taskLowQuality );
+                taskUltraQuality = createRenderingTask(maxSize, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
+                executor.submit( taskUltraQuality );
             }
         }
     }
-
-	private RenderingTask createDummyRenderingTask(int size) {
-		return new RenderingTask(
-                asr,
-                this.imageView,
-                size,
-                renderSize,
-                AntiAliasingMode.ADAPTIVE_SUPERSAMPLING,
-                AntiAliasingPattern.QUINCUNX
-            )
-            {
-                @Override protected void scheduled() {}
-                @Override public Double call() { return secondsPerPixel; }
-                @Override protected void succeeded() {}
-            };
-	}
 
 	private RenderingTask createRenderingTask(int size, AntiAliasingMode aam, AntiAliasingPattern aap) {
 		return new RenderingTask(asr, this.imageView, size, renderSize, aam, aap);
