@@ -38,7 +38,7 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
         final int width = dcsd.privateDcsd.width;
         final int height = dcsd.privateDcsd.height;
 
-        if( width == 0 || height == 0 )
+    	if (!validArea(dcsd))
             return;
 
         int xStep = width / Math.min( width, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
@@ -87,6 +87,10 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
 	// TODO: the parent method stopDrawing uses implicitly the renderingTasks field, but it's not actually needed
     private void stopTasks(List<FutureTask<Boolean>> tasks) {
     	tasks.forEach( (task) -> task.cancel(true) );
+    }
+    
+    private boolean validArea(DrawcallStaticDataExt callData) {
+    	return callData.privateDcsd.width != 0 && callData.privateDcsd.height != 0;
     }
 
 	private List<FutureTask<Boolean>> createRenderTasks(DrawcallStaticDataExt dcsd) {
