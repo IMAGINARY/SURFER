@@ -35,21 +35,11 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
 
     public synchronized void draw( DrawcallStaticDataExt dcsd )
     {
-        final int width = dcsd.privateDcsd.width;
-        final int height = dcsd.privateDcsd.height;
-
     	if (!validArea(dcsd))
             return;
 
-        int xStep = width / Math.min( width, Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
-        int yStep = height / Math.min( height, 3 );//Math.max( 2, Runtime.getRuntime().availableProcessors() ) );
-
         boolean success = true;
-
-        LinkedList< FutureTask< Boolean > > tasks = new LinkedList< FutureTask< Boolean > >();
-        for( int x = 0; x < width; x += xStep )
-            for( int y = 0; y < height; y += yStep )
-                tasks.add( new FutureTask< Boolean >( new RenderingTask( dcsd.privateDcsd, x, y, Math.min( x + xStep, width - 1 ), Math.min( y + yStep, height - 1 ) ) ) );
+    	List<FutureTask<Boolean>> tasks = createRenderTasks(dcsd);
 
         renderingTasks = tasks;
 
