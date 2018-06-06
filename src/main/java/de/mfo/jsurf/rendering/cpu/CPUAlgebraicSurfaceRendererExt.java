@@ -25,10 +25,6 @@ public class CPUAlgebraicSurfaceRendererExt extends CPUAlgebraicSurfaceRenderer
         public int[] getColorBuffer() { return privateDcsd.colorBuffer; }
     }
 
-    public CPUAlgebraicSurfaceRendererExt()
-    {
-        super();
-    }
 
     public synchronized DrawcallStaticDataExt collectDrawCallStaticDataExt( int[] colorBuffer, int width, int height )
     {
