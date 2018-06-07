@@ -69,6 +69,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,35 @@ public class RenderArea extends Region
 {
     private static final Logger logger = LoggerFactory.getLogger( RenderArea.class );
 
+	private static class RenderResolutions {
+		public final RenderResolution interactive;
+		public final RenderResolution medium;
+		public final RenderResolution high;
+		public final RenderResolution ultraHigh;
+		
+		private static final int MIN_RESOLUTION = 128;
+		
+		public RenderResolutions(RenderArea renderArea, double targetFps) {
+			Bounds imageBounds = renderArea.localToScene( renderArea.getBoundsInLocal(), true );
+			int max = (int) Math.round( Math.max( imageBounds.getWidth(), imageBounds.getHeight() ) );
+			int interactive = ( int ) Math.max( Math.min( max, Math.sqrt( 1.0 / ( targetFps * renderArea.secondsPerPixel ) ) ), MIN_RESOLUTION );
+			int medium = (max + interactive) / 2;
+
+			this.interactive = new RenderResolution(interactive, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
+			
+			this.medium = (interactive > max / 2) ?
+				new RenderResolution(medium, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX) :
+				null;
+
+			this.high = new RenderResolution(max, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
+			this.ultraHigh = new RenderResolution(max, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
+		}
+
+		public boolean doMedium() {
+			return medium != null;
+		}
+	}
+    
     ImageView imageView;
     SimpleBooleanProperty triggerRepaintOnChange;
 
@@ -252,32 +282,21 @@ public class RenderArea extends Region
 	private boolean shouldRepaint() {
 		return this.getScene() != null && this.getParent() != null && triggerRepaintOnChange.get();
 	}
-
+	
 	private void scheduleTasks() {
-		// calculate upper bound of the resolution
-		Bounds b = this.localToScene( this.getBoundsInLocal(), true );
-		int maxSize = (int) Math.round( Math.max( b.getWidth(), b.getHeight() ) );
-		int lowResSize = ( int ) Math.max( Math.min( maxSize, Math.sqrt( 1.0 / ( targetFps * secondsPerPixel ) ) ), 100 );
-
-		taskLowQuality = createRenderingTask(lowResSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
-		taskLowQuality.setOnSucceeded( e ->
-		{
-		    secondsPerPixel = ( double ) e.getSource().getValue();
-		});
+		RenderResolutions resolutions = new RenderResolutions(this, targetFps);
+		
+		taskLowQuality = createRenderingTask(resolutions.interactive);
+		taskLowQuality.setOnSucceeded(
+			e -> { secondsPerPixel = ( double ) e.getSource().getValue(); }
+		);
 		executor.submit( taskLowQuality );
 
-		if( lowResSize < maxSize / 2 )
-		{
-		    taskMediumQuality = createRenderingTask(( maxSize + lowResSize ) / 2,
-		    		AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.QUINCUNX);
-		    executor.submit( taskMediumQuality );
+		if( resolutions.doMedium() )
+		    executor.submit( taskMediumQuality = createRenderingTask(resolutions.medium) );
 
-		}
-		taskHighQuality = createRenderingTask(maxSize, AntiAliasingMode.ADAPTIVE_SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
-		executor.submit( taskHighQuality );
-
-		taskUltraQuality = createRenderingTask(maxSize, AntiAliasingMode.SUPERSAMPLING, AntiAliasingPattern.OG_4x4);
-		executor.submit( taskUltraQuality );
+		executor.submit( taskHighQuality = createRenderingTask(resolutions.high) );
+		executor.submit( taskUltraQuality = createRenderingTask(resolutions.ultraHigh) );
 	}
 
 	private void cancelTasks() {
@@ -291,8 +310,8 @@ public class RenderArea extends Region
 		    taskUltraQuality.cancel();
 	}
 
-	private RenderingTask createRenderingTask(int size, AntiAliasingMode aam, AntiAliasingPattern aap) {
-		return new RenderingTask(asr, this.imageView, size, renderSize, aam, aap);
+	private RenderingTask createRenderingTask(RenderResolution rr) {
+		return new RenderingTask(asr, this.imageView, renderSize, rr);
 	}
 
     public void setPreviewImage( Image previewImage )
@@ -461,9 +480,10 @@ public class RenderArea extends Region
             }
             Function< String, Color3f > string2color = s ->
             {
-                Scanner sc = new Scanner( s );
-                sc.useLocale( Locale.US );
-                return new Color3f( sc.nextFloat(), sc.nextFloat(), sc.nextFloat() );
+                try (Scanner sc = new Scanner( s )) {
+                    sc.useLocale( Locale.US );
+                    return new Color3f( sc.nextFloat(), sc.nextFloat(), sc.nextFloat() );
+                }
             };
 
             asr.setBackgroundColor( string2color.apply( props.getProperty( "background_color" ) ) );
@@ -681,15 +701,26 @@ public class RenderArea extends Region
     }
 }
 
+class RenderResolution {
+	public final int size;
+	public final AntiAliasingMode mode;
+	public final AntiAliasingPattern pattern;
+
+	public RenderResolution(int size, AntiAliasingMode mode, AntiAliasingPattern pattern) {
+		this.size = size;
+		this.mode = mode;
+		this.pattern = pattern;
+	}
+}
+
 class RenderingTask extends Task< Double >
 {
     protected CPUAlgebraicSurfaceRendererExt asr;
     protected CPUAlgebraicSurfaceRendererExt.DrawcallStaticDataExt dcsd;
     protected ImageView imageView;
-    protected int renderSize;
     protected IntegerProperty renderSizeProperty;
-    protected AntiAliasingMode aam;
-    protected AntiAliasingPattern aap;
+
+    protected RenderResolution resolution;
 
     protected Semaphore semaphore;
 
@@ -697,18 +728,14 @@ class RenderingTask extends Task< Double >
     public RenderingTask(
         CPUAlgebraicSurfaceRendererExt asr,
         ImageView imageView,
-        int renderSize,
         IntegerProperty renderSizeProperty,
-        AntiAliasingMode aam,
-        AntiAliasingPattern aap
+        RenderResolution resolution
     )
     {
         this.asr = asr;
         this.imageView = imageView;
-        this.renderSize = renderSize;
         this.renderSizeProperty = renderSizeProperty;
-        this.aam = aam;
-        this.aap = aap;
+        this.resolution = resolution;
 
         semaphore = new Semaphore( 0 );
     }
@@ -720,15 +747,15 @@ class RenderingTask extends Task< Double >
         super.scheduled();
 
         // apply anti-aliasing settings
-        asr.setAntiAliasingMode( aam );
-        asr.setAntiAliasingPattern( aap );
+        asr.setAntiAliasingMode( resolution.mode );
+        asr.setAntiAliasingPattern( resolution.pattern );
 
         // grab the current state of the asr
         // (to be used later on the worker thread)
         dcsd = asr.collectDrawCallStaticDataExt(
-            new int[ renderSize * renderSize ],
-            renderSize,
-            renderSize
+            new int[ resolution.size * resolution.size ],
+            resolution.size,
+            resolution.size
         );
 
         // permit execution of call() method on background thread
@@ -746,7 +773,7 @@ class RenderingTask extends Task< Double >
             long t_end = System.nanoTime();
 
             // return time per pixel
-            return ( ( t_end - t_start ) / 1000000000.0 ) / ( renderSize * renderSize );
+            return ( ( t_end - t_start ) / 1000000000.0 ) / ( resolution.size * resolution.size );
         }
         catch( InterruptedException | RenderingInterruptedException e )
         {
