@@ -748,13 +748,9 @@ class RenderingTask extends Task< Double >
             // return time per pixel
             return ( ( t_end - t_start ) / 1000000000.0 ) / ( renderSize * renderSize );
         }
-        catch( InterruptedException ie )
+        catch( InterruptedException | RenderingInterruptedException e )
         {
-            throw ie;
-        }
-        catch( RenderingInterruptedException rie )
-        {
-            throw rie;
+            throw e;
         }
         catch( Throwable t )
         {
