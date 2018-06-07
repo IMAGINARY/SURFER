@@ -15,6 +15,7 @@ import javax.vecmath.*;
 import de.mfo.surfer.Main;
 import de.mfo.surfer.gallery.GalleryItem;
 import de.mfo.surfer.util.FXUtils;
+import de.mfo.surfer.util.ImageUtil;
 import de.mfo.surfer.util.Preferences;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -794,18 +795,8 @@ class RenderingTask extends Task< Double >
         super.succeeded();
 
         renderSizeProperty.setValue( Math.max( dcsd.getWidth(), dcsd.getHeight() ) );
-        imageView.setImage( createImageFromRGB( dcsd.getColorBuffer(), dcsd.getWidth(), dcsd.getHeight() ) );
+        imageView.setImage( ImageUtil.createImageFromRGB( dcsd.getColorBuffer(), dcsd.getWidth(), dcsd.getHeight() ) );
         this.imageView.setScaleY( -1.0 ); // because jsurf writes pixel lines in opposite order
     }
 
-    private static Image createImageFromRGB( int[] rgbBuffer, int w, int h )
-    {
-        WritableImage image = new WritableImage( w, h );
-        image.getPixelWriter().setPixels(
-            0, 0, w, h,
-            PixelFormat.getIntArgbInstance(),
-            rgbBuffer, 0, w
-        );
-        return image;
-    }
-};
+}
