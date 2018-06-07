@@ -461,10 +461,9 @@ public class RenderArea extends Region
             }
             Function< String, Color3f > string2color = s ->
             {
-                try (Scanner sc = new Scanner( s ) ) {
-                    sc.useLocale( Locale.US );
-                    return new Color3f( sc.nextFloat(), sc.nextFloat(), sc.nextFloat() );
-                }
+                Scanner sc = new Scanner( s );
+                sc.useLocale( Locale.US );
+                return new Color3f( sc.nextFloat(), sc.nextFloat(), sc.nextFloat() );
             };
 
             asr.setBackgroundColor( string2color.apply( props.getProperty( "background_color" ) ) );
